@@ -270,17 +270,21 @@ async function init() {
   attachEvents();
 
   try {
-    const text = await fetch("manual_oil_gas_ypf.md", { cache: "no-store" }).then((r) => {
+    const text = await fetch("manual_oil_gas_ypf.md").then((r) => {
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       return r.text();
     });
     state.modules = parseManual(text);
+    const moduleIds = new Set(state.modules.map((module) => module.id));
+    state.done = new Set([...state.done].filter((id) => moduleIds.has(id)));
     if (!state.modules[state.activeModule]) state.activeModule = 0;
     render();
   } catch (error) {
     renderEmpty();
     console.error(error);
   }
+
+  registerServiceWorker();
 }
 
 function cacheElements() {
@@ -356,6 +360,7 @@ function parseManual(text) {
       shortTitle: "Mapa general",
       objective: "Panorama inicial, fuentes y datos publicos clave.",
       content: introText,
+      plainText: cleanMarkdown(introText).replace(/\s+/g, " "),
       words: countWords(introText),
     },
   ];
@@ -363,12 +368,14 @@ function parseManual(text) {
   starts.forEach((item, index) => {
     const end = starts[index + 1]?.index ?? text.length;
     const content = text.slice(item.index, end).trim();
+    const plainText = cleanMarkdown(content).replace(/\s+/g, " ");
     modules.push({
       id: item.id,
       title: item.title,
       shortTitle: makeShortTitle(item.title),
       objective: extractObjective(content),
       content,
+      plainText,
       words: countWords(content),
     });
   });
@@ -434,7 +441,9 @@ function renderModules() {
 
 function renderControls() {
   document.querySelectorAll(".segment").forEach((button) => {
-    button.classList.toggle("active", button.dataset.view === state.view);
+    const active = button.dataset.view === state.view;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
   });
 
   const total = state.modules.length;
@@ -452,6 +461,7 @@ function renderControls() {
   `;
 
   els.markDone.classList.toggle("is-done", state.done.has(state.activeModule));
+  els.markDone.setAttribute("aria-pressed", String(state.done.has(state.activeModule)));
   els.markDone.innerHTML = `<span class="icon" data-icon="check"></span>${state.done.has(state.activeModule) ? "Completado" : "Estudiado"}`;
   els.progressRing.style.setProperty("--progress", `${percent * 3.6}deg`);
   els.progressRing.querySelector("span").textContent = `${percent}%`;
@@ -468,10 +478,10 @@ function renderSearch() {
 
   const results = state.modules
     .map((module) => {
-      const haystack = `${module.title}\n${module.objective}\n${module.content}`.toLowerCase();
+      const haystack = `${module.title}\n${module.objective}\n${module.plainText}`.toLowerCase();
       const index = haystack.indexOf(query);
       if (index === -1) return null;
-      const plain = cleanMarkdown(module.content).replace(/\s+/g, " ");
+      const plain = module.plainText;
       const plainIndex = plain.toLowerCase().indexOf(query);
       const start = Math.max(0, plainIndex - 70);
       const snippet = plainIndex >= 0 ? plain.slice(start, start + 190) : module.objective;
@@ -656,7 +666,7 @@ function renderQuiz() {
         .join("")}
     </div>
 
-    ${answered ? `<div class="analysis-card" style="margin-top: 12px;"><h3>Lectura</h3><p>${escapeHtml(item.why)}</p></div>` : ""}
+    ${answered ? `<div class="analysis-card quiz-explain"><h3>Lectura</h3><p>${escapeHtml(item.why)}</p></div>` : ""}
 
     <div class="quiz-actions">
       <button class="ghost-button" id="prevQuiz"><span class="icon" data-icon="minus"></span>Anterior</button>
@@ -888,18 +898,28 @@ function renderTable(tableLines) {
 
   const [head, ...body] = rows;
   return `
+    <div class="table-scroll" role="region" aria-label="Tabla de datos" tabindex="0">
     <table>
-      <thead><tr>${head.map((cell) => `<th>${inline(cell)}</th>`).join("")}</tr></thead>
+      <thead><tr>${head.map((cell) => `<th scope="col">${inline(cell)}</th>`).join("")}</tr></thead>
       <tbody>${body.map((row) => `<tr>${row.map((cell) => `<td>${inline(cell)}</td>`).join("")}</tr>`).join("")}</tbody>
     </table>
+    </div>
   `;
 }
 
 function inline(value) {
-  return escapeHtml(value)
+  const links = [];
+  const withLinkTokens = escapeHtml(value).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, (_, label, url) => {
+    const token = `@@LINK_${links.length}@@`;
+    links.push(`<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`);
+    return token;
+  });
+
+  return withLinkTokens
     .replace(/`([^`]+)`/g, "<code>$1</code>")
     .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-    .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>')
+    .replace(/@@LINK_(\d+)@@/g, (_, index) => links[Number(index)] ?? "");
 }
 
 function cleanMarkdown(value) {
@@ -924,12 +944,12 @@ function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
     state.activeModule = Number.isFinite(saved.activeModule) ? saved.activeModule : 0;
-    state.view = saved.view || "read";
-    state.done = new Set(saved.done || []);
-    state.notes = saved.notes || {};
-    state.textSize = saved.textSize || 16;
-    state.quizIndex = saved.quizIndex || 0;
-    state.quizAnswers = saved.quizAnswers || {};
+    state.view = ["read", "map", "cards", "quiz", "kpis", "notes"].includes(saved.view) ? saved.view : "read";
+    state.done = new Set(Array.isArray(saved.done) ? saved.done.map(Number).filter(Number.isFinite) : []);
+    state.notes = typeof saved.notes === "object" && saved.notes ? saved.notes : {};
+    state.textSize = clamp(Number(saved.textSize) || 16, 14, 20);
+    state.quizIndex = clamp(Number(saved.quizIndex) || 0, 0, quiz.length - 1);
+    state.quizAnswers = typeof saved.quizAnswers === "object" && saved.quizAnswers ? saved.quizAnswers : {};
     state.kpiFilter = saved.kpiFilter || "Todos";
   } catch {
     state.done = new Set();
@@ -937,19 +957,26 @@ function loadState() {
 }
 
 function saveState() {
-  localStorage.setItem(
-    storageKey,
-    JSON.stringify({
-      activeModule: state.activeModule,
-      view: state.view,
-      done: [...state.done],
-      notes: state.notes,
-      textSize: state.textSize,
-      quizIndex: state.quizIndex,
-      quizAnswers: state.quizAnswers,
-      kpiFilter: state.kpiFilter,
-    }),
-  );
+  try {
+    const notes = Object.fromEntries(
+      Object.entries(state.notes).map(([key, value]) => [key, String(value).slice(0, 12000)]),
+    );
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify({
+        activeModule: state.activeModule,
+        view: state.view,
+        done: [...state.done],
+        notes,
+        textSize: state.textSize,
+        quizIndex: state.quizIndex,
+        quizAnswers: state.quizAnswers,
+        kpiFilter: state.kpiFilter,
+      }),
+    );
+  } catch (error) {
+    console.warn("No se pudo guardar el progreso local", error);
+  }
 }
 
 function renderEmpty() {
@@ -958,6 +985,15 @@ function renderEmpty() {
   const template = document.getElementById("emptyStateTemplate");
   els.mainContent.innerHTML = template.innerHTML;
   paintIcons();
+}
+
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator)) return;
+  const isLocal = ["localhost", "127.0.0.1"].includes(location.hostname);
+  if (location.protocol !== "https:" && !isLocal) return;
+  navigator.serviceWorker.register("service-worker.js").catch((error) => {
+    console.warn("No se pudo registrar el service worker", error);
+  });
 }
 
 function paintIcons() {

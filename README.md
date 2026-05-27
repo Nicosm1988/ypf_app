@@ -26,6 +26,9 @@ http://127.0.0.1:8001/
 - Diccionario de KPIs.
 - Notas por modulo guardadas en el navegador.
 - Progreso local con `localStorage`.
+- PWA/offline basico con service worker.
+- Assets responsive en AVIF/WebP.
+- Headers de cache y seguridad para Vercel.
 
 ## Archivos principales
 
@@ -34,3 +37,6 @@ http://127.0.0.1:8001/
 - `app.js`
 - `manual_oil_gas_ypf.md`
 - `assets/energy-chain.png`
+- `vercel.json`
+- `manifest.webmanifest`
+- `service-worker.js`

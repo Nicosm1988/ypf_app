@@ -3,11 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Oil & Gas Study Desk</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23111827'/%3E%3Cpath d='M17 45h30M23 45V22h18v23M27 22V12h10v10M29 29h6M29 36h6' stroke='white' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <title>Oil & Gas Study Desk | Manual YPF</title>
+    <meta
+      name="description"
+      content="Web personal de estudio sobre oil and gas, Latinoamerica, Argentina, Vaca Muerta, YPF, KPIs, BI, IA y tableros ejecutivos."
+    />
+    <meta name="theme-color" content="#0f766e" />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://ypf-app.vercel.app/" />
+    <meta property="og:title" content="Oil & Gas Study Desk | Manual YPF" />
+    <meta property="og:description" content="Manual ejecutivo y tecnico para estudiar oil and gas, Vaca Muerta, YPF, KPIs, BI e IA." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="assets/energy-chain-v1-1280.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#content">Saltar al contenido</a>
     <div class="app-shell">
       <aside class="sidebar" aria-label="Modulos">
         <div class="brand">
@@ -20,7 +34,7 @@
 
         <label class="search-box">
           <span class="icon" data-icon="search"></span>
-          <input id="searchInput" type="search" placeholder="Buscar conceptos" autocomplete="off" />
+          <input id="searchInput" type="search" placeholder="Buscar conceptos" autocomplete="off" aria-label="Buscar conceptos" />
         </label>
 
         <div class="side-section">
@@ -29,7 +43,7 @@
         </div>
       </aside>
 
-      <main class="workspace">
+      <main id="content" class="workspace" tabindex="-1">
         <header class="topbar">
           <div class="topbar-title">
             <span class="eyebrow" id="activeContext">Manual ejecutivo</span>
@@ -50,7 +64,36 @@
         </header>
 
         <section class="image-strip" aria-label="Cadena de valor oil and gas">
-          <img src="assets/energy-chain.png" alt="Cadena de valor de petroleo y gas con pozo, ductos, refineria y LNG" />
+          <picture>
+            <source
+              type="image/avif"
+              srcset="
+                assets/energy-chain-v1-640.avif 640w,
+                assets/energy-chain-v1-960.avif 960w,
+                assets/energy-chain-v1-1280.avif 1280w,
+                assets/energy-chain-v1-1672.avif 1672w
+              "
+              sizes="(max-width: 860px) 100vw, calc(100vw - 388px)"
+            />
+            <source
+              type="image/webp"
+              srcset="
+                assets/energy-chain-v1-640.webp 640w,
+                assets/energy-chain-v1-960.webp 960w,
+                assets/energy-chain-v1-1280.webp 1280w,
+                assets/energy-chain-v1-1672.webp 1672w
+              "
+              sizes="(max-width: 860px) 100vw, calc(100vw - 388px)"
+            />
+            <img
+              src="assets/energy-chain.png"
+              width="1672"
+              height="941"
+              fetchpriority="high"
+              decoding="async"
+              alt="Cadena de valor de petroleo y gas con pozo, ductos, refineria y LNG"
+            />
+          </picture>
           <div class="image-overlay">
             <strong>Roca -> pozo -> ducto -> refineria -> mercado</strong>
             <span id="studyStats">0 modulos completados</span>
@@ -58,13 +101,13 @@
         </section>
 
         <section class="control-band">
-          <div class="segmented" role="tablist" aria-label="Vistas de estudio">
-            <button class="segment active" data-view="read" role="tab">Lectura</button>
-            <button class="segment" data-view="map" role="tab">Mapa</button>
-            <button class="segment" data-view="cards" role="tab">Tarjetas</button>
-            <button class="segment" data-view="quiz" role="tab">Quiz</button>
-            <button class="segment" data-view="kpis" role="tab">KPIs</button>
-            <button class="segment" data-view="notes" role="tab">Notas</button>
+          <div class="segmented" aria-label="Vistas de estudio">
+            <button class="segment active" data-view="read" aria-pressed="true">Lectura</button>
+            <button class="segment" data-view="map" aria-pressed="false">Mapa</button>
+            <button class="segment" data-view="cards" aria-pressed="false">Tarjetas</button>
+            <button class="segment" data-view="quiz" aria-pressed="false">Quiz</button>
+            <button class="segment" data-view="kpis" aria-pressed="false">KPIs</button>
+            <button class="segment" data-view="notes" aria-pressed="false">Notas</button>
           </div>
           <div class="quick-metrics" id="quickMetrics"></div>
         </section>
@@ -96,6 +139,13 @@
         </div>
       </main>
     </div>
+
+    <noscript>
+      <section class="noscript-panel">
+        <h1>Oil & Gas Study Desk</h1>
+        <p>Esta web usa JavaScript para convertir el manual Markdown en una experiencia de estudio interactiva.</p>
+      </section>
+    </noscript>
 
     <template id="emptyStateTemplate">
       <div class="empty-state">
