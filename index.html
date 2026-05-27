@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Oil & Gas Study Desk</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23111827'/%3E%3Cpath d='M17 45h30M23 45V22h18v23M27 22V12h10v10M29 29h6M29 36h6' stroke='white' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Modulos">
+        <div class="brand">
+          <span class="brand-mark">YPF</span>
+          <div>
+            <strong>Oil & Gas Desk</strong>
+            <small>Estudio personal</small>
+          </div>
+        </div>
+
+        <label class="search-box">
+          <span class="icon" data-icon="search"></span>
+          <input id="searchInput" type="search" placeholder="Buscar conceptos" autocomplete="off" />
+        </label>
+
+        <div class="side-section">
+          <div class="side-title">Curriculum</div>
+          <nav id="moduleList" class="module-list"></nav>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div class="topbar-title">
+            <span class="eyebrow" id="activeContext">Manual ejecutivo</span>
+            <h1 id="pageTitle">Cargando manual</h1>
+          </div>
+          <div class="top-actions">
+            <button class="icon-button" id="decreaseText" title="Reducir texto" aria-label="Reducir texto">
+              <span class="icon" data-icon="minus"></span>
+            </button>
+            <button class="icon-button" id="increaseText" title="Aumentar texto" aria-label="Aumentar texto">
+              <span class="icon" data-icon="plus"></span>
+            </button>
+            <button class="primary-button" id="markDone">
+              <span class="icon" data-icon="check"></span>
+              Estudiado
+            </button>
+          </div>
+        </header>
+
+        <section class="image-strip" aria-label="Cadena de valor oil and gas">
+          <img src="assets/energy-chain.png" alt="Cadena de valor de petroleo y gas con pozo, ductos, refineria y LNG" />
+          <div class="image-overlay">
+            <strong>Roca -> pozo -> ducto -> refineria -> mercado</strong>
+            <span id="studyStats">0 modulos completados</span>
+          </div>
+        </section>
+
+        <section class="control-band">
+          <div class="segmented" role="tablist" aria-label="Vistas de estudio">
+            <button class="segment active" data-view="read" role="tab">Lectura</button>
+            <button class="segment" data-view="map" role="tab">Mapa</button>
+            <button class="segment" data-view="cards" role="tab">Tarjetas</button>
+            <button class="segment" data-view="quiz" role="tab">Quiz</button>
+            <button class="segment" data-view="kpis" role="tab">KPIs</button>
+            <button class="segment" data-view="notes" role="tab">Notas</button>
+          </div>
+          <div class="quick-metrics" id="quickMetrics"></div>
+        </section>
+
+        <section id="searchResults" class="search-results" hidden></section>
+
+        <div class="content-layout">
+          <article id="mainContent" class="reader" aria-live="polite"></article>
+          <aside class="study-rail" aria-label="Panel de estudio">
+            <div class="rail-panel">
+              <div class="rail-title">
+                <span class="icon" data-icon="activity"></span>
+                Progreso
+              </div>
+              <div class="progress-ring" id="progressRing">
+                <span>0%</span>
+              </div>
+              <div class="rail-meta" id="progressMeta">Sin avance guardado</div>
+            </div>
+
+            <div class="rail-panel">
+              <div class="rail-title">
+                <span class="icon" data-icon="target"></span>
+                Foco
+              </div>
+              <div id="focusList" class="focus-list"></div>
+            </div>
+          </aside>
+        </div>
+      </main>
+    </div>
+
+    <template id="emptyStateTemplate">
+      <div class="empty-state">
+        <span class="icon large" data-icon="file"></span>
+        <h2>No se pudo cargar el manual</h2>
+        <p>Revisa que el archivo manual_oil_gas_ypf.md este junto a index.html.</p>
+      </div>
+    </template>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
