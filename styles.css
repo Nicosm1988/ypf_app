@@ -383,6 +383,12 @@ p {
   font-weight: 800;
 }
 
+body[data-view="map"] .image-strip,
+body[data-view="flow"] .image-strip {
+  min-height: 180px;
+  height: 180px;
+}
+
 .control-band {
   display: flex;
   align-items: center;
@@ -480,6 +486,16 @@ p {
   grid-template-columns: minmax(0, 1fr) 280px;
   gap: 18px;
   align-items: start;
+}
+
+body[data-view="map"] .content-layout,
+body[data-view="flow"] .content-layout {
+  grid-template-columns: 1fr;
+}
+
+body[data-view="map"] .study-rail,
+body[data-view="flow"] .study-rail {
+  display: none;
 }
 
 .reader,
@@ -630,9 +646,22 @@ p {
   display: grid;
   grid-template-columns: 20px minmax(0, 1fr);
   gap: 8px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: #374151;
   font-size: 13px;
   line-height: 1.35;
+  text-align: left;
+}
+
+.focus-link {
+  cursor: pointer;
+}
+
+.focus-link:hover span:last-child {
+  color: var(--accent);
 }
 
 .tool-surface {
@@ -708,6 +737,385 @@ p {
   margin: 0;
   color: var(--muted);
   line-height: 1.55;
+}
+
+.concept-chip {
+  display: inline;
+  padding: 1px 4px;
+  border: 0;
+  border-radius: 5px;
+  background: #dcefeb;
+  color: #075e57;
+  font: inherit;
+  font-weight: 750;
+  line-height: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.concept-chip:hover {
+  background: #c6e4de;
+}
+
+.concept-map {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.concept-canvas,
+.concept-detail,
+.scenario-detail,
+.flow-board {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfaf6;
+}
+
+.concept-canvas {
+  min-height: 360px;
+  aspect-ratio: 1140 / 560;
+  overflow: hidden;
+  position: relative;
+}
+
+.concept-canvas svg {
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  display: block;
+}
+
+.concept-edge line {
+  stroke: #9aa8a0;
+  stroke-width: 2;
+  stroke-dasharray: 8 8;
+  animation: edgeFlow 5s linear infinite;
+  animation-delay: var(--edge-delay);
+}
+
+.concept-edge text {
+  fill: #5f6b63;
+  font-size: 12px;
+  font-weight: 750;
+  paint-order: stroke;
+  stroke: #fbfaf6;
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+
+.concept-edge path,
+.concept-edge marker path {
+  fill: #8ca096;
+}
+
+.concept-edge.active line {
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+
+.concept-edge.active text {
+  fill: #075e57;
+}
+
+.concept-edge.muted {
+  opacity: 0.24;
+}
+
+.concept-node {
+  cursor: pointer;
+  outline: 0;
+}
+
+.concept-node circle {
+  fill: #eef4ef;
+  stroke: #87afa6;
+  stroke-width: 2;
+  filter: drop-shadow(0 8px 12px rgba(31, 41, 55, 0.13));
+  transition: transform 160ms ease, fill 160ms ease, stroke 160ms ease;
+}
+
+.concept-node text {
+  fill: #1f2933;
+  font-size: 13px;
+  font-weight: 900;
+  pointer-events: none;
+}
+
+.concept-node.related circle {
+  fill: #f5efe5;
+  stroke: var(--accent-2);
+}
+
+.concept-node.active circle {
+  fill: var(--accent);
+  stroke: #064e3b;
+  animation: nodePulse 2.4s ease-in-out infinite;
+}
+
+.concept-node.active text {
+  fill: #ffffff;
+}
+
+.concept-node.muted {
+  opacity: 0.38;
+}
+
+.concept-node:hover circle,
+.concept-node:focus-visible circle {
+  transform: scale(1.08);
+  transform-origin: center;
+  stroke: #111827;
+}
+
+.concept-detail {
+  padding: 16px;
+}
+
+.concept-detail h3,
+.scenario-detail h3 {
+  margin: 4px 0 10px;
+  font-size: 25px;
+  line-height: 1.1;
+}
+
+.concept-detail p,
+.scenario-detail p {
+  color: #34433a;
+  line-height: 1.55;
+}
+
+.detail-block {
+  display: grid;
+  gap: 4px;
+  margin-top: 13px;
+}
+
+.detail-block strong {
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.detail-block span {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.concept-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.concept-tags span {
+  padding: 6px 8px;
+  border: 1px solid #c7d7d1;
+  border-radius: 8px;
+  background: #edf7f4;
+  color: #075e57;
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.relation-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.relation-button {
+  display: grid;
+  gap: 3px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  text-align: left;
+}
+
+.relation-button strong {
+  color: var(--ink);
+}
+
+.relation-button span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.system-lenses {
+  margin-top: 14px;
+}
+
+.scenario-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.scenario-button {
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.scenario-button.active {
+  border-color: var(--accent);
+  background: #e8f3f1;
+  color: var(--accent);
+}
+
+.flow-board {
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.flow-track {
+  position: absolute;
+  left: 34px;
+  right: 34px;
+  top: 80px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #64748b, #0f766e, #b45309, #315f7d);
+  opacity: 0.72;
+}
+
+.flow-pulse {
+  position: absolute;
+  top: -6px;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.18), 0 0 24px rgba(15, 118, 110, 0.5);
+  animation: moleculeMove 5.8s linear infinite;
+  animation-delay: var(--pulse-delay);
+}
+
+.flow-board.high .flow-pulse {
+  animation-duration: 8s;
+  background: #fed7aa;
+  box-shadow: 0 0 0 4px rgba(180, 83, 9, 0.18), 0 0 24px rgba(180, 83, 9, 0.45);
+}
+
+.flow-board.low .flow-pulse {
+  animation-duration: 4.6s;
+}
+
+.flow-steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(124px, 1fr));
+  gap: 10px;
+  z-index: 1;
+}
+
+.flow-step {
+  min-height: 250px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid rgba(217, 222, 215, 0.9);
+  border-radius: 8px;
+  background: rgba(255, 253, 250, 0.92);
+  box-shadow: 0 14px 24px rgba(31, 41, 55, 0.08);
+  animation: stepRise 520ms ease both;
+  animation-delay: calc(var(--step-index) * 70ms);
+}
+
+.step-number {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #111827;
+  color: #ffffff;
+  font-weight: 900;
+}
+
+.flow-step h3 {
+  margin: 6px 0 0;
+  font-size: 18px;
+}
+
+.flow-step strong {
+  color: var(--accent);
+  font-size: 13px;
+}
+
+.flow-step p {
+  margin: 0;
+  color: #34433a;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.flow-step small {
+  align-self: end;
+  color: var(--accent-2);
+  font-weight: 850;
+  line-height: 1.3;
+}
+
+.scenario-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 14px;
+  margin-top: 14px;
+  padding: 16px;
+}
+
+@keyframes edgeFlow {
+  from {
+    stroke-dashoffset: 24;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes nodePulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 8px 12px rgba(31, 41, 55, 0.16));
+  }
+  50% {
+    filter: drop-shadow(0 0 22px rgba(15, 118, 110, 0.45));
+  }
+}
+
+@keyframes moleculeMove {
+  from {
+    left: 0;
+  }
+  to {
+    left: calc(100% - 22px);
+  }
+}
+
+@keyframes stepRise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .flashcard {
@@ -974,8 +1382,31 @@ p {
   .study-rail,
   .analysis-grid,
   .kpi-grid,
-  .value-chain {
+  .value-chain,
+  .concept-map,
+  .scenario-detail {
     grid-template-columns: 1fr;
+  }
+
+  .concept-canvas,
+  .concept-canvas svg {
+    min-height: 430px;
+  }
+
+  .concept-detail {
+    order: -1;
+  }
+
+  .flow-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .flow-track {
+    display: none;
+  }
+
+  .flow-step {
+    min-height: 210px;
   }
 }
 
@@ -1007,5 +1438,32 @@ p {
 
   .quick-metrics {
     justify-content: flex-start;
+  }
+
+  .concept-canvas {
+    overflow-x: auto;
+  }
+
+  .concept-canvas svg {
+    width: 760px;
+  }
+
+  .flow-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-step {
+    min-height: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
   }
 }

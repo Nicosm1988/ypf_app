@@ -244,10 +244,325 @@ const kpis = [
   { area: "Sustentabilidad", name: "Intensidad de emisiones", formula: "kgCO2e / boe o t producto", source: "HSE, energia y sensores", use: "Compara huella operativa por activo." },
 ];
 
+const concepts = [
+  {
+    id: "roca",
+    label: "Roca",
+    group: "Subsuelo",
+    module: 2,
+    x: 110,
+    y: 160,
+    aliases: ["geologia", "roca madre", "shale"],
+    definition: "Sistema geologico que contiene o genero hidrocarburos. En shale, la roca madre tambien funciona como reservorio.",
+    why: "La calidad de roca marca el techo tecnico: sin espesor, presion, madurez y contenido organico adecuados, no hay pozo que arregle el negocio.",
+    kpis: ["TOC", "Espesor", "Presion", "Madurez termica"],
+    decision: "Elegir areas, landing zones, pilotos y ritmo de appraisal.",
+  },
+  {
+    id: "reservas",
+    label: "Reservas",
+    group: "Portafolio",
+    module: 2,
+    x: 280,
+    y: 110,
+    aliases: ["recursos", "P1", "P2", "P3"],
+    definition: "Volumen recuperable comercialmente bajo condiciones tecnicas, economicas y regulatorias.",
+    why: "Son la base de valor futuro de la empresa y conectan geologia, precio, capex, permisos y contabilidad.",
+    kpis: ["P1", "P2", "P3", "RRR", "Vida de reservas"],
+    decision: "Asignar capital a exploracion, desarrollo, adquisiciones o desinversiones.",
+  },
+  {
+    id: "pozo",
+    label: "Pozo",
+    group: "Operacion",
+    module: 2,
+    x: 290,
+    y: 260,
+    aliases: ["perforacion", "pozos horizontales", "pad drilling"],
+    definition: "Activo que conecta superficie con reservorio y convierte potencial geologico en flujo medible.",
+    why: "En shale, el pozo es una unidad de manufactura: lateral, etapas, arena, agua y NPT definen retorno.",
+    kpis: ["Costo por pozo", "Metros laterales", "NPT", "Dias de perforacion"],
+    decision: "Optimizar diseno de pozo, contratistas, secuencia de pads y curva de aprendizaje.",
+  },
+  {
+    id: "fractura",
+    label: "Fractura",
+    group: "Operacion",
+    module: 3,
+    x: 455,
+    y: 220,
+    aliases: ["completacion", "etapas de fractura", "arena", "agua"],
+    definition: "Estimula la roca con agua, arena y aditivos para crear conductividad artificial.",
+    why: "Es una de las palancas mas fuertes de productividad y costo en Vaca Muerta.",
+    kpis: ["Etapas/dia", "Arena/pozo", "Agua/pozo", "IP30", "IP90"],
+    decision: "Definir intensidad de completacion, proveedores, logistica de arena y abastecimiento de agua.",
+  },
+  {
+    id: "produccion",
+    label: "Produccion",
+    group: "Operacion",
+    module: 2,
+    x: 565,
+    y: 115,
+    aliases: ["IP30", "declino", "EUR", "uptime"],
+    definition: "Flujo diario de crudo, gas, agua y solidos que sale del sistema pozo-reservorio.",
+    why: "La produccion mueve ingresos, reservas producidas, regalias, opex, emisiones e infraestructura.",
+    kpis: ["bbl/d", "Mm3/d", "EUR", "Declino", "Uptime"],
+    decision: "Ajustar choke, workovers, mantenimiento, forecast y perforacion necesaria para sostener plateau.",
+  },
+  {
+    id: "facilities",
+    label: "Facilities",
+    group: "Superficie",
+    module: 2,
+    x: 620,
+    y: 300,
+    aliases: ["tratamiento", "separacion", "agua de produccion", "SCADA"],
+    definition: "Equipos de superficie que separan, tratan, miden, comprimen y preparan fluidos para transporte.",
+    why: "Si superficie queda chica, el subsuelo bueno no se monetiza; aparecen shut-ins, offspec o venteos.",
+    kpis: ["Disponibilidad", "Downtime", "Agua producida", "Gas venteado"],
+    decision: "Invertir en plantas, compresion, energia, medicion y automatizacion.",
+  },
+  {
+    id: "midstream",
+    label: "Midstream",
+    group: "Infraestructura",
+    module: 4,
+    x: 755,
+    y: 205,
+    aliases: ["oleoductos", "gasoductos", "linepack", "evacuacion"],
+    definition: "Red de gathering, plantas, ductos, tanques, compresion y terminales que mueve la produccion.",
+    why: "Es el cuello que puede frenar Vaca Muerta aunque haya roca y pozos excelentes.",
+    kpis: ["Throughput", "Capacidad usada", "Linepack", "Nominaciones"],
+    decision: "Contratar capacidad firme, expandir ductos, priorizar pads o redireccionar mercado.",
+  },
+  {
+    id: "refineria",
+    label: "Refineria",
+    group: "Downstream",
+    module: 5,
+    x: 890,
+    y: 330,
+    aliases: ["downstream", "blending", "margen de refinacion", "crack spread"],
+    definition: "Complejo industrial que transforma crudo en combustibles, asfaltos, GLP, lubricantes y feedstocks.",
+    why: "Convierte un barril en mix de productos y margen, y sostiene abastecimiento domestico.",
+    kpis: ["Utilizacion", "Yield", "Margen", "Disponibilidad mecanica"],
+    decision: "Elegir slate, paradas, imports/exports, blending y proyectos de conversion.",
+  },
+  {
+    id: "trading",
+    label: "Trading",
+    group: "Mercado",
+    module: 6,
+    x: 835,
+    y: 95,
+    aliases: ["Brent", "WTI", "netback", "hedging"],
+    definition: "Gestion comercial de precios, contratos, fletes, calidad, paridades, inventarios y coberturas.",
+    why: "El valor real no es Brent: es precio realizado neto de costos, impuestos, restricciones y timing.",
+    kpis: ["Netback", "Realized price", "VaR", "Inventarios"],
+    decision: "Exportar, refinar, importar, almacenar, cubrir precio o ajustar produccion.",
+  },
+  {
+    id: "mercado",
+    label: "Mercado",
+    group: "Cliente",
+    module: 6,
+    x: 1015,
+    y: 190,
+    aliases: ["exportacion", "importacion", "estaciones", "demanda"],
+    definition: "Demanda domestica, regional o global que paga por crudo, gas, LNG, combustibles o petroquimicos.",
+    why: "Sin mercado firme, el recurso no se transforma en caja; con mercado correcto, se vuelve estrategia pais.",
+    kpis: ["Market share", "Paridad", "Volumen vendido", "Margen canal"],
+    decision: "Balancear mercado interno, exportaciones, precios, inventarios y seguridad energetica.",
+  },
+  {
+    id: "caja",
+    label: "Caja",
+    group: "Finanzas",
+    module: 10,
+    x: 1030,
+    y: 395,
+    aliases: ["EBITDA", "free cash flow", "ROCE", "deuda"],
+    definition: "Resultado financiero que queda despues de convertir volumen fisico en ventas, margen y flujo de fondos.",
+    why: "La caja decide si la empresa puede perforar mas, bajar deuda, financiar LNG o atravesar ciclos de precio.",
+    kpis: ["EBITDA", "FCF", "ROCE", "Deuda neta/EBITDA"],
+    decision: "Priorizar capex, financiar proyectos, pagar deuda o asociarse.",
+  },
+  {
+    id: "datos",
+    label: "Datos",
+    group: "Digital",
+    module: 12,
+    x: 720,
+    y: 465,
+    aliases: ["Power BI", "Microsoft Fabric", "SCADA", "IA"],
+    definition: "Capa que integra sensores, SCADA, ERP, EAM, laboratorio, trading, ventas, finanzas y emisiones.",
+    why: "Permite ver relaciones invisibles: pozo, ducto, refineria, precio, inventario, seguridad y caja en un mismo sistema.",
+    kpis: ["Calidad del dato", "Latencia", "Indicadores certificados", "Valor IA"],
+    decision: "Certificar KPIs, automatizar alertas, crear gemelos digitales y priorizar casos IA.",
+  },
+  {
+    id: "vaca-muerta",
+    label: "Vaca Muerta",
+    group: "Argentina",
+    module: 9,
+    x: 450,
+    y: 440,
+    aliases: ["Neuquen", "shale oil", "shale gas"],
+    definition: "Formacion no convencional de la Cuenca Neuquina con ventanas de petroleo, gas humedo y gas seco.",
+    why: "Puede cambiar energia, exportaciones, divisas, proveedores, tecnologia y geopolitica argentina.",
+    kpis: ["Produccion shale", "Pozos conectados", "Capacidad evacuacion", "Exportaciones"],
+    decision: "Acelerar oil, desarrollar gas, invertir midstream, estructurar LNG y estabilizar reglas.",
+  },
+  {
+    id: "ypf",
+    label: "YPF",
+    group: "Empresa",
+    module: 10,
+    x: 220,
+    y: 435,
+    aliases: ["empresa integrada", "directorio", "capex"],
+    definition: "Empresa integrada con upstream, downstream, comercializacion, infraestructura, datos y rol estrategico nacional.",
+    why: "Coordina barriles, combustibles, infraestructura, seguridad energetica, deuda, socios y Vaca Muerta.",
+    kpis: ["Reservas P1", "RRR", "Capex", "Margen downstream", "FCF"],
+    decision: "Asignar capital entre shale, refinerias, infraestructura, LNG, deuda y abastecimiento interno.",
+  },
+  {
+    id: "lng",
+    label: "LNG",
+    group: "Exportacion",
+    module: 9,
+    x: 1010,
+    y: 505,
+    aliases: ["gas natural licuado", "FLNG", "Argentina LNG"],
+    definition: "Gas natural enfriado para transporte maritimo, que permite vender gas a mercados globales.",
+    why: "Puede romper la estacionalidad del gas argentino y convertir Vaca Muerta en plataforma exportadora.",
+    kpis: ["Mtpa", "FID", "Contratos", "Utilizacion gasoducto"],
+    decision: "Asegurar gas, ductos, compradores, financiamiento, permisos y estabilidad fiscal.",
+  },
+];
+
+const conceptLinks = [
+  ["roca", "reservas", "certifica potencial"],
+  ["roca", "pozo", "define diseno"],
+  ["pozo", "fractura", "se completa"],
+  ["fractura", "produccion", "desbloquea flujo"],
+  ["produccion", "facilities", "entra a superficie"],
+  ["facilities", "midstream", "entrega especificado"],
+  ["midstream", "refineria", "abastece crudo"],
+  ["midstream", "trading", "habilita ruta"],
+  ["trading", "mercado", "captura precio"],
+  ["refineria", "mercado", "vende combustibles"],
+  ["mercado", "caja", "genera ingresos"],
+  ["caja", "ypf", "financia capex"],
+  ["ypf", "vaca-muerta", "prioriza portafolio"],
+  ["vaca-muerta", "roca", "nace en subsuelo"],
+  ["vaca-muerta", "midstream", "necesita evacuacion"],
+  ["vaca-muerta", "lng", "monetiza gas"],
+  ["lng", "mercado", "abre demanda global"],
+  ["datos", "pozo", "optimiza operacion"],
+  ["datos", "midstream", "detecta cuellos"],
+  ["datos", "refineria", "optimiza margen"],
+  ["datos", "caja", "certifica decisiones"],
+  ["ypf", "datos", "gobierna KPIs"],
+];
+
+const flowSteps = [
+  {
+    id: "rock",
+    title: "Roca",
+    subtitle: "Potencial geologico",
+    body: "TOC, espesor, presion y madurez definen si el recurso puede convertirse en inventario economico.",
+    kpi: "TOC / espesor / presion",
+  },
+  {
+    id: "well",
+    title: "Pozo",
+    subtitle: "Contacto con la roca",
+    body: "El pozo horizontal y la completacion convierten roca en caudal inicial, EUR y curva de declino.",
+    kpi: "Costo por pozo / IP30 / EUR",
+  },
+  {
+    id: "surface",
+    title: "Superficie",
+    subtitle: "Tratamiento y medicion",
+    body: "Separadores, compresion, agua, energia y medicion fiscal preparan el producto para transportar.",
+    kpi: "Uptime / downtime / offspec",
+  },
+  {
+    id: "midstream",
+    title: "Midstream",
+    subtitle: "Evacuacion",
+    body: "Ductos, tanques, linepack y terminales determinan si la produccion llega al mercado sin descuento.",
+    kpi: "Capacidad usada / throughput",
+  },
+  {
+    id: "conversion",
+    title: "Conversion",
+    subtitle: "Refino o LNG",
+    body: "El crudo puede ir a refineria; el gas puede ir a demanda interna, exportacion regional o LNG.",
+    kpi: "Margen refino / Mtpa LNG",
+  },
+  {
+    id: "market",
+    title: "Mercado",
+    subtitle: "Precio neto",
+    body: "El cliente paga segun calidad, flete, impuestos, paridad, regulacion y oportunidad comercial.",
+    kpi: "Netback / margen canal",
+  },
+  {
+    id: "cash",
+    title: "Caja",
+    subtitle: "Reinversion",
+    body: "La caja resultante financia capex, deuda, mantenimiento, seguridad, tecnologia y nuevos proyectos.",
+    kpi: "FCF / ROCE / deuda",
+  },
+];
+
+const flowScenarios = [
+  {
+    id: "base",
+    label: "Base integrada",
+    effect: "El sistema fluye si pozo, planta, ducto, refineria/puerto y mercado tienen capacidad alineada.",
+    decision: "Mantener ritmo de desarrollo y monitorear desviaciones entre produccion, transporte e inventarios.",
+    stress: "mid",
+  },
+  {
+    id: "bottleneck",
+    label: "Cuello midstream",
+    effect: "La produccion fisica queda limitada por ductos, tanques, compresion o terminales.",
+    decision: "Contratar capacidad firme, expandir infraestructura o reordenar el plan de pads.",
+    stress: "high",
+  },
+  {
+    id: "price",
+    label: "Precio local bajo",
+    effect: "El volumen puede existir, pero el netback cae y se posterga capex de crecimiento.",
+    decision: "Comparar paridad exportacion/importacion, sensibilidad Brent/FX y caja disponible.",
+    stress: "high",
+  },
+  {
+    id: "export",
+    label: "Exportacion habilitada",
+    effect: "La produccion incremental compite por mercados globales y puede transformarse en dolares.",
+    decision: "Asegurar calidad, terminal, contratos, permisos, flete y cobertura de precio.",
+    stress: "low",
+  },
+  {
+    id: "refinery",
+    label: "Refineria parada",
+    effect: "Baja conversion local: suben inventarios de crudo o imports de combustibles segun demanda.",
+    decision: "Reprogramar slate, importar producto, exportar crudo o ajustar inventarios criticos.",
+    stress: "mid",
+  },
+];
+
 const state = {
   modules: [],
   activeModule: 0,
   view: "read",
+  selectedConcept: "vaca-muerta",
+  flowScenario: "base",
   query: "",
   done: new Set(),
   notes: {},
@@ -398,6 +713,7 @@ function extractObjective(content) {
 
 function render() {
   document.documentElement.style.setProperty("--reader-size", `${state.textSize}px`);
+  document.body.dataset.view = state.view;
   const module = currentModule();
   els.pageTitle.textContent = module.title;
   els.activeContext.textContent = module.id === 0 ? "Manual ejecutivo" : `Modulo ${module.id}`;
@@ -516,13 +832,34 @@ function renderSearch() {
 function renderFocus() {
   const items = focusBank[state.activeModule] ?? focusBank[0];
   els.focusList.innerHTML = items
-    .map((item) => `<div class="focus-item"><span class="icon" data-icon="check"></span><span>${escapeHtml(item)}</span></div>`)
+    .map((item) => {
+      const concept = conceptForTerm(item);
+      if (!concept) {
+        return `<div class="focus-item"><span class="icon" data-icon="check"></span><span>${escapeHtml(item)}</span></div>`;
+      }
+      return `
+        <button class="focus-item focus-link" data-concept="${concept.id}">
+          <span class="icon" data-icon="check"></span>
+          <span>${escapeHtml(item)}</span>
+        </button>
+      `;
+    })
     .join("");
+
+  els.focusList.querySelectorAll("[data-concept]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.selectedConcept = button.dataset.concept;
+      state.view = "map";
+      saveState();
+      render();
+    });
+  });
 }
 
 function renderView() {
   if (state.view === "read") return renderRead();
   if (state.view === "map") return renderMap();
+  if (state.view === "flow") return renderFlow();
   if (state.view === "cards") return renderCards();
   if (state.view === "quiz") return renderQuiz();
   if (state.view === "kpis") return renderKpis();
@@ -533,48 +870,113 @@ function renderView() {
 function renderRead() {
   els.mainContent.className = "reader";
   els.mainContent.innerHTML = markdownToHtml(currentModule().content);
+  annotateConceptTerms(els.mainContent);
 }
 
 function renderMap() {
   const module = currentModule();
+  const selected = getConcept(state.selectedConcept) ?? getConcept("vaca-muerta");
+  const visible = conceptsForCurrentModule();
+  const visibleIds = new Set(visible.map((concept) => concept.id));
+  const linkedIds = new Set([selected.id, ...conceptLinks.filter((link) => link.includes(selected.id)).flat()]);
+  const svgWidth = 1140;
+  const svgHeight = 560;
+
   els.mainContent.className = "tool-surface";
   els.mainContent.innerHTML = `
     <div class="tool-header">
       <div>
-        <h2>Mapa de decision</h2>
+        <h2>Conexiones de negocio</h2>
         <p>${escapeHtml(module.title)}</p>
       </div>
-      <button class="ghost-button" id="backToRead"><span class="icon" data-icon="book"></span>Lectura</button>
+      <button class="ghost-button" id="backToRead"><span class="icon" data-icon="book"></span>Leer modulo</button>
     </div>
 
-    <div class="value-chain">
-      ${[
-        ["Roca", "Calidad geologica, presion, ventana de fluidos y recursos."],
-        ["Pozo", "Perforacion, completacion, EUR, costo y declino."],
-        ["Superficie", "Separacion, tratamiento, medicion, agua y energia."],
-        ["Midstream", "Evacuacion, ductos, tanques, nominaciones y capacidad."],
-        ["Mercado", "Refinacion, trading, ventas, netback, caja y riesgo."],
-      ]
-        .map(([title, body]) => `<div class="chain-node"><strong>${title}</strong><span>${body}</span></div>`)
-        .join("")}
+    <div class="concept-map">
+      <div class="concept-canvas" aria-label="Grafo conceptual oil and gas">
+        <svg viewBox="0 0 ${svgWidth} ${svgHeight}" preserveAspectRatio="xMidYMin meet" role="img" aria-labelledby="conceptGraphTitle conceptGraphDesc">
+          <title id="conceptGraphTitle">Grafo conceptual de la industria oil and gas</title>
+          <desc id="conceptGraphDesc">Nodos de subsuelo, operacion, midstream, downstream, mercado, finanzas y datos conectados por relaciones de valor.</desc>
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#8ca096"></path>
+            </marker>
+          </defs>
+          ${conceptLinks
+            .map(([from, to, label], index) => {
+              const a = getConcept(from);
+              const b = getConcept(to);
+              const highlighted = linkedIds.has(from) && linkedIds.has(to);
+              const muted = !visibleIds.has(from) && !visibleIds.has(to);
+              const mx = (a.x + b.x) / 2;
+              const my = (a.y + b.y) / 2;
+              return `
+                <g class="concept-edge ${highlighted ? "active" : ""} ${muted ? "muted" : ""}" style="--edge-delay:${index * 55}ms">
+                  <line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" marker-end="url(#arrow)"></line>
+                  <text x="${mx}" y="${my - 8}">${escapeHtml(label)}</text>
+                </g>
+              `;
+            })
+            .join("")}
+          ${concepts
+            .map((concept) => {
+              const active = concept.id === selected.id;
+              const related = linkedIds.has(concept.id);
+              const muted = !visibleIds.has(concept.id) && !related;
+              return `
+                <g class="concept-node ${active ? "active" : ""} ${related ? "related" : ""} ${muted ? "muted" : ""}" data-concept="${concept.id}" tabindex="0" role="button" aria-label="${escapeHtml(concept.label)}">
+                  <circle cx="${concept.x}" cy="${concept.y}" r="${active ? 39 : 32}"></circle>
+                  <text x="${concept.x}" y="${concept.y + 5}" text-anchor="middle">${escapeHtml(concept.label)}</text>
+                </g>
+              `;
+            })
+            .join("")}
+        </svg>
+      </div>
+
+      <aside class="concept-detail" aria-live="polite">
+        <span class="card-label">${escapeHtml(selected.group)}</span>
+        <h3>${escapeHtml(selected.label)}</h3>
+        <p>${escapeHtml(selected.definition)}</p>
+        <div class="detail-block">
+          <strong>Por que importa</strong>
+          <span>${escapeHtml(selected.why)}</span>
+        </div>
+        <div class="detail-block">
+          <strong>Decision que habilita</strong>
+          <span>${escapeHtml(selected.decision)}</span>
+        </div>
+        <div class="concept-tags">
+          ${selected.kpis.map((kpi) => `<span>${escapeHtml(kpi)}</span>`).join("")}
+        </div>
+        <div class="relation-list">
+          ${conceptLinks
+            .filter((link) => link.includes(selected.id))
+            .map(([from, to, label]) => {
+              const other = getConcept(from === selected.id ? to : from);
+              return `<button class="relation-button" data-concept="${other.id}"><strong>${escapeHtml(other.label)}</strong><span>${escapeHtml(label)}</span></button>`;
+            })
+            .join("")}
+        </div>
+      </aside>
     </div>
 
-    <div class="analysis-grid">
+    <div class="analysis-grid system-lenses">
       <div class="analysis-card">
-        <h3>Director</h3>
-        <p>Pregunta por retorno, riesgo, caja, deuda, permisos, socios, opcion exportadora y resiliencia del portafolio.</p>
+        <h3>Subsuelo</h3>
+        <p>Roca y reservas definen el potencial, pero solo se vuelven valor si pozo, completacion y superficie lo convierten en caudal repetible.</p>
       </div>
       <div class="analysis-card">
-        <h3>Gerente operativo</h3>
-        <p>Mira plan vs real, uptime, restricciones, seguridad, mantenimiento, contratistas y capacidad de respuesta diaria.</p>
+        <h3>Infraestructura</h3>
+        <p>Midstream decide la velocidad real de crecimiento: capacidad, linepack, tanques, terminales y contratos pueden habilitar o frenar Vaca Muerta.</p>
       </div>
       <div class="analysis-card">
-        <h3>Analista de datos</h3>
-        <p>Conecta activos, produccion, costos, precios, calidad, inventarios y emisiones en indicadores certificados.</p>
+        <h3>Mercado</h3>
+        <p>Trading, refineria, LNG y clientes convierten moleculas en netback. El precio relevante es el realizado, no solo el benchmark.</p>
       </div>
       <div class="analysis-card">
-        <h3>Riesgo critico</h3>
-        <p>El error mas caro suele estar en la interfaz: pozo sin ducto, refineria sin unidad disponible o precio sin netback.</p>
+        <h3>Datos</h3>
+        <p>SCADA, ERP, EAM, laboratorio, trading y Power BI conectan operacion con caja, riesgo y decisiones del directorio.</p>
       </div>
     </div>
   `;
@@ -583,6 +985,95 @@ function renderMap() {
     state.view = "read";
     saveState();
     render();
+  });
+  els.mainContent.querySelectorAll("[data-concept]").forEach((node) => {
+    node.addEventListener("click", () => {
+      state.selectedConcept = node.dataset.concept;
+      saveState();
+      renderMap();
+      paintIcons();
+    });
+    node.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        node.dispatchEvent(new Event("click"));
+      }
+    });
+  });
+}
+
+function renderFlow() {
+  const selected = flowScenarios.find((scenario) => scenario.id === state.flowScenario) ?? flowScenarios[0];
+  els.mainContent.className = "tool-surface";
+  els.mainContent.innerHTML = `
+    <div class="tool-header">
+      <div>
+        <h2>Flujo de valor</h2>
+        <p>De recurso geologico a decision financiera.</p>
+      </div>
+      <button class="ghost-button" id="flowToMap"><span class="icon" data-icon="activity"></span>Ver conexiones</button>
+    </div>
+
+    <div class="scenario-bar" aria-label="Escenarios">
+      ${flowScenarios
+        .map(
+          (scenario) => `
+            <button class="scenario-button ${scenario.id === selected.id ? "active" : ""}" data-scenario="${scenario.id}" aria-pressed="${scenario.id === selected.id}">
+              ${escapeHtml(scenario.label)}
+            </button>
+          `,
+        )
+        .join("")}
+    </div>
+
+    <div class="flow-board ${selected.stress}" aria-label="Cadena animada de valor">
+      <div class="flow-track">
+        ${Array.from({ length: 9 })
+          .map((_, index) => `<span class="flow-pulse" style="--pulse-delay:${index * 0.42}s"></span>`)
+          .join("")}
+      </div>
+      <div class="flow-steps">
+        ${flowSteps
+          .map(
+            (step, index) => `
+              <article class="flow-step" style="--step-index:${index}">
+                <span class="step-number">${index + 1}</span>
+                <h3>${escapeHtml(step.title)}</h3>
+                <strong>${escapeHtml(step.subtitle)}</strong>
+                <p>${escapeHtml(step.body)}</p>
+                <small>${escapeHtml(step.kpi)}</small>
+              </article>
+            `,
+          )
+          .join("")}
+      </div>
+    </div>
+
+    <div class="scenario-detail">
+      <div>
+        <span class="card-label">Escenario</span>
+        <h3>${escapeHtml(selected.label)}</h3>
+        <p>${escapeHtml(selected.effect)}</p>
+      </div>
+      <div class="detail-block">
+        <strong>Decision ejecutiva</strong>
+        <span>${escapeHtml(selected.decision)}</span>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("flowToMap").addEventListener("click", () => {
+    state.view = "map";
+    saveState();
+    render();
+  });
+  els.mainContent.querySelectorAll(".scenario-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.flowScenario = button.dataset.scenario;
+      saveState();
+      renderFlow();
+      paintIcons();
+    });
   });
 }
 
@@ -932,6 +1423,101 @@ function cleanMarkdown(value) {
     .trim();
 }
 
+function getConcept(id) {
+  return concepts.find((concept) => concept.id === id);
+}
+
+function conceptsForCurrentModule() {
+  const moduleId = state.activeModule;
+  if (moduleId === 0) return concepts;
+  const linked = new Set(
+    concepts
+      .filter((concept) => concept.module === moduleId)
+      .flatMap((concept) => [concept.id, ...conceptLinks.filter((link) => link.includes(concept.id)).flat()]),
+  );
+  const result = concepts.filter((concept) => concept.module === moduleId || linked.has(concept.id));
+  return result.length ? result : concepts;
+}
+
+function conceptForTerm(term) {
+  const normalized = normalizeTerm(term);
+  return concepts.find((concept) => {
+    const labels = [concept.label, ...(concept.aliases ?? [])].map(normalizeTerm);
+    return labels.includes(normalized);
+  });
+}
+
+function conceptGlossary() {
+  return concepts
+    .flatMap((concept) => [concept.label, ...(concept.aliases ?? [])].map((term) => ({ term, concept })))
+    .filter((entry) => entry.term.length > 2)
+    .sort((a, b) => b.term.length - a.term.length);
+}
+
+function normalizeTerm(value) {
+  return String(value)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+function annotateConceptTerms(root) {
+  const glossary = conceptGlossary();
+  const used = new Set();
+  let count = 0;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement;
+      if (!parent || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      if (parent.closest("a, button, code, pre, h1, h2, h3, h4, th")) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    },
+  });
+
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  for (const node of nodes) {
+    if (count >= 28) break;
+    const text = node.nodeValue;
+    const lower = normalizeTerm(text);
+    const match = glossary.find(({ term, concept }) => {
+      if (used.has(concept.id)) return false;
+      return lower.includes(normalizeTerm(term));
+    });
+    if (!match) continue;
+
+    const index = lower.indexOf(normalizeTerm(match.term));
+    if (index < 0) continue;
+    const actual = text.slice(index, index + match.term.length);
+    if (!actual.trim()) continue;
+
+    const fragment = document.createDocumentFragment();
+    fragment.append(document.createTextNode(text.slice(0, index)));
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "concept-chip";
+    button.dataset.concept = match.concept.id;
+    button.textContent = actual;
+    button.setAttribute("aria-label", `Ver concepto ${match.concept.label}`);
+    fragment.append(button);
+    fragment.append(document.createTextNode(text.slice(index + match.term.length)));
+    node.replaceWith(fragment);
+    used.add(match.concept.id);
+    count += 1;
+  }
+
+  root.querySelectorAll(".concept-chip").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.selectedConcept = button.dataset.concept;
+      state.view = "map";
+      saveState();
+      render();
+    });
+  });
+}
+
 function currentModule() {
   return state.modules.find((module) => module.id === state.activeModule) ?? state.modules[0];
 }
@@ -944,7 +1530,9 @@ function loadState() {
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
     state.activeModule = Number.isFinite(saved.activeModule) ? saved.activeModule : 0;
-    state.view = ["read", "map", "cards", "quiz", "kpis", "notes"].includes(saved.view) ? saved.view : "read";
+    state.view = ["read", "map", "flow", "cards", "quiz", "kpis", "notes"].includes(saved.view) ? saved.view : "read";
+    state.selectedConcept = getConcept(saved.selectedConcept) ? saved.selectedConcept : "vaca-muerta";
+    state.flowScenario = flowScenarios.some((scenario) => scenario.id === saved.flowScenario) ? saved.flowScenario : "base";
     state.done = new Set(Array.isArray(saved.done) ? saved.done.map(Number).filter(Number.isFinite) : []);
     state.notes = typeof saved.notes === "object" && saved.notes ? saved.notes : {};
     state.textSize = clamp(Number(saved.textSize) || 16, 14, 20);
@@ -966,6 +1554,8 @@ function saveState() {
       JSON.stringify({
         activeModule: state.activeModule,
         view: state.view,
+        selectedConcept: state.selectedConcept,
+        flowScenario: state.flowScenario,
         done: [...state.done],
         notes,
         textSize: state.textSize,

@@ -20,7 +20,9 @@ http://127.0.0.1:8001/
 - Navegacion por modulos.
 - Busqueda de conceptos.
 - Modo lectura.
-- Mapa de decision.
+- Conceptos clickeables dentro de la lectura.
+- Grafo animado de conexiones entre roca, pozo, midstream, downstream, mercado, caja, datos, Vaca Muerta e YPF.
+- Flujo animado de valor con escenarios como cuello midstream, precio local bajo, exportacion habilitada y refineria parada.
 - Tarjetas de repaso.
 - Quiz ejecutivo.
 - Diccionario de KPIs.
