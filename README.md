@@ -1,11 +1,23 @@
-# Oil & Gas Study Desk
+# YPF BI Playbook
 
-Web personal de estudio sobre la industria global del petroleo y gas, Latinoamerica, Argentina, Vaca Muerta e YPF.
+MVP web para un equipo BI con dos recursos principales:
 
-## Abrir localmente
+- Diccionario BI para alinear conceptos de negocio, datos, Power BI, modelado, KPIs, gobierno y adopcion.
+- Roadmap BI punta a punta para ordenar el trabajo desde intake hasta operacion y mejora continua.
+
+La app es estatica, sin credenciales, sin datos sensibles y compatible con Vercel.
+
+## Stack
+
+- HTML, CSS y JavaScript vanilla.
+- Modulos ES para separar datos de UI.
+- Contenido local editable en `data/dictionary.js` y `data/roadmap.js`.
+- Deploy estatico en Vercel.
+
+## Correr localmente
 
 ```bash
-python3 -m http.server 8001 --bind 127.0.0.1
+npm run dev
 ```
 
 Luego abrir:
@@ -14,31 +26,92 @@ Luego abrir:
 http://127.0.0.1:8001/
 ```
 
-## Incluye
+El servidor local tambien soporta:
 
-- Manual ejecutivo y tecnico en Markdown.
-- Navegacion por modulos.
-- Busqueda de conceptos.
-- Modo lectura.
-- Conceptos clickeables dentro de la lectura.
-- Grafo animado de conexiones entre roca, pozo, midstream, downstream, mercado, caja, datos, Vaca Muerta e YPF.
-- Flujo animado de valor con escenarios como cuello midstream, precio local bajo, exportacion habilitada y refineria parada.
-- Tarjetas de repaso.
-- Quiz ejecutivo.
-- Diccionario de KPIs.
-- Notas por modulo guardadas en el navegador.
-- Progreso local con `localStorage`.
-- PWA/offline basico con service worker.
-- Assets responsive en AVIF/WebP.
-- Headers de cache y seguridad para Vercel.
+```text
+http://127.0.0.1:8001/diccionario
+http://127.0.0.1:8001/roadmap
+```
+
+## Validar build
+
+```bash
+npm run build
+```
+
+El build valida que:
+
+- Exista Home, Diccionario BI y Roadmap BI.
+- El diccionario tenga al menos 40 terminos.
+- El roadmap tenga las 14 fases obligatorias.
+- Los datos tengan los campos requeridos.
+- Vercel tenga rewrites para `/diccionario` y `/roadmap`.
+
+## Desplegar en Vercel
+
+El proyecto esta preparado para deploy estatico.
+
+Si el proyecto ya esta linkeado a Vercel:
+
+```bash
+vercel deploy --prod
+```
+
+Si se despliega desde GitHub, Vercel puede publicar automaticamente cuando haya push a la rama configurada.
+
+## Agregar terminos al diccionario
+
+Editar `data/dictionary.js` y agregar un objeto en `dictionaryTerms`:
+
+```js
+{
+  id: "nuevo-termino",
+  term: "Nuevo termino",
+  category: "Datos",
+  definition: "Definicion simple.",
+  whyItMatters: "Por que importa para el equipo.",
+  example: "Ejemplo breve.",
+  risk: "Riesgo de entenderlo mal."
+}
+```
+
+Las categorias disponibles estan en `dictionaryCategories`.
+
+## Editar fases del roadmap
+
+Editar `data/roadmap.js` y modificar `roadmapPhases`.
+
+Cada fase debe mantener esta estructura:
+
+```js
+{
+  id: 0,
+  title: "Intake y triage",
+  lane: "Consultoria BI",
+  objective: "Objetivo de la fase.",
+  keyActivities: ["Actividad clave"],
+  deliverables: ["Entregable"],
+  owner: "Responsable principal",
+  riskIfSkipped: "Riesgo si se saltea.",
+  gate: "Gate A - Alineacion"
+}
+```
+
+## Seguridad
+
+No subir informacion confidencial, credenciales ni datos sensibles.
+
+No conectar esta version a sistemas internos, APIs privadas, tokens ni fuentes reales sin una revision de seguridad previa.
 
 ## Archivos principales
 
 - `index.html`
 - `styles.css`
 - `app.js`
-- `manual_oil_gas_ypf.md`
-- `assets/energy-chain.png`
+- `data/dictionary.js`
+- `data/roadmap.js`
+- `scripts/dev-server.mjs`
+- `scripts/validate-build.mjs`
 - `vercel.json`
 - `manifest.webmanifest`
 - `service-worker.js`

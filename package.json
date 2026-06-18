@@ -1,0 +1,12 @@
+{
+  "name": "ypf-bi-playbook",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MVP estatico del YPF BI Playbook con diccionario BI y roadmap punta a punta.",
+  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+    "build": "node scripts/validate-build.mjs",
+    "validate": "node scripts/validate-build.mjs"
+  }
+}

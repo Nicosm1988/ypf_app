@@ -3,16 +3,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Oil & Gas Study Desk | Manual YPF</title>
+    <title>YPF BI Playbook</title>
     <meta
       name="description"
-      content="Web personal de estudio sobre oil and gas, Latinoamerica, Argentina, Vaca Muerta, YPF, KPIs, BI, IA y tableros ejecutivos."
+      content="Diccionario y roadmap operativo para proyectos BI de punta a punta."
     />
-    <meta name="theme-color" content="#0f766e" />
+    <meta name="theme-color" content="#102f44" />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://ypf-app-nine.vercel.app/" />
-    <meta property="og:title" content="Oil & Gas Study Desk | Manual YPF" />
-    <meta property="og:description" content="Manual ejecutivo y tecnico para estudiar oil and gas, Vaca Muerta, YPF, KPIs, BI e IA." />
+    <meta property="og:title" content="YPF BI Playbook" />
+    <meta
+      property="og:description"
+      content="Diccionario BI y roadmap operativo para alinear conceptos, procesos y buenas practicas."
+    />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://ypf-app-nine.vercel.app/assets/energy-chain-v1-1280.webp" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -22,140 +25,35 @@
   </head>
   <body>
     <a class="skip-link" href="#content">Saltar al contenido</a>
-    <div class="app-shell">
-      <aside class="sidebar" aria-label="Modulos">
-        <div class="brand">
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="brand" href="/" data-route aria-label="Ir al inicio">
           <span class="brand-mark">YPF</span>
-          <div>
-            <strong>Oil & Gas Desk</strong>
-            <small>Estudio personal</small>
-          </div>
-        </div>
+          <span>
+            <strong>BI Playbook</strong>
+            <small>Diccionario y roadmap BI</small>
+          </span>
+        </a>
 
-        <label class="search-box">
-          <span class="icon" data-icon="search"></span>
-          <input id="searchInput" type="search" placeholder="Buscar conceptos" autocomplete="off" aria-label="Buscar conceptos" />
-        </label>
+        <nav class="main-nav" aria-label="Navegacion principal">
+          <a href="/" data-route>Inicio</a>
+          <a href="/diccionario" data-route>Diccionario BI</a>
+          <a href="/roadmap" data-route>Roadmap BI</a>
+        </nav>
+      </header>
 
-        <div class="side-section">
-          <div class="side-title">Curriculum</div>
-          <nav id="moduleList" class="module-list"></nav>
-        </div>
-      </aside>
-
-      <main id="content" class="workspace" tabindex="-1">
-        <header class="topbar">
-          <div class="topbar-title">
-            <span class="eyebrow" id="activeContext">Manual ejecutivo</span>
-            <h1 id="pageTitle">Cargando manual</h1>
-          </div>
-          <div class="top-actions">
-            <button class="icon-button" id="decreaseText" title="Reducir texto" aria-label="Reducir texto">
-              <span class="icon" data-icon="minus"></span>
-            </button>
-            <button class="icon-button" id="increaseText" title="Aumentar texto" aria-label="Aumentar texto">
-              <span class="icon" data-icon="plus"></span>
-            </button>
-            <button class="primary-button" id="markDone">
-              <span class="icon" data-icon="check"></span>
-              Estudiado
-            </button>
-          </div>
-        </header>
-
-        <section class="image-strip" aria-label="Cadena de valor oil and gas">
-          <picture>
-            <source
-              type="image/avif"
-              srcset="
-                assets/energy-chain-v1-640.avif 640w,
-                assets/energy-chain-v1-960.avif 960w,
-                assets/energy-chain-v1-1280.avif 1280w,
-                assets/energy-chain-v1-1672.avif 1672w
-              "
-              sizes="(max-width: 860px) 100vw, calc(100vw - 388px)"
-            />
-            <source
-              type="image/webp"
-              srcset="
-                assets/energy-chain-v1-640.webp 640w,
-                assets/energy-chain-v1-960.webp 960w,
-                assets/energy-chain-v1-1280.webp 1280w,
-                assets/energy-chain-v1-1672.webp 1672w
-              "
-              sizes="(max-width: 860px) 100vw, calc(100vw - 388px)"
-            />
-            <img
-              src="assets/energy-chain.png"
-              width="1672"
-              height="941"
-              fetchpriority="high"
-              decoding="async"
-              alt="Cadena de valor de petroleo y gas con pozo, ductos, refineria y LNG"
-            />
-          </picture>
-          <div class="image-overlay">
-            <strong>Roca -> pozo -> ducto -> refineria -> mercado</strong>
-            <span id="studyStats">0 modulos completados</span>
-          </div>
-        </section>
-
-        <section class="control-band">
-          <div class="segmented" aria-label="Vistas de estudio">
-            <button class="segment active" data-view="read" aria-pressed="true">Lectura</button>
-            <button class="segment" data-view="map" aria-pressed="false">Conexiones</button>
-            <button class="segment" data-view="flow" aria-pressed="false">Flujo</button>
-            <button class="segment" data-view="cards" aria-pressed="false">Tarjetas</button>
-            <button class="segment" data-view="quiz" aria-pressed="false">Quiz</button>
-            <button class="segment" data-view="kpis" aria-pressed="false">KPIs</button>
-            <button class="segment" data-view="notes" aria-pressed="false">Notas</button>
-          </div>
-          <div class="quick-metrics" id="quickMetrics"></div>
-        </section>
-
-        <section id="searchResults" class="search-results" hidden></section>
-
-        <div class="content-layout">
-          <article id="mainContent" class="reader" aria-live="polite"></article>
-          <aside class="study-rail" aria-label="Panel de estudio">
-            <div class="rail-panel">
-              <div class="rail-title">
-                <span class="icon" data-icon="activity"></span>
-                Progreso
-              </div>
-              <div class="progress-ring" id="progressRing">
-                <span>0%</span>
-              </div>
-              <div class="rail-meta" id="progressMeta">Sin avance guardado</div>
-            </div>
-
-            <div class="rail-panel">
-              <div class="rail-title">
-                <span class="icon" data-icon="target"></span>
-                Foco
-              </div>
-              <div id="focusList" class="focus-list"></div>
-            </div>
-          </aside>
-        </div>
+      <main id="content" class="page-shell" tabindex="-1">
+        <div id="appRoot" aria-live="polite"></div>
       </main>
     </div>
 
     <noscript>
       <section class="noscript-panel">
-        <h1>Oil & Gas Study Desk</h1>
-        <p>Esta web usa JavaScript para convertir el manual Markdown en una experiencia de estudio interactiva.</p>
+        <h1>YPF BI Playbook</h1>
+        <p>Esta herramienta necesita JavaScript para activar la busqueda, filtros y navegacion.</p>
       </section>
     </noscript>
 
-    <template id="emptyStateTemplate">
-      <div class="empty-state">
-        <span class="icon large" data-icon="file"></span>
-        <h2>No se pudo cargar el manual</h2>
-        <p>Revisa que el archivo manual_oil_gas_ypf.md este junto a index.html.</p>
-      </div>
-    </template>
-
-    <script src="app.js" defer></script>
+    <script type="module" src="app.js"></script>
   </body>
 </html>

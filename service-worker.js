@@ -1,10 +1,11 @@
-const CACHE_NAME = "oil-gas-study-desk-v4";
+const CACHE_NAME = "ypf-bi-playbook-v1";
 const PRECACHE_URLS = [
   "/",
   "/index.html",
   "/styles.css",
   "/app.js",
-  "/manual_oil_gas_ypf.md",
+  "/data/dictionary.js",
+  "/data/roadmap.js",
   "/manifest.webmanifest",
   "/assets/favicon.svg",
   "/assets/energy-chain-v1-640.avif",
