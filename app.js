@@ -108,69 +108,64 @@ function renderRoute(route = getRoute()) {
 function renderHomePage() {
   const phasePreview = roadmapPhases.slice(0, 4);
   appRoot.innerHTML = `
-    <section class="page">
-      <div class="hero">
-        <div class="hero-copy">
-          <div>
-            <span class="eyebrow">MVP interno BI</span>
+    <section class="page home-page">
+      <section class="hero" aria-label="YPF BI Playbook">
+        <picture class="hero-media">
+          <source
+            type="image/avif"
+            srcset="
+              /assets/energy-chain-v1-640.avif 640w,
+              /assets/energy-chain-v1-960.avif 960w,
+              /assets/energy-chain-v1-1280.avif 1280w,
+              /assets/energy-chain-v1-1672.avif 1672w
+            "
+            sizes="100vw"
+          />
+          <source
+            type="image/webp"
+            srcset="
+              /assets/energy-chain-v1-640.webp 640w,
+              /assets/energy-chain-v1-960.webp 960w,
+              /assets/energy-chain-v1-1280.webp 1280w,
+              /assets/energy-chain-v1-1672.webp 1672w
+            "
+            sizes="100vw"
+          />
+          <img
+            src="/assets/energy-chain.png"
+            width="1672"
+            height="941"
+            fetchpriority="high"
+            decoding="async"
+            alt="Cadena operativa de energia con pozo, ductos, refineria y mercado"
+          />
+        </picture>
+        <div class="hero-shade" aria-hidden="true"></div>
+        <div class="page-inner hero-grid">
+          <div class="hero-copy">
+            <span class="eyebrow">YPF energia argentina</span>
             <h1>YPF BI Playbook</h1>
+            <p class="hero-kicker">Diccionario y roadmap operativo para proyectos BI de punta a punta.</p>
+            <p class="hero-text">
+              Una guia simple para alinear conceptos, procesos y buenas practicas BI. Centraliza un
+              diccionario para hablar el mismo idioma y un roadmap para ordenar el trabajo desde la
+              necesidad de negocio hasta la adopcion del producto.
+            </p>
+            <div class="hero-actions">
+              <a class="button" href="/diccionario" data-route>
+                ${icon("book")}
+                Explorar diccionario
+              </a>
+              <a class="button secondary" href="/roadmap" data-route>
+                ${icon("route")}
+                Ver roadmap
+              </a>
+            </div>
           </div>
-          <p class="hero-text">
-            Una guia simple para alinear conceptos, procesos y buenas practicas BI.
-            Esta herramienta centraliza dos recursos clave para el equipo: un diccionario BI
-            para hablar el mismo idioma y un roadmap punta a punta para ordenar el trabajo
-            desde la necesidad de negocio hasta la adopcion del producto.
-          </p>
-          <div class="hero-actions">
-            <a class="button" href="/diccionario" data-route>
-              ${icon("book")}
-              Explorar diccionario
-            </a>
-            <a class="button secondary" href="/roadmap" data-route>
-              ${icon("route")}
-              Ver roadmap
-            </a>
-          </div>
-          <div class="quote-band">
-            ${icon("quote")}
-            <strong>Un buen producto BI no empieza en Power BI. Empieza en una decision de negocio clara.</strong>
-          </div>
-        </div>
 
-        <aside class="hero-visual" aria-label="Resumen del playbook">
-          <picture>
-            <source
-              type="image/avif"
-              srcset="
-                /assets/energy-chain-v1-640.avif 640w,
-                /assets/energy-chain-v1-960.avif 960w,
-                /assets/energy-chain-v1-1280.avif 1280w,
-                /assets/energy-chain-v1-1672.avif 1672w
-              "
-              sizes="(max-width: 980px) 100vw, 470px"
-            />
-            <source
-              type="image/webp"
-              srcset="
-                /assets/energy-chain-v1-640.webp 640w,
-                /assets/energy-chain-v1-960.webp 960w,
-                /assets/energy-chain-v1-1280.webp 1280w,
-                /assets/energy-chain-v1-1672.webp 1672w
-              "
-              sizes="(max-width: 980px) 100vw, 470px"
-            />
-            <img
-              src="/assets/energy-chain.png"
-              width="1672"
-              height="941"
-              fetchpriority="high"
-              decoding="async"
-              alt="Cadena operativa de energia con pozo, ductos, refineria y mercado"
-            />
-          </picture>
-          <div class="visual-summary">
+          <aside class="visual-summary" aria-label="Resumen del playbook">
             <h2>Base clara para crecer sin sobredisenar.</h2>
-            <p>Contenido local editable, navegacion simple y foco en decisiones, metricas, gobierno y adopcion.</p>
+            <p>Contenido local editable con foco en decisiones, metricas, gobierno y adopcion.</p>
             <div class="stat-grid" aria-label="Metricas del playbook">
               <div class="stat">
                 <strong>${dictionaryTerms.length}</strong>
@@ -185,18 +180,28 @@ function renderHomePage() {
                 <span>gates operativos</span>
               </div>
             </div>
-          </div>
-        </aside>
-      </div>
+          </aside>
+        </div>
+        <div class="hero-tabs" aria-hidden="true">
+          <span class="active"></span>
+          <span></span>
+          <span></span>
+        </div>
+      </section>
 
-      <div class="section-title">
+      <section class="quote-band page-inner">
+        ${icon("quote")}
+        <strong>Un buen producto BI no empieza en Power BI. Empieza en una decision de negocio clara.</strong>
+      </section>
+
+      <div class="section-title page-inner">
         <div>
           <h2>Recursos principales</h2>
           <p>Dos entradas directas para consulta diaria, discovery y delivery BI.</p>
         </div>
       </div>
 
-      <section class="feature-grid" aria-label="Secciones principales">
+      <section class="feature-grid page-inner" aria-label="Secciones principales">
         <article class="feature-card">
           <span class="feature-icon">${icon("book")}</span>
           <h3>Diccionario BI</h3>
@@ -217,14 +222,25 @@ function renderHomePage() {
         </article>
       </section>
 
-      <div class="section-title">
+      <section class="story-band">
+        <div class="page-inner story-content">
+          <span class="eyebrow">energia para decidir</span>
+          <h2>Un playbook simple para operar con una misma fuente de lenguaje.</h2>
+          <p>
+            La estetica acompana el trabajo: mucho aire, jerarquia clara, acentos amarillos y modulos
+            pensados para que el equipo encuentre rapido conceptos, fases y criterios de entrega.
+          </p>
+        </div>
+      </section>
+
+      <div class="section-title page-inner">
         <div>
           <h2>De la necesidad a la adopcion</h2>
           <p>El roadmap completo queda en una vista navegable; estas son las primeras decisiones del flujo.</p>
         </div>
       </div>
 
-      <section class="mini-roadmap" aria-label="Primeras fases del roadmap">
+      <section class="mini-roadmap page-inner" aria-label="Primeras fases del roadmap">
         ${phasePreview
           .map(
             (phase) => `
@@ -242,14 +258,14 @@ function renderHomePage() {
 
 function renderDictionaryPage() {
   appRoot.innerHTML = `
-    <section class="page dictionary-layout">
-      <header class="page-heading">
+    <section class="page tool-page dictionary-layout">
+      <header class="page-heading page-inner">
         <span class="eyebrow">Glosario operativo</span>
         <h1>Diccionario BI</h1>
         <p class="lede">Conceptos esenciales para hablar el mismo idioma entre negocio, datos y Power BI.</p>
       </header>
 
-      <section class="control-panel" aria-label="Filtros del diccionario">
+      <section class="control-panel page-inner" aria-label="Filtros del diccionario">
         <div class="search-row">
           <label class="search-input">
             ${icon("search")}
@@ -281,7 +297,7 @@ function renderDictionaryPage() {
         </div>
       </section>
 
-      <section class="term-grid" id="dictionaryResults" aria-label="Terminos BI"></section>
+      <section class="term-grid page-inner" id="dictionaryResults" aria-label="Terminos BI"></section>
     </section>
   `;
 
@@ -331,7 +347,7 @@ function renderDictionaryResults() {
   count.textContent = `${results.length} resultado${results.length === 1 ? "" : "s"}`;
 
   if (!results.length) {
-    container.className = "";
+    container.className = "page-inner";
     container.innerHTML = `
       <div class="empty-state">
         ${icon("filter")}
@@ -342,7 +358,7 @@ function renderDictionaryResults() {
     return;
   }
 
-  container.className = "term-grid";
+  container.className = "term-grid page-inner";
   container.innerHTML = results
     .map(
       (term) => `
@@ -374,8 +390,8 @@ function renderDictionaryResults() {
 
 function renderRoadmapPage() {
   appRoot.innerHTML = `
-    <section class="page">
-      <header class="page-heading">
+    <section class="page tool-page">
+      <header class="page-heading page-inner">
         <span class="eyebrow">Proceso punta a punta</span>
         <h1>Roadmap BI</h1>
         <p class="lede">
@@ -384,7 +400,7 @@ function renderRoadmapPage() {
         </p>
       </header>
 
-      <section class="roadmap-toolbar" aria-label="Leyenda del roadmap">
+      <section class="roadmap-toolbar page-inner" aria-label="Leyenda del roadmap">
         <div class="result-count">${roadmapPhases.length} fases</div>
         <div class="lane-legend">
           ${Object.entries(laneStyles)
@@ -400,11 +416,11 @@ function renderRoadmapPage() {
         </div>
       </section>
 
-      <section class="timeline" aria-label="Fases del roadmap BI">
+      <section class="timeline page-inner" aria-label="Fases del roadmap BI">
         ${roadmapPhases.map(renderPhaseCard).join("")}
       </section>
 
-      <div class="footer-note">
+      <div class="footer-note page-inner">
         ${icon("shield")}
         <span>No subir informacion confidencial, credenciales ni datos sensibles. El contenido de este MVP es local y editable.</span>
       </div>
