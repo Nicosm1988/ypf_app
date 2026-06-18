@@ -1,4 +1,4 @@
-const CACHE_NAME = "ypf-bi-playbook-v2";
+const CACHE_NAME = "ypf-bi-playbook-v3";
 const PRECACHE_URLS = [
   "/",
   "/index.html",

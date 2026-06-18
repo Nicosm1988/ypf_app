@@ -18,6 +18,8 @@ const icons = {
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 3H2l8 9.5V20l4 2v-9.5L22 3z"></path></svg>',
   gauge:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>',
+  gitBranch:
+    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="6" x2="6" y1="3" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg>',
   layers:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m12 2 10 5-10 5L2 7l10-5z"></path><path d="m2 17 10 5 10-5"></path><path d="m2 12 10 5 10-5"></path></svg>',
   quote:
@@ -400,6 +402,8 @@ function renderRoadmapPage() {
         </p>
       </header>
 
+      ${renderBiFlowCanvas()}
+
       <section class="roadmap-toolbar page-inner" aria-label="Leyenda del roadmap">
         <div class="result-count">${roadmapPhases.length} fases</div>
         <div class="lane-legend">
@@ -435,6 +439,134 @@ function renderRoadmapPage() {
       });
     });
   });
+
+  document.querySelectorAll("[data-flow-tab]").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll("[data-flow-tab]").forEach((item) => item.classList.remove("active"));
+      button.classList.add("active");
+      const target = button.dataset.flowTab;
+      document.querySelectorAll("[data-flow-node]").forEach((node) => {
+        node.classList.toggle("spotlight", node.dataset.flowNode === target);
+      });
+    });
+  });
+}
+
+function renderBiFlowCanvas() {
+  return `
+    <section class="bi-flow-showcase page-inner" aria-label="Flujo BI estilo workflow visual">
+      <aside class="flow-rail" aria-label="Escenarios del flujo BI">
+        <button class="flow-tab active" type="button" data-flow-tab="decision">
+          <strong>BI Ops</strong>
+          <span>Convierte necesidades en decisiones medibles</span>
+        </button>
+        <button class="flow-tab" type="button" data-flow-tab="data">
+          <strong>Data Ops</strong>
+          <span>Certifica fuentes, calidad y accesos</span>
+        </button>
+        <button class="flow-tab" type="button" data-flow-tab="model">
+          <strong>Power BI</strong>
+          <span>Publica modelo semantico y medidas DAX</span>
+        </button>
+        <button class="flow-tab" type="button" data-flow-tab="governance">
+          <strong>Gobierno</strong>
+          <span>Controla seguridad, UAT y adopcion</span>
+        </button>
+      </aside>
+
+      <div class="flow-canvas" aria-label="Canvas del proceso BI">
+        <div class="flow-canvas-copy">
+          <span class="flow-chip">BI workflow canvas</span>
+          <h2>Del pedido inicial al producto BI operando</h2>
+          <p>Un mapa visual para entender dependencias, gates, ramificaciones y controles sin leer todo el roadmap.</p>
+        </div>
+
+        <svg class="flow-lines" viewBox="0 0 940 520" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <filter id="flowGlow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"></feGaussianBlur>
+              <feMerge>
+                <feMergeNode in="coloredBlur"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+              </feMerge>
+            </filter>
+          </defs>
+          <path class="flow-line active" d="M150 236 C220 236 240 236 310 236"></path>
+          <path class="flow-line active" d="M500 236 C565 236 585 236 650 236"></path>
+          <path class="flow-line active" d="M735 210 C785 118 815 105 865 105"></path>
+          <path class="flow-line" d="M735 262 C785 350 815 363 865 363"></path>
+          <path class="flow-line dashed" d="M406 285 C374 346 348 370 318 418"></path>
+          <path class="flow-line dashed" d="M446 285 C445 348 445 372 445 420"></path>
+          <path class="flow-line dashed" d="M488 285 C526 350 556 373 590 420"></path>
+          <path class="flow-line dashed" d="M530 285 C614 346 681 370 742 420"></path>
+          <circle class="flow-pulse" cx="306" cy="236" r="5"></circle>
+          <circle class="flow-pulse delay-1" cx="646" cy="236" r="5"></circle>
+          <circle class="flow-pulse delay-2" cx="860" cy="105" r="5"></circle>
+        </svg>
+
+        <div class="flow-node trigger" data-flow-node="decision" style="--x: 13%; --y: 48%;">
+          <span class="node-icon cyan">${icon("clipboard")}</span>
+          <strong>Intake de necesidad</strong>
+          <small>brief, sponsor, urgencia</small>
+        </div>
+
+        <div class="flow-node agent spotlight" data-flow-node="decision" style="--x: 45%; --y: 48%;">
+          <span class="node-icon white">${icon("spark")}</span>
+          <strong>Consultoria BI</strong>
+          <small>triage + decision + KPI</small>
+          <div class="node-ports">
+            <span>Pregunta</span>
+            <span>Metrica</span>
+            <span>Gate</span>
+          </div>
+        </div>
+
+        <div class="flow-node decision" data-flow-node="governance" style="--x: 69%; --y: 48%;">
+          <span class="node-icon green">${icon("gitBranch")}</span>
+          <strong>Gate aprobado?</strong>
+          <small>metricas, datos, seguridad</small>
+          <em class="branch-label true">true</em>
+          <em class="branch-label false">false</em>
+        </div>
+
+        <div class="flow-node output" data-flow-node="model" style="--x: 87%; --y: 20%;">
+          <span class="node-icon blue">${icon("layers")}</span>
+          <strong>Modelo semantico</strong>
+          <small>dataset certificado</small>
+        </div>
+
+        <div class="flow-node output" data-flow-node="governance" style="--x: 87%; --y: 70%;">
+          <span class="node-icon orange">${icon("route")}</span>
+          <strong>Rework controlado</strong>
+          <small>ajuste de alcance</small>
+        </div>
+
+        <div class="flow-orbit" data-flow-node="data" style="--x: 31%; --y: 82%;">
+          <span>${icon("search")}</span>
+          <strong>Data quality</strong>
+          <small>perfilado + lineage</small>
+        </div>
+
+        <div class="flow-orbit" data-flow-node="model" style="--x: 45%; --y: 82%;">
+          <span>${icon("gauge")}</span>
+          <strong>DAX</strong>
+          <small>logica de negocio</small>
+        </div>
+
+        <div class="flow-orbit" data-flow-node="governance" style="--x: 60%; --y: 82%;">
+          <span>${icon("shield")}</span>
+          <strong>RLS / OLS</strong>
+          <small>seguridad</small>
+        </div>
+
+        <div class="flow-orbit" data-flow-node="governance" style="--x: 76%; --y: 82%;">
+          <span>${icon("book")}</span>
+          <strong>UAT</strong>
+          <small>aceptacion</small>
+        </div>
+      </div>
+    </section>
+  `;
 }
 
 function renderPhaseCard(phase) {
