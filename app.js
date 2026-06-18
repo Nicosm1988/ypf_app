@@ -1,4 +1,5 @@
 import { dictionaryCategories, dictionaryTerms } from "./data/dictionary.js";
+import { powerBiShortcuts, shortcutsPdf } from "./data/powerbiShortcuts.js";
 import { laneStyles, roadmapPhases } from "./data/roadmap.js";
 
 const appRoot = document.querySelector("#appRoot");
@@ -14,8 +15,14 @@ const icons = {
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m6 9 6 6 6-6"></path></svg>',
   clipboard:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect width="8" height="4" x="8" y="2" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>',
+  code:
+    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m16 18 6-6-6-6"></path><path d="m8 6-6 6 6 6"></path></svg>',
+  download:
+    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>',
   filter:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 3H2l8 9.5V20l4 2v-9.5L22 3z"></path></svg>',
+  folder:
+    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7l-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"></path></svg>',
   gauge:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>',
   gitBranch:
@@ -32,12 +39,16 @@ const icons = {
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.68 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1v7z"></path></svg>',
   spark:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M13 2 3 14h8l-1 8 11-13h-8l1-7z"></path></svg>',
+  terminal:
+    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m4 17 6-6-6-6"></path><path d="M12 19h8"></path></svg>',
 };
 
 const routeTitles = {
   "/": "YPF BI Playbook",
   "/diccionario": "Diccionario BI | YPF BI Playbook",
   "/roadmap": "Roadmap BI | YPF BI Playbook",
+  "/proyecto-power-bi": "Proyecto de Power BI con Visual Studio | YPF BI Playbook",
+  "/atajos": "Atajos Power BI | YPF BI Playbook",
 };
 
 const dictionaryState = {
@@ -69,7 +80,7 @@ function escapeHtml(value) {
 
 function getRoute(pathname = window.location.pathname) {
   const cleanPath = pathname.replace(/\/+$/, "") || "/";
-  if (cleanPath === "/diccionario" || cleanPath === "/roadmap") return cleanPath;
+  if (["/diccionario", "/roadmap", "/proyecto-power-bi", "/atajos"].includes(cleanPath)) return cleanPath;
   return "/";
 }
 
@@ -104,11 +115,20 @@ function renderRoute(route = getRoute()) {
     return;
   }
 
+  if (route === "/proyecto-power-bi") {
+    renderProjectPage();
+    return;
+  }
+
+  if (route === "/atajos") {
+    renderShortcutsPage();
+    return;
+  }
+
   renderHomePage();
 }
 
 function renderHomePage() {
-  const phasePreview = roadmapPhases.slice(0, 4);
   appRoot.innerHTML = `
     <section class="page home-page">
       <section class="hero" aria-label="YPF BI Playbook">
@@ -147,11 +167,11 @@ function renderHomePage() {
           <div class="hero-copy">
             <span class="eyebrow">YPF energia argentina</span>
             <h1>YPF BI Playbook</h1>
-            <p class="hero-kicker">Diccionario y roadmap operativo para proyectos BI de punta a punta.</p>
-            <p class="hero-text">
+        <p class="hero-kicker">Diccionario, roadmap y practica de trabajo para proyectos BI mantenibles.</p>
+        <p class="hero-text">
               Una guia simple para alinear conceptos, procesos y buenas practicas BI. Centraliza un
-              diccionario para hablar el mismo idioma y un roadmap para ordenar el trabajo desde la
-              necesidad de negocio hasta la adopcion del producto.
+              diccionario para hablar el mismo idioma, un roadmap de cinco pilares y una forma de
+              trabajar modelos Power BI con mas criterio, versionado y foco.
             </p>
             <div class="hero-actions">
               <a class="button" href="/diccionario" data-route>
@@ -175,11 +195,11 @@ function renderHomePage() {
               </div>
               <div class="stat">
                 <strong>${roadmapPhases.length}</strong>
-                <span>fases del roadmap</span>
+                <span>pilares de trabajo</span>
               </div>
               <div class="stat">
-                <strong>7</strong>
-                <span>gates operativos</span>
+                <strong>${powerBiShortcuts.length}</strong>
+                <span>familias de atajos</span>
               </div>
             </div>
           </aside>
@@ -199,7 +219,7 @@ function renderHomePage() {
       <div class="section-title page-inner">
         <div>
           <h2>Recursos principales</h2>
-          <p>Dos entradas directas para consulta diaria, discovery y delivery BI.</p>
+          <p>Entradas directas para consulta diaria, discovery, desarrollo y delivery BI.</p>
         </div>
       </div>
 
@@ -216,9 +236,27 @@ function renderHomePage() {
         <article class="feature-card">
           <span class="feature-icon">${icon("route")}</span>
           <h3>Roadmap BI</h3>
-          <p>Mapa del proceso completo para construir productos BI desde el intake hasta la operacion.</p>
+          <p>Contexto, mapa, reglas, skills y diseno: las cinco piezas para construir modelos que se puedan sostener.</p>
           <a class="button small secondary" href="/roadmap" data-route>
             Ver roadmap
+            ${icon("arrowRight")}
+          </a>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon">${icon("code")}</span>
+          <h3>Proyecto Power BI</h3>
+          <p>Una forma de trabajar el modelo con archivos, Git, terminal y Visual Studio Code sin perder criterio de negocio.</p>
+          <a class="button small secondary" href="/proyecto-power-bi" data-route>
+            Ver proyecto
+            ${icon("arrowRight")}
+          </a>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon">${icon("terminal")}</span>
+          <h3>Atajos Power BI</h3>
+          <p>Resumen navegable de atajos del PDF subido al repo para trabajar mas rapido en Desktop.</p>
+          <a class="button small secondary" href="/atajos" data-route>
+            Ver atajos
             ${icon("arrowRight")}
           </a>
         </article>
@@ -227,23 +265,23 @@ function renderHomePage() {
       <section class="story-band">
         <div class="page-inner story-content">
           <span class="eyebrow">energia para decidir</span>
-          <h2>Un playbook simple para operar con una misma fuente de lenguaje.</h2>
+          <h2>De hacer graficos a construir productos BI mantenibles.</h2>
           <p>
-            La estetica acompana el trabajo: mucho aire, jerarquia clara, acentos amarillos y modulos
-            pensados para que el equipo encuentre rapido conceptos, fases y criterios de entrega.
+            La diferencia no esta en tener mas visuales. Esta en dejar contexto, modelo, reglas,
+            documentacion y diseno para que otra persona pueda seguir sin tener que adivinar.
           </p>
         </div>
       </section>
 
       <div class="section-title page-inner">
         <div>
-          <h2>De la necesidad a la adopcion</h2>
-          <p>El roadmap completo queda en una vista navegable; estas son las primeras decisiones del flujo.</p>
+          <h2>Las cinco piezas que sostienen el modelo</h2>
+          <p>El roadmap ahora arranca donde suelen romperse los proyectos reales: cuando el modelo crece y hay que mantenerlo.</p>
         </div>
       </div>
 
       <section class="mini-roadmap page-inner" aria-label="Primeras fases del roadmap">
-        ${phasePreview
+        ${roadmapPhases
           .map(
             (phase) => `
               <article class="mini-step">
@@ -394,18 +432,18 @@ function renderRoadmapPage() {
   appRoot.innerHTML = `
     <section class="page tool-page">
       <header class="page-heading page-inner">
-        <span class="eyebrow">Proceso punta a punta</span>
+        <span class="eyebrow">Modelo mantenible</span>
         <h1>Roadmap BI</h1>
         <p class="lede">
-          Mapa operativo desde la necesidad de negocio hasta la entrega, adopcion y mejora continua.
-          En desktop se navega como timeline horizontal; en mobile se apila en vertical.
+          Antes de pedirle ayuda a una IA, a una persona nueva o al propio equipo de BI, el proyecto
+          necesita una base compartida: contexto, mapa, reglas, skills y diseno.
         </p>
       </header>
 
       ${renderBiFlowCanvas()}
 
       <section class="roadmap-toolbar page-inner" aria-label="Leyenda del roadmap">
-        <div class="result-count">${roadmapPhases.length} fases</div>
+        <div class="result-count">${roadmapPhases.length} pilares</div>
         <div class="lane-legend">
           ${Object.entries(laneStyles)
             .map(
@@ -456,29 +494,33 @@ function renderBiFlowCanvas() {
   return `
     <section class="bi-flow-showcase page-inner" aria-label="Flujo BI estilo workflow visual">
       <aside class="flow-rail" aria-label="Escenarios del flujo BI">
-        <button class="flow-tab active" type="button" data-flow-tab="decision">
-          <strong>BI Ops</strong>
-          <span>Convierte necesidades en decisiones medibles</span>
+        <button class="flow-tab active" type="button" data-flow-tab="context">
+          <strong>Contexto</strong>
+          <span>Modelo, usuarios, negocio y decisiones</span>
         </button>
-        <button class="flow-tab" type="button" data-flow-tab="data">
-          <strong>Data Ops</strong>
-          <span>Certifica fuentes, calidad y accesos</span>
+        <button class="flow-tab" type="button" data-flow-tab="map">
+          <strong>Mapa</strong>
+          <span>Estrella, granularidad y relaciones</span>
         </button>
-        <button class="flow-tab" type="button" data-flow-tab="model">
-          <strong>Power BI</strong>
-          <span>Publica modelo semantico y medidas DAX</span>
+        <button class="flow-tab" type="button" data-flow-tab="rules">
+          <strong>Reglas</strong>
+          <span>DAX, naming, carpetas y patrones</span>
         </button>
-        <button class="flow-tab" type="button" data-flow-tab="governance">
-          <strong>Gobierno</strong>
-          <span>Controla seguridad, UAT y adopcion</span>
+        <button class="flow-tab" type="button" data-flow-tab="skills">
+          <strong>Skills</strong>
+          <span>Manuales de trabajo por dominio</span>
+        </button>
+        <button class="flow-tab" type="button" data-flow-tab="design">
+          <strong>Diseno</strong>
+          <span>Diagramas, bocetos y experiencia</span>
         </button>
       </aside>
 
       <div class="flow-canvas" aria-label="Canvas del proceso BI">
         <div class="flow-canvas-copy">
-          <span class="flow-chip">BI workflow canvas</span>
-          <h2>Del pedido inicial al producto BI operando</h2>
-          <p>Un mapa visual para entender dependencias, gates, ramificaciones y controles sin leer todo el roadmap.</p>
+          <span class="flow-chip">BI model canvas</span>
+          <h2>La IA no adivina el negocio</h2>
+          <p>Si el proyecto deja estas cinco piezas visibles, el equipo trabaja mejor y la IA ayuda con menos ruido.</p>
         </div>
 
         <svg class="flow-lines" viewBox="0 0 940 520" preserveAspectRatio="none" aria-hidden="true">
@@ -504,73 +546,225 @@ function renderBiFlowCanvas() {
           <circle class="flow-pulse delay-2" cx="860" cy="105" r="5"></circle>
         </svg>
 
-        <div class="flow-node trigger" data-flow-node="decision" style="--x: 13%; --y: 48%;">
+        <div class="flow-node trigger spotlight" data-flow-node="context" style="--x: 13%; --y: 48%;">
           <span class="node-icon cyan">${icon("clipboard")}</span>
-          <strong>Intake de necesidad</strong>
-          <small>brief, sponsor, urgencia</small>
+          <strong>Contexto</strong>
+          <small>para quien y que decision</small>
         </div>
 
-        <div class="flow-node agent spotlight" data-flow-node="decision" style="--x: 45%; --y: 48%;">
-          <span class="node-icon white">${icon("spark")}</span>
-          <strong>Consultoria BI</strong>
-          <small>triage + decision + KPI</small>
+        <div class="flow-node agent" data-flow-node="map" style="--x: 45%; --y: 48%;">
+          <span class="node-icon white">${icon("layers")}</span>
+          <strong>Mapa semantico</strong>
+          <small>estrella + granularidad</small>
           <div class="node-ports">
-            <span>Pregunta</span>
-            <span>Metrica</span>
-            <span>Gate</span>
+            <span>Hechos</span>
+            <span>Dims</span>
+            <span>Relaciones</span>
           </div>
         </div>
 
-        <div class="flow-node decision" data-flow-node="governance" style="--x: 69%; --y: 48%;">
+        <div class="flow-node decision" data-flow-node="rules" style="--x: 69%; --y: 48%;">
           <span class="node-icon green">${icon("gitBranch")}</span>
-          <strong>Gate aprobado?</strong>
-          <small>metricas, datos, seguridad</small>
-          <em class="branch-label true">true</em>
-          <em class="branch-label false">false</em>
+          <strong>Reglas claras?</strong>
+          <small>naming, DAX, carpetas</small>
+          <em class="branch-label true">si</em>
+          <em class="branch-label false">no</em>
         </div>
 
-        <div class="flow-node output" data-flow-node="model" style="--x: 87%; --y: 20%;">
-          <span class="node-icon blue">${icon("layers")}</span>
-          <strong>Modelo semantico</strong>
-          <small>dataset certificado</small>
+        <div class="flow-node output" data-flow-node="design" style="--x: 87%; --y: 20%;">
+          <span class="node-icon blue">${icon("route")}</span>
+          <strong>Diseno del report</strong>
+          <small>boceto y flujo de lectura</small>
         </div>
 
-        <div class="flow-node output" data-flow-node="governance" style="--x: 87%; --y: 70%;">
+        <div class="flow-node output" data-flow-node="rules" style="--x: 87%; --y: 70%;">
           <span class="node-icon orange">${icon("route")}</span>
-          <strong>Rework controlado</strong>
-          <small>ajuste de alcance</small>
+          <strong>Volver a reglas</strong>
+          <small>ajuste antes de escalar</small>
         </div>
 
-        <div class="flow-orbit" data-flow-node="data" style="--x: 31%; --y: 82%;">
+        <div class="flow-orbit" data-flow-node="map" style="--x: 31%; --y: 82%;">
           <span>${icon("search")}</span>
-          <strong>Data quality</strong>
-          <small>perfilado + lineage</small>
+          <strong>Granularidad</strong>
+          <small>nivel de detalle</small>
         </div>
 
-        <div class="flow-orbit" data-flow-node="model" style="--x: 45%; --y: 82%;">
+        <div class="flow-orbit" data-flow-node="rules" style="--x: 45%; --y: 82%;">
           <span>${icon("gauge")}</span>
-          <strong>DAX</strong>
-          <small>logica de negocio</small>
+          <strong>Convenciones</strong>
+          <small>DAX + Power Query</small>
         </div>
 
-        <div class="flow-orbit" data-flow-node="governance" style="--x: 60%; --y: 82%;">
-          <span>${icon("shield")}</span>
-          <strong>RLS / OLS</strong>
-          <small>seguridad</small>
-        </div>
-
-        <div class="flow-orbit" data-flow-node="governance" style="--x: 76%; --y: 82%;">
+        <div class="flow-orbit" data-flow-node="skills" style="--x: 60%; --y: 82%;">
           <span>${icon("book")}</span>
-          <strong>UAT</strong>
-          <small>aceptacion</small>
+          <strong>Skills</strong>
+          <small>manuales por dominio</small>
+        </div>
+
+        <div class="flow-orbit" data-flow-node="design" style="--x: 76%; --y: 82%;">
+          <span>${icon("shield")}</span>
+          <strong>Diseno</strong>
+          <small>diagramas + UX</small>
         </div>
       </div>
     </section>
   `;
 }
 
+function renderProjectPage() {
+  appRoot.innerHTML = `
+    <section class="page tool-page">
+      <header class="page-heading page-inner">
+        <span class="eyebrow">PBIP + TMDL + Git</span>
+        <h1>Proyecto de Power BI con Visual Studio</h1>
+        <p class="lede">
+          Cuando el modelo deja de ser un archivo cerrado y pasa a vivir como texto, el trabajo cambia:
+          se puede revisar, versionar, comparar y mejorar con el mismo cuidado con el que se cuida codigo.
+        </p>
+      </header>
+
+      <section class="project-studio page-inner">
+        <div class="project-copy">
+          <span class="flow-chip">filosofia de trabajo</span>
+          <h2>No se trata de reemplazar criterio por IA. Se trata de darle contexto para que ayude mejor.</h2>
+          <p>
+            En proyectos reales, el problema rara vez es hacer un grafico mas. El problema es que el modelo crece,
+            las medidas se duplican, las relaciones empiezan a ser dificiles de explicar y cada cambio se vuelve
+            una pequena investigacion. Trabajar con una estructura clara permite que el equipo y la IA colaboren
+            sin romper la confianza del negocio.
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="/roadmap" data-route>${icon("route")} Ver los 5 pilares</a>
+            <a class="button secondary" href="/atajos" data-route>${icon("terminal")} Ver atajos</a>
+          </div>
+        </div>
+
+        <div class="code-window" aria-label="Estructura sugerida de proyecto Power BI">
+          <div class="window-dots"><span></span><span></span><span></span></div>
+          <pre><code>proyecto_power_bi/
+├─ README.md
+├─ CLAUDE.md
+├─ documentacion/
+│  ├─ contexto.md
+│  ├─ mapa-modelo.md
+│  ├─ reglas-dax.md
+│  └─ diseno-report.md
+├─ skills/
+│  ├─ dax.md
+│  ├─ power-query.md
+│  ├─ tmdl.md
+│  └─ documentacion.md
+├─ Modelo.SemanticModel/
+│  └─ definition/
+│     ├─ tables/
+│     ├─ relationships.tmdl
+│     └─ expressions.tmdl
+├─ Modelo.Report/
+└─ scripts/
+   └─ deploy.ps1</code></pre>
+          <div class="code-note">
+            ${icon("folder")}
+            <span>PBIP guarda el proyecto como carpetas y archivos; TMDL vuelve legible el modelo semantico.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="quality-grid page-inner" aria-label="Buenas practicas Power BI avanzado">
+        ${renderQualityCard("Modelo en estrella", "Menos relaciones raras, menos filtros ambiguos y mas confianza cuando alguien pregunta de donde sale un numero.", ["Hechos y dimensiones claras", "Granularidad escrita", "Relaciones revisadas"])}
+        ${renderQualityCard("Medidas organizadas", "No alcanza con que una medida funcione. Tiene que poder encontrarse, entenderse y reutilizarse dentro de seis meses.", ["Carpetas por dominio", "Medidas base y derivadas", "Diccionario de formulas"])}
+        ${renderQualityCard("Reportes guiados", "Un informe saturado cansa. Uno guiado acompana: muestra lo importante primero y deja el detalle para cuando hace falta.", ["Marcadores", "Panel de seleccion", "Jerarquia visual"])}
+        ${renderQualityCard("Publicacion cuidada", "Produccion no es publicar y esperar. Es controlar refresh, credenciales, gateways, seguridad y performance.", ["Refresh monitoreado", "RLS si aplica", "Modelo hibrido con criterio"])}
+      </section>
+
+      <section class="pbip-note page-inner">
+        <div>
+          <span class="eyebrow">modo proyecto</span>
+          <h2>PBIP como puente entre BI e ingenieria</h2>
+          <p>
+            Segun la documentacion oficial de Microsoft, Power BI Project permite guardar el reporte y el modelo
+            semantico como carpetas con archivos de texto. En ese escenario, Visual Studio Code, Git y la terminal
+            dejan de ser herramientas ajenas al BI: pasan a ser parte de una forma mas ordenada de cuidar el modelo.
+          </p>
+        </div>
+        <ul>
+          <li>Versionar cambios antes de tocar un modelo productivo.</li>
+          <li>Revisar diferencias de medidas, relaciones y expresiones.</li>
+          <li>Documentar decisiones junto al proyecto, no en un chat perdido.</li>
+          <li>Usar IA con reglas y contexto, no como una caja negra.</li>
+        </ul>
+      </section>
+    </section>
+  `;
+}
+
+function renderQualityCard(title, text, bullets) {
+  return `
+    <article class="quality-card">
+      <h3>${escapeHtml(title)}</h3>
+      <p>${escapeHtml(text)}</p>
+      <ul>
+        ${bullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join("")}
+      </ul>
+    </article>
+  `;
+}
+
+function renderShortcutsPage() {
+  appRoot.innerHTML = `
+    <section class="page tool-page">
+      <header class="page-heading page-inner">
+        <span class="eyebrow">Power BI Desktop</span>
+        <h1>Atajos Power BI</h1>
+        <p class="lede">
+          Un resumen practico del PDF de atajos cargado en el repo. La idea no es memorizar todo:
+          es empezar por los que ahorran tiempo todos los dias.
+        </p>
+      </header>
+
+      <section class="shortcut-hero page-inner">
+        <div>
+          <span class="flow-chip">recurso local</span>
+          <h2>${escapeHtml(shortcutsPdf.title)}</h2>
+          <p>${shortcutsPdf.pages} slides por categoria. Guardado en el proyecto y disponible para descargar.</p>
+        </div>
+        <a class="button" href="/${shortcutsPdf.source}" download>
+          ${icon("download")}
+          Descargar PDF
+        </a>
+      </section>
+
+      <section class="shortcut-grid page-inner" aria-label="Atajos de Power BI">
+        ${powerBiShortcuts.map(renderShortcutCategory).join("")}
+      </section>
+    </section>
+  `;
+}
+
+function renderShortcutCategory(category) {
+  return `
+    <article class="shortcut-card">
+      <div class="shortcut-card-head">
+        <h2>${escapeHtml(category.category)}</h2>
+        <p>${escapeHtml(category.intro)}</p>
+      </div>
+      <div class="shortcut-list">
+        ${category.items
+          .map(
+            (item) => `
+              <div class="shortcut-row">
+                <span>${escapeHtml(item.action)}</span>
+                <span class="key-group">${item.keys.map((key) => `<kbd>${escapeHtml(key)}</kbd>`).join("<em>+</em>")}</span>
+              </div>
+            `,
+          )
+          .join("")}
+      </div>
+    </article>
+  `;
+}
+
 function renderPhaseCard(phase) {
-  const lane = laneStyles[phase.lane] || laneStyles["Consultoria BI"];
+  const lane = laneStyles[phase.lane] || { color: "var(--ypf-blue)", badge: "" };
   const isExpanded = phase.id === expandedPhase;
   return `
     <article

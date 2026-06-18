@@ -11,6 +11,14 @@
     {
       "source": "/roadmap",
       "destination": "/index.html"
+    },
+    {
+      "source": "/proyecto-power-bi",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/atajos",
+      "destination": "/index.html"
     }
   ],
   "headers": [

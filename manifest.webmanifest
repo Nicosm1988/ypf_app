@@ -1,7 +1,7 @@
 {
   "name": "YPF BI Playbook",
   "short_name": "BI Playbook",
-  "description": "Diccionario y roadmap operativo para proyectos BI de punta a punta.",
+  "description": "Playbook BI con diccionario, roadmap, proyecto Power BI y atajos de trabajo.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

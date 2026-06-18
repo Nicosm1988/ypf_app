@@ -15,6 +15,7 @@ const mimeTypes = {
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".md": "text/markdown; charset=utf-8",
+  ".pdf": "application/pdf",
   ".png": "image/png",
   ".svg": "image/svg+xml",
   ".webmanifest": "application/manifest+json; charset=utf-8",
@@ -24,7 +25,8 @@ const mimeTypes = {
 function toSafePath(urlPathname) {
   const decoded = decodeURIComponent(urlPathname);
   const routePath = decoded.replace(/\/+$/, "") || "/";
-  if (routePath === "/" || routePath === "/diccionario" || routePath === "/roadmap") {
+  const appRoutes = new Set(["/", "/diccionario", "/roadmap", "/proyecto-power-bi", "/atajos"]);
+  if (appRoutes.has(routePath)) {
     return path.join(root, "index.html");
   }
 

@@ -1,9 +1,11 @@
 # YPF BI Playbook
 
-MVP web para un equipo BI con dos recursos principales:
+MVP web para un equipo BI con recursos de consulta y trabajo:
 
 - Diccionario BI para alinear conceptos de negocio, datos, Power BI, modelado, KPIs, gobierno y adopcion.
-- Roadmap BI punta a punta para ordenar el trabajo desde intake hasta operacion y mejora continua.
+- Roadmap BI estructurado en cinco pilares: contexto, mapa, reglas, skills y diseno.
+- Proyecto de Power BI con Visual Studio para trabajar PBIP, TMDL, Git y documentacion con criterio.
+- Atajos Power BI extraidos del PDF local del repo.
 
 La app es estatica, sin credenciales, sin datos sensibles y compatible con Vercel.
 
@@ -11,7 +13,7 @@ La app es estatica, sin credenciales, sin datos sensibles y compatible con Verce
 
 - HTML, CSS y JavaScript vanilla.
 - Modulos ES para separar datos de UI.
-- Contenido local editable en `data/dictionary.js` y `data/roadmap.js`.
+- Contenido local editable en `data/dictionary.js`, `data/roadmap.js` y `data/powerbiShortcuts.js`.
 - Deploy estatico en Vercel.
 
 ## Correr localmente
@@ -31,6 +33,8 @@ El servidor local tambien soporta:
 ```text
 http://127.0.0.1:8001/diccionario
 http://127.0.0.1:8001/roadmap
+http://127.0.0.1:8001/proyecto-power-bi
+http://127.0.0.1:8001/atajos
 ```
 
 ## Validar build
@@ -41,11 +45,12 @@ npm run build
 
 El build valida que:
 
-- Exista Home, Diccionario BI y Roadmap BI.
+- Exista Home, Diccionario BI, Roadmap BI, Proyecto Power BI y Atajos.
 - El diccionario tenga al menos 40 terminos.
-- El roadmap tenga las 14 fases obligatorias.
+- El roadmap tenga los 5 pilares obligatorios.
+- Los atajos tengan categorias e items navegables.
 - Los datos tengan los campos requeridos.
-- Vercel tenga rewrites para `/diccionario` y `/roadmap`.
+- Vercel tenga rewrites para `/diccionario`, `/roadmap`, `/proyecto-power-bi` y `/atajos`.
 - Se genere `dist/` con las rutas estaticas listas para Vercel.
 
 ## Desplegar en Vercel
@@ -78,23 +83,41 @@ Editar `data/dictionary.js` y agregar un objeto en `dictionaryTerms`:
 
 Las categorias disponibles estan en `dictionaryCategories`.
 
-## Editar fases del roadmap
+## Editar pilares del roadmap
 
 Editar `data/roadmap.js` y modificar `roadmapPhases`.
 
-Cada fase debe mantener esta estructura:
+Cada pilar debe mantener esta estructura:
 
 ```js
 {
   id: 0,
-  title: "Intake y triage",
-  lane: "Consultoria BI",
-  objective: "Objetivo de la fase.",
+  title: "Contexto",
+  lane: "Direccion BI",
+  objective: "Objetivo del pilar.",
   keyActivities: ["Actividad clave"],
   deliverables: ["Entregable"],
   owner: "Responsable principal",
   riskIfSkipped: "Riesgo si se saltea.",
   gate: "Gate A - Alineacion"
+}
+```
+
+PBIP no va dentro del roadmap: vive en la pagina `Proyecto de Power BI con Visual Studio`.
+
+## Editar atajos Power BI
+
+El PDF fuente esta en `assets/docs/atajos-power-bi.pdf`.
+
+El resumen navegable se edita en `data/powerbiShortcuts.js`, agrupando cada atajo por categoria:
+
+```js
+{
+  category: "Uso frecuente",
+  intro: "Descripcion corta.",
+  items: [
+    { action: "Mover el foco entre secciones", keys: ["Ctrl", "F6"] }
+  ]
 }
 ```
 
@@ -111,6 +134,8 @@ No conectar esta version a sistemas internos, APIs privadas, tokens ni fuentes r
 - `app.js`
 - `data/dictionary.js`
 - `data/roadmap.js`
+- `data/powerbiShortcuts.js`
+- `assets/docs/atajos-power-bi.pdf`
 - `scripts/dev-server.mjs`
 - `scripts/validate-build.mjs`
 - `vercel.json`
