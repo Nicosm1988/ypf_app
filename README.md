@@ -46,6 +46,7 @@ El build valida que:
 - El roadmap tenga las 14 fases obligatorias.
 - Los datos tengan los campos requeridos.
 - Vercel tenga rewrites para `/diccionario` y `/roadmap`.
+- Se genere `dist/` con las rutas estaticas listas para Vercel.
 
 ## Desplegar en Vercel
 

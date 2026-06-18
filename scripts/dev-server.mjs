@@ -23,7 +23,8 @@ const mimeTypes = {
 
 function toSafePath(urlPathname) {
   const decoded = decodeURIComponent(urlPathname);
-  if (decoded === "/" || decoded === "/diccionario" || decoded === "/roadmap") {
+  const routePath = decoded.replace(/\/+$/, "") || "/";
+  if (routePath === "/" || routePath === "/diccionario" || routePath === "/roadmap") {
     return path.join(root, "index.html");
   }
 

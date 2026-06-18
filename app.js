@@ -66,7 +66,8 @@ function escapeHtml(value) {
 }
 
 function getRoute(pathname = window.location.pathname) {
-  if (pathname === "/diccionario" || pathname === "/roadmap") return pathname;
+  const cleanPath = pathname.replace(/\/+$/, "") || "/";
+  if (cleanPath === "/diccionario" || cleanPath === "/roadmap") return cleanPath;
   return "/";
 }
 
@@ -141,25 +142,25 @@ function renderHomePage() {
             <source
               type="image/avif"
               srcset="
-                assets/energy-chain-v1-640.avif 640w,
-                assets/energy-chain-v1-960.avif 960w,
-                assets/energy-chain-v1-1280.avif 1280w,
-                assets/energy-chain-v1-1672.avif 1672w
+                /assets/energy-chain-v1-640.avif 640w,
+                /assets/energy-chain-v1-960.avif 960w,
+                /assets/energy-chain-v1-1280.avif 1280w,
+                /assets/energy-chain-v1-1672.avif 1672w
               "
               sizes="(max-width: 980px) 100vw, 470px"
             />
             <source
               type="image/webp"
               srcset="
-                assets/energy-chain-v1-640.webp 640w,
-                assets/energy-chain-v1-960.webp 960w,
-                assets/energy-chain-v1-1280.webp 1280w,
-                assets/energy-chain-v1-1672.webp 1672w
+                /assets/energy-chain-v1-640.webp 640w,
+                /assets/energy-chain-v1-960.webp 960w,
+                /assets/energy-chain-v1-1280.webp 1280w,
+                /assets/energy-chain-v1-1672.webp 1672w
               "
               sizes="(max-width: 980px) 100vw, 470px"
             />
             <img
-              src="assets/energy-chain.png"
+              src="/assets/energy-chain.png"
               width="1672"
               height="941"
               fetchpriority="high"

@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dictionaryCategories, dictionaryTerms } from "../data/dictionary.js";
 import { roadmapPhases } from "../data/roadmap.js";
 
@@ -33,7 +33,7 @@ const appJs = await readFile("app.js", "utf8");
 const vercelJson = JSON.parse(await readFile("vercel.json", "utf8"));
 
 assert(indexHtml.includes("YPF BI Playbook"), "index.html debe exponer el nombre del producto.");
-assert(indexHtml.includes('type="module" src="app.js"'), "index.html debe cargar app.js como modulo.");
+assert(indexHtml.includes('type="module" src="/app.js"'), "index.html debe cargar app.js como modulo.");
 assert(appJs.includes("renderDictionaryPage"), "app.js debe renderizar el diccionario.");
 assert(appJs.includes("renderRoadmapPage"), "app.js debe renderizar el roadmap.");
 
@@ -49,8 +49,23 @@ assert(roadmapPhases.every((phase, index) => phase.id === index), "Las fases deb
 const rewriteSources = new Set((vercelJson.rewrites || []).map((rewrite) => rewrite.source));
 assert(rewriteSources.has("/diccionario"), "Vercel debe reescribir /diccionario a index.html.");
 assert(rewriteSources.has("/roadmap"), "Vercel debe reescribir /roadmap a index.html.");
+assert(vercelJson.outputDirectory === "dist", "Vercel debe publicar la carpeta dist.");
+
+await rm("dist", { force: true, recursive: true });
+await mkdir("dist/diccionario", { recursive: true });
+await mkdir("dist/roadmap", { recursive: true });
+await cp("assets", "dist/assets", { recursive: true });
+await cp("data", "dist/data", { recursive: true });
+
+const rootFiles = ["index.html", "styles.css", "app.js", "manifest.webmanifest", "service-worker.js"];
+for (const file of rootFiles) {
+  await cp(file, `dist/${file}`);
+}
+
+await writeFile("dist/diccionario/index.html", indexHtml);
+await writeFile("dist/roadmap/index.html", indexHtml);
 
 console.log("Build validation OK");
 console.log(`- ${dictionaryTerms.length} terminos BI`);
 console.log(`- ${roadmapPhases.length} fases de roadmap`);
-console.log("- Vercel rewrites configurados");
+console.log("- dist generado para Vercel");
