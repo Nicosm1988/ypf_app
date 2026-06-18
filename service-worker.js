@@ -1,4 +1,4 @@
-const CACHE_NAME = "ypf-bi-playbook-v1";
+const CACHE_NAME = "ypf-bi-playbook-v2";
 const PRECACHE_URLS = [
   "/",
   "/index.html",
@@ -40,6 +40,11 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== location.origin) return;
 
+  const shouldPreferNetwork =
+    request.mode === "navigate" ||
+    ["document", "script", "style", "manifest"].includes(request.destination) ||
+    url.pathname.startsWith("/data/");
+
   event.respondWith(
     caches.match(request).then((cached) => {
       const networkFetch = fetch(request)
@@ -52,7 +57,7 @@ self.addEventListener("fetch", (event) => {
         })
         .catch(() => cached);
 
-      return cached || networkFetch;
+      return shouldPreferNetwork ? networkFetch || cached : cached || networkFetch;
     })
   );
 });
