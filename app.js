@@ -61,6 +61,36 @@ const dictionaryState = {
 };
 
 let expandedPhase = 0;
+let pointerFrame = 0;
+
+const interactiveSurfaceSelector = [
+  ".visual-summary",
+  ".stat",
+  ".feature-card",
+  ".workflow-lab",
+  ".workflow-case",
+  ".workflow-node-card",
+  ".workflow-output",
+  ".mini-step",
+  ".term-card",
+  ".empty-state",
+  ".control-panel",
+  ".roadmap-pipeline",
+  ".pipeline-step",
+  ".pipeline-lane-card",
+  ".phase-card",
+  ".prd-copy",
+  ".comparison-table",
+  ".guide-card",
+  ".readiness-panel",
+  ".project-copy",
+  ".code-window",
+  ".quality-card",
+  ".pbip-note",
+  ".shortcut-hero",
+  ".shortcut-card",
+  ".tooling-card",
+].join(",");
 
 function icon(name) {
   return `<span class="icon" aria-hidden="true">${icons[name] || ""}</span>`;
@@ -98,6 +128,68 @@ function navigate(path) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+function setupAmbientPointer() {
+  const root = document.documentElement;
+  const applyPointer = (clientX, clientY) => {
+    root.style.setProperty("--pointer-x", `${Math.round(clientX)}px`);
+    root.style.setProperty("--pointer-y", `${Math.round(clientY)}px`);
+    root.style.setProperty("--pointer-ratio-x", `${clientX / Math.max(window.innerWidth, 1)}`);
+    root.style.setProperty("--pointer-ratio-y", `${clientY / Math.max(window.innerHeight, 1)}`);
+  };
+
+  applyPointer(window.innerWidth * 0.5, window.innerHeight * 0.3);
+
+  window.addEventListener(
+    "pointermove",
+    (event) => {
+      if (pointerFrame) cancelAnimationFrame(pointerFrame);
+      pointerFrame = requestAnimationFrame(() => {
+        applyPointer(event.clientX, event.clientY);
+        pointerFrame = 0;
+      });
+    },
+    { passive: true },
+  );
+}
+
+function enhanceInteractiveSurfaces() {
+  const surfaces = appRoot.querySelectorAll(interactiveSurfaceSelector);
+
+  surfaces.forEach((surface) => {
+    if (surface.dataset.interactiveBound === "true") return;
+
+    const resetSurface = () => {
+      surface.style.setProperty("--spot-x", "50%");
+      surface.style.setProperty("--spot-y", "50%");
+      surface.style.setProperty("--tilt-x", "0deg");
+      surface.style.setProperty("--tilt-y", "0deg");
+    };
+
+    surface.dataset.interactiveBound = "true";
+    surface.classList.add("interactive-surface");
+    resetSurface();
+
+    surface.addEventListener(
+      "pointermove",
+      (event) => {
+        const rect = surface.getBoundingClientRect();
+        const x = rect.width ? (event.clientX - rect.left) / rect.width : 0.5;
+        const y = rect.height ? (event.clientY - rect.top) / rect.height : 0.5;
+        const clampedX = Math.min(Math.max(x, 0), 1);
+        const clampedY = Math.min(Math.max(y, 0), 1);
+
+        surface.style.setProperty("--spot-x", `${Math.round(clampedX * 100)}%`);
+        surface.style.setProperty("--spot-y", `${Math.round(clampedY * 100)}%`);
+        surface.style.setProperty("--tilt-x", `${((0.5 - clampedY) * 5).toFixed(2)}deg`);
+        surface.style.setProperty("--tilt-y", `${((clampedX - 0.5) * 6).toFixed(2)}deg`);
+      },
+      { passive: true },
+    );
+
+    surface.addEventListener("pointerleave", resetSurface, { passive: true });
+  });
+}
+
 function setActiveNav(route) {
   navLinks.forEach((link) => {
     const url = new URL(link.href);
@@ -111,35 +203,21 @@ function renderRoute(route = getRoute()) {
 
   if (route === "/diccionario") {
     renderDictionaryPage();
-    return;
-  }
-
-  if (route === "/guia-power-bi") {
+  } else if (route === "/guia-power-bi") {
     renderGuidePage();
-    return;
-  }
-
-  if (route === "/roadmap") {
+  } else if (route === "/roadmap") {
     renderRoadmapPage();
-    return;
-  }
-
-  if (route === "/proyecto-power-bi") {
+  } else if (route === "/proyecto-power-bi") {
     renderProjectPage();
-    return;
-  }
-
-  if (route === "/atajos") {
+  } else if (route === "/atajos") {
     renderShortcutsPage();
-    return;
-  }
-
-  if (route === "/librerias") {
+  } else if (route === "/librerias") {
     renderToolingPage();
-    return;
+  } else {
+    renderHomePage();
   }
 
-  renderHomePage();
+  requestAnimationFrame(enhanceInteractiveSurfaces);
 }
 
 function renderHomePage() {
@@ -228,6 +306,8 @@ function renderHomePage() {
         ${icon("quote")}
         <strong>Un buen producto BI no empieza en Power BI. Empieza en una decision de negocio clara.</strong>
       </section>
+
+      ${renderWorkflowLab()}
 
       <div class="section-title page-inner">
         <div>
@@ -323,6 +403,75 @@ function renderHomePage() {
           )
           .join("")}
       </section>
+    </section>
+  `;
+}
+
+function renderWorkflowLab() {
+  const cases = [
+    ["Producto", "Define decision, KPI, usuario y alcance antes de construir."],
+    ["Ingenieria", "Convierte la Spec en fuentes, modelo, DAX, pruebas y release."],
+    ["Operacion", "Monitorea refresh, capacidad, uso real e incidentes."],
+  ];
+  const nodes = [
+    { title: "PRD", text: "por que, para quien y exito", iconName: "clipboard", tone: "orange" },
+    { title: "Spec", text: "arquitectura y reglas tecnicas", iconName: "code", tone: "blue" },
+    { title: "Datos", text: "fuentes, M y calidad", iconName: "layers", tone: "cyan" },
+    { title: "Modelo", text: "estrella, VertiPaq y DAX", iconName: "gitBranch", tone: "green" },
+    { title: "UX + seguridad", text: "RLS, OLS y lectura guiada", iconName: "shield", tone: "violet" },
+    { title: "Release", text: "PBIP, Git y pipelines", iconName: "terminal", tone: "yellow" },
+    { title: "Operacion", text: "capacidad, refresh y mejora", iconName: "gauge", tone: "orange" },
+  ];
+
+  return `
+    <section class="workflow-lab page-inner" aria-label="Flujo inmersivo de proyecto BI">
+      <div class="workflow-copy">
+        <span class="flow-chip">workflow vivo</span>
+        <h2>Que cada paso del proyecto se pueda ver, revisar y controlar.</h2>
+        <p>
+          La experiencia toma la logica de un canvas visual: cada decision deja una huella, cada etapa tiene
+          salida clara y el flujo completo se entiende sin perder la profundidad tecnica.
+        </p>
+        <div class="workflow-case-list" aria-label="Carriles de trabajo">
+          ${cases
+            .map(
+              ([title, text], index) => `
+                <article class="workflow-case ${index === 0 ? "active" : ""}">
+                  <strong>${escapeHtml(title)}</strong>
+                  <span>${escapeHtml(text)}</span>
+                </article>
+              `,
+            )
+            .join("")}
+        </div>
+      </div>
+
+      <div class="workflow-board" aria-label="Canvas del flujo BI">
+        <div class="workflow-board-head">
+          <span class="flow-chip">BI flow</span>
+          <strong>De necesidad a producto operativo</strong>
+        </div>
+        <div class="workflow-chain">
+          ${nodes
+            .map(
+              (node, index) => `
+                <article class="workflow-node-card tone-${node.tone}" style="--node-order:${index}">
+                  <span class="node-icon">${icon(node.iconName)}</span>
+                  <strong>${escapeHtml(node.title)}</strong>
+                  <small>${escapeHtml(node.text)}</small>
+                </article>
+              `,
+            )
+            .join("")}
+        </div>
+        <div class="workflow-output">
+          <span>${icon("spark")}</span>
+          <div>
+            <strong>Resultado esperable</strong>
+            <p>Menos retrabajo, mas trazabilidad y una experiencia de BI que acompana la decision real.</p>
+          </div>
+        </div>
+      </div>
     </section>
   `;
 }
@@ -561,6 +710,7 @@ function renderDictionaryResults() {
         <p>Proba con otra palabra, limpia el filtro o revisa una categoria mas amplia.</p>
       </div>
     `;
+    requestAnimationFrame(enhanceInteractiveSurfaces);
     return;
   }
 
@@ -592,6 +742,7 @@ function renderDictionaryResults() {
       `,
     )
     .join("");
+  requestAnimationFrame(enhanceInteractiveSurfaces);
 }
 
 function renderRoadmapPage() {
@@ -607,6 +758,8 @@ function renderRoadmapPage() {
       </header>
 
       ${renderBiFlowCanvas()}
+
+      ${renderRoadmapPipeline()}
 
       <section class="roadmap-toolbar page-inner" aria-label="Leyenda del roadmap">
         <div class="result-count">${roadmapPhases.length} gates</div>
@@ -772,6 +925,57 @@ function renderBiFlowCanvas() {
           <strong>PBIP/TMDL</strong>
           <small>Git + releases</small>
         </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderRoadmapPipeline() {
+  const lanes = Object.keys(laneStyles).map((lane) => ({
+    lane,
+    style: laneStyles[lane],
+    phases: roadmapPhases.filter((phase) => phase.lane === lane),
+  }));
+
+  return `
+    <section class="roadmap-pipeline page-inner" aria-label="Pipeline estructurado del roadmap BI">
+      <div class="pipeline-intro">
+        <span class="flow-chip">roadmap por flujo</span>
+        <h2>Una secuencia, cinco carriles y gates que ordenan la entrega.</h2>
+        <p>
+          El proyecto avanza como un sistema: producto define el norte, datos sostienen la respuesta,
+          el modelo organiza la logica, UX y seguridad cuidan la adopcion, y delivery mantiene vivo lo publicado.
+        </p>
+      </div>
+
+      <div class="pipeline-track" aria-label="Secuencia de gates">
+        ${roadmapPhases
+          .map((phase) => {
+            const lane = laneStyles[phase.lane] || { color: "var(--ypf-blue)" };
+            return `
+              <article class="pipeline-step" style="--lane-color:${lane.color}">
+                <span>${phase.id + 1}</span>
+                <strong>${escapeHtml(phase.title)}</strong>
+                <small>${escapeHtml(phase.gate)}</small>
+              </article>
+            `;
+          })
+          .join("")}
+      </div>
+
+      <div class="pipeline-lanes" aria-label="Carriles del roadmap">
+        ${lanes
+          .map(
+            ({ lane, style, phases }) => `
+              <article class="pipeline-lane-card" style="--lane-color:${style.color}">
+                <h3><span></span>${escapeHtml(lane)}</h3>
+                <ol>
+                  ${phases.map((phase) => `<li><strong>${phase.id + 1}.</strong> ${escapeHtml(phase.title)}</li>`).join("")}
+                </ol>
+              </article>
+            `,
+          )
+          .join("")}
       </div>
     </section>
   `;
@@ -1001,4 +1205,5 @@ if ("serviceWorker" in navigator && window.location.protocol === "https:") {
   });
 }
 
+setupAmbientPointer();
 renderRoute();

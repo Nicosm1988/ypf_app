@@ -1,4 +1,4 @@
-const CACHE_NAME = "ypf-bi-playbook-v5";
+const CACHE_NAME = "ypf-bi-playbook-v6";
 const PRECACHE_URLS = [
   "/",
   "/guia-power-bi",
