@@ -2,9 +2,11 @@
 
 MVP web para un equipo BI con recursos de consulta y trabajo:
 
-- Diccionario BI para alinear conceptos de negocio, datos, Power BI, modelado, KPIs, gobierno y adopcion.
-- Roadmap BI estructurado en cinco pilares: contexto, mapa, reglas, skills y diseno.
-- Proyecto de Power BI con Visual Studio para trabajar PBIP, TMDL, Git y documentacion con criterio.
+- Guia Power BI/Fabric para ordenar el ciclo completo desde PRD y Spec hasta operacion.
+- Diccionario BI para alinear conceptos de producto, datos, Power BI, Fabric, performance, gobierno y adopcion.
+- Roadmap BI estructurado en 9 gates de ingenieria: PRD/Spec, ETL, modelo, DAX, seguridad, UX, Fabric, CI/CD y operacion.
+- Proyecto de Power BI con Visual Studio para trabajar PRD, Spec, PBIP, TMDL, Git y documentacion con criterio.
+- Catalogo de librerias, agentes, MCPs y sandboxes guardado en documentacion local.
 - Atajos Power BI extraidos del PDF local del repo.
 
 La app es estatica, sin credenciales, sin datos sensibles y compatible con Vercel.
@@ -13,7 +15,8 @@ La app es estatica, sin credenciales, sin datos sensibles y compatible con Verce
 
 - HTML, CSS y JavaScript vanilla.
 - Modulos ES para separar datos de UI.
-- Contenido local editable en `data/dictionary.js`, `data/roadmap.js` y `data/powerbiShortcuts.js`.
+- Contenido local editable en `data/dictionary.js`, `data/engineeringGuide.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
+- Documentacion tecnica en `docs/librerias-agentes-mcp.md`.
 - Deploy estatico en Vercel.
 
 ## Correr localmente
@@ -31,9 +34,11 @@ http://127.0.0.1:8001/
 El servidor local tambien soporta:
 
 ```text
+http://127.0.0.1:8001/guia-power-bi
 http://127.0.0.1:8001/diccionario
 http://127.0.0.1:8001/roadmap
 http://127.0.0.1:8001/proyecto-power-bi
+http://127.0.0.1:8001/librerias
 http://127.0.0.1:8001/atajos
 ```
 
@@ -45,12 +50,14 @@ npm run build
 
 El build valida que:
 
-- Exista Home, Diccionario BI, Roadmap BI, Proyecto Power BI y Atajos.
-- El diccionario tenga al menos 40 terminos.
-- El roadmap tenga los 5 pilares obligatorios.
+- Exista Home, Guia Power BI/Fabric, Diccionario BI, Roadmap BI, Proyecto Power BI, Librerias y Atajos.
+- El diccionario tenga al menos 65 terminos.
+- El roadmap tenga los 9 gates obligatorios y arranque con PRD/Spec.
+- La guia tenga capitulos, comparacion PRD vs Spec y checklist de salida a produccion.
+- El catalogo tecnico tenga documentacion Markdown y familias de herramientas.
 - Los atajos tengan categorias e items navegables.
 - Los datos tengan los campos requeridos.
-- Vercel tenga rewrites para `/diccionario`, `/roadmap`, `/proyecto-power-bi` y `/atajos`.
+- Vercel tenga rewrites para `/guia-power-bi`, `/diccionario`, `/roadmap`, `/proyecto-power-bi`, `/librerias` y `/atajos`.
 - Se genere `dist/` con las rutas estaticas listas para Vercel.
 
 ## Desplegar en Vercel
@@ -83,18 +90,18 @@ Editar `data/dictionary.js` y agregar un objeto en `dictionaryTerms`:
 
 Las categorias disponibles estan en `dictionaryCategories`.
 
-## Editar pilares del roadmap
+## Editar gates del roadmap
 
 Editar `data/roadmap.js` y modificar `roadmapPhases`.
 
-Cada pilar debe mantener esta estructura:
+Cada gate debe mantener esta estructura:
 
 ```js
 {
   id: 0,
-  title: "Contexto",
-  lane: "Direccion BI",
-  objective: "Objetivo del pilar.",
+  title: "PRD y Spec",
+  lane: "Producto y negocio",
+  objective: "Objetivo del gate.",
   keyActivities: ["Actividad clave"],
   deliverables: ["Entregable"],
   owner: "Responsable principal",
@@ -103,7 +110,19 @@ Cada pilar debe mantener esta estructura:
 }
 ```
 
-PBIP no va dentro del roadmap: vive en la pagina `Proyecto de Power BI con Visual Studio`.
+El roadmap debe comenzar con PRD y Spec. PBIP/TMDL viven dentro del gate de CI/CD cuando el proyecto ya requiere modelo como codigo.
+
+## Editar guia Power BI/Fabric
+
+Editar `data/engineeringGuide.js`.
+
+- `prdSpecComparison`: tabla de comparacion entre PRD y Spec.
+- `guideSections`: capitulos de la guia.
+- `readinessChecklist`: checklist previo a produccion.
+
+## Editar librerias, agentes y MCPs
+
+Editar `data/toolingLibrary.js` para la version navegable y `docs/librerias-agentes-mcp.md` para la documentacion Markdown.
 
 ## Editar atajos Power BI
 
@@ -133,8 +152,11 @@ No conectar esta version a sistemas internos, APIs privadas, tokens ni fuentes r
 - `styles.css`
 - `app.js`
 - `data/dictionary.js`
+- `data/engineeringGuide.js`
 - `data/roadmap.js`
+- `data/toolingLibrary.js`
 - `data/powerbiShortcuts.js`
+- `docs/librerias-agentes-mcp.md`
 - `assets/docs/atajos-power-bi.pdf`
 - `scripts/dev-server.mjs`
 - `scripts/validate-build.mjs`

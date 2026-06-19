@@ -1,16 +1,21 @@
-const CACHE_NAME = "ypf-bi-playbook-v4";
+const CACHE_NAME = "ypf-bi-playbook-v5";
 const PRECACHE_URLS = [
   "/",
+  "/guia-power-bi",
   "/roadmap",
   "/proyecto-power-bi",
   "/atajos",
+  "/librerias",
   "/diccionario",
   "/index.html",
   "/styles.css",
   "/app.js",
   "/data/dictionary.js",
+  "/data/engineeringGuide.js",
   "/data/roadmap.js",
   "/data/powerbiShortcuts.js",
+  "/data/toolingLibrary.js",
+  "/docs/librerias-agentes-mcp.md",
   "/manifest.webmanifest",
   "/assets/docs/atajos-power-bi.pdf",
   "/assets/favicon.svg",

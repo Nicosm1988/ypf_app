@@ -1,7 +1,7 @@
 {
   "name": "YPF BI Playbook",
   "short_name": "BI Playbook",
-  "description": "Playbook BI con diccionario, roadmap, proyecto Power BI y atajos de trabajo.",
+  "description": "Playbook BI/Fabric con PRD, Spec, roadmap, diccionario, proyecto Power BI, librerias y atajos.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

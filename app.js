@@ -1,6 +1,8 @@
 import { dictionaryCategories, dictionaryTerms } from "./data/dictionary.js";
+import { guideSections, prdSpecComparison, readinessChecklist } from "./data/engineeringGuide.js";
 import { powerBiShortcuts, shortcutsPdf } from "./data/powerbiShortcuts.js";
 import { laneStyles, roadmapPhases } from "./data/roadmap.js";
+import { toolingDocs, toolingGroups } from "./data/toolingLibrary.js";
 
 const appRoot = document.querySelector("#appRoot");
 const contentTarget = document.querySelector("#content");
@@ -45,10 +47,12 @@ const icons = {
 
 const routeTitles = {
   "/": "YPF BI Playbook",
+  "/guia-power-bi": "Guia Power BI/Fabric | YPF BI Playbook",
   "/diccionario": "Diccionario BI | YPF BI Playbook",
   "/roadmap": "Roadmap BI | YPF BI Playbook",
   "/proyecto-power-bi": "Proyecto de Power BI con Visual Studio | YPF BI Playbook",
   "/atajos": "Atajos Power BI | YPF BI Playbook",
+  "/librerias": "Librerias y agentes | YPF BI Playbook",
 };
 
 const dictionaryState = {
@@ -80,7 +84,7 @@ function escapeHtml(value) {
 
 function getRoute(pathname = window.location.pathname) {
   const cleanPath = pathname.replace(/\/+$/, "") || "/";
-  if (["/diccionario", "/roadmap", "/proyecto-power-bi", "/atajos"].includes(cleanPath)) return cleanPath;
+  if (["/guia-power-bi", "/diccionario", "/roadmap", "/proyecto-power-bi", "/atajos", "/librerias"].includes(cleanPath)) return cleanPath;
   return "/";
 }
 
@@ -110,6 +114,11 @@ function renderRoute(route = getRoute()) {
     return;
   }
 
+  if (route === "/guia-power-bi") {
+    renderGuidePage();
+    return;
+  }
+
   if (route === "/roadmap") {
     renderRoadmapPage();
     return;
@@ -122,6 +131,11 @@ function renderRoute(route = getRoute()) {
 
   if (route === "/atajos") {
     renderShortcutsPage();
+    return;
+  }
+
+  if (route === "/librerias") {
+    renderToolingPage();
     return;
   }
 
@@ -167,11 +181,10 @@ function renderHomePage() {
           <div class="hero-copy">
             <span class="eyebrow">YPF energia argentina</span>
             <h1>YPF BI Playbook</h1>
-        <p class="hero-kicker">Diccionario, roadmap y practica de trabajo para proyectos BI mantenibles.</p>
-        <p class="hero-text">
-              Una guia simple para alinear conceptos, procesos y buenas practicas BI. Centraliza un
-              diccionario para hablar el mismo idioma, un roadmap de cinco pilares y una forma de
-              trabajar modelos Power BI con mas criterio, versionado y foco.
+            <p class="hero-kicker">Ingenieria Power BI/Fabric desde PRD hasta operacion.</p>
+            <p class="hero-text">
+              Una guia viva para convertir necesidades de negocio en productos analiticos confiables:
+              PRD, Spec, ETL, modelo semantico, DAX, seguridad, UX, Fabric, CI/CD y monitoreo.
             </p>
             <div class="hero-actions">
               <a class="button" href="/diccionario" data-route>
@@ -195,11 +208,11 @@ function renderHomePage() {
               </div>
               <div class="stat">
                 <strong>${roadmapPhases.length}</strong>
-                <span>pilares de trabajo</span>
+                <span>gates de entrega</span>
               </div>
               <div class="stat">
-                <strong>${powerBiShortcuts.length}</strong>
-                <span>familias de atajos</span>
+                <strong>${guideSections.length}</strong>
+                <span>capitulos guia</span>
               </div>
             </div>
           </aside>
@@ -219,16 +232,25 @@ function renderHomePage() {
       <div class="section-title page-inner">
         <div>
           <h2>Recursos principales</h2>
-          <p>Entradas directas para consulta diaria, discovery, desarrollo y delivery BI.</p>
+          <p>Entradas directas para producto, ingenieria, delivery, consulta diaria y futuras automatizaciones.</p>
         </div>
       </div>
 
       <section class="feature-grid page-inner" aria-label="Secciones principales">
         <article class="feature-card">
+          <span class="feature-icon">${icon("layers")}</span>
+          <h3>Guia Power BI/Fabric</h3>
+          <p>Ciclo completo: PRD, Spec, ETL, VertiPaq, DAX, seguridad, UX, Direct Lake, CI/CD y operacion.</p>
+          <a class="button small" href="/guia-power-bi" data-route>
+            Ver guia
+            ${icon("arrowRight")}
+          </a>
+        </article>
+        <article class="feature-card">
           <span class="feature-icon">${icon("book")}</span>
           <h3>Diccionario BI</h3>
-          <p>Conceptos clave de negocio, datos, Power BI, modelado, KPIs, gobierno y adopcion.</p>
-          <a class="button small" href="/diccionario" data-route>
+          <p>Conceptos clave de producto, Fabric, Power BI, modelado, DAX, performance, gobierno y operacion.</p>
+          <a class="button small secondary" href="/diccionario" data-route>
             Explorar diccionario
             ${icon("arrowRight")}
           </a>
@@ -236,7 +258,7 @@ function renderHomePage() {
         <article class="feature-card">
           <span class="feature-icon">${icon("route")}</span>
           <h3>Roadmap BI</h3>
-          <p>Contexto, mapa, reglas, skills y diseno: las cinco piezas para construir modelos que se puedan sostener.</p>
+          <p>Gates de entrega desde PRD/Spec hasta produccion monitoreada y mejora continua.</p>
           <a class="button small secondary" href="/roadmap" data-route>
             Ver roadmap
             ${icon("arrowRight")}
@@ -245,9 +267,18 @@ function renderHomePage() {
         <article class="feature-card">
           <span class="feature-icon">${icon("code")}</span>
           <h3>Proyecto Power BI</h3>
-          <p>Una forma de trabajar el modelo con archivos, Git, terminal y Visual Studio Code sin perder criterio de negocio.</p>
+          <p>Estructura de proyecto con PRD, Spec, PBIP, TMDL, Git, documentacion y scripts.</p>
           <a class="button small secondary" href="/proyecto-power-bi" data-route>
             Ver proyecto
+            ${icon("arrowRight")}
+          </a>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon">${icon("folder")}</span>
+          <h3>Librerias y agentes</h3>
+          <p>Inventario documentado de MCPs, bases, cloud, agentes, sandboxes, APIs y frameworks para futuras specs.</p>
+          <a class="button small secondary" href="/librerias" data-route>
+            Ver librerias
             ${icon("arrowRight")}
           </a>
         </article>
@@ -265,18 +296,18 @@ function renderHomePage() {
       <section class="story-band">
         <div class="page-inner story-content">
           <span class="eyebrow">energia para decidir</span>
-          <h2>De hacer graficos a construir productos BI mantenibles.</h2>
+          <h2>De pedir un reporte a construir un producto analitico serio.</h2>
           <p>
-            La diferencia no esta en tener mas visuales. Esta en dejar contexto, modelo, reglas,
-            documentacion y diseno para que otra persona pueda seguir sin tener que adivinar.
+            La diferencia esta en separar el PRD de la Spec, modelar con criterio, versionar cambios
+            y operar la solucion cuando ya esta en manos del negocio.
           </p>
         </div>
       </section>
 
       <div class="section-title page-inner">
         <div>
-          <h2>Las cinco piezas que sostienen el modelo</h2>
-          <p>El roadmap ahora arranca donde suelen romperse los proyectos reales: cuando el modelo crece y hay que mantenerlo.</p>
+          <h2>Los gates que sostienen un proyecto BI</h2>
+          <p>El roadmap arranca en PRD/Spec y termina cuando produccion esta monitoreada.</p>
         </div>
       </div>
 
@@ -359,6 +390,141 @@ function renderDictionaryPage() {
   renderDictionaryResults();
 }
 
+function renderGuidePage() {
+  appRoot.innerHTML = `
+    <section class="page tool-page">
+      <header class="page-heading page-inner">
+        <span class="eyebrow">Guia de ingenieria BI</span>
+        <h1>Power BI y Microsoft Fabric</h1>
+        <p class="lede">
+          Un ciclo de vida completo para productos analiticos: empieza con PRD y Spec,
+          sigue con datos, modelo, DAX, seguridad y UX, y termina en CI/CD, monitoreo y mejora continua.
+        </p>
+      </header>
+
+      <section class="prd-panel page-inner">
+        <div class="prd-copy">
+          <span class="flow-chip">antes de construir</span>
+          <h2>PRD primero. Spec despues. Desarrollo con menos ruido.</h2>
+          <p>
+            El PRD ordena el problema, los usuarios y el exito esperado. La Spec convierte esa
+            direccion en una arquitectura ejecutable. Cuando se mezclan, nadie sabe si esta
+            discutiendo negocio o implementacion.
+          </p>
+        </div>
+        <div class="comparison-table" role="table" aria-label="Comparacion PRD y Spec">
+          <div class="comparison-row head" role="row">
+            <span>Caracteristica</span>
+            <span>PRD</span>
+            <span>Spec</span>
+          </div>
+          ${prdSpecComparison
+            .map(
+              (item) => `
+                <div class="comparison-row" role="row">
+                  <strong>${escapeHtml(item.characteristic)}</strong>
+                  <span data-label="PRD">${escapeHtml(item.prd)}</span>
+                  <span data-label="Spec">${escapeHtml(item.spec)}</span>
+                </div>
+              `,
+            )
+            .join("")}
+        </div>
+      </section>
+
+      <section class="guide-grid page-inner" aria-label="Capitulos de la guia Power BI y Fabric">
+        ${guideSections.map(renderGuideSectionCard).join("")}
+      </section>
+
+      <section class="readiness-panel page-inner">
+        <div>
+          <span class="eyebrow">checklist</span>
+          <h2>Antes de poner en produccion</h2>
+          <p>
+            Esta lista funciona como control simple para no publicar reportes que todavia no tienen
+            producto, modelo, seguridad u operacion suficientemente claros.
+          </p>
+        </div>
+        <ul>
+          ${readinessChecklist.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </section>
+    </section>
+  `;
+}
+
+function renderGuideSectionCard(section) {
+  return `
+    <article class="guide-card">
+      <div class="guide-card-head">
+        <span>${escapeHtml(section.eyebrow)}</span>
+        <h2>${escapeHtml(section.title)}</h2>
+      </div>
+      <p>${escapeHtml(section.summary)}</p>
+      <div class="guide-card-grid">
+        <div>
+          <h3>Practicas clave</h3>
+          <ul>${section.practices.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </div>
+        <div>
+          <h3>Entregables</h3>
+          <ul>${section.deliverables.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </div>
+      </div>
+      <div class="risk-note">
+        <strong>Riesgo si se saltea:</strong> ${escapeHtml(section.risk)}
+      </div>
+    </article>
+  `;
+}
+
+function renderToolingPage() {
+  const totalItems = toolingGroups.reduce((total, group) => total + group.items.length, 0);
+  appRoot.innerHTML = `
+    <section class="page tool-page">
+      <header class="page-heading page-inner">
+        <span class="eyebrow">Documentacion tecnica</span>
+        <h1>Librerias, agentes y MCPs</h1>
+        <p class="lede">
+          Inventario para futuras specs: bases de datos, nube, desarrollo, busqueda, observabilidad,
+          colaboracion, IA, agentes, sandboxes y frameworks. No se instala todo por defecto; se elige con criterio.
+        </p>
+      </header>
+
+      <section class="shortcut-hero page-inner">
+        <div>
+          <span class="flow-chip">inventario del repo</span>
+          <h2>${escapeHtml(toolingDocs.title)}</h2>
+          <p>${toolingGroups.length} familias y ${totalItems} herramientas documentadas para evaluar cuando una Spec lo justifique.</p>
+        </div>
+        <a class="button" href="/${toolingDocs.source}" target="_blank" rel="noreferrer">
+          ${icon("book")}
+          Abrir documentacion
+        </a>
+      </section>
+
+      <section class="tooling-grid page-inner" aria-label="Catalogo de librerias y agentes">
+        ${toolingGroups.map(renderToolingGroup).join("")}
+      </section>
+    </section>
+  `;
+}
+
+function renderToolingGroup(group) {
+  return `
+    <article class="tooling-card">
+      <div class="tooling-card-head">
+        <h2>${escapeHtml(group.group)}</h2>
+        <span>${group.items.length}</span>
+      </div>
+      <p>${escapeHtml(group.description)}</p>
+      <div class="tooling-tags">
+        ${group.items.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+      </div>
+    </article>
+  `;
+}
+
 function getFilteredTerms() {
   const query = normalizeText(dictionaryState.query.trim());
   return dictionaryTerms.filter((term) => {
@@ -432,18 +598,18 @@ function renderRoadmapPage() {
   appRoot.innerHTML = `
     <section class="page tool-page">
       <header class="page-heading page-inner">
-        <span class="eyebrow">Modelo mantenible</span>
-        <h1>Roadmap BI</h1>
+        <span class="eyebrow">Roadmap de ingenieria</span>
+        <h1>Roadmap BI/Fabric</h1>
         <p class="lede">
-          Antes de pedirle ayuda a una IA, a una persona nueva o al propio equipo de BI, el proyecto
-          necesita una base compartida: contexto, mapa, reglas, skills y diseno.
+          Un recorrido con gates claros: PRD, Spec, datos, modelo, DAX, seguridad, UX,
+          plataforma, CI/CD y operacion. La idea no es burocracia: es construir con menos retrabajo.
         </p>
       </header>
 
       ${renderBiFlowCanvas()}
 
       <section class="roadmap-toolbar page-inner" aria-label="Leyenda del roadmap">
-        <div class="result-count">${roadmapPhases.length} pilares</div>
+        <div class="result-count">${roadmapPhases.length} gates</div>
         <div class="lane-legend">
           ${Object.entries(laneStyles)
             .map(
@@ -494,33 +660,33 @@ function renderBiFlowCanvas() {
   return `
     <section class="bi-flow-showcase page-inner" aria-label="Flujo BI estilo workflow visual">
       <aside class="flow-rail" aria-label="Escenarios del flujo BI">
-        <button class="flow-tab active" type="button" data-flow-tab="context">
-          <strong>Contexto</strong>
-          <span>Modelo, usuarios, negocio y decisiones</span>
+        <button class="flow-tab active" type="button" data-flow-tab="prd">
+          <strong>PRD</strong>
+          <span>Problema, usuario, KPIs y alcance</span>
         </button>
-        <button class="flow-tab" type="button" data-flow-tab="map">
-          <strong>Mapa</strong>
-          <span>Estrella, granularidad y relaciones</span>
+        <button class="flow-tab" type="button" data-flow-tab="etl">
+          <strong>Datos</strong>
+          <span>Fuentes, Power Query y folding</span>
         </button>
-        <button class="flow-tab" type="button" data-flow-tab="rules">
-          <strong>Reglas</strong>
-          <span>DAX, naming, carpetas y patrones</span>
+        <button class="flow-tab" type="button" data-flow-tab="model">
+          <strong>Modelo</strong>
+          <span>VertiPaq, estrella y DAX</span>
         </button>
-        <button class="flow-tab" type="button" data-flow-tab="skills">
-          <strong>Skills</strong>
-          <span>Manuales de trabajo por dominio</span>
+        <button class="flow-tab" type="button" data-flow-tab="security">
+          <strong>Confianza</strong>
+          <span>RLS, OLS, gobierno y UX</span>
         </button>
-        <button class="flow-tab" type="button" data-flow-tab="design">
-          <strong>Diseno</strong>
-          <span>Diagramas, bocetos y experiencia</span>
+        <button class="flow-tab" type="button" data-flow-tab="ops">
+          <strong>Operacion</strong>
+          <span>CI/CD, capacity y monitoreo</span>
         </button>
       </aside>
 
       <div class="flow-canvas" aria-label="Canvas del proceso BI">
         <div class="flow-canvas-copy">
           <span class="flow-chip">BI model canvas</span>
-          <h2>La IA no adivina el negocio</h2>
-          <p>Si el proyecto deja estas cinco piezas visibles, el equipo trabaja mejor y la IA ayuda con menos ruido.</p>
+          <h2>Del PRD a produccion</h2>
+          <p>La IA ayuda mas cuando el proyecto deja problema, Spec, modelo, seguridad y operacion por escrito.</p>
         </div>
 
         <svg class="flow-lines" viewBox="0 0 940 520" preserveAspectRatio="none" aria-hidden="true">
@@ -546,65 +712,65 @@ function renderBiFlowCanvas() {
           <circle class="flow-pulse delay-2" cx="860" cy="105" r="5"></circle>
         </svg>
 
-        <div class="flow-node trigger spotlight" data-flow-node="context" style="--x: 13%; --y: 48%;">
+        <div class="flow-node trigger spotlight" data-flow-node="prd" style="--x: 13%; --y: 48%;">
           <span class="node-icon cyan">${icon("clipboard")}</span>
-          <strong>Contexto</strong>
-          <small>para quien y que decision</small>
+          <strong>PRD</strong>
+          <small>por que, que y exito</small>
         </div>
 
-        <div class="flow-node agent" data-flow-node="map" style="--x: 45%; --y: 48%;">
+        <div class="flow-node agent" data-flow-node="etl" style="--x: 45%; --y: 48%;">
           <span class="node-icon white">${icon("layers")}</span>
-          <strong>Mapa semantico</strong>
-          <small>estrella + granularidad</small>
+          <strong>Spec + ETL</strong>
+          <small>fuentes + folding</small>
           <div class="node-ports">
-            <span>Hechos</span>
-            <span>Dims</span>
-            <span>Relaciones</span>
+            <span>Fuentes</span>
+            <span>Power Query</span>
+            <span>Calidad</span>
           </div>
         </div>
 
-        <div class="flow-node decision" data-flow-node="rules" style="--x: 69%; --y: 48%;">
+        <div class="flow-node decision" data-flow-node="model" style="--x: 69%; --y: 48%;">
           <span class="node-icon green">${icon("gitBranch")}</span>
-          <strong>Reglas claras?</strong>
-          <small>naming, DAX, carpetas</small>
+          <strong>Modelo listo?</strong>
+          <small>VertiPaq, DAX, BPA</small>
           <em class="branch-label true">si</em>
           <em class="branch-label false">no</em>
         </div>
 
-        <div class="flow-node output" data-flow-node="design" style="--x: 87%; --y: 20%;">
+        <div class="flow-node output" data-flow-node="security" style="--x: 87%; --y: 20%;">
           <span class="node-icon blue">${icon("route")}</span>
-          <strong>Diseno del report</strong>
-          <small>boceto y flujo de lectura</small>
+          <strong>Confianza</strong>
+          <small>RLS/OLS + UX</small>
         </div>
 
-        <div class="flow-node output" data-flow-node="rules" style="--x: 87%; --y: 70%;">
+        <div class="flow-node output" data-flow-node="ops" style="--x: 87%; --y: 70%;">
           <span class="node-icon orange">${icon("route")}</span>
-          <strong>Volver a reglas</strong>
-          <small>ajuste antes de escalar</small>
+          <strong>Produccion</strong>
+          <small>CI/CD + capacity</small>
         </div>
 
-        <div class="flow-orbit" data-flow-node="map" style="--x: 31%; --y: 82%;">
+        <div class="flow-orbit" data-flow-node="etl" style="--x: 31%; --y: 82%;">
           <span>${icon("search")}</span>
-          <strong>Granularidad</strong>
-          <small>nivel de detalle</small>
+          <strong>Query Folding</strong>
+          <small>pushdown al origen</small>
         </div>
 
-        <div class="flow-orbit" data-flow-node="rules" style="--x: 45%; --y: 82%;">
+        <div class="flow-orbit" data-flow-node="model" style="--x: 45%; --y: 82%;">
           <span>${icon("gauge")}</span>
-          <strong>Convenciones</strong>
-          <small>DAX + Power Query</small>
+          <strong>VertiPaq</strong>
+          <small>cardinalidad baja</small>
         </div>
 
-        <div class="flow-orbit" data-flow-node="skills" style="--x: 60%; --y: 82%;">
+        <div class="flow-orbit" data-flow-node="security" style="--x: 60%; --y: 82%;">
           <span>${icon("book")}</span>
-          <strong>Skills</strong>
-          <small>manuales por dominio</small>
+          <strong>3-30-300</strong>
+          <small>UX para decidir</small>
         </div>
 
-        <div class="flow-orbit" data-flow-node="design" style="--x: 76%; --y: 82%;">
+        <div class="flow-orbit" data-flow-node="ops" style="--x: 76%; --y: 82%;">
           <span>${icon("shield")}</span>
-          <strong>Diseno</strong>
-          <small>diagramas + UX</small>
+          <strong>PBIP/TMDL</strong>
+          <small>Git + releases</small>
         </div>
       </div>
     </section>
@@ -615,39 +781,42 @@ function renderProjectPage() {
   appRoot.innerHTML = `
     <section class="page tool-page">
       <header class="page-heading page-inner">
-        <span class="eyebrow">PBIP + TMDL + Git</span>
+        <span class="eyebrow">PRD + Spec + PBIP</span>
         <h1>Proyecto de Power BI con Visual Studio</h1>
         <p class="lede">
-          Cuando el modelo deja de ser un archivo cerrado y pasa a vivir como texto, el trabajo cambia:
-          se puede revisar, versionar, comparar y mejorar con el mismo cuidado con el que se cuida codigo.
+          Un proyecto Power BI serio no empieza en el PBIX: empieza con un PRD claro, baja a una Spec
+          tecnica y recien despues se versiona el modelo como codigo con PBIP, TMDL, Git y scripts.
         </p>
       </header>
 
       <section class="project-studio page-inner">
         <div class="project-copy">
           <span class="flow-chip">filosofia de trabajo</span>
-          <h2>No se trata de reemplazar criterio por IA. Se trata de darle contexto para que ayude mejor.</h2>
+          <h2>No se trata de documentar por cumplir. Se trata de que negocio, BI e IA trabajen con el mismo mapa.</h2>
           <p>
-            En proyectos reales, el problema rara vez es hacer un grafico mas. El problema es que el modelo crece,
-            las medidas se duplican, las relaciones empiezan a ser dificiles de explicar y cada cambio se vuelve
-            una pequena investigacion. Trabajar con una estructura clara permite que el equipo y la IA colaboren
-            sin romper la confianza del negocio.
+            En proyectos reales, el problema rara vez es hacer un grafico mas. El problema es no tener claro
+            que decision se quiere mejorar, que queda fuera, que datos sostienen la respuesta y como se prueba
+            que la solucion funciona. El PRD alinea el producto; la Spec ordena la implementacion.
           </p>
           <div class="hero-actions">
-            <a class="button" href="/roadmap" data-route>${icon("route")} Ver los 5 pilares</a>
-            <a class="button secondary" href="/atajos" data-route>${icon("terminal")} Ver atajos</a>
+            <a class="button" href="/guia-power-bi" data-route>${icon("layers")} Ver guia</a>
+            <a class="button secondary" href="/roadmap" data-route>${icon("route")} Ver roadmap</a>
           </div>
         </div>
 
         <div class="code-window" aria-label="Estructura sugerida de proyecto Power BI">
           <div class="window-dots"><span></span><span></span><span></span></div>
           <pre><code>proyecto_power_bi/
+├─ PRD.md
+├─ SPEC.md
 ├─ README.md
 ├─ CLAUDE.md
 ├─ documentacion/
-│  ├─ contexto.md
+│  ├─ contexto-negocio.md
+│  ├─ arquitectura-datos.md
 │  ├─ mapa-modelo.md
-│  ├─ reglas-dax.md
+│  ├─ seguridad-gobierno.md
+│  ├─ performance.md
 │  └─ diseno-report.md
 ├─ skills/
 │  ├─ dax.md
@@ -664,30 +833,31 @@ function renderProjectPage() {
    └─ deploy.ps1</code></pre>
           <div class="code-note">
             ${icon("folder")}
-            <span>PBIP guarda el proyecto como carpetas y archivos; TMDL vuelve legible el modelo semantico.</span>
+            <span>PRD define el producto. Spec define la construccion. PBIP/TMDL vuelve versionable el modelo.</span>
           </div>
         </div>
       </section>
 
       <section class="quality-grid page-inner" aria-label="Buenas practicas Power BI avanzado">
-        ${renderQualityCard("Modelo en estrella", "Menos relaciones raras, menos filtros ambiguos y mas confianza cuando alguien pregunta de donde sale un numero.", ["Hechos y dimensiones claras", "Granularidad escrita", "Relaciones revisadas"])}
-        ${renderQualityCard("Medidas organizadas", "No alcanza con que una medida funcione. Tiene que poder encontrarse, entenderse y reutilizarse dentro de seis meses.", ["Carpetas por dominio", "Medidas base y derivadas", "Diccionario de formulas"])}
-        ${renderQualityCard("Reportes guiados", "Un informe saturado cansa. Uno guiado acompana: muestra lo importante primero y deja el detalle para cuando hace falta.", ["Marcadores", "Panel de seleccion", "Jerarquia visual"])}
-        ${renderQualityCard("Publicacion cuidada", "Produccion no es publicar y esperar. Es controlar refresh, credenciales, gateways, seguridad y performance.", ["Refresh monitoreado", "RLS si aplica", "Modelo hibrido con criterio"])}
+        ${renderQualityCard("PRD aprobado", "El equipo sabe que problema se resuelve, para quien, con que metrica de exito y que queda fuera del alcance.", ["Historias de usuario", "KPIs y objetivos", "Criterios de aceptacion"])}
+        ${renderQualityCard("Spec ejecutable", "La decision de producto se transforma en arquitectura, datos, modelo, DAX, seguridad, UX y pruebas.", ["Fuentes y granularidad", "Reglas tecnicas", "Casos de prueba"])}
+        ${renderQualityCard("Modelo como codigo", "PBIP y TMDL permiten revisar cambios, comparar versiones y trabajar con ramas como en software.", ["Git y PRs", "Diffs legibles", "Checklist de release"])}
+        ${renderQualityCard("Operacion cuidada", "Produccion implica monitorear refresh, gateways, capacidad, permisos, uso real y backlog de mejoras.", ["Capacity metrics", "Incremental refresh", "Runbook operativo"])}
       </section>
 
       <section class="pbip-note page-inner">
         <div>
           <span class="eyebrow">modo proyecto</span>
-          <h2>PBIP como puente entre BI e ingenieria</h2>
+          <h2>PBIP como puente entre producto BI e ingenieria</h2>
           <p>
             Segun la documentacion oficial de Microsoft, Power BI Project permite guardar el reporte y el modelo
             semantico como carpetas con archivos de texto. En ese escenario, Visual Studio Code, Git y la terminal
-            dejan de ser herramientas ajenas al BI: pasan a ser parte de una forma mas ordenada de cuidar el modelo.
+            dejan de ser herramientas ajenas al BI: pasan a ser parte de una forma mas ordenada de cuidar el modelo,
+            siempre apoyadas por PRD y Spec.
           </p>
         </div>
         <ul>
-          <li>Versionar cambios antes de tocar un modelo productivo.</li>
+          <li>Separar problema de negocio, requisitos y decisiones tecnicas.</li>
           <li>Revisar diferencias de medidas, relaciones y expresiones.</li>
           <li>Documentar decisiones junto al proyecto, no en un chat perdido.</li>
           <li>Usar IA con reglas y contexto, no como una caja negra.</li>

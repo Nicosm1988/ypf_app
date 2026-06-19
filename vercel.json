@@ -5,6 +5,10 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/guia-power-bi",
+      "destination": "/index.html"
+    },
+    {
       "source": "/diccionario",
       "destination": "/index.html"
     },
@@ -18,6 +22,10 @@
     },
     {
       "source": "/atajos",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/librerias",
       "destination": "/index.html"
     }
   ],
