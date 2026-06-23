@@ -1,5 +1,14 @@
 import { dictionaryCategories, dictionaryTerms } from "./data/dictionary.js";
 import { guideSections, prdSpecComparison, readinessChecklist } from "./data/engineeringGuide.js";
+import {
+  dmaicStages,
+  leanPractices,
+  methodologyCadence,
+  methodologyPrinciples,
+  methodologyTools,
+  oeeFactors,
+  toyotaFourP,
+} from "./data/methodology.js";
 import { powerBiShortcuts, shortcutsPdf } from "./data/powerbiShortcuts.js";
 import { laneStyles, roadmapPhases } from "./data/roadmap.js";
 import { toolingDocs, toolingGroups } from "./data/toolingLibrary.js";
@@ -46,13 +55,14 @@ const icons = {
 };
 
 const routeTitles = {
-  "/": "YPF BI Playbook",
-  "/guia-power-bi": "Guia Power BI/Fabric | YPF BI Playbook",
-  "/diccionario": "Diccionario BI | YPF BI Playbook",
-  "/roadmap": "Roadmap BI | YPF BI Playbook",
-  "/proyecto-power-bi": "Proyecto de Power BI con Visual Studio | YPF BI Playbook",
-  "/atajos": "Atajos Power BI | YPF BI Playbook",
-  "/librerias": "Librerias y agentes | YPF BI Playbook",
+  "/": "Datalización YPF",
+  "/guia-power-bi": "Guía y roadmap de automatización BI/Fabric | Datalización YPF",
+  "/metodologia": "Metodología de mejora continua BI | Datalización YPF",
+  "/diccionario": "Diccionario BI | Datalización YPF",
+  "/roadmap": "Guía y roadmap de automatización BI/Fabric | Datalización YPF",
+  "/proyecto-power-bi": "Proyecto de Power BI con Visual Studio Code | Datalización YPF",
+  "/atajos": "Atajos Power BI | Datalización YPF",
+  "/librerias": "Librerías y agentes | Datalización YPF",
 };
 
 const dictionaryState = {
@@ -63,13 +73,689 @@ const dictionaryState = {
 let expandedPhase = 0;
 let pointerFrame = 0;
 
+const workflowSteps = [
+  {
+    title: "Proceso",
+    short: "Tarea repetible, responsable y disparador.",
+    iconName: "clipboard",
+    tone: "orange",
+    technical:
+      "Mapa operativo del proceso: evento que lo dispara, entradas necesarias, responsables, SLA, excepciones, decisión esperada y salida que debe producirse.",
+    functional:
+      "Define qué parte del trabajo puede automatizarse, qué parte requiere intervención humana y cómo se mide que el proceso mejoró.",
+    examples: [
+      "Abastecimiento identifica que el proceso repetible es detectar quiebres de stock críticos antes de que impacten en operación.",
+      "Operaciones define que cada desvío de despacho debe generar una revisión con responsable, plazo y evidencia.",
+      "Finanzas formaliza el cierre mensual de margen como proceso con cortes, validaciones, aprobaciones y explicación de variaciones.",
+    ],
+  },
+  {
+    title: "Reglas",
+    short: "Criterios, umbrales y excepciones.",
+    iconName: "code",
+    tone: "blue",
+    technical:
+      "Conjunto versionable de reglas de negocio: condiciones, fórmulas, umbrales, prioridades, excepciones, validaciones y criterios de aprobación.",
+    functional:
+      "Convierte conocimiento experto en instrucciones consistentes para que el proceso no dependa de interpretaciones manuales distintas.",
+    examples: [
+      "Si el stock proyectado cae por debajo del mínimo, el sistema prioriza el material y dispara una alerta al responsable.",
+      "La variación de margen se clasifica por precio, volumen, mix o costo con una regla única para todas las áreas.",
+      "Una orden duplicada, sin fecha válida o sin centro de costo queda observada antes de entrar al circuito de aprobación.",
+    ],
+  },
+  {
+    title: "Datos",
+    short: "Fuentes, calidad, frecuencia y linaje.",
+    iconName: "layers",
+    tone: "cyan",
+    technical:
+      "Integración de fuentes con owners, contratos de datos, frecuencia, linaje, controles de calidad, preparación, historización y trazabilidad.",
+    functional:
+      "Hace que la automatización use datos confiables en el momento correcto. Sin esta base, el proceso automatiza errores.",
+    examples: [
+      "El volumen despachado se toma del sistema transaccional con corte horario, responsable de negocio y regla de conciliación.",
+      "Power Query elimina columnas innecesarias y preserva folding para que la actualización no bloquee el proceso.",
+      "Los controles detectan duplicados, fechas nulas y códigos sin correspondencia antes de alimentar la automatización.",
+    ],
+  },
+  {
+    title: "Motor",
+    short: "Modelo, lógica, cálculo y decisión.",
+    iconName: "gitBranch",
+    tone: "green",
+    technical:
+      "Modelo semántico y motor de decisión que calculan estado, riesgo, prioridad, recomendación o resultado a partir de reglas y datos gobernados.",
+    functional:
+      "Transforma datos en señales accionables. La automatización sabe qué ocurrió, qué importa y qué debería pasar después.",
+    examples: [
+      "El motor prioriza desvíos por impacto económico, criticidad operativa y antigüedad del evento.",
+      "El modelo calcula margen, volumen neto y variación con la misma lógica para Finanzas, Comercial y Operaciones.",
+      "Las medidas se documentan y versionan para que cada automatización pueda auditar cómo llegó a un resultado.",
+    ],
+  },
+  {
+    title: "Acción",
+    short: "Salida operativa, permisos y trazabilidad.",
+    iconName: "shield",
+    tone: "violet",
+    technical:
+      "Diseño de la salida del proceso: tablero, alerta, tarea, ticket, API, aprobación, RLS/OLS, permisos, auditoría y confirmación de ejecución.",
+    functional:
+      "La automatización debe terminar en una acción concreta y trazable, no solo en una visualización que alguien debe interpretar manualmente.",
+    examples: [
+      "Un desvío crítico crea una tarea para el responsable, con evidencia, prioridad y fecha límite.",
+      "Un tablero muestra qué acciones están pendientes, cuáles fueron resueltas y qué excepciones siguen abiertas.",
+      "Los permisos aseguran que cada usuario vea solo los procesos, montos y activos que le corresponden.",
+    ],
+  },
+  {
+    title: "Orquestación",
+    short: "Pipelines, Git, ambientes y agenda.",
+    iconName: "terminal",
+    tone: "blue",
+    technical:
+      "Ejecución controlada con jobs, refresh, pipelines, notebooks, PBIP/TMDL, ramas, pull requests, ambientes Dev-Test-Prod y reglas de despliegue.",
+    functional:
+      "Permite que el proceso corra sin intervención manual, con control de cambios, ambientes separados y posibilidad de rollback.",
+    examples: [
+      "Un pipeline actualiza datos, recalcula reglas y publica alertas cada mañana antes de la reunión operativa.",
+      "Una regla nueva pasa por pull request antes de entrar a producción.",
+      "Las conexiones cambian entre desarrollo, prueba y producción sin editar manualmente el proceso.",
+    ],
+  },
+  {
+    title: "Operación",
+    short: "SLA, incidentes, adopción y mejora.",
+    iconName: "gauge",
+    tone: "orange",
+    technical:
+      "Monitoreo continuo de SLA, refresh, gateway, capacidad Fabric, latencia, errores, adopción, incidentes, auditoría y backlog de optimización.",
+    functional:
+      "Automatizar no es publicar una vez: es sostener el proceso, detectar fallas, medir impacto y mejorarlo con evidencia.",
+    examples: [
+      "Si falla un refresh, se registra incidente, responsable, causa y acción correctiva.",
+      "Capacity Metrics muestra throttling y el equipo ajusta modelo, agenda o capacidad antes de afectar al usuario.",
+      "La adopción muestra qué alertas se atienden, cuáles se ignoran y qué parte del proceso debe rediseñarse.",
+    ],
+  },
+];
+
+const datalizationCriteria = [
+  {
+    title: "Proceso mapeado",
+    text: "Existe un proceso repetible con disparador, responsable, entrada, salida, SLA y excepciones conocidas.",
+  },
+  {
+    title: "Reglas explícitas",
+    text: "Los criterios de negocio están escritos como reglas, umbrales, validaciones y prioridades auditables.",
+  },
+  {
+    title: "Datos confiables",
+    text: "Las fuentes tienen owner, linaje, calidad, frecuencia y controles suficientes para ejecutar el proceso.",
+  },
+  {
+    title: "Motor automatizado",
+    text: "La lógica transforma datos en estado, prioridad, recomendación o acción sin depender de cálculo manual.",
+  },
+  {
+    title: "Acción integrada",
+    text: "La salida llega al usuario, tablero, ticket, alerta o sistema que permite ejecutar el siguiente paso.",
+  },
+  {
+    title: "Operación gobernada",
+    text: "El proceso tiene monitoreo, incidentes, permisos, runbook, mejora continua y medición de adopción.",
+  },
+];
+
+const datalizationLevels = [
+  {
+    percent: "0-20%",
+    title: "Proceso manual",
+    text: "El trabajo depende de planillas, correos, criterio individual o carga manual. Hay datos, pero no automatización real.",
+  },
+  {
+    percent: "21-40%",
+    title: "Proceso definido",
+    text: "El circuito está identificado y hay reglas iniciales, aunque todavía faltan datos gobernados y ejecución automática.",
+  },
+  {
+    percent: "41-60%",
+    title: "Datos y reglas conectados",
+    text: "Las fuentes y reglas principales están integradas, pero la acción todavía requiere intervención manual frecuente.",
+  },
+  {
+    percent: "61-80%",
+    title: "Automatización controlada",
+    text: "El proceso calcula, alerta o prioriza con trazabilidad, seguridad y controles, aunque aún tiene brechas operativas.",
+  },
+  {
+    percent: "81-99%",
+    title: "Automatización operativa",
+    text: "El proceso se ejecuta en la rutina real, se monitorea y mejora; solo quedan excepciones o integraciones menores.",
+  },
+  {
+    percent: "100%",
+    title: "Datalizado",
+    text: "El proceso se dispara, calcula, controla, ejecuta, registra y mejora con datos gobernados y responsables claros.",
+  },
+];
+
+const guideStoryPalette = ["#ff6b3b", "#3aa0ff", "#35c9bd", "#30d174", "#8d72ff", "#67e8dc", "#5fa8ff", "#f2c94c", "#ff8a5c"];
+
+const guideStoryDetails = {
+  "prd-spec": {
+    iconName: "clipboard",
+    flow: "La necesidad se convierte en contrato.",
+    scene:
+      "La historia empieza cuando una tarea repetida deja de resolverse por memoria, urgencia o planillas aisladas. Antes de construir, el equipo nombra el proceso, el disparador, la decisión esperada y la salida que debe quedar registrada.",
+    automation:
+      "La automatización nace cuando el PRD explica el proceso y la Spec traduce esa intención en reglas, datos, arquitectura y criterios verificables.",
+    outcome: "Un proceso entendido antes de ser construido.",
+  },
+  "etl-power-query": {
+    iconName: "layers",
+    flow: "Las fuentes dejan de ser insumos frágiles.",
+    scene:
+      "Con el proceso claro, el siguiente riesgo es alimentar la automatización con datos poco confiables. Las fuentes se conectan, se limpian y se preparan para que cada actualización sea repetible, auditable y rápida.",
+    automation:
+      "Power Query no es una zona de prueba; es la primera línea de producción de la automatización. Cada transformación debe poder explicarse, mantenerse y volver a ejecutarse sin intervención manual.",
+    outcome: "Datos preparados para correr sin depender de ajustes manuales.",
+  },
+  "modelo-vertipaq": {
+    iconName: "gitBranch",
+    flow: "El modelo ordena la lógica del proceso.",
+    scene:
+      "Cuando los datos ya entran con calidad, el modelo semántico convierte tablas dispersas en una estructura que el negocio puede entender. La granularidad, las relaciones y las dimensiones definen cómo se leerá cada señal.",
+    automation:
+      "Un modelo estrella bien diseñado permite que la automatización filtre, agregue y compare sin ambigüedad, con performance suficiente para acompañar la rutina operativa.",
+    outcome: "Un motor semántico consistente y rápido.",
+  },
+  "dax": {
+    iconName: "code",
+    flow: "Las reglas se transforman en cálculo gobernado.",
+    scene:
+      "La decisión operativa aparece cuando las reglas de negocio se expresan como medidas claras. DAX debe contar la misma historia para todos: qué se calcula, con qué contexto y bajo qué excepción.",
+    automation:
+      "Las medidas dejan de ser fórmulas sueltas y pasan a ser reglas versionables, probadas y revisables con criterios funcionales y de performance.",
+    outcome: "Reglas de negocio calculadas con trazabilidad.",
+  },
+  "seguridad-gobierno": {
+    iconName: "shield",
+    flow: "La confianza se diseña antes de publicar.",
+    scene:
+      "Una automatización operativa puede afectar decisiones, prioridades y responsabilidades. Por eso la seguridad, el linaje y el ownership no son una etapa administrativa: son parte del diseño del proceso.",
+    automation:
+      "La automatización solo escala si cada usuario ve lo que corresponde, cada dato tiene responsable y cada decisión puede explicarse desde su origen.",
+    outcome: "Permisos, linaje y responsabilidades explícitas.",
+  },
+  "ux-reportes": {
+    iconName: "route",
+    flow: "La salida empuja la acción correcta.",
+    scene:
+      "El usuario no necesita más pantallas: necesita saber qué pasó, qué importa y qué acción sigue. La experiencia debe reducir lectura, dudas y retrabajo.",
+    automation:
+      "La UX convierte el cálculo en operación: prioriza señales, guía el análisis y deja evidencia suficiente para que la acción ocurra sin volver a reconstruir el caso.",
+    outcome: "Una salida accionable, clara y adoptable.",
+  },
+  "fabric-direct-lake": {
+    iconName: "folder",
+    flow: "La arquitectura define cómo llegarán los datos.",
+    scene:
+      "Antes de escribir transformaciones o medidas, el equipo debe saber qué fuentes alimentan el proceso, con qué latencia, bajo qué permisos y en qué arquitectura van a vivir. Fabric, OneLake, Lakehouse, Warehouse, Import, Direct Lake o DirectQuery no son adornos: condicionan todo el diseño posterior.",
+    automation:
+      "La automatización solo puede ser confiable si la arquitectura asegura acceso, frecuencia, capacidad y modo de almacenamiento compatibles con la operación que se quiere automatizar.",
+    outcome: "Fuentes, plataforma y storage decididos antes de modelar.",
+  },
+  "cicd-pbip": {
+    iconName: "terminal",
+    flow: "El cambio se aprueba antes de publicar.",
+    scene:
+      "Una automatización viva cambia: aparecen reglas, fuentes, excepciones y mejoras. Antes de publicar, cada cambio debe quedar versionado, probado y aprobado.",
+    automation:
+      "PBIP, TMDL, Git, pull requests y ambientes separados convierten el BI en un activo revisable y recuperable antes de llegar a producción.",
+    outcome: "Solución aprobada para publicar.",
+  },
+  "publicacion": {
+    iconName: "download",
+    flow: "La automatización pasa a usuarios reales.",
+    scene:
+      "Publicar es el momento en que la solución deja de ser construcción interna y queda disponible para la operación: workspace productivo, app, permisos, refresh, credenciales y comunicación.",
+    automation:
+      "La publicación convierte el modelo y el reporte en un servicio usable. Desde ese punto, el proceso debe tener acceso real, actualización productiva y una audiencia clara.",
+    outcome: "Solución publicada y disponible.",
+  },
+  "operacion-capacidad": {
+    iconName: "gauge",
+    flow: "La automatización se opera y mejora.",
+    scene:
+      "La historia no termina al publicar. Un proceso datalizado debe correr, avisar, registrar fallas, medir uso y evolucionar con evidencia.",
+    automation:
+      "La operación monitorea refresh, capacidad, incidentes, adopción y backlog para que el proceso automatizado siga siendo confiable cuando cambia la realidad.",
+    outcome: "Producción monitoreada, con responsables y mejora continua.",
+  },
+};
+
+const guideDocumentTemplates = [
+  {
+    id: "prd",
+    title: "Modelo PRD",
+    eyebrow: "Proceso y negocio",
+    source: "assets/docs/modelos/prd-datalizacion.docx",
+    format: "Word editable",
+    purpose:
+      "Sirve para acordar qué proceso se quiere automatizar, por qué importa, quién lo usa, qué reglas funcionales aplican y cómo se mide el éxito.",
+    preview: [
+      "Resumen ejecutivo",
+      "Proceso actual y problema a resolver",
+      "Disparador, usuarios y responsabilidades",
+      "Reglas de negocio, KPIs y alcance",
+      "Riesgos, supuestos y criterios de aceptación",
+    ],
+  },
+  {
+    id: "spec",
+    title: "Modelo Spec",
+    eyebrow: "Implementación técnica",
+    source: "assets/docs/modelos/spec-datalizacion.docx",
+    format: "Word editable",
+    purpose:
+      "Convierte el PRD aprobado en arquitectura construible: datos, modelado, DAX, seguridad, UX, versionado, publicación y operación.",
+    preview: [
+      "Contexto técnico y arquitectura",
+      "Fuentes, contratos de datos y Power Query",
+      "Modelo semántico, medidas y reglas DAX",
+      "Seguridad, gobierno y salida operativa",
+      "Despliegue, operación, pruebas y aceptación técnica",
+    ],
+  },
+];
+
+const projectBuildSteps = [
+  {
+    title: "Acordar PRD y Spec antes de abrir Power BI",
+    easy:
+      "Primero se define qué tarea manual se quiere eliminar, qué salida espera el usuario y qué regla debe cumplirse.",
+    technical:
+      "El PRD fija objetivo, alcance, KPI, responsables y criterios de aceptación. La Spec baja eso a fuentes, modelo, DAX, seguridad, UX, pruebas y publicación.",
+    tools: ["Word", "Markdown", "PRD", "Spec"],
+  },
+  {
+    title: "Crear el proyecto PBIP desde Power BI Desktop",
+    easy:
+      "En lugar de guardar solo un PBIX cerrado, se guarda el proyecto como carpetas para que los cambios se puedan revisar.",
+    technical:
+      "PBIP separa reporte y modelo semántico en archivos versionables. Eso permite comparar medidas, relaciones, expresiones TMDL y metadatos.",
+    tools: ["Power BI Desktop", "PBIP", "TMDL"],
+  },
+  {
+    title: "Abrir la carpeta en Visual Studio Code",
+    easy:
+      "VS Code se usa como mesa de trabajo: ahí se ve la documentación, los archivos del modelo y los scripts en un solo lugar.",
+    technical:
+      "La carpeta del proyecto debe incluir README, PRD, Spec, documentación técnica, scripts y archivos PBIP/TMDL. Cada cambio queda visible antes de publicarse.",
+    tools: ["VS Code", "Explorador de archivos", "Markdown"],
+  },
+  {
+    title: "Versionar con Git y trabajar por ramas",
+    easy:
+      "Cada mejora se hace en una rama. Antes de llegar a producción, alguien puede revisar qué cambió.",
+    technical:
+      "Git permite diff, historial, pull request, rollback y trazabilidad. Sirve para controlar cambios de medidas, relaciones, documentación y scripts.",
+    tools: ["Git", "GitHub", "Pull request"],
+  },
+  {
+    title: "Validar modelo, DAX, seguridad y performance",
+    easy:
+      "No alcanza con que el reporte se vea bien: hay que probar números, permisos, tiempos de carga y actualización.",
+    technical:
+      "Se validan medidas DAX, relaciones, cardinalidad, RLS/OLS, refresh, Query Folding, Performance Analyzer y consumo de capacidad cuando aplique.",
+    tools: ["DAX Studio", "Tabular Editor", "Performance Analyzer"],
+  },
+  {
+    title: "Publicar, monitorear y dejar operación definida",
+    easy:
+      "Cuando se publica, la solución pasa a ser un servicio. Debe tener responsables, alertas y una forma clara de pedir mejoras.",
+    technical:
+      "La salida requiere workspace, app o audiencia, credenciales, gateway, refresh, endorsement, monitoreo, runbook, SLA e incidentes.",
+    tools: ["Power BI Service", "Deployment pipelines", "Capacity Metrics"],
+  },
+];
+
+const projectToolStack = [
+  {
+    title: "Power BI Desktop",
+    text: "Construye el reporte y el modelo. Es donde se diseñan páginas, relaciones, medidas DAX y configuración principal.",
+  },
+  {
+    title: "Visual Studio Code",
+    text: "Ordena el proyecto como carpeta: documentación, PBIP, TMDL, scripts y contexto para revisión o asistencia con IA.",
+  },
+  {
+    title: "Git y GitHub",
+    text: "Registran cambios, permiten revisión por pull request y evitan publicar modificaciones sin trazabilidad.",
+  },
+  {
+    title: "PBIP y TMDL",
+    text: "Vuelven el reporte y el modelo semántico archivos revisables. Permiten ver diferencias de medidas, tablas y metadatos.",
+  },
+  {
+    title: "DAX Studio y Tabular Editor",
+    text: "Ayudan a revisar medidas, performance, metadatos y calidad del modelo cuando el proyecto empieza a crecer.",
+  },
+  {
+    title: "Power BI Service / Fabric",
+    text: "Publica, asegura, refresca y opera la solución con workspaces, apps, pipelines, permisos y monitoreo.",
+  },
+];
+
+const guideGlossaryCuratedTerms = [
+  termFromDictionary("datalizacion", ["Datalización"]),
+  termFromDictionary("automatizacion-procesos", ["Automatización", "automatización", "automatización de procesos"]),
+  {
+    id: "bi",
+    title: "BI",
+    definition: "Business Intelligence: disciplina que convierte datos en información confiable para analizar, decidir y operar mejor.",
+    whyItMatters: "En esta guía, BI no es solo reportar; es sostener procesos automatizados con datos y reglas.",
+    aliases: ["BI", "Business Intelligence"],
+  },
+  termFromDictionary("prd", ["PRD"]),
+  termFromDictionary("spec-producto-tecnica", ["Spec", "Spec técnica"]),
+  termFromDictionary("criterio-aceptacion", ["Criterios de aceptación", "criterio de aceptación"]),
+  termFromDictionary("disparador-proceso", ["Disparador", "disparador"]),
+  {
+    id: "stakeholder",
+    title: "Stakeholder",
+    definition: "Persona o grupo que participa, valida, usa o se ve afectado por el proceso automatizado.",
+    whyItMatters: "Ayuda a identificar quién decide, quién usa la salida y quién debe resolver excepciones.",
+    aliases: ["Stakeholder", "stakeholders", "Mapa de stakeholders"],
+  },
+  {
+    id: "etl",
+    title: "ETL",
+    definition: "Extract, Transform, Load: proceso de extraer datos, transformarlos y cargarlos para uso analítico u operativo.",
+    whyItMatters: "Ordena cómo los datos llegan al modelo o a la automatización sin depender de tareas manuales.",
+    aliases: ["ETL"],
+  },
+  termFromDictionary("power-query", ["Power Query"]),
+  termFromDictionary("query-folding", ["Query Folding", "Query folding", "folding", "Folding"]),
+  termFromDictionary("refresh", ["Refresh", "refresh", "refresco", "refrescos"]),
+  termFromDictionary("data-quality", ["Calidad de datos", "calidad"]),
+  termFromDictionary("modelo-semantico", ["Modelo semántico", "modelo semántico", "motor semántico"]),
+  termFromDictionary("vertipaq", ["VertiPaq", "VeryPaq", "verypaq"]),
+  termFromDictionary("esquema-estrella", ["Esquema estrella", "modelo estrella"]),
+  termFromDictionary("granularidad", ["Granularidad", "granularidad"]),
+  termFromDictionary("cardinalidad", ["Cardinalidad", "cardinalidad"]),
+  termFromDictionary("tabla-hechos", ["Hechos", "hechos", "tabla de hechos"]),
+  termFromDictionary("tabla-dimensiones", ["Dimensiones", "dimensiones", "tabla de dimensiones"]),
+  termFromDictionary("relacion-uno-a-muchos", ["Relaciones", "relaciones"]),
+  {
+    id: "dax",
+    title: "DAX",
+    definition: "Data Analysis Expressions: lenguaje de fórmulas de Power BI para crear medidas, reglas y cálculos sobre el modelo semántico.",
+    whyItMatters: "Permite expresar reglas de negocio reutilizables y auditables.",
+    aliases: ["DAX"],
+  },
+  termFromDictionary("medida-dax", ["Medidas", "medidas", "medida"]),
+  {
+    id: "var-dax",
+    title: "VAR",
+    definition: "Palabra clave de DAX para guardar un valor intermedio dentro de una medida y evitar recálculos.",
+    whyItMatters: "Mejora legibilidad y puede ayudar a performance en medidas complejas.",
+    aliases: ["VAR"],
+  },
+  {
+    id: "iteradores-x",
+    title: "Iteradores X",
+    definition: "Funciones DAX como SUMX, AVERAGEX o FILTER que recorren filas y evalúan una expresión por cada una.",
+    whyItMatters: "Son potentes, pero mal usados pueden volver lento el modelo.",
+    aliases: ["iteradores X", "iteradores", "SUMX", "AVERAGEX"],
+  },
+  termFromDictionary("formula-engine", ["Formula Engine"]),
+  {
+    id: "tabular-editor",
+    title: "Tabular Editor",
+    definition: "Herramienta para editar, auditar y automatizar modelos tabulares de Power BI y Analysis Services.",
+    whyItMatters: "Permite ordenar metadatos, revisar medidas y mantener modelos con criterio de ingeniería.",
+    aliases: ["Tabular Editor"],
+  },
+  {
+    id: "seguridad",
+    title: "Seguridad",
+    definition: "Diseño de permisos, roles y controles para que cada usuario acceda solo a lo que corresponde.",
+    whyItMatters: "Una automatización sin seguridad puede exponer datos o disparar acciones indebidas.",
+    aliases: ["Seguridad", "seguridad"],
+  },
+  termFromDictionary("rls", ["RLS", "RLS dinámico"]),
+  termFromDictionary("ols", ["OLS"]),
+  {
+    id: "rls-ols",
+    title: "RLS/OLS",
+    definition: "Combinación de seguridad por filas y por objetos para limitar datos visibles según usuario o rol.",
+    whyItMatters: "Permite proteger alcance operativo y atributos sensibles dentro de un mismo modelo.",
+    aliases: ["RLS/OLS"],
+  },
+  termFromDictionary("userprincipalname", ["USERPRINCIPALNAME()"]),
+  termFromDictionary("lineage", ["Linaje", "linaje"]),
+  termFromDictionary("data-owner", ["Owner", "owner", "owners", "ownership"]),
+  termFromDictionary("data-steward", ["Steward", "steward", "stewards", "stewardship"]),
+  termFromDictionary("certificacion-dataset", ["Certificación", "certificación", "certificación de dataset"]),
+  {
+    id: "b2b",
+    title: "B2B",
+    definition: "Business-to-business: usuarios externos o invitados que pertenecen a otra organización o tenant.",
+    whyItMatters: "En seguridad Power BI, usuarios B2B pueden comportarse distinto y deben probarse con identidades reales.",
+    aliases: ["B2B"],
+  },
+  {
+    id: "ux",
+    title: "UX",
+    definition: "User Experience: diseño de la experiencia para que el usuario entienda, navegue y actúe con bajo esfuerzo.",
+    whyItMatters: "Una automatización falla si la salida no guía la acción correcta.",
+    aliases: ["UX"],
+  },
+  termFromDictionary("regla-3-30-300", ["3-30-300", "regla 3-30-300"]),
+  {
+    id: "drill-through",
+    title: "Drill-through",
+    definition: "Navegación desde un resumen hacia una página de detalle filtrada por el contexto seleccionado.",
+    whyItMatters: "Permite pasar de señal a evidencia sin reconstruir manualmente el caso.",
+    aliases: ["drill-through", "drill through"],
+  },
+  {
+    id: "slicer",
+    title: "Slicer",
+    definition: "Filtro visual de Power BI que permite al usuario elegir valores como fecha, región o producto.",
+    whyItMatters: "Demasiados slicers agregan carga cognitiva y pueden degradar performance.",
+    aliases: ["slicers", "Slicers", "slicer"],
+  },
+  termFromDictionary("visual", ["Visuales", "visuales", "visual"]),
+  termFromDictionary("accion-trazable", ["Acción trazable", "acción trazable", "acciones trazables"]),
+  {
+    id: "performance",
+    title: "Performance",
+    definition: "Capacidad de responder rápido, refrescar a tiempo y sostener uso real sin degradarse.",
+    whyItMatters: "Condiciona adopción y confiabilidad operativa.",
+    aliases: ["Performance", "performance"],
+  },
+  {
+    id: "fabric",
+    title: "Microsoft Fabric",
+    definition: "Plataforma de Microsoft que integra almacenamiento, ingeniería, ciencia de datos, BI y operación analítica en una experiencia unificada.",
+    whyItMatters: "Permite acercar datos, pipelines, lakehouse y Power BI en una arquitectura común.",
+    aliases: ["Fabric", "Microsoft Fabric"],
+  },
+  termFromDictionary("direct-lake", ["Direct Lake"]),
+  termFromDictionary("onelake", ["OneLake"]),
+  {
+    id: "delta-parquet",
+    title: "Delta/Parquet",
+    definition: "Formatos de almacenamiento analítico usados en lakehouses: Parquet guarda columnas; Delta agrega transacciones y control de versiones.",
+    whyItMatters: "Son la base habitual para que Fabric y Direct Lake lean datos de forma eficiente.",
+    aliases: ["Delta/Parquet", "Delta", "Parquet"],
+  },
+  {
+    id: "import-mode",
+    title: "Import",
+    definition: "Modo de Power BI que copia datos al modelo en memoria para lograr consultas rápidas.",
+    whyItMatters: "Sirve de referencia para comparar la experiencia de Direct Lake.",
+    aliases: ["import", "Import"],
+  },
+  {
+    id: "storage-mode",
+    title: "Modo de almacenamiento",
+    definition: "Configuración que define cómo una tabla del modelo semántico accede a los datos: Import, DirectQuery, Direct Lake, Dual o combinaciones controladas.",
+    whyItMatters: "Condiciona performance, refresh, seguridad, capacidad y comportamiento de las consultas.",
+    aliases: ["storage", "storage mode", "modo de almacenamiento", "modo de storage"],
+  },
+  termFromDictionary("v-order", ["V-Order"]),
+  termFromDictionary("spark-optimize", ["Optimize", "Spark Optimize"]),
+  termFromDictionary("vacuum", ["Vacuum"]),
+  {
+    id: "directquery",
+    title: "DirectQuery",
+    definition: "Modo que consulta la fuente en tiempo real sin importar todos los datos al modelo.",
+    whyItMatters: "Reduce copia de datos, pero puede ser más lento y depender de la fuente.",
+    aliases: ["DirectQuery"],
+  },
+  termFromDictionary("directquery-fallback", ["fallback", "Fallback", "fallbacks"]),
+  {
+    id: "lakehouse",
+    title: "Lakehouse",
+    definition: "Arquitectura que combina almacenamiento tipo lago con capacidades de consulta y gobierno más cercanas a un warehouse.",
+    whyItMatters: "Es una pieza habitual en Fabric para preparar datos analíticos reutilizables.",
+    aliases: ["Lakehouse", "lakehouse"],
+  },
+  {
+    id: "warehouse",
+    title: "Warehouse",
+    definition: "Almacén de datos optimizado para consultas analíticas, reporting y consumo estructurado.",
+    whyItMatters: "Puede ser la capa ordenada desde la que se alimentan modelos BI.",
+    aliases: ["Warehouse", "warehouse"],
+  },
+  {
+    id: "cicd",
+    title: "CI/CD",
+    definition: "Continuous Integration / Continuous Delivery: práctica para integrar, probar y desplegar cambios de forma controlada.",
+    whyItMatters: "Reduce riesgo al mover BI entre ambientes y evita publicaciones manuales sin revisión.",
+    aliases: ["CI/CD"],
+  },
+  termFromDictionary("pbip", ["PBIP"]),
+  termFromDictionary("tmdl", ["TMDL"]),
+  {
+    id: "pbip-tmdl",
+    title: "PBIP/TMDL",
+    definition: "Uso combinado de Power BI Project y TMDL para versionar reportes, modelos y metadatos como archivos revisables.",
+    whyItMatters: "Hace que el BI pueda revisarse con Git, pull requests y diferencias legibles.",
+    aliases: ["PBIP/TMDL"],
+  },
+  {
+    id: "git",
+    title: "Git",
+    definition: "Sistema de control de versiones que registra cambios, autores, ramas y evolución de archivos.",
+    whyItMatters: "Permite revisar y recuperar cambios en modelos, specs y documentación.",
+    aliases: ["Git"],
+  },
+  termFromDictionary("pull-request", ["Pull Request", "pull request", "pull requests", "PRs", "PR"]),
+  termFromDictionary("feature-branch", ["Ramas", "ramas", "branches", "feature branch"]),
+  {
+    id: "dev-test-prod",
+    title: "Dev-Test-Prod",
+    definition: "Separación de ambientes de desarrollo, prueba y producción.",
+    whyItMatters: "Permite validar cambios antes de afectar a usuarios productivos.",
+    aliases: ["Dev-Test-Prod", "Dev, Test y Prod", "desarrollo, prueba y producción"],
+  },
+  termFromDictionary("deployment-pipelines", ["Deployment Pipelines", "pipeline de deployment", "pipelines"]),
+  {
+    id: "release",
+    title: "Release",
+    definition: "Publicación controlada de una versión hacia un ambiente de uso.",
+    whyItMatters: "Ordena qué cambia, quién aprueba y cómo volver atrás si algo falla.",
+    aliases: ["Release", "release"],
+  },
+  {
+    id: "sla",
+    title: "SLA",
+    definition: "Service Level Agreement: compromiso de nivel de servicio, como horario de disponibilidad, tiempo de respuesta o ventana de actualización.",
+    whyItMatters: "Define qué espera la operación y contra qué se mide el cumplimiento.",
+    aliases: ["SLA"],
+  },
+  termFromDictionary("gateway-power-bi", ["Gateway", "gateway"]),
+  termFromDictionary("capacity-units", ["CUs", "Capacity Units"]),
+  termFromDictionary("fabric-capacity-metrics", ["Fabric Capacity Metrics"]),
+  termFromDictionary("throttling", ["Throttling", "throttling"]),
+  termFromDictionary("incremental-refresh", ["Incremental Refresh", "incremental refresh"]),
+  {
+    id: "incidente",
+    title: "Incidente",
+    definition: "Evento que afecta o amenaza el funcionamiento esperado de una automatización.",
+    whyItMatters: "Debe registrarse con causa, impacto, responsable y acción correctiva.",
+    aliases: ["Incidente", "incidente", "incidentes"],
+  },
+  {
+    id: "backlog",
+    title: "Backlog",
+    definition: "Lista priorizada de mejoras, incidentes o tareas pendientes.",
+    whyItMatters: "Permite evolucionar la automatización con orden y evidencia de impacto.",
+    aliases: ["Backlog", "backlog"],
+  },
+  {
+    id: "api",
+    title: "API",
+    definition: "Interfaz que permite que sistemas intercambien datos o acciones de forma programática.",
+    whyItMatters: "Puede conectar la automatización BI con tareas, tickets, alertas u otros sistemas.",
+    aliases: ["API", "APIs"],
+  },
+];
+
+const guideGlossaryCuratedIds = new Set(guideGlossaryCuratedTerms.map((term) => term.id));
+const guideGlossaryTerms = [
+  ...guideGlossaryCuratedTerms,
+  ...dictionaryTerms
+    .filter((term) => !guideGlossaryCuratedIds.has(term.id))
+    .map((term) => ({
+      id: term.id,
+      title: term.term,
+      definition: term.definition,
+      whyItMatters: term.whyItMatters,
+      aliases: [term.term],
+    })),
+];
+
+const guideGlossaryTermById = new Map(guideGlossaryTerms.map((term) => [term.id, term]));
+const guideGlossaryAliasEntries = guideGlossaryTerms
+  .flatMap((term) => [...new Set([term.title, ...(term.aliases || [])])].map((alias) => ({ alias, term })))
+  .filter((entry) => entry.alias)
+  .sort((a, b) => b.alias.length - a.alias.length);
+const guideGlossaryAliasMap = new Map(guideGlossaryAliasEntries.map((entry) => [normalizeText(entry.alias), entry.term]));
+const guideGlossaryRegex = new RegExp(
+  `(^|[^\\p{L}\\p{N}_])(${guideGlossaryAliasEntries.map((entry) => escapeRegExp(entry.alias)).join("|")})(?=$|[^\\p{L}\\p{N}_])`,
+  "giu",
+);
+
+const guideGlossaryBySectionId = {
+  "prd-spec": ["prd", "spec-producto-tecnica", "criterio-aceptacion", "disparador-proceso", "stakeholder", "bi", "power-query", "dax"],
+  "etl-power-query": ["etl", "power-query", "query-folding", "refresh", "data-quality", "incremental-refresh", "fabric", "lakehouse", "warehouse", "direct-lake", "import-mode", "directquery"],
+  "modelo-vertipaq": ["modelo-semantico", "storage-mode", "vertipaq", "direct-lake", "import-mode", "directquery", "directquery-fallback", "esquema-estrella", "granularidad", "cardinalidad", "tabla-hechos", "tabla-dimensiones", "relacion-uno-a-muchos"],
+  "dax": ["dax", "medida-dax", "var-dax", "iteradores-x", "formula-engine", "tabular-editor", "performance"],
+  "seguridad-gobierno": ["seguridad", "rls", "ols", "rls-ols", "userprincipalname", "lineage", "data-owner", "data-steward", "certificacion-dataset", "b2b"],
+  "ux-reportes": ["ux", "regla-3-30-300", "drill-through", "slicer", "visual", "performance", "accion-trazable"],
+  "fabric-direct-lake": ["fabric", "onelake", "lakehouse", "warehouse", "storage-mode", "direct-lake", "import-mode", "directquery", "delta-parquet", "v-order", "spark-optimize", "vacuum", "directquery-fallback"],
+  "cicd-pbip": ["cicd", "pbip", "tmdl", "pbip-tmdl", "git", "pull-request", "feature-branch", "dev-test-prod", "deployment-pipelines", "release"],
+  "publicacion": ["release", "deployment-pipelines", "pbip", "tmdl", "git", "pull-request"],
+  "operacion-capacidad": ["sla", "refresh", "gateway-power-bi", "capacity-units", "fabric-capacity-metrics", "throttling", "incremental-refresh", "incidente", "backlog"],
+};
+
 const interactiveSurfaceSelector = [
   ".visual-summary",
   ".stat",
   ".feature-card",
+  ".datalization-card",
+  ".datalization-level",
   ".workflow-lab",
   ".workflow-case",
   ".workflow-node-card",
+  ".workflow-step-panel",
   ".workflow-output",
   ".mini-step",
   ".term-card",
@@ -79,10 +765,6 @@ const interactiveSurfaceSelector = [
   ".pipeline-step",
   ".pipeline-lane-card",
   ".phase-card",
-  ".prd-copy",
-  ".comparison-table",
-  ".guide-card",
-  ".readiness-panel",
   ".project-copy",
   ".code-window",
   ".quality-card",
@@ -90,10 +772,33 @@ const interactiveSurfaceSelector = [
   ".shortcut-hero",
   ".shortcut-card",
   ".tooling-card",
+  ".methodology-principle",
+  ".oee-factor",
+  ".dmaic-stage",
+  ".methodology-tool-card",
+  ".toyota-layer",
+  ".lean-practice",
+  ".cadence-item",
+  ".methodology-close",
 ].join(",");
 
 function icon(name) {
   return `<span class="icon" aria-hidden="true">${icons[name] || ""}</span>`;
+}
+
+function termFromDictionary(id, aliases = [], title = "") {
+  const term = dictionaryTerms.find((item) => item.id === id);
+  if (!term) {
+    throw new Error(`No existe el término de diccionario: ${id}`);
+  }
+
+  return {
+    id,
+    title: title || aliases[0] || term.term,
+    definition: term.definition,
+    whyItMatters: term.whyItMatters,
+    aliases: [term.term, ...aliases],
+  };
 }
 
 function normalizeText(value) {
@@ -112,9 +817,72 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function renderExplainedText(value) {
+  const text = String(value);
+  let html = "";
+  let lastIndex = 0;
+
+  text.replace(guideGlossaryRegex, (fullMatch, prefix, matchedTerm, offset) => {
+    const matchStart = offset + prefix.length;
+    const term = guideGlossaryAliasMap.get(normalizeText(matchedTerm));
+    if (!term) return fullMatch;
+
+    html += escapeHtml(text.slice(lastIndex, matchStart));
+    html += renderInlineTerm(matchedTerm, term);
+    lastIndex = matchStart + matchedTerm.length;
+    return fullMatch;
+  });
+
+  html += escapeHtml(text.slice(lastIndex));
+  return html;
+}
+
+function renderInlineTerm(label, term) {
+  const tooltip = `${term.title}: ${term.definition}`;
+  return `
+    <button
+      class="explain-term"
+      type="button"
+      data-tooltip="${escapeHtml(tooltip)}"
+      aria-label="${escapeHtml(tooltip)}"
+    >${escapeHtml(label)}</button>
+  `;
+}
+
+function renderGuideStepGlossary(section) {
+  const terms = (guideGlossaryBySectionId[section.id] || [])
+    .map((id) => guideGlossaryTermById.get(id))
+    .filter(Boolean);
+
+  if (!terms.length) return "";
+
+  return `
+    <div class="guide-step-glossary" aria-label="Glosario de ${escapeHtml(section.title)}">
+      <h3>Glosario de esta etapa</h3>
+      <div class="guide-glossary-grid">
+        ${terms
+          .map(
+            (term) => `
+              <article class="guide-glossary-card">
+                <strong>${escapeHtml(term.title)}</strong>
+                <p>${escapeHtml(term.definition)}</p>
+                <small>${escapeHtml(term.whyItMatters)}</small>
+              </article>
+            `,
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+}
+
 function getRoute(pathname = window.location.pathname) {
   const cleanPath = pathname.replace(/\/+$/, "") || "/";
-  if (["/guia-power-bi", "/diccionario", "/roadmap", "/proyecto-power-bi", "/atajos", "/librerias"].includes(cleanPath)) return cleanPath;
+  if (["/guia-power-bi", "/metodologia", "/diccionario", "/roadmap", "/proyecto-power-bi", "/atajos", "/librerias"].includes(cleanPath)) return cleanPath;
   return "/";
 }
 
@@ -180,8 +948,8 @@ function enhanceInteractiveSurfaces() {
 
         surface.style.setProperty("--spot-x", `${Math.round(clampedX * 100)}%`);
         surface.style.setProperty("--spot-y", `${Math.round(clampedY * 100)}%`);
-        surface.style.setProperty("--tilt-x", `${((0.5 - clampedY) * 5).toFixed(2)}deg`);
-        surface.style.setProperty("--tilt-y", `${((clampedX - 0.5) * 6).toFixed(2)}deg`);
+        surface.style.setProperty("--tilt-x", "0deg");
+        surface.style.setProperty("--tilt-y", "0deg");
       },
       { passive: true },
     );
@@ -191,9 +959,10 @@ function enhanceInteractiveSurfaces() {
 }
 
 function setActiveNav(route) {
+  const activeRoute = route === "/roadmap" ? "/guia-power-bi" : route;
   navLinks.forEach((link) => {
     const url = new URL(link.href);
-    link.classList.toggle("active", getRoute(url.pathname) === route);
+    link.classList.toggle("active", getRoute(url.pathname) === activeRoute);
   });
 }
 
@@ -203,10 +972,14 @@ function renderRoute(route = getRoute()) {
 
   if (route === "/diccionario") {
     renderDictionaryPage();
+  } else if (route === "/metodologia") {
+    renderMethodologyPage();
   } else if (route === "/guia-power-bi") {
     renderGuidePage();
+    setupUnifiedFlowInteractions();
   } else if (route === "/roadmap") {
     renderRoadmapPage();
+    setupUnifiedFlowInteractions();
   } else if (route === "/proyecto-power-bi") {
     renderProjectPage();
   } else if (route === "/atajos") {
@@ -215,6 +988,7 @@ function renderRoute(route = getRoute()) {
     renderToolingPage();
   } else {
     renderHomePage();
+    setupWorkflowInteractions();
   }
 
   requestAnimationFrame(enhanceInteractiveSurfaces);
@@ -223,7 +997,7 @@ function renderRoute(route = getRoute()) {
 function renderHomePage() {
   appRoot.innerHTML = `
     <section class="page home-page">
-      <section class="hero" aria-label="YPF BI Playbook">
+      <section class="hero" aria-label="Datalización YPF">
         <picture class="hero-media">
           <source
             type="image/avif"
@@ -251,49 +1025,35 @@ function renderHomePage() {
             height="941"
             fetchpriority="high"
             decoding="async"
-            alt="Cadena operativa de energia con pozo, ductos, refineria y mercado"
+            alt="Cadena operativa de energía con pozo, ductos, refinería y mercado"
           />
-        </picture>
+          </picture>
         <div class="hero-shade" aria-hidden="true"></div>
         <div class="page-inner hero-grid">
           <div class="hero-copy">
-            <span class="eyebrow">YPF energia argentina</span>
-            <h1>YPF BI Playbook</h1>
-            <p class="hero-kicker">Ingenieria Power BI/Fabric desde PRD hasta operacion.</p>
+            <span class="eyebrow">Automatización operativa</span>
+            <h1>Datalización YPF</h1>
+            <p class="hero-kicker">Automatizar procesos con datos confiables.</p>
             <p class="hero-text">
-              Una guia viva para convertir necesidades de negocio en productos analiticos confiables:
-              PRD, Spec, ETL, modelo semantico, DAX, seguridad, UX, Fabric, CI/CD y monitoreo.
+              Datalizar es convertir procesos manuales o fragmentados en flujos automatizados:
+              datos confiables, reglas explícitas, disparadores, controles, acciones trazables y mejora continua.
+              El objetivo no es tener más reportes; es que la operación trabaje mejor y con menos retrabajo.
             </p>
             <div class="hero-actions">
-              <a class="button" href="/diccionario" data-route>
-                ${icon("book")}
-                Explorar diccionario
-              </a>
-              <a class="button secondary" href="/roadmap" data-route>
+              <a class="button" href="/roadmap" data-route>
                 ${icon("route")}
-                Ver roadmap
+                Ver guía + roadmap
+              </a>
+              <a class="button secondary" href="/diccionario" data-route>
+                ${icon("book")}
+                Explorar conceptos
+              </a>
+              <a class="button secondary" href="/metodologia" data-route>
+                ${icon("gauge")}
+                Ver metodología
               </a>
             </div>
           </div>
-
-          <aside class="visual-summary" aria-label="Resumen del playbook">
-            <h2>Base clara para crecer sin sobredisenar.</h2>
-            <p>Contenido local editable con foco en decisiones, metricas, gobierno y adopcion.</p>
-            <div class="stat-grid" aria-label="Metricas del playbook">
-              <div class="stat">
-                <strong>${dictionaryTerms.length}</strong>
-                <span>terminos iniciales</span>
-              </div>
-              <div class="stat">
-                <strong>${roadmapPhases.length}</strong>
-                <span>gates de entrega</span>
-              </div>
-              <div class="stat">
-                <strong>${guideSections.length}</strong>
-                <span>capitulos guia</span>
-              </div>
-            </div>
-          </aside>
         </div>
         <div class="hero-tabs" aria-hidden="true">
           <span class="active"></span>
@@ -304,32 +1064,43 @@ function renderHomePage() {
 
       <section class="quote-band page-inner">
         ${icon("quote")}
-        <strong>Un buen producto BI no empieza en Power BI. Empieza en una decision de negocio clara.</strong>
+        <strong>Datalizar es automatizar procesos: capturar datos, aplicar reglas, disparar acciones y medir resultados.</strong>
       </section>
+
+      ${renderDatalizationDefinition()}
 
       ${renderWorkflowLab()}
 
       <div class="section-title page-inner">
         <div>
           <h2>Recursos principales</h2>
-          <p>Entradas directas para producto, ingenieria, delivery, consulta diaria y futuras automatizaciones.</p>
+          <p>Entradas directas para diseñar, construir, gobernar y operar procesos automatizados con BI, Fabric y datos confiables.</p>
         </div>
       </div>
 
       <section class="feature-grid page-inner" aria-label="Secciones principales">
         <article class="feature-card">
           <span class="feature-icon">${icon("layers")}</span>
-          <h3>Guia Power BI/Fabric</h3>
-          <p>Ciclo completo: PRD, Spec, ETL, VertiPaq, DAX, seguridad, UX, Direct Lake, CI/CD y operacion.</p>
-          <a class="button small" href="/guia-power-bi" data-route>
-            Ver guia
+          <h3>Guía + roadmap de automatización</h3>
+          <p>Flujo técnico para automatizar procesos: PRD, datos, modelado, DAX, seguridad, UX, aprobación, publicación y operación.</p>
+          <a class="button small secondary" href="/guia-power-bi" data-route>
+            Ver flujo
+            ${icon("arrowRight")}
+          </a>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon">${icon("gauge")}</span>
+          <h3>Metodología de mejora BI</h3>
+          <p>OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata integrados al trabajo diario.</p>
+          <a class="button small secondary" href="/metodologia" data-route>
+            Ver metodología
             ${icon("arrowRight")}
           </a>
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("book")}</span>
-          <h3>Diccionario BI</h3>
-          <p>Conceptos clave de producto, Fabric, Power BI, modelado, DAX, performance, gobierno y operacion.</p>
+          <h3>Diccionario de automatización</h3>
+          <p>Conceptos clave para alinear procesos, reglas, datos, Fabric, Power BI, gobierno y operación.</p>
           <a class="button small secondary" href="/diccionario" data-route>
             Explorar diccionario
             ${icon("arrowRight")}
@@ -337,17 +1108,17 @@ function renderHomePage() {
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("route")}</span>
-          <h3>Roadmap BI</h3>
-          <p>Gates de entrega desde PRD/Spec hasta produccion monitoreada y mejora continua.</p>
-          <a class="button small secondary" href="/roadmap" data-route>
-            Ver roadmap
+          <h3>Modelos PRD y Spec</h3>
+          <p>Plantillas descargables para alinear el proceso y convertirlo en una implementación técnica revisable.</p>
+          <a class="button small secondary" href="/guia-power-bi" data-route>
+            Ver modelos
             ${icon("arrowRight")}
           </a>
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("code")}</span>
-          <h3>Proyecto Power BI</h3>
-          <p>Estructura de proyecto con PRD, Spec, PBIP, TMDL, Git, documentacion y scripts.</p>
+          <h3>Proyecto automatizable</h3>
+          <p>Estructura de proyecto con proceso, reglas, Spec, PBIP, TMDL, Git, documentación y scripts.</p>
           <a class="button small secondary" href="/proyecto-power-bi" data-route>
             Ver proyecto
             ${icon("arrowRight")}
@@ -355,17 +1126,17 @@ function renderHomePage() {
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("folder")}</span>
-          <h3>Librerias y agentes</h3>
-          <p>Inventario documentado de MCPs, bases, cloud, agentes, sandboxes, APIs y frameworks para futuras specs.</p>
+          <h3>Herramientas para automatizar</h3>
+          <p>Inventario documentado de MCPs, bases, cloud, agentes, sandboxes, APIs y frameworks para automatizaciones futuras.</p>
           <a class="button small secondary" href="/librerias" data-route>
-            Ver librerias
+            Ver librerías
             ${icon("arrowRight")}
           </a>
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("terminal")}</span>
           <h3>Atajos Power BI</h3>
-          <p>Resumen navegable de atajos del PDF subido al repo para trabajar mas rapido en Desktop.</p>
+          <p>Resumen navegable de atajos del PDF subido al repo para trabajar más rápido en Desktop.</p>
           <a class="button small secondary" href="/atajos" data-route>
             Ver atajos
             ${icon("arrowRight")}
@@ -375,31 +1146,34 @@ function renderHomePage() {
 
       <section class="story-band">
         <div class="page-inner story-content">
-          <span class="eyebrow">energia para decidir</span>
-          <h2>De pedir un reporte a construir un producto analitico serio.</h2>
+          <span class="eyebrow">procesos que operan mejor</span>
+          <h2>De tareas manuales a procesos automatizados, trazables y medibles.</h2>
           <p>
-            La diferencia esta en separar el PRD de la Spec, modelar con criterio, versionar cambios
-            y operar la solucion cuando ya esta en manos del negocio.
+            La diferencia está en identificar el proceso, explicitar reglas, gobernar datos,
+            disparar acciones y operar cada automatización con responsables, métricas e incidentes.
           </p>
         </div>
       </section>
 
       <div class="section-title page-inner">
         <div>
-          <h2>Los gates que sostienen un proyecto BI</h2>
-          <p>El roadmap arranca en PRD/Spec y termina cuando produccion esta monitoreada.</p>
+          <h2>Madurez de automatización</h2>
+          <p>El roadmap arranca con el proceso y avanza por arquitectura, datos, modelo, reglas, confianza, experiencia, release y operación.</p>
         </div>
       </div>
 
       <section class="mini-roadmap page-inner" aria-label="Primeras fases del roadmap">
         ${roadmapPhases
           .map(
-            (phase) => `
-              <article class="mini-step">
-                <span>${phase.id}</span>
+            (phase, index) => {
+              const lane = laneStyles[phase.lane] || { color: "var(--ypf-blue)" };
+              return `
+              <article class="mini-step" style="--lane-color:${lane.color}; --step-order:${index}">
+                <span>${phase.id + 1}</span>
                 <strong>${escapeHtml(phase.title)}</strong>
               </article>
-            `,
+            `;
+            },
           )
           .join("")}
       </section>
@@ -407,59 +1181,121 @@ function renderHomePage() {
   `;
 }
 
-function renderWorkflowLab() {
-  const cases = [
-    ["Producto", "Define decision, KPI, usuario y alcance antes de construir."],
-    ["Ingenieria", "Convierte la Spec en fuentes, modelo, DAX, pruebas y release."],
-    ["Operacion", "Monitorea refresh, capacidad, uso real e incidentes."],
-  ];
-  const nodes = [
-    { title: "PRD", text: "por que, para quien y exito", iconName: "clipboard", tone: "orange" },
-    { title: "Spec", text: "arquitectura y reglas tecnicas", iconName: "code", tone: "blue" },
-    { title: "Datos", text: "fuentes, M y calidad", iconName: "layers", tone: "cyan" },
-    { title: "Modelo", text: "estrella, VertiPaq y DAX", iconName: "gitBranch", tone: "green" },
-    { title: "UX + seguridad", text: "RLS, OLS y lectura guiada", iconName: "shield", tone: "violet" },
-    { title: "Release", text: "PBIP, Git y pipelines", iconName: "terminal", tone: "yellow" },
-    { title: "Operacion", text: "capacidad, refresh y mejora", iconName: "gauge", tone: "orange" },
-  ];
-
+function renderDatalizationDefinition() {
   return `
-    <section class="workflow-lab page-inner" aria-label="Flujo inmersivo de proyecto BI">
-      <div class="workflow-copy">
-        <span class="flow-chip">workflow vivo</span>
-        <h2>Que cada paso del proyecto se pueda ver, revisar y controlar.</h2>
+    <section class="datalization-section page-inner" aria-labelledby="datalizationTitle">
+      <div class="datalization-copy">
+        <span class="flow-chip">qué es datalizar</span>
+        <h2 id="datalizationTitle">Datalizar es automatizar procesos con datos gobernados.</h2>
         <p>
-          La experiencia toma la logica de un canvas visual: cada decision deja una huella, cada etapa tiene
-          salida clara y el flujo completo se entiende sin perder la profundidad tecnica.
+          Un proyecto está datalizado cuando un proceso de negocio deja de depender de tareas manuales,
+          planillas aisladas o interpretaciones individuales, y pasa a ejecutarse con datos confiables,
+          reglas explícitas, disparadores, acciones trazables y operación monitoreada. No alcanza con
+          mostrar información: la automatización debe reducir retrabajo, acelerar decisiones y dejar evidencia.
         </p>
-        <div class="workflow-case-list" aria-label="Carriles de trabajo">
-          ${cases
+      </div>
+
+      <div class="datalization-grid" aria-label="Condiciones de datalización completa">
+        ${datalizationCriteria
+          .map(
+            (item) => `
+              <article class="datalization-card">
+                <h3>${escapeHtml(item.title)}</h3>
+                <p>${escapeHtml(item.text)}</p>
+              </article>
+            `,
+          )
+          .join("")}
+      </div>
+
+      <div class="datalization-levels" aria-label="Niveles porcentuales de datalización">
+        <div class="datalization-level-head">
+          <h3>Porcentaje de datalización</h3>
+          <p>El porcentaje expresa cuánto del proceso está automatizado, gobernado y operado; no cuántos reportes existen.</p>
+        </div>
+        <div class="datalization-level-grid">
+          ${datalizationLevels
             .map(
-              ([title, text], index) => `
-                <article class="workflow-case ${index === 0 ? "active" : ""}">
-                  <strong>${escapeHtml(title)}</strong>
-                  <span>${escapeHtml(text)}</span>
+              (level) => `
+                <article class="datalization-level">
+                  <strong>${escapeHtml(level.percent)}</strong>
+                  <h4>${escapeHtml(level.title)}</h4>
+                  <p>${escapeHtml(level.text)}</p>
                 </article>
               `,
             )
             .join("")}
         </div>
       </div>
+    </section>
+  `;
+}
 
-      <div class="workflow-board" aria-label="Canvas del flujo BI">
+function renderWorkflowLab() {
+  return `
+    <section class="workflow-lab page-inner" aria-label="Flujo operativo de datalización">
+      <div class="workflow-board" aria-label="Canvas del flujo de datalización">
         <div class="workflow-board-head">
-          <span class="flow-chip">BI flow</span>
-          <strong>De necesidad a producto operativo</strong>
+          <div>
+            <span class="flow-chip">flujo de automatización</span>
+            <h2>Mapa de transformación: de tarea manual a automatización real.</h2>
+            <p>
+              Esta sección muestra qué debe cambiar para que un trabajo deje de ser seguimiento manual
+              y pase a operar como sistema: proceso, reglas, datos, motor, acción, orquestación y mejora.
+            </p>
+          </div>
+          <div class="workflow-lanes" aria-label="Carriles del flujo">
+            <span>Proceso</span>
+            <span>Reglas y datos</span>
+            <span>Acción y operación</span>
+          </div>
         </div>
-        <div class="workflow-chain">
-          ${nodes
+        <div class="workflow-chain" aria-label="Pasos clickeables del flujo">
+          ${workflowSteps
             .map(
-              (node, index) => `
-                <article class="workflow-node-card tone-${node.tone}" style="--node-order:${index}">
-                  <span class="node-icon">${icon(node.iconName)}</span>
-                  <strong>${escapeHtml(node.title)}</strong>
-                  <small>${escapeHtml(node.text)}</small>
-                </article>
+              (step, index) => `
+                <button
+                  class="workflow-node-card tone-${step.tone} ${index === 0 ? "active" : ""}"
+                  type="button"
+                  style="--node-order:${index}"
+                  data-workflow-step="${index}"
+                  aria-expanded="${index === 0 ? "true" : "false"}"
+                  aria-controls="workflow-panel-${index}"
+                >
+                    <span class="node-icon">${icon(step.iconName)}</span>
+                    <strong>${escapeHtml(step.title)}</strong>
+                    <small>${escapeHtml(step.short)}</small>
+                    <span class="node-disclosure">${index === 0 ? "Detalle abierto" : "Abrir detalle"} ${icon("chevronDown")}</span>
+                </button>
+              `,
+            )
+            .join("")}
+        </div>
+        <div class="workflow-detail-drawer" aria-live="polite">
+          ${workflowSteps
+            .map(
+              (step, index) => `
+                <section class="workflow-step-panel" id="workflow-panel-${index}" data-workflow-panel="${index}" ${index === 0 ? "" : "hidden"}>
+                  <div class="workflow-panel-summary">
+                    <span>Paso ${index + 1}</span>
+                    <h3>${escapeHtml(step.title)}</h3>
+                    <p>${escapeHtml(step.short)}</p>
+                  </div>
+                  <div>
+                    <h3>Significado técnico</h3>
+                    <p>${escapeHtml(step.technical)}</p>
+                  </div>
+                  <div>
+                    <h3>Significado funcional</h3>
+                    <p>${escapeHtml(step.functional)}</p>
+                  </div>
+                  <div>
+                    <h3>Ejemplos reales</h3>
+                    <ul>
+                      ${step.examples.map((example) => `<li>${escapeHtml(example)}</li>`).join("")}
+                    </ul>
+                  </div>
+                </section>
               `,
             )
             .join("")}
@@ -467,12 +1303,287 @@ function renderWorkflowLab() {
         <div class="workflow-output">
           <span>${icon("spark")}</span>
           <div>
-            <strong>Resultado esperable</strong>
-            <p>Menos retrabajo, mas trazabilidad y una experiencia de BI que acompana la decision real.</p>
+            <strong>Qué se quiere contar</strong>
+            <p>Un reporte informa; una automatización toma una señal, aplica reglas, dispara una acción, registra evidencia y permite mejorar el proceso.</p>
           </div>
         </div>
       </div>
     </section>
+  `;
+}
+
+function setupWorkflowInteractions() {
+  const buttons = [...document.querySelectorAll("[data-workflow-step]")];
+  const panels = [...document.querySelectorAll("[data-workflow-panel]")];
+  if (!buttons.length || !panels.length) return;
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const target = button.dataset.workflowStep;
+      const isOpen = button.getAttribute("aria-expanded") === "true";
+      if (isOpen) return;
+
+      buttons.forEach((item) => {
+        item.classList.remove("active");
+        item.setAttribute("aria-expanded", "false");
+        const disclosure = item.querySelector(".node-disclosure");
+        if (disclosure) disclosure.innerHTML = `Abrir detalle ${icon("chevronDown")}`;
+      });
+      panels.forEach((panel) => {
+        panel.hidden = true;
+      });
+
+      button.classList.add("active");
+      button.setAttribute("aria-expanded", "true");
+      const disclosure = button.querySelector(".node-disclosure");
+      if (disclosure) disclosure.innerHTML = `Detalle abierto ${icon("chevronDown")}`;
+      const panel = panels.find((item) => item.dataset.workflowPanel === target);
+      if (panel) panel.hidden = false;
+    });
+  });
+}
+
+function renderMethodologyPage() {
+  appRoot.innerHTML = `
+    <section class="page tool-page methodology-page">
+      <header class="page-heading page-inner methodology-hero">
+        <span class="eyebrow">Metodología operativa</span>
+        <h1>Mejora continua aplicada a BI</h1>
+        <p class="lede">
+          Un marco para presentar a nivel gerencial y usar en la rutina diaria: OEE BI para medir
+          efectividad, DMAIC para ordenar el ciclo de mejora y herramientas Lean Six Sigma ubicadas
+          donde realmente agregan valor.
+        </p>
+      </header>
+
+      <section class="methodology-intro page-inner" aria-labelledby="methodologyIntroTitle">
+        <div class="methodology-intro-copy">
+          <span class="flow-chip">encuadre</span>
+          <h2 id="methodologyIntroTitle">No es un glosario de métodos. Es un sistema de gestión para productos BI.</h2>
+          <p>
+            La metodología entra en la página para responder una pregunta concreta: cómo sabemos que una
+            automatización BI mejora el proceso, se sostiene en producción y aprende con evidencia.
+            Por eso cada concepto se conecta con un momento del trabajo: definir, medir, analizar,
+            mejorar o controlar.
+          </p>
+        </div>
+        <div class="methodology-principles" aria-label="Usos del marco metodológico">
+          ${methodologyPrinciples.map(renderMethodologyPrinciple).join("")}
+        </div>
+      </section>
+
+      <section class="oee-section page-inner" aria-labelledby="oeeTitle">
+        <div class="methodology-section-head">
+          <span class="flow-chip">OEE BI</span>
+          <h2 id="oeeTitle">Overall Equipment Effectiveness traducido a efectividad analítica.</h2>
+          <p>
+            En planta, OEE combina disponibilidad, rendimiento y calidad. En un equipo BI, el mismo
+            razonamiento sirve para medir si la solución está disponible, fluye con eficiencia y produce
+            salidas confiables para operar.
+          </p>
+        </div>
+        <div class="oee-formula" aria-label="Fórmula OEE BI">
+          <strong>OEE BI</strong>
+          <span>Disponibilidad</span>
+          <em>x</em>
+          <span>Eficiencia</span>
+          <em>x</em>
+          <span>Calidad</span>
+        </div>
+        <div class="oee-grid">
+          ${oeeFactors.map(renderOeeFactor).join("")}
+        </div>
+      </section>
+
+      <section class="dmaic-section page-inner" aria-labelledby="dmaicTitle">
+        <div class="methodology-section-head">
+          <span class="flow-chip">DMAIC</span>
+          <h2 id="dmaicTitle">El ciclo que evita construir sin aprender.</h2>
+          <p>
+            DMAIC ordena el flujo de mejora: primero se define el proceso, después se mide la pérdida,
+            se analiza la causa, se mejora el diseño y finalmente se controla la operación para no volver
+            al circuito manual.
+          </p>
+        </div>
+        <div class="dmaic-track" aria-label="Ciclo DMAIC aplicado a BI">
+          ${dmaicStages.map(renderDmaicStage).join("")}
+        </div>
+      </section>
+
+      <section class="methodology-toolchain page-inner" aria-labelledby="toolchainTitle">
+        <div class="methodology-section-head">
+          <span class="flow-chip">herramientas ubicadas</span>
+          <h2 id="toolchainTitle">Cada herramienta entra cuando responde una pregunta del proceso.</h2>
+          <p>
+            El criterio es simple: si no ayuda a decidir, medir, reducir riesgo o sostener la mejora,
+            no se fuerza. Así Lean Six Sigma, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata quedan integrados
+            al trabajo real del equipo.
+          </p>
+        </div>
+        <div class="methodology-tool-grid">
+          ${methodologyTools.map(renderMethodologyTool).join("")}
+        </div>
+      </section>
+
+      <section class="toyota-section page-inner" aria-labelledby="toyotaTitle">
+        <div class="methodology-section-head">
+          <span class="flow-chip">4P Toyota</span>
+          <h2 id="toyotaTitle">Una lectura de gestión para sostener la datalización.</h2>
+          <p>
+            Las 4P ayudan a que la conversación no quede atrapada en la herramienta. Primero se define
+            el propósito, luego el flujo, después los roles y finalmente la rutina de resolución de problemas.
+          </p>
+        </div>
+        <div class="toyota-layers" aria-label="Cuatro P de Toyota aplicadas a BI">
+          ${toyotaFourP.map(renderToyotaLayer).join("")}
+        </div>
+      </section>
+
+      <section class="lean-practices-section page-inner" aria-labelledby="leanPracticesTitle">
+        <div class="methodology-section-head">
+          <span class="flow-chip">patrones de mejora</span>
+          <h2 id="leanPracticesTitle">Prácticas que se traducen en decisiones de diseño BI.</h2>
+          <p>
+            Estas prácticas no aparecen como teoría separada: se convierten en requisitos de UX, controles
+            de datos, reglas de publicación, diseño de flujo y cadencia de operación.
+          </p>
+        </div>
+        <div class="lean-practice-grid">
+          ${leanPractices.map(renderLeanPractice).join("")}
+        </div>
+      </section>
+
+      <section class="methodology-cadence page-inner" aria-labelledby="cadenceTitle">
+        <div class="methodology-section-head">
+          <span class="flow-chip">operación diaria</span>
+          <h2 id="cadenceTitle">La metodología se vuelve útil cuando entra en la agenda del equipo.</h2>
+          <p>
+            El marco se sostiene con una cadencia liviana: salud diaria, Kaizen semanal, gate de release
+            y revisión mensual de efectividad. Esa rutina conecta gerencia, ingeniería y usuarios.
+          </p>
+        </div>
+        <div class="cadence-grid">
+          ${methodologyCadence.map(renderCadenceItem).join("")}
+        </div>
+      </section>
+
+      <section class="methodology-close page-inner" aria-label="Cierre metodológico">
+        <div>
+          <span class="eyebrow">criterio de uso</span>
+          <h2>La metodología se aplica por problema, no por moda.</h2>
+          <p>
+            OEE BI muestra dónde se pierde efectividad. DMAIC ordena cómo intervenir. VSM, FMEA,
+            Kaizen, SMED, Poka-Yoke, Kata y 4P Toyota se eligen según la pérdida detectada y el momento
+            del proyecto. Ese es el hilo conductor para una presentación gerencial y para el trabajo diario.
+          </p>
+        </div>
+        <a class="button secondary" href="/guia-power-bi" data-route>
+          ${icon("route")}
+          Conectar con guía + roadmap
+        </a>
+      </section>
+    </section>
+  `;
+}
+
+function renderMethodologyPrinciple(item) {
+  return `
+    <article class="methodology-principle">
+      <h3>${escapeHtml(item.title)}</h3>
+      <p>${escapeHtml(item.text)}</p>
+    </article>
+  `;
+}
+
+function renderOeeFactor(factor, index) {
+  const colors = ["var(--ypf-blue)", "var(--ypf-yellow)", "var(--green)"];
+  return `
+    <article class="oee-factor" style="--method-color:${colors[index % colors.length]}">
+      <div class="oee-factor-head">
+        <span>${index + 1}</span>
+        <h3>${escapeHtml(factor.title)}</h3>
+      </div>
+      <p class="oee-factor-short">${escapeHtml(factor.short)}</p>
+      <div class="oee-factor-formula">${escapeHtml(factor.formula)}</div>
+      <p>${escapeHtml(factor.biMeaning)}</p>
+      <div class="oee-factor-columns">
+        <div>
+          <h4>Señales sanas</h4>
+          <ul>${factor.signals.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </div>
+        <div>
+          <h4>Pérdidas típicas</h4>
+          <ul>${factor.failureModes.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderDmaicStage(stage, index) {
+  const colors = ["#ff6b3b", "#3aa0ff", "#8d72ff", "#30d174", "#35c9bd"];
+  return `
+    <article class="dmaic-stage" style="--method-color:${colors[index % colors.length]}; --method-order:${index}">
+      <span>${String(index + 1).padStart(2, "0")}</span>
+      <h3>${escapeHtml(stage.title)}</h3>
+      <strong>${escapeHtml(stage.question)}</strong>
+      <p>${escapeHtml(stage.biApplication)}</p>
+      <div class="methodology-tags">
+        ${stage.tools.map((item) => `<small>${escapeHtml(item)}</small>`).join("")}
+      </div>
+      <ul>${stage.evidence.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+    </article>
+  `;
+}
+
+function renderMethodologyTool(tool, index) {
+  return `
+    <article class="methodology-tool-card" style="--method-order:${index}">
+      <div class="methodology-tool-head">
+        <span>${escapeHtml(tool.role)}</span>
+        <small>${escapeHtml(tool.when)}</small>
+      </div>
+      <h3>${escapeHtml(tool.title)}</h3>
+      <p>${escapeHtml(tool.purpose)}</p>
+      <strong>${escapeHtml(tool.biUse)}</strong>
+    </article>
+  `;
+}
+
+function renderToyotaLayer(layer, index) {
+  return `
+    <article class="toyota-layer" style="--method-order:${index}">
+      <span>${index + 1}P</span>
+      <div>
+        <small>${escapeHtml(layer.subtitle)}</small>
+        <h3>${escapeHtml(layer.title)}</h3>
+        <p>${escapeHtml(layer.biTranslation)}</p>
+        <div class="methodology-tags">
+          ${layer.evidence.map((item) => `<small>${escapeHtml(item)}</small>`).join("")}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderLeanPractice(practice) {
+  return `
+    <article class="lean-practice">
+      <span>${escapeHtml(practice.focus)}</span>
+      <h3>${escapeHtml(practice.title)}</h3>
+      <p>${escapeHtml(practice.text)}</p>
+      <strong>${escapeHtml(practice.example)}</strong>
+    </article>
+  `;
+}
+
+function renderCadenceItem(item, index) {
+  return `
+    <article class="cadence-item">
+      <span>${index + 1}</span>
+      <h3>${escapeHtml(item.title)}</h3>
+      <p>${escapeHtml(item.text)}</p>
+    </article>
   `;
 }
 
@@ -493,14 +1604,14 @@ function renderDictionaryPage() {
               id="dictionarySearch"
               type="search"
               value="${escapeHtml(dictionaryState.query)}"
-              placeholder="Buscar por termino, categoria o definicion"
+              placeholder="Buscar por término, categoría o definición"
               autocomplete="off"
-              aria-label="Buscar terminos"
+              aria-label="Buscar términos"
             />
           </label>
           <div class="result-count" id="dictionaryCount"></div>
         </div>
-        <div class="chip-row" aria-label="Categorias">
+        <div class="chip-row" aria-label="Categorías">
           ${["Todas", ...dictionaryCategories]
             .map(
               (category) => `
@@ -517,7 +1628,7 @@ function renderDictionaryPage() {
         </div>
       </section>
 
-      <section class="term-grid page-inner" id="dictionaryResults" aria-label="Terminos BI"></section>
+      <section class="term-grid page-inner" id="dictionaryResults" aria-label="Términos BI"></section>
     </section>
   `;
 
@@ -541,87 +1652,401 @@ function renderDictionaryPage() {
 
 function renderGuidePage() {
   appRoot.innerHTML = `
-    <section class="page tool-page">
-      <header class="page-heading page-inner">
-        <span class="eyebrow">Guia de ingenieria BI</span>
-        <h1>Power BI y Microsoft Fabric</h1>
+    <section class="page tool-page guide-story-page">
+      <header class="page-heading page-inner guide-story-hero">
+        <span class="eyebrow">Guía y roadmap de automatización BI/Fabric</span>
+        <h1>De proceso manual a automatización operativa</h1>
         <p class="lede">
-          Un ciclo de vida completo para productos analiticos: empieza con PRD y Spec,
-          sigue con datos, modelo, DAX, seguridad y UX, y termina en CI/CD, monitoreo y mejora continua.
+          Una sola experiencia para entender, diseñar y gobernar la datalización: arriba, el flujo
+          operativo con gates clickeables; abajo, la historia completa de cómo una necesidad se convierte
+          en una automatización trazable, monitoreada y lista para mejorar.
         </p>
       </header>
 
-      <section class="prd-panel page-inner">
-        <div class="prd-copy">
-          <span class="flow-chip">antes de construir</span>
-          <h2>PRD primero. Spec despues. Desarrollo con menos ruido.</h2>
+      <section class="guide-story-intro page-inner" aria-labelledby="guideStoryTitle">
+        <div class="guide-story-copy">
+          <span class="flow-chip">tesis de la guía</span>
+          <h2 id="guideStoryTitle">Datalizar es hacer que un proceso trabaje como sistema.</h2>
           <p>
-            El PRD ordena el problema, los usuarios y el exito esperado. La Spec convierte esa
-            direccion en una arquitectura ejecutable. Cuando se mezclan, nadie sabe si esta
-            discutiendo negocio o implementacion.
+            El punto de partida no es un reporte ni una herramienta. Es una tarea repetible que hoy
+            consume tiempo, depende de interpretación manual o pierde trazabilidad. La guía sigue ese
+            recorrido hasta convertirlo en un flujo con datos confiables, reglas explícitas, ejecución
+            controlada, salida accionable y operación continua.
           </p>
         </div>
-        <div class="comparison-table" role="table" aria-label="Comparacion PRD y Spec">
-          <div class="comparison-row head" role="row">
-            <span>Caracteristica</span>
-            <span>PRD</span>
-            <span>Spec</span>
+        <div class="guide-story-proof" aria-label="Transformación esperada">
+          <div>
+            <span>Antes</span>
+            <strong>Tareas manuales, criterios dispersos y decisiones difíciles de auditar.</strong>
           </div>
-          ${prdSpecComparison
+          <div>
+            <span>Durante</span>
+            <strong>Proceso, reglas, datos, modelo, seguridad y UX se ordenan como una misma cadena.</strong>
+          </div>
+          <div>
+            <span>Después</span>
+            <strong>La operación recibe señales, acciones y evidencia sin reconstruir el caso desde cero.</strong>
+          </div>
+        </div>
+      </section>
+
+      ${renderUnifiedAutomationFlow()}
+
+      ${renderPrdSpecModelSection()}
+
+      <section class="guide-journey page-inner" aria-labelledby="guideJourneyTitle">
+        <div class="guide-section-title">
+          <span class="flow-chip">historia completa</span>
+          <h2 id="guideJourneyTitle">Del caso operativo a la producción monitoreada.</h2>
+          <p>
+            Leé la secuencia como una historia única: cada etapa reduce trabajo manual, aumenta trazabilidad
+            y prepara la siguiente decisión técnica.
+          </p>
+        </div>
+        ${guideSections.map(renderGuideJourneyStep).join("")}
+      </section>
+
+      <section class="guide-readiness-panel page-inner" aria-labelledby="guideReadinessTitle">
+        <div class="guide-readiness-copy">
+          <span class="flow-chip">control de salida</span>
+          <h2 id="guideReadinessTitle">Una automatización solo está lista cuando puede operar sin improvisación.</h2>
+          <p>
+            Antes de producción, el equipo debe poder demostrar que el proceso está entendido, las reglas
+            están versionadas, los datos tienen calidad, la seguridad fue probada y la operación sabe cómo
+            responder ante incidentes.
+          </p>
+        </div>
+        <ol class="guide-readiness-flow">
+          ${readinessChecklist
             .map(
-              (item) => `
-                <div class="comparison-row" role="row">
-                  <strong>${escapeHtml(item.characteristic)}</strong>
-                  <span data-label="PRD">${escapeHtml(item.prd)}</span>
-                  <span data-label="Spec">${escapeHtml(item.spec)}</span>
-                </div>
+              (item, index) => `
+                <li style="--guide-color:${guideStoryPalette[index % guideStoryPalette.length]}; --guide-order:${index}">
+                  <span>${index + 1}</span>
+                  <p>${escapeHtml(item)}</p>
+                </li>
               `,
             )
             .join("")}
-        </div>
-      </section>
-
-      <section class="guide-grid page-inner" aria-label="Capitulos de la guia Power BI y Fabric">
-        ${guideSections.map(renderGuideSectionCard).join("")}
-      </section>
-
-      <section class="readiness-panel page-inner">
-        <div>
-          <span class="eyebrow">checklist</span>
-          <h2>Antes de poner en produccion</h2>
-          <p>
-            Esta lista funciona como control simple para no publicar reportes que todavia no tienen
-            producto, modelo, seguridad u operacion suficientemente claros.
-          </p>
-        </div>
-        <ul>
-          ${readinessChecklist.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-        </ul>
+        </ol>
       </section>
     </section>
   `;
 }
 
-function renderGuideSectionCard(section) {
+function getUnifiedFlowItems() {
+  const positions = [
+    { x: 6, y: 56 },
+    { x: 17, y: 56 },
+    { x: 28, y: 56 },
+    { x: 39, y: 56 },
+    { x: 50, y: 56 },
+    { x: 61, y: 56 },
+    { x: 72, y: 56 },
+    { x: 83, y: 56 },
+    { x: 94, y: 56 },
+  ];
+
+  return guideSections.map((section, index) => {
+    const phase = roadmapPhases[index] || {};
+    const story = getGuideStory(section, index);
+    const lane = laneStyles[phase.lane] || { color: story.color };
+
+    return {
+      id: index,
+      section,
+      phase,
+      story,
+      position: positions[index],
+      color: lane.color || story.color,
+      tooltip: `Abrir definición técnica y funcional de ${section.title}`,
+    };
+  });
+}
+
+function renderUnifiedAutomationFlow() {
+  const items = getUnifiedFlowItems();
+  const laneEntries = Object.entries(laneStyles).map(([lane, style]) => {
+    const firstItem = items.find((item) => item.phase.lane === lane) || items[0];
+    return { lane, style, target: firstItem.id };
+  });
+
   return `
-    <article class="guide-card">
-      <div class="guide-card-head">
-        <span>${escapeHtml(section.eyebrow)}</span>
-        <h2>${escapeHtml(section.title)}</h2>
+    <section class="bi-flow-showcase unified-flow-showcase page-inner" aria-labelledby="unifiedFlowTitle">
+      <div class="flow-canvas unified-flow-canvas" aria-label="Canvas unificado de guía y roadmap">
+        <div class="flow-canvas-copy">
+          <span class="flow-chip">flujo Power BI/Fabric</span>
+          <h2 id="unifiedFlowTitle">Camino de datalización BI.</h2>
+          <p>La animación recorre el camino real: definición, datos, modelado, DAX, confianza, acción, aprobación, publicación y operación.</p>
+        </div>
+
+        <svg class="flow-lines unified-flow-lines" viewBox="0 0 1000 540" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <filter id="flowGlow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"></feGaussianBlur>
+              <feMerge>
+                <feMergeNode in="coloredBlur"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+              </feMerge>
+            </filter>
+          </defs>
+          <path class="flow-line unified-main-path unified-main-path-base" d="M52 302 H948"></path>
+          <path class="flow-line active unified-main-path unified-main-path-motion" d="M52 302 H948"></path>
+        </svg>
+
+        <span class="unified-flow-runner" aria-hidden="true"></span>
+        ${items.map(renderUnifiedFlowNode).join("")}
       </div>
-      <p>${escapeHtml(section.summary)}</p>
-      <div class="guide-card-grid">
+
+      <aside class="flow-rail unified-flow-rail" aria-label="Carriles del flujo de automatización">
+        ${laneEntries
+          .map(({ lane, style, target }, index) => {
+            const laneItems = items.filter((item) => item.phase.lane === lane);
+
+            return `
+              <button
+                class="flow-tab ${index === 0 ? "active" : ""}"
+                type="button"
+                style="--flow-color:${style.color}"
+                data-unified-flow="${target}"
+                data-unified-group="${laneItems.map((item) => item.id).join(",")}"
+                data-tooltip="Ver gates del carril ${escapeHtml(lane)}"
+                aria-expanded="${index === 0 ? "true" : "false"}"
+              >
+                <strong>${escapeHtml(lane)}</strong>
+                <span>${laneItems.map((item) => item.id + 1).join(" · ")}</span>
+              </button>
+            `;
+          })
+          .join("")}
+      </aside>
+
+      <div class="unified-flow-menu" aria-live="polite">
+        ${items.map(renderUnifiedFlowPanel).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderUnifiedFlowNode(item) {
+  const { id, section, phase, story, position, color, tooltip } = item;
+  const isActive = id === 0;
+
+  return `
+    <button
+      class="flow-node unified-flow-node ${isActive ? "spotlight" : ""}"
+      type="button"
+      data-flow-node="${section.id}"
+      data-unified-flow="${id}"
+      data-tooltip="${escapeHtml(tooltip)}"
+      aria-expanded="${isActive ? "true" : "false"}"
+      aria-controls="unified-flow-panel-${id}"
+      style="--x:${position.x}%; --y:${position.y}%; --flow-color:${color}; --flow-order:${id}"
+    >
+      <span class="node-index">${id + 1}</span>
+      <span class="node-icon" style="background:${color}">${icon(story.iconName || "spark")}</span>
+      <strong>${escapeHtml(section.title)}</strong>
+      <small>${escapeHtml(phase.gate || story.flow || section.eyebrow)}</small>
+    </button>
+  `;
+}
+
+function renderUnifiedFlowPanel(item) {
+  const { id, section, phase, story, color } = item;
+
+  return `
+    <section
+      class="unified-flow-panel"
+      id="unified-flow-panel-${id}"
+      data-unified-flow-panel="${id}"
+      style="--flow-color:${color}"
+      ${id === 0 ? "" : "hidden"}
+    >
+      <div class="unified-panel-head">
+        <span>Gate ${id + 1}</span>
+        <h3>${escapeHtml(phase.title || section.title)}</h3>
+        <p>${escapeHtml(phase.gate || story.outcome || "")}</p>
+      </div>
+
+      <div class="unified-panel-grid">
         <div>
-          <h3>Practicas clave</h3>
-          <ul>${section.practices.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+          <h4>Objetivo principal</h4>
+          <p>${escapeHtml(phase.objective || section.summary)}</p>
         </div>
         <div>
-          <h3>Entregables</h3>
-          <ul>${section.deliverables.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+          <h4>Entregable esperado</h4>
+          <p>${escapeHtml(phase.targetOutcome || story.outcome || section.deliverables?.[0] || "")}</p>
         </div>
       </div>
-      <div class="risk-note">
-        <strong>Riesgo si se saltea:</strong> ${escapeHtml(section.risk)}
+
+      <div class="unified-panel-columns">
+        <div>
+          <h4>Objetivos secundarios</h4>
+          <ul>${(phase.secondaryObjectives || phase.keyActivities || section.practices).map((itemText) => `<li>${escapeHtml(itemText)}</li>`).join("")}</ul>
+        </div>
+        <div>
+          <h4>Qué debe quedar</h4>
+          <ul>${(phase.deliverables || section.deliverables).map((itemText) => `<li>${escapeHtml(itemText)}</li>`).join("")}</ul>
+        </div>
+      </div>
+
+      <div class="unified-panel-foot">
+        <span>${escapeHtml(phase.owner || section.eyebrow)}</span>
+        <p><strong>Riesgo si se saltea:</strong> ${escapeHtml(phase.riskIfSkipped || section.risk)}</p>
+      </div>
+    </section>
+  `;
+}
+
+function renderPrdSpecModelSection() {
+  return `
+    <section class="guide-models-section page-inner" id="modelos-prd-spec" aria-labelledby="guideModelsTitle">
+      <div class="guide-models-copy">
+        <span class="flow-chip">modelos descargables</span>
+          <h2 id="guideModelsTitle">PRD y Spec: dos documentos, un mismo proceso.</h2>
+          <p>
+            El PRD alinea la necesidad operativa; la Spec convierte esa necesidad en una implementación revisable.
+            Los modelos se presentan como una vista previa limpia y se descargan como documentos Word editables.
+          </p>
+        </div>
+
+      <div class="guide-models-grid">
+        ${guideDocumentTemplates.map(renderGuideDocumentTemplate).join("")}
+      </div>
+
+      <div class="guide-process-contract" aria-labelledby="guideContractTitle">
+        <div class="guide-contract-copy">
+          <span class="flow-chip">primer acuerdo</span>
+          <h2 id="guideContractTitle">La automatización empieza cuando PRD y Spec dejan de mezclarse.</h2>
+          <p>
+            El PRD define el proceso que se quiere automatizar. La Spec define cómo se construye.
+            Separarlos evita discusiones ambiguas: negocio valida sentido, alcance y resultado;
+            ingeniería valida arquitectura, reglas, datos, seguridad y despliegue.
+          </p>
+        </div>
+        <div class="guide-contract-rows" aria-label="Contrato entre PRD y Spec">
+          ${prdSpecComparison
+            .map(
+              (item) => `
+                <div class="guide-contract-row">
+                  <strong>${escapeHtml(item.characteristic)}</strong>
+                  <p><span>PRD</span>${escapeHtml(item.prd)}</p>
+                  <p><span>Spec</span>${escapeHtml(item.spec)}</p>
+                </div>
+              `,
+            )
+            .join("")}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderGuideDocumentTemplate(template) {
+  return `
+    <article class="guide-model-card">
+      <div class="guide-model-head">
+        <span>${escapeHtml(template.eyebrow)}</span>
+        <h3>${escapeHtml(template.title)}</h3>
+        <p>${escapeHtml(template.purpose)}</p>
+      </div>
+      <div class="guide-model-preview" aria-label="Vista previa de ${escapeHtml(template.title)}">
+        <div class="guide-model-paper">
+          <span>YPF | Equipo de Datalización</span>
+          <h4>${escapeHtml(template.title)}</h4>
+          <p>${escapeHtml(template.format)}</p>
+          <ol>
+            ${template.preview.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+          </ol>
+        </div>
+      </div>
+      <div class="guide-model-actions">
+        <a class="button small secondary" href="/${template.source}" download>
+          ${icon("download")}
+          Descargar Word
+        </a>
+      </div>
+    </article>
+  `;
+}
+
+function setupUnifiedFlowInteractions() {
+  const triggers = [...document.querySelectorAll("[data-unified-flow]")];
+  const panels = [...document.querySelectorAll("[data-unified-flow-panel]")];
+  if (!triggers.length || !panels.length) return;
+
+  const openPanel = (target) => {
+    triggers.forEach((trigger) => {
+      const group = trigger.dataset.unifiedGroup ? trigger.dataset.unifiedGroup.split(",") : [];
+      const isActive = trigger.dataset.unifiedFlow === target || group.includes(target);
+      trigger.classList.toggle("active", isActive);
+      trigger.classList.toggle("spotlight", isActive && trigger.classList.contains("flow-node"));
+      trigger.setAttribute("aria-expanded", String(isActive));
+    });
+
+    panels.forEach((panel) => {
+      panel.hidden = panel.dataset.unifiedFlowPanel !== target;
+    });
+  };
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      openPanel(trigger.dataset.unifiedFlow);
+    });
+  });
+}
+
+function getGuideStory(section, index) {
+  return {
+    ...(guideStoryDetails[section.id] || {}),
+    color: guideStoryPalette[index % guideStoryPalette.length],
+  };
+}
+
+function renderGuideFlowNode(section, index) {
+  const story = getGuideStory(section, index);
+  return `
+    <li class="guide-flow-node" style="--guide-color:${story.color}; --guide-order:${index}">
+      <span>${index + 1}</span>
+      <strong>${escapeHtml(section.title)}</strong>
+      <small>${escapeHtml(story.flow || section.eyebrow)}</small>
+    </li>
+  `;
+}
+
+function renderGuideJourneyStep(section, index) {
+  const story = getGuideStory(section, index);
+  return `
+    <article class="guide-journey-step" style="--guide-color:${story.color}; --guide-order:${index}">
+      <div class="guide-step-marker" aria-hidden="true">
+        <span>${String(index + 1).padStart(2, "0")}</span>
+        ${icon(story.iconName || "spark")}
+      </div>
+      <div class="guide-step-body">
+        <div class="guide-step-kicker">
+          <span>${escapeHtml(section.eyebrow)}</span>
+          <strong>${renderExplainedText(story.outcome || "Salida verificable para la etapa siguiente.")}</strong>
+        </div>
+        <h2>${renderExplainedText(section.title)}</h2>
+        <p class="guide-scene">${renderExplainedText(story.scene || section.summary)}</p>
+        <p>${renderExplainedText(section.summary)}</p>
+        <div class="guide-automation-note">
+          <span>Clave de automatización</span>
+          <p>${renderExplainedText(story.automation || section.summary)}</p>
+        </div>
+        <div class="guide-step-columns">
+          <div>
+            <h3>Cómo avanza la historia</h3>
+            <ul>${section.practices.map((item) => `<li>${renderExplainedText(item)}</li>`).join("")}</ul>
+          </div>
+          <div>
+            <h3>Qué queda como evidencia</h3>
+            <ul>${section.deliverables.map((item) => `<li>${renderExplainedText(item)}</li>`).join("")}</ul>
+          </div>
+        </div>
+        ${renderGuideStepGlossary(section)}
+        <p class="guide-risk">
+          <strong>Si se saltea:</strong> ${renderExplainedText(section.risk)}
+        </p>
       </div>
     </article>
   `;
@@ -632,11 +2057,11 @@ function renderToolingPage() {
   appRoot.innerHTML = `
     <section class="page tool-page">
       <header class="page-heading page-inner">
-        <span class="eyebrow">Documentacion tecnica</span>
-        <h1>Librerias, agentes y MCPs</h1>
+        <span class="eyebrow">Documentación técnica</span>
+        <h1>Librerías, agentes y MCPs</h1>
         <p class="lede">
-          Inventario para futuras specs: bases de datos, nube, desarrollo, busqueda, observabilidad,
-          colaboracion, IA, agentes, sandboxes y frameworks. No se instala todo por defecto; se elige con criterio.
+          Inventario para futuras automatizaciones: bases de datos, nube, desarrollo, búsqueda, observabilidad,
+          colaboración, IA, agentes, sandboxes y frameworks. No se instala todo por defecto; se elige según el proceso.
         </p>
       </header>
 
@@ -644,15 +2069,15 @@ function renderToolingPage() {
         <div>
           <span class="flow-chip">inventario del repo</span>
           <h2>${escapeHtml(toolingDocs.title)}</h2>
-          <p>${toolingGroups.length} familias y ${totalItems} herramientas documentadas para evaluar cuando una Spec lo justifique.</p>
+          <p>${toolingGroups.length} familias y ${totalItems} herramientas documentadas para evaluar cuando una automatización lo justifique.</p>
         </div>
         <a class="button" href="/${toolingDocs.source}" target="_blank" rel="noreferrer">
           ${icon("book")}
-          Abrir documentacion
+          Abrir documentación
         </a>
       </section>
 
-      <section class="tooling-grid page-inner" aria-label="Catalogo de librerias y agentes">
+      <section class="tooling-grid page-inner" aria-label="Catálogo de librerías y agentes">
         ${toolingGroups.map(renderToolingGroup).join("")}
       </section>
     </section>
@@ -668,10 +2093,70 @@ function renderToolingGroup(group) {
       </div>
       <p>${escapeHtml(group.description)}</p>
       <div class="tooling-tags">
-        ${group.items.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+        ${group.items
+          .map((item) => `<span data-tooltip="${escapeHtml(getToolingTooltip(group, item))}">${escapeHtml(item)}</span>`)
+          .join("")}
       </div>
     </article>
   `;
+}
+
+function getToolingTooltip(group, item) {
+  const key = normalizeText(group.group);
+  const explanations = [
+    {
+      match: "base",
+      technical: "almacenar, consultar o vectorizar datos que alimentan modelos, APIs o procesos analíticos",
+      plain: "guardar y consultar información confiable para que la automatización tenga una fuente clara",
+    },
+    {
+      match: "infraestructura",
+      technical: "ejecutar, escalar, aislar y desplegar workloads, servicios, pipelines o agentes",
+      plain: "darle un lugar estable y seguro a la solución para que pueda correr en producción",
+    },
+    {
+      match: "desarrollo",
+      technical: "versionar código, probar cambios, depurar errores y documentar contratos técnicos",
+      plain: "ordenar el trabajo del equipo y revisar cambios antes de publicarlos",
+    },
+    {
+      match: "busqueda",
+      technical: "buscar, navegar, extraer o validar información web de forma automatizada",
+      plain: "traer información externa cuando el proceso necesita consultar fuentes fuera del modelo",
+    },
+    {
+      match: "monitorizacion",
+      technical: "registrar eventos, medir salud, alertar fallas y analizar comportamiento productivo",
+      plain: "saber rápido si algo falló y quién debe actuar",
+    },
+    {
+      match: "productividad",
+      technical: "gestionar requisitos, backlog, documentación, coordinación y trazabilidad de decisiones",
+      plain: "mantener al equipo alineado sobre qué se pidió, qué se decidió y qué falta hacer",
+    },
+    {
+      match: "ia",
+      technical: "consumir modelos, APIs o capacidades externas para análisis, generación o asistencia inteligente",
+      plain: "sumar inteligencia al proceso cuando aporta velocidad, lectura o recomendación",
+    },
+    {
+      match: "agentes",
+      technical: "usar asistentes e IDEs con contexto del repositorio para crear, refactorizar o verificar artefactos",
+      plain: "ayudar al equipo a trabajar más rápido sin perder revisión humana",
+    },
+    {
+      match: "sandboxing",
+      technical: "ejecutar código o agentes en entornos aislados para reducir riesgo operativo",
+      plain: "probar automatizaciones sin exponer sistemas productivos",
+    },
+    {
+      match: "frameworks",
+      technical: "construir servicios, interfaces, modelos de ML, procesamiento de datos o integraciones",
+      plain: "resolver partes específicas de una solución cuando Power BI o Fabric no alcanzan solos",
+    },
+  ];
+  const explanation = explanations.find((entry) => key.includes(entry.match)) || explanations[0];
+  return `${item}. Técnico: permite ${explanation.technical}. En simple: sirve para ${explanation.plain}.`;
 }
 
 function getFilteredTerms() {
@@ -706,8 +2191,8 @@ function renderDictionaryResults() {
     container.innerHTML = `
       <div class="empty-state">
         ${icon("filter")}
-        <h2>No hay terminos para esa busqueda</h2>
-        <p>Proba con otra palabra, limpia el filtro o revisa una categoria mas amplia.</p>
+        <h2>No hay términos para esa búsqueda</h2>
+        <p>Proba con otra palabra, limpia el filtro o revisa una categoría más amplia.</p>
       </div>
     `;
     requestAnimationFrame(enhanceInteractiveSurfaces);
@@ -726,7 +2211,7 @@ function renderDictionaryResults() {
           <p class="term-definition">${escapeHtml(term.definition)}</p>
           <dl class="detail-list">
             <div>
-              <dt>Por que importa</dt>
+              <dt>Por qué importa</dt>
               <dd>${escapeHtml(term.whyItMatters)}</dd>
             </div>
             <div>
@@ -746,188 +2231,7 @@ function renderDictionaryResults() {
 }
 
 function renderRoadmapPage() {
-  appRoot.innerHTML = `
-    <section class="page tool-page">
-      <header class="page-heading page-inner">
-        <span class="eyebrow">Roadmap de ingenieria</span>
-        <h1>Roadmap BI/Fabric</h1>
-        <p class="lede">
-          Un recorrido con gates claros: PRD, Spec, datos, modelo, DAX, seguridad, UX,
-          plataforma, CI/CD y operacion. La idea no es burocracia: es construir con menos retrabajo.
-        </p>
-      </header>
-
-      ${renderBiFlowCanvas()}
-
-      ${renderRoadmapPipeline()}
-
-      <section class="roadmap-toolbar page-inner" aria-label="Leyenda del roadmap">
-        <div class="result-count">${roadmapPhases.length} gates</div>
-        <div class="lane-legend">
-          ${Object.entries(laneStyles)
-            .map(
-              ([lane, style]) => `
-                <span class="lane-pill">
-                  <span class="lane-dot" style="background:${style.color}"></span>
-                  ${escapeHtml(lane)}
-                </span>
-              `,
-            )
-            .join("")}
-        </div>
-      </section>
-
-      <section class="timeline page-inner" aria-label="Fases del roadmap BI">
-        ${roadmapPhases.map(renderPhaseCard).join("")}
-      </section>
-
-      <div class="footer-note page-inner">
-        ${icon("shield")}
-        <span>No subir informacion confidencial, credenciales ni datos sensibles. El contenido de este MVP es local y editable.</span>
-      </div>
-    </section>
-  `;
-
-  document.querySelectorAll("[data-phase-toggle]").forEach((button) => {
-    button.addEventListener("click", () => {
-      expandedPhase = Number(button.dataset.phaseToggle);
-      document.querySelectorAll(".phase-card").forEach((card) => {
-        card.classList.toggle("expanded", Number(card.dataset.phase) === expandedPhase);
-      });
-    });
-  });
-
-  document.querySelectorAll("[data-flow-tab]").forEach((button) => {
-    button.addEventListener("click", () => {
-      document.querySelectorAll("[data-flow-tab]").forEach((item) => item.classList.remove("active"));
-      button.classList.add("active");
-      const target = button.dataset.flowTab;
-      document.querySelectorAll("[data-flow-node]").forEach((node) => {
-        node.classList.toggle("spotlight", node.dataset.flowNode === target);
-      });
-    });
-  });
-}
-
-function renderBiFlowCanvas() {
-  return `
-    <section class="bi-flow-showcase page-inner" aria-label="Flujo BI estilo workflow visual">
-      <aside class="flow-rail" aria-label="Escenarios del flujo BI">
-        <button class="flow-tab active" type="button" data-flow-tab="prd">
-          <strong>PRD</strong>
-          <span>Problema, usuario, KPIs y alcance</span>
-        </button>
-        <button class="flow-tab" type="button" data-flow-tab="etl">
-          <strong>Datos</strong>
-          <span>Fuentes, Power Query y folding</span>
-        </button>
-        <button class="flow-tab" type="button" data-flow-tab="model">
-          <strong>Modelo</strong>
-          <span>VertiPaq, estrella y DAX</span>
-        </button>
-        <button class="flow-tab" type="button" data-flow-tab="security">
-          <strong>Confianza</strong>
-          <span>RLS, OLS, gobierno y UX</span>
-        </button>
-        <button class="flow-tab" type="button" data-flow-tab="ops">
-          <strong>Operacion</strong>
-          <span>CI/CD, capacity y monitoreo</span>
-        </button>
-      </aside>
-
-      <div class="flow-canvas" aria-label="Canvas del proceso BI">
-        <div class="flow-canvas-copy">
-          <span class="flow-chip">BI model canvas</span>
-          <h2>Del PRD a produccion</h2>
-          <p>La IA ayuda mas cuando el proyecto deja problema, Spec, modelo, seguridad y operacion por escrito.</p>
-        </div>
-
-        <svg class="flow-lines" viewBox="0 0 940 520" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <filter id="flowGlow">
-              <feGaussianBlur stdDeviation="3" result="coloredBlur"></feGaussianBlur>
-              <feMerge>
-                <feMergeNode in="coloredBlur"></feMergeNode>
-                <feMergeNode in="SourceGraphic"></feMergeNode>
-              </feMerge>
-            </filter>
-          </defs>
-          <path class="flow-line active" d="M150 236 C220 236 240 236 310 236"></path>
-          <path class="flow-line active" d="M500 236 C565 236 585 236 650 236"></path>
-          <path class="flow-line active" d="M735 210 C785 118 815 105 865 105"></path>
-          <path class="flow-line" d="M735 262 C785 350 815 363 865 363"></path>
-          <path class="flow-line dashed" d="M406 285 C374 346 348 370 318 418"></path>
-          <path class="flow-line dashed" d="M446 285 C445 348 445 372 445 420"></path>
-          <path class="flow-line dashed" d="M488 285 C526 350 556 373 590 420"></path>
-          <path class="flow-line dashed" d="M530 285 C614 346 681 370 742 420"></path>
-          <circle class="flow-pulse" cx="306" cy="236" r="5"></circle>
-          <circle class="flow-pulse delay-1" cx="646" cy="236" r="5"></circle>
-          <circle class="flow-pulse delay-2" cx="860" cy="105" r="5"></circle>
-        </svg>
-
-        <div class="flow-node trigger spotlight" data-flow-node="prd" style="--x: 13%; --y: 48%;">
-          <span class="node-icon cyan">${icon("clipboard")}</span>
-          <strong>PRD</strong>
-          <small>por que, que y exito</small>
-        </div>
-
-        <div class="flow-node agent" data-flow-node="etl" style="--x: 45%; --y: 48%;">
-          <span class="node-icon white">${icon("layers")}</span>
-          <strong>Spec + ETL</strong>
-          <small>fuentes + folding</small>
-          <div class="node-ports">
-            <span>Fuentes</span>
-            <span>Power Query</span>
-            <span>Calidad</span>
-          </div>
-        </div>
-
-        <div class="flow-node decision" data-flow-node="model" style="--x: 69%; --y: 48%;">
-          <span class="node-icon green">${icon("gitBranch")}</span>
-          <strong>Modelo listo?</strong>
-          <small>VertiPaq, DAX, BPA</small>
-          <em class="branch-label true">si</em>
-          <em class="branch-label false">no</em>
-        </div>
-
-        <div class="flow-node output" data-flow-node="security" style="--x: 87%; --y: 20%;">
-          <span class="node-icon blue">${icon("route")}</span>
-          <strong>Confianza</strong>
-          <small>RLS/OLS + UX</small>
-        </div>
-
-        <div class="flow-node output" data-flow-node="ops" style="--x: 87%; --y: 70%;">
-          <span class="node-icon orange">${icon("route")}</span>
-          <strong>Produccion</strong>
-          <small>CI/CD + capacity</small>
-        </div>
-
-        <div class="flow-orbit" data-flow-node="etl" style="--x: 31%; --y: 82%;">
-          <span>${icon("search")}</span>
-          <strong>Query Folding</strong>
-          <small>pushdown al origen</small>
-        </div>
-
-        <div class="flow-orbit" data-flow-node="model" style="--x: 45%; --y: 82%;">
-          <span>${icon("gauge")}</span>
-          <strong>VertiPaq</strong>
-          <small>cardinalidad baja</small>
-        </div>
-
-        <div class="flow-orbit" data-flow-node="security" style="--x: 60%; --y: 82%;">
-          <span>${icon("book")}</span>
-          <strong>3-30-300</strong>
-          <small>UX para decidir</small>
-        </div>
-
-        <div class="flow-orbit" data-flow-node="ops" style="--x: 76%; --y: 82%;">
-          <span>${icon("shield")}</span>
-          <strong>PBIP/TMDL</strong>
-          <small>Git + releases</small>
-        </div>
-      </div>
-    </section>
-  `;
+  renderGuidePage();
 }
 
 function renderRoadmapPipeline() {
@@ -941,10 +2245,10 @@ function renderRoadmapPipeline() {
     <section class="roadmap-pipeline page-inner" aria-label="Pipeline estructurado del roadmap BI">
       <div class="pipeline-intro">
         <span class="flow-chip">roadmap por flujo</span>
-        <h2>Una secuencia, cinco carriles y gates que ordenan la entrega.</h2>
+        <h2>Una secuencia, cinco carriles y gates que automatizan la operación.</h2>
         <p>
-          El proyecto avanza como un sistema: producto define el norte, datos sostienen la respuesta,
-          el modelo organiza la logica, UX y seguridad cuidan la adopcion, y delivery mantiene vivo lo publicado.
+          El proyecto avanza como un sistema vivo: proceso define el trabajo, reglas ordenan la lógica,
+          datos sostienen la ejecución, UX y seguridad cuidan la acción, y delivery mantiene viva la automatización.
         </p>
       </div>
 
@@ -953,7 +2257,7 @@ function renderRoadmapPipeline() {
           .map((phase) => {
             const lane = laneStyles[phase.lane] || { color: "var(--ypf-blue)" };
             return `
-              <article class="pipeline-step" style="--lane-color:${lane.color}">
+              <article class="pipeline-step" style="--lane-color:${lane.color}; --step-order:${phase.id}">
                 <span>${phase.id + 1}</span>
                 <strong>${escapeHtml(phase.title)}</strong>
                 <small>${escapeHtml(phase.gate)}</small>
@@ -986,26 +2290,22 @@ function renderProjectPage() {
     <section class="page tool-page">
       <header class="page-heading page-inner">
         <span class="eyebrow">PRD + Spec + PBIP</span>
-        <h1>Proyecto de Power BI con Visual Studio</h1>
+        <h1>Proyecto de Power BI con Visual Studio Code</h1>
         <p class="lede">
-          Un proyecto Power BI serio no empieza en el PBIX: empieza con un PRD claro, baja a una Spec
-          tecnica y recien despues se versiona el modelo como codigo con PBIP, TMDL, Git y scripts.
+          Una automatización BI seria no empieza en el PBIX: empieza con un proceso claro, baja a reglas
+          técnicas y recién después se versiona el modelo como código con PBIP, TMDL, Git y scripts.
         </p>
       </header>
 
       <section class="project-studio page-inner">
         <div class="project-copy">
-          <span class="flow-chip">filosofia de trabajo</span>
-          <h2>No se trata de documentar por cumplir. Se trata de que negocio, BI e IA trabajen con el mismo mapa.</h2>
+          <span class="flow-chip">filosofía de trabajo</span>
+          <h2>No se trata de documentar por cumplir. Se trata de que negocio, BI e IA trabajen sobre el mismo proceso.</h2>
           <p>
-            En proyectos reales, el problema rara vez es hacer un grafico mas. El problema es no tener claro
-            que decision se quiere mejorar, que queda fuera, que datos sostienen la respuesta y como se prueba
-            que la solucion funciona. El PRD alinea el producto; la Spec ordena la implementacion.
+            En proyectos reales, el problema rara vez es hacer un gráfico más. El problema es no tener claro
+            qué tarea manual se quiere eliminar, qué regla debe aplicar, qué dato sostiene la acción y cómo
+            se prueba que el proceso automatizado funciona. El PRD alinea el proceso; la Spec ordena la implementación.
           </p>
-          <div class="hero-actions">
-            <a class="button" href="/guia-power-bi" data-route>${icon("layers")} Ver guia</a>
-            <a class="button secondary" href="/roadmap" data-route>${icon("route")} Ver roadmap</a>
-          </div>
         </div>
 
         <div class="code-window" aria-label="Estructura sugerida de proyecto Power BI">
@@ -1015,18 +2315,18 @@ function renderProjectPage() {
 ├─ SPEC.md
 ├─ README.md
 ├─ CLAUDE.md
-├─ documentacion/
+├─ documentación/
 │  ├─ contexto-negocio.md
 │  ├─ arquitectura-datos.md
 │  ├─ mapa-modelo.md
 │  ├─ seguridad-gobierno.md
 │  ├─ performance.md
-│  └─ diseno-report.md
+│  └─ diseño-report.md
 ├─ skills/
 │  ├─ dax.md
 │  ├─ power-query.md
 │  ├─ tmdl.md
-│  └─ documentacion.md
+│  └─ documentación.md
 ├─ Modelo.SemanticModel/
 │  └─ definition/
 │     ├─ tables/
@@ -1037,37 +2337,90 @@ function renderProjectPage() {
    └─ deploy.ps1</code></pre>
           <div class="code-note">
             ${icon("folder")}
-            <span>PRD define el producto. Spec define la construccion. PBIP/TMDL vuelve versionable el modelo.</span>
+            <span>PRD define el proceso. Spec define la automatización. PBIP/TMDL vuelve versionable el modelo.</span>
           </div>
         </div>
       </section>
 
-      <section class="quality-grid page-inner" aria-label="Buenas practicas Power BI avanzado">
-        ${renderQualityCard("PRD aprobado", "El equipo sabe que problema se resuelve, para quien, con que metrica de exito y que queda fuera del alcance.", ["Historias de usuario", "KPIs y objetivos", "Criterios de aceptacion"])}
-        ${renderQualityCard("Spec ejecutable", "La decision de producto se transforma en arquitectura, datos, modelo, DAX, seguridad, UX y pruebas.", ["Fuentes y granularidad", "Reglas tecnicas", "Casos de prueba"])}
-        ${renderQualityCard("Modelo como codigo", "PBIP y TMDL permiten revisar cambios, comparar versiones y trabajar con ramas como en software.", ["Git y PRs", "Diffs legibles", "Checklist de release"])}
-        ${renderQualityCard("Operacion cuidada", "Produccion implica monitorear refresh, gateways, capacidad, permisos, uso real y backlog de mejoras.", ["Capacity metrics", "Incremental refresh", "Runbook operativo"])}
+      <section class="project-method page-inner" aria-labelledby="projectMethodTitle">
+        <div class="project-method-head">
+          <span class="flow-chip">método de trabajo</span>
+          <h2 id="projectMethodTitle">Cómo trabajar con Visual Studio Code y Power BI sin perder control.</h2>
+          <p>
+            La idea es simple: Power BI construye la solución; Visual Studio Code ordena el proyecto; Git
+            controla los cambios; y la Spec explica por qué cada decisión técnica existe.
+          </p>
+        </div>
+        <div class="project-step-list">
+          ${projectBuildSteps.map(renderProjectBuildStep).join("")}
+        </div>
+      </section>
+
+      <section class="project-tools page-inner" aria-labelledby="projectToolsTitle">
+        <div class="project-method-head">
+          <span class="flow-chip">herramientas necesarias</span>
+          <h2 id="projectToolsTitle">Qué usa cada parte del equipo.</h2>
+          <p>
+            No todas las herramientas se usan al mismo tiempo. Se incorporan cuando el proyecto necesita
+            trazabilidad, revisión, performance, seguridad o publicación controlada.
+          </p>
+        </div>
+        <div class="project-tool-grid">
+          ${projectToolStack.map(renderProjectTool).join("")}
+        </div>
+      </section>
+
+      <section class="quality-grid page-inner" aria-label="Buenas prácticas Power BI avanzado">
+        ${renderQualityCard("Proceso aprobado", "El equipo sabe qué tarea se automatiza, quién la usa, qué disparador la inicia y qué métrica prueba la mejora.", ["Disparadores", "SLA y responsables", "Criterios de aceptación"])}
+        ${renderQualityCard("Spec ejecutable", "La lógica del proceso se transforma en arquitectura, datos, modelo, reglas, seguridad, UX y pruebas.", ["Fuentes y granularidad", "Reglas técnicas", "Casos de prueba"])}
+        ${renderQualityCard("Modelo como código", "PBIP y TMDL permiten revisar cambios, comparar versiones y trabajar con ramas como en software.", ["Git y PRs", "Diffs legibles", "Checklist de release"])}
+        ${renderQualityCard("Operación cuidada", "Producción implica monitorear refresh, gateways, capacidad, permisos, uso real y backlog de mejoras.", ["Capacity metrics", "Incremental refresh", "Runbook operativo"])}
       </section>
 
       <section class="pbip-note page-inner">
         <div>
           <span class="eyebrow">modo proyecto</span>
-          <h2>PBIP como puente entre producto BI e ingenieria</h2>
+          <h2>PBIP como puente entre producto BI e ingeniería</h2>
           <p>
-            Segun la documentacion oficial de Microsoft, Power BI Project permite guardar el reporte y el modelo
-            semantico como carpetas con archivos de texto. En ese escenario, Visual Studio Code, Git y la terminal
-            dejan de ser herramientas ajenas al BI: pasan a ser parte de una forma mas ordenada de cuidar el modelo,
+            Según la documentación oficial de Microsoft, Power BI Project permite guardar el reporte y el modelo
+            semántico como carpetas con archivos de texto. En ese escenario, Visual Studio Code, Git y la terminal
+            dejan de ser herramientas ajenas al BI: pasan a ser parte de una forma más ordenada de cuidar la automatización,
             siempre apoyadas por PRD y Spec.
           </p>
         </div>
         <ul>
-          <li>Separar problema de negocio, requisitos y decisiones tecnicas.</li>
+          <li>Separar proceso operativo, reglas de negocio y decisiones técnicas.</li>
           <li>Revisar diferencias de medidas, relaciones y expresiones.</li>
-          <li>Documentar decisiones junto al proyecto, no en un chat perdido.</li>
+          <li>Documentar reglas y excepciones junto al proyecto, no en un chat perdido.</li>
           <li>Usar IA con reglas y contexto, no como una caja negra.</li>
         </ul>
       </section>
     </section>
+  `;
+}
+
+function renderProjectBuildStep(step, index) {
+  return `
+    <article class="project-step-card">
+      <span>${index + 1}</span>
+      <div>
+        <h3>${escapeHtml(step.title)}</h3>
+        <p><strong>En simple:</strong> ${escapeHtml(step.easy)}</p>
+        <p><strong>Técnicamente:</strong> ${escapeHtml(step.technical)}</p>
+        <div class="project-tool-tags">
+          ${step.tools.map((tool) => `<small>${escapeHtml(tool)}</small>`).join("")}
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderProjectTool(tool) {
+  return `
+    <article class="project-tool-card">
+      <h3>${escapeHtml(tool.title)}</h3>
+      <p>${escapeHtml(tool.text)}</p>
+    </article>
   `;
 }
 
@@ -1090,8 +2443,8 @@ function renderShortcutsPage() {
         <span class="eyebrow">Power BI Desktop</span>
         <h1>Atajos Power BI</h1>
         <p class="lede">
-          Un resumen practico del PDF de atajos cargado en el repo. La idea no es memorizar todo:
-          es empezar por los que ahorran tiempo todos los dias.
+          Un resumen práctico del PDF de atajos cargado en el repo. La idea no es memorizar todo:
+          es empezar por los que ahorran tiempo todos los días.
         </p>
       </header>
 
@@ -1099,7 +2452,7 @@ function renderShortcutsPage() {
         <div>
           <span class="flow-chip">recurso local</span>
           <h2>${escapeHtml(shortcutsPdf.title)}</h2>
-          <p>${shortcutsPdf.pages} slides por categoria. Guardado en el proyecto y disponible para descargar.</p>
+          <p>${shortcutsPdf.pages} slides por categoría. Guardado en el proyecto y disponible para descargar.</p>
         </div>
         <a class="button" href="/${shortcutsPdf.source}" download>
           ${icon("download")}
@@ -1147,7 +2500,7 @@ function renderPhaseCard(phase) {
       style="--lane-color:${lane.color}"
     >
       <div class="phase-index">
-        <span class="phase-number">${phase.id}</span>
+        <span class="phase-number">${phase.id + 1}</span>
         <div class="phase-meta">
           <span>${escapeHtml(phase.lane)}</span>
           <span class="badge ${lane.badge}">${escapeHtml(phase.gate)}</span>

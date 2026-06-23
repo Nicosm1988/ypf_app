@@ -9,6 +9,10 @@
       "destination": "/index.html"
     },
     {
+      "source": "/metodologia",
+      "destination": "/index.html"
+    },
+    {
       "source": "/diccionario",
       "destination": "/index.html"
     },

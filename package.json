@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Playbook estatico BI/Fabric con PRD, Spec, roadmap, diccionario, librerias y atajos.",
+  "description": "Portal interno de Datalización YPF para automatizar procesos con PRD, Spec, roadmap, diccionario, BI/Fabric, librerías y atajos.",
   "scripts": {
     "dev": "node scripts/dev-server.mjs",
-    "build": "node scripts/validate-build.mjs",
-    "validate": "node scripts/validate-build.mjs"
+    "docs:modelos": "node scripts/generate-docx-models.mjs",
+    "build": "node scripts/generate-docx-models.mjs && node scripts/validate-build.mjs",
+    "validate": "node scripts/generate-docx-models.mjs && node scripts/validate-build.mjs"
+  },
+  "devDependencies": {
+    "docx": "^9.7.1"
   }
 }

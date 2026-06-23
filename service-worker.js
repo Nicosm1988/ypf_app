@@ -1,7 +1,8 @@
-const CACHE_NAME = "ypf-bi-playbook-v6";
+const CACHE_NAME = "datalizacion-ypf-v10";
 const PRECACHE_URLS = [
   "/",
   "/guia-power-bi",
+  "/metodologia",
   "/roadmap",
   "/proyecto-power-bi",
   "/atajos",
@@ -12,12 +13,17 @@ const PRECACHE_URLS = [
   "/app.js",
   "/data/dictionary.js",
   "/data/engineeringGuide.js",
+  "/data/methodology.js",
   "/data/roadmap.js",
   "/data/powerbiShortcuts.js",
   "/data/toolingLibrary.js",
   "/docs/librerias-agentes-mcp.md",
+  "/docs/modelos/prd-datalizacion.md",
+  "/docs/modelos/spec-datalizacion.md",
   "/manifest.webmanifest",
   "/assets/docs/atajos-power-bi.pdf",
+  "/assets/docs/modelos/prd-datalizacion.docx",
+  "/assets/docs/modelos/spec-datalizacion.docx",
   "/assets/favicon.svg",
   "/assets/energy-chain-v1-640.avif",
   "/assets/energy-chain-v1-960.avif",

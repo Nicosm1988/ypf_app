@@ -1,11 +1,11 @@
 {
-  "name": "YPF BI Playbook",
-  "short_name": "BI Playbook",
-  "description": "Playbook BI/Fabric con PRD, Spec, roadmap, diccionario, proyecto Power BI, librerias y atajos.",
+  "name": "Datalización YPF",
+  "short_name": "Datalización",
+  "description": "Portal interno de Datalización YPF para automatizar procesos con datos, metodología, reglas, gobierno, BI/Fabric y operación analítica.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f5f7f9",
+  "background_color": "#0e1218",
   "theme_color": "#102f44",
   "icons": [
     {

@@ -1,12 +1,12 @@
 export const toolingDocs = {
   source: "docs/librerias-agentes-mcp.md",
-  title: "Librerias, agentes y MCPs para proyectos BI/IA",
+  title: "Librerías, agentes y MCPs para proyectos BI/IA",
 };
 
 export const toolingGroups = [
   {
     group: "Bases de datos y almacenamiento",
-    description: "Motores transaccionales, analiticos, vectoriales y servicios cloud para persistencia, consulta y exploracion.",
+    description: "Motores transacciónales, analíticos, vectoriales y servicios cloud para persistencia, consulta y exploración.",
     items: [
       "PostgreSQL / CrystalDBA",
       "Qdrant",
@@ -52,7 +52,7 @@ export const toolingGroups = [
   },
   {
     group: "Desarrollo y control de versiones",
-    description: "Herramientas para programar, depurar, revisar cambios, documentar APIs y sostener delivery tecnico.",
+    description: "Herramientas para programar, depurar, revisar cambios, documentar APIs y sostener delivery técnico.",
     items: [
       "GitHub",
       "GitLab",
@@ -69,7 +69,7 @@ export const toolingGroups = [
   },
   {
     group: "Busqueda, web y scraping",
-    description: "Herramientas de navegacion, busqueda, automatizacion web y extraccion de informacion publica.",
+    description: "Herramientas de navegación, búsqueda, automatización web y extracción de información pública.",
     items: [
       "Puppeteer",
       "Playwright",
@@ -87,7 +87,7 @@ export const toolingGroups = [
   },
   {
     group: "Monitorizacion y observabilidad",
-    description: "Servicios para detectar errores, medir salud, alertar y operar soluciones en produccion.",
+    description: "Servicios para detectar errores, medir salud, alertar y operar soluciones en producción.",
     items: [
       "Sentry",
       "Grafana",
@@ -98,15 +98,15 @@ export const toolingGroups = [
     ],
   },
   {
-    group: "Productividad y colaboracion",
-    description: "Herramientas para requisitos, backlog, documentacion, coordinacion y rutinas del equipo.",
+    group: "Productividad y colaboración",
+    description: "Herramientas para requisitos, backlog, documentación, coordinacion y rutinas del equipo.",
     items: [
       "Slack",
       "Atlassian Jira",
       "Atlassian Confluence",
       "Linear",
       "Notion",
-      "Obsidian",
+      "Obsidían",
       "Apple Notes",
       "Todoist",
       "Google Drive",
@@ -132,7 +132,7 @@ export const toolingGroups = [
   },
   {
     group: "Agentes de IA e IDEs",
-    description: "Entornos que pueden consumir librerias, MCPs y contexto del repo para generar, refactorizar y verificar codigo.",
+    description: "Entornos que pueden consumir librerías, MCPs y contexto del repo para generar, refactorizar y verificar código.",
     items: [
       "Claude Code",
       "Aider",
@@ -155,8 +155,8 @@ export const toolingGroups = [
     ],
   },
   {
-    group: "Sandboxing y ejecucion aislada",
-    description: "Tecnologias para ejecutar codigo de agentes o usuarios con aislamiento fuerte y menor riesgo operativo.",
+    group: "Sandboxing y ejecución aislada",
+    description: "Tecnologías para ejecutar código de agentes o usuarios con aislamiento fuerte y menor riesgo operativo.",
     items: [
       "Firecracker",
       "gVisor",
@@ -173,7 +173,7 @@ export const toolingGroups = [
     ],
   },
   {
-    group: "Frameworks y librerias tradicionales",
+    group: "Frameworks y librerías tradicionales",
     description: "Frameworks de backend, frontend, ML y datos que suelen aparecer en specs, benchmarks o automatizaciones.",
     items: [
       "Spring Boot",

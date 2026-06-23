@@ -25,7 +25,7 @@ const mimeTypes = {
 function toSafePath(urlPathname) {
   const decoded = decodeURIComponent(urlPathname);
   const routePath = decoded.replace(/\/+$/, "") || "/";
-  const appRoutes = new Set(["/", "/guia-power-bi", "/diccionario", "/roadmap", "/proyecto-power-bi", "/atajos", "/librerias"]);
+  const appRoutes = new Set(["/", "/guia-power-bi", "/metodologia", "/diccionario", "/roadmap", "/proyecto-power-bi", "/atajos", "/librerias"]);
   if (appRoutes.has(routePath)) {
     return path.join(root, "index.html");
   }
@@ -58,5 +58,5 @@ const server = createServer(async (request, response) => {
 });
 
 server.listen(port, "127.0.0.1", () => {
-  console.log(`YPF BI Playbook running at http://127.0.0.1:${port}/`);
+  console.log(`Datalización YPF running at http://127.0.0.1:${port}/`);
 });

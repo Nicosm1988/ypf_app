@@ -1,12 +1,15 @@
-# YPF BI Playbook
+# Datalización YPF
 
-MVP web para un equipo BI con recursos de consulta y trabajo:
+Portal interno para el área de Datalización de YPF con recursos de consulta y trabajo.
 
-- Guia Power BI/Fabric para ordenar el ciclo completo desde PRD y Spec hasta operacion.
-- Diccionario BI para alinear conceptos de producto, datos, Power BI, Fabric, performance, gobierno y adopcion.
-- Roadmap BI estructurado en 9 gates de ingenieria: PRD/Spec, ETL, modelo, DAX, seguridad, UX, Fabric, CI/CD y operacion.
-- Proyecto de Power BI con Visual Studio para trabajar PRD, Spec, PBIP, TMDL, Git y documentacion con criterio.
-- Catalogo de librerias, agentes, MCPs y sandboxes guardado en documentacion local.
+Datalización es la práctica de automatizar procesos mediante datos confiables, reglas explícitas, acciones trazables y operación monitoreada.
+
+- Guía + roadmap BI/Fabric para ordenar el ciclo completo desde proceso y reglas hasta operación.
+- Metodología de mejora continua BI con OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, flujo continuo, SMED, Poka-Yoke y Kata.
+- Diccionario BI para alinear conceptos de automatización, datos, Power BI, Fabric, performance, gobierno y adopción.
+- Roadmap BI integrado en la guía, estructurado en 9 gates de ingeniería: PRD/Spec, datos/Power Query, modelado, DAX, seguridad/gobierno, UX/acción, versionado/aprobación, publicación y operación/mejora.
+- Proyecto de Power BI con Visual Studio para trabajar procesos, Spec, PBIP, TMDL, Git y documentación con criterio.
+- Catálogo de librerías, agentes, MCPs y sandboxes guardado en documentación local.
 - Atajos Power BI extraidos del PDF local del repo.
 
 La app es estatica, sin credenciales, sin datos sensibles y compatible con Vercel.
@@ -15,8 +18,9 @@ La app es estatica, sin credenciales, sin datos sensibles y compatible con Verce
 
 - HTML, CSS y JavaScript vanilla.
 - Modulos ES para separar datos de UI.
-- Contenido local editable en `data/dictionary.js`, `data/engineeringGuide.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
-- Documentacion tecnica en `docs/librerias-agentes-mcp.md`.
+- Contenido local editable en `data/dictionary.js`, `data/engineeringGuide.js`, `data/methodology.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
+- Documentación técnica en `docs/librerias-agentes-mcp.md`.
+- Modelos descargables en `docs/modelos/prd-datalizacion.md` y `docs/modelos/spec-datalizacion.md`.
 - Deploy estatico en Vercel.
 
 ## Correr localmente
@@ -35,6 +39,7 @@ El servidor local tambien soporta:
 
 ```text
 http://127.0.0.1:8001/guia-power-bi
+http://127.0.0.1:8001/metodologia
 http://127.0.0.1:8001/diccionario
 http://127.0.0.1:8001/roadmap
 http://127.0.0.1:8001/proyecto-power-bi
@@ -50,45 +55,46 @@ npm run build
 
 El build valida que:
 
-- Exista Home, Guia Power BI/Fabric, Diccionario BI, Roadmap BI, Proyecto Power BI, Librerias y Atajos.
-- El diccionario tenga al menos 65 terminos.
+- Exista Home, Guía Power BI/Fabric, Metodología, Diccionario BI, Roadmap BI, Proyecto Power BI, Librerías y Atajos.
+- El diccionario tenga al menos 65 términos.
 - El roadmap tenga los 9 gates obligatorios y arranque con PRD/Spec.
-- La guia tenga capitulos, comparacion PRD vs Spec y checklist de salida a produccion.
-- El catalogo tecnico tenga documentacion Markdown y familias de herramientas.
-- Los atajos tengan categorias e items navegables.
+- La guía tenga capítulos, comparacion PRD vs Spec y checklist de salida a producción.
+- La metodología tenga OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, SMED, Poka-Yoke, Kata y cadencias de operación.
+- El catálogo técnico tenga documentación Markdown y familias de herramientas.
+- Los atajos tengan categorías e items navegables.
 - Los datos tengan los campos requeridos.
-- Vercel tenga rewrites para `/guia-power-bi`, `/diccionario`, `/roadmap`, `/proyecto-power-bi`, `/librerias` y `/atajos`.
+- Vercel tenga rewrites para `/guia-power-bi`, `/metodologia`, `/diccionario`, `/roadmap`, `/proyecto-power-bi`, `/librerias` y `/atajos`.
 - Se genere `dist/` con las rutas estaticas listas para Vercel.
 
 ## Desplegar en Vercel
 
-El proyecto esta preparado para deploy estatico.
+El proyecto está preparado para deploy estatico.
 
-Si el proyecto ya esta linkeado a Vercel:
+Si el proyecto ya está linkeado a Vercel:
 
 ```bash
 vercel deploy --prod
 ```
 
-Si se despliega desde GitHub, Vercel puede publicar automaticamente cuando haya push a la rama configurada.
+Si se despliega desde GitHub, Vercel puede publicar automáticamente cuando haya push a la rama configurada.
 
-## Agregar terminos al diccionario
+## Agregar términos al diccionario
 
 Editar `data/dictionary.js` y agregar un objeto en `dictionaryTerms`:
 
 ```js
 {
-  id: "nuevo-termino",
-  term: "Nuevo termino",
+  id: "nuevo-término",
+  term: "Nuevo término",
   category: "Datos",
-  definition: "Definicion simple.",
-  whyItMatters: "Por que importa para el equipo.",
+  definition: "Definición simple.",
+  whyItMatters: "Por qué importa para el equipo.",
   example: "Ejemplo breve.",
   risk: "Riesgo de entenderlo mal."
 }
 ```
 
-Las categorias disponibles estan en `dictionaryCategories`.
+Las categorías disponibles estan en `dictionaryCategories`.
 
 ## Editar gates del roadmap
 
@@ -110,25 +116,38 @@ Cada gate debe mantener esta estructura:
 }
 ```
 
-El roadmap debe comenzar con PRD y Spec. PBIP/TMDL viven dentro del gate de CI/CD cuando el proyecto ya requiere modelo como codigo.
+El roadmap debe comenzar con PRD y Spec. La publicación productiva es un gate propio y ocurre después de versionado, pruebas y aprobación.
 
-## Editar guia Power BI/Fabric
+## Editar guía + roadmap Power BI/Fabric
 
 Editar `data/engineeringGuide.js`.
 
 - `prdSpecComparison`: tabla de comparacion entre PRD y Spec.
-- `guideSections`: capitulos de la guia.
-- `readinessChecklist`: checklist previo a produccion.
+- `guideSections`: capítulos de la guía.
+- `readinessChecklist`: checklist previo a producción.
 
-## Editar librerias, agentes y MCPs
+El flujo interactivo combina esos capítulos con los 9 gates de `data/roadmap.js`.
 
-Editar `data/toolingLibrary.js` para la version navegable y `docs/librerias-agentes-mcp.md` para la documentacion Markdown.
+## Editar metodología de mejora continua BI
+
+Editar `data/methodology.js`.
+
+- `oeeFactors`: disponibilidad, eficiencia y calidad traducidas al contexto BI.
+- `dmaicStages`: ciclo definir, medir, analizar, mejorar y controlar.
+- `methodologyTools`: ubicación de Lean Six Sigma, VSM, OEE BI, FMEA, VSM futuro y Kaizen/Kata.
+- `toyotaFourP`: filosofía, proceso, personas y resolución de problemas.
+- `leanPractices`: flujo continuo, SMED, Poka-Yoke, Kaizen y Kata.
+- `methodologyCadence`: rutina diaria, semanal, release y comité mensual.
+
+## Editar librerías, agentes y MCPs
+
+Editar `data/toolingLibrary.js` para la versión navegable y `docs/librerias-agentes-mcp.md` para la documentación Markdown.
 
 ## Editar atajos Power BI
 
-El PDF fuente esta en `assets/docs/atajos-power-bi.pdf`.
+El PDF fuente está en `assets/docs/atajos-power-bi.pdf`.
 
-El resumen navegable se edita en `data/powerbiShortcuts.js`, agrupando cada atajo por categoria:
+El resumen navegable se edita en `data/powerbiShortcuts.js`, agrupando cada atajo por categoría:
 
 ```js
 {
@@ -142,9 +161,9 @@ El resumen navegable se edita en `data/powerbiShortcuts.js`, agrupando cada ataj
 
 ## Seguridad
 
-No subir informacion confidencial, credenciales ni datos sensibles.
+No subir información confidencial, credenciales ni datos sensibles.
 
-No conectar esta version a sistemas internos, APIs privadas, tokens ni fuentes reales sin una revision de seguridad previa.
+No conectar esta versión a sistemas internos, APIs privadas, tokens ni fuentes reales sin una revisión de seguridad previa.
 
 ## Archivos principales
 
@@ -153,6 +172,7 @@ No conectar esta version a sistemas internos, APIs privadas, tokens ni fuentes r
 - `app.js`
 - `data/dictionary.js`
 - `data/engineeringGuide.js`
+- `data/methodology.js`
 - `data/roadmap.js`
 - `data/toolingLibrary.js`
 - `data/powerbiShortcuts.js`
