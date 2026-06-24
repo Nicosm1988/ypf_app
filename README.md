@@ -2,10 +2,11 @@
 
 Portal interno para el área de Datalización de YPF con recursos de consulta y trabajo.
 
-Datalización es la práctica de automatizar procesos mediante datos confiables, reglas explícitas, acciones trazables y operación monitoreada.
+Datalización es la práctica de automatizar procesos mediante datos confiables, reglas explícitas, acciones trazables y operación monitoreada. La web está replanteada con el Principio de la Pirámide de Barbara Minto: respuesta ejecutiva, tres razones, evidencia y acción.
 
 - Guía + roadmap BI/Fabric para ordenar el ciclo completo desde proceso y reglas hasta operación.
 - Metodología de mejora continua BI con OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, flujo continuo, SMED, Poka-Yoke y Kata.
+- Narrativa ejecutiva Minto en cada página para presentar primero la conclusión, luego los argumentos y finalmente la evidencia operativa.
 - Diccionario BI para alinear conceptos de automatización, datos, Power BI, Fabric, performance, gobierno y adopción.
 - Roadmap BI integrado en la guía, estructurado en 9 gates de ingeniería: PRD/Spec, datos/Power Query, modelado, DAX, seguridad/gobierno, UX/acción, versionado/aprobación, publicación y operación/mejora.
 - Proyecto de Power BI con Visual Studio para trabajar procesos, Spec, PBIP, TMDL, Git y documentación con criterio.
@@ -18,7 +19,7 @@ La app es estatica, sin credenciales, sin datos sensibles y compatible con Verce
 
 - HTML, CSS y JavaScript vanilla.
 - Modulos ES para separar datos de UI.
-- Contenido local editable en `data/dictionary.js`, `data/engineeringGuide.js`, `data/methodology.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
+- Contenido local editable en `data/dictionary.js`, `data/engineeringGuide.js`, `data/methodology.js`, `data/pyramidNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
 - Documentación técnica en `docs/librerias-agentes-mcp.md`.
 - Modelos descargables en `docs/modelos/prd-datalizacion.md` y `docs/modelos/spec-datalizacion.md`.
 - Deploy estatico en Vercel.
@@ -60,6 +61,7 @@ El build valida que:
 - El roadmap tenga los 9 gates obligatorios y arranque con PRD/Spec.
 - La guía tenga capítulos, comparacion PRD vs Spec y checklist de salida a producción.
 - La metodología tenga OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, SMED, Poka-Yoke, Kata y cadencias de operación.
+- Cada página principal tenga narrativa Minto con tesis, tres soportes y acción.
 - El catálogo técnico tenga documentación Markdown y familias de herramientas.
 - Los atajos tengan categorías e items navegables.
 - Los datos tengan los campos requeridos.
@@ -139,6 +141,14 @@ Editar `data/methodology.js`.
 - `leanPractices`: flujo continuo, SMED, Poka-Yoke, Kaizen y Kata.
 - `methodologyCadence`: rutina diaria, semanal, release y comité mensual.
 
+## Editar narrativa Minto
+
+Editar `data/pyramidNarrative.js`.
+
+- Cada página debe tener una tesis ejecutiva, un resumen, tres soportes MECE y una acción.
+- Los títulos deben funcionar como conclusiones, no como etiquetas decorativas.
+- No usar saltos de línea HTML forzados para construir sentido; el texto debe fluir correctamente con el wrap natural del navegador.
+
 ## Editar librerías, agentes y MCPs
 
 Editar `data/toolingLibrary.js` para la versión navegable y `docs/librerias-agentes-mcp.md` para la documentación Markdown.
@@ -173,6 +183,7 @@ No conectar esta versión a sistemas internos, APIs privadas, tokens ni fuentes 
 - `data/dictionary.js`
 - `data/engineeringGuide.js`
 - `data/methodology.js`
+- `data/pyramidNarrative.js`
 - `data/roadmap.js`
 - `data/toolingLibrary.js`
 - `data/powerbiShortcuts.js`

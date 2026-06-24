@@ -11,6 +11,7 @@ import {
   toyotaFourP,
 } from "../data/methodology.js";
 import { powerBiShortcuts, shortcutsPdf } from "../data/powerbiShortcuts.js";
+import { pageNarratives } from "../data/pyramidNarrative.js";
 import { roadmapPhases } from "../data/roadmap.js";
 import { toolingDocs, toolingGroups } from "../data/toolingLibrary.js";
 
@@ -48,6 +49,7 @@ assert(indexHtml.includes("Datalización YPF"), "index.html debe exponer el nomb
 assert(indexHtml.includes('type="module" src="/app.js"'), "index.html debe cargar app.js como modulo.");
 assert(appJs.includes("renderDictionaryPage"), "app.js debe renderizar el diccionario.");
 assert(appJs.includes("renderMethodologyPage"), "app.js debe renderizar la metodología.");
+assert(appJs.includes("renderPyramidBrief"), "app.js debe renderizar la estructura ejecutiva Minto.");
 assert(appJs.includes("renderRoadmapPage"), "app.js debe renderizar el roadmap.");
 assert(appJs.includes("renderGuidePage"), "app.js debe renderizar la guía Power BI/Fabric.");
 assert(appJs.includes("renderProjectPage"), "app.js debe renderizar el proyecto Power BI.");
@@ -78,6 +80,14 @@ assert(methodologyTools.length >= 6, "La metodología debe ubicar Lean Six Sigma
 assert(toyotaFourP.length === 4, "La metodología debe incluir las 4P de Toyota.");
 assert(leanPractices.length >= 5, "La metodología debe cubrir flujo continuo, SMED, Poka-Yoke, Kaizen y Kata.");
 assert(methodologyCadence.length >= 4, "La metodología debe incluir cadencias de operación.");
+
+const requiredNarratives = ["home", "guide", "methodology", "project", "dictionary", "tooling", "shortcuts"];
+assert(requiredNarratives.every((key) => pageNarratives[key]), "Todas las páginas principales deben tener narrativa Minto.");
+assert(
+  requiredNarratives.every((key) => pageNarratives[key].title && pageNarratives[key].summary && pageNarratives[key].support.length === 3 && pageNarratives[key].action),
+  "Cada narrativa Minto debe incluir tesis, resumen, tres soportes y acción.",
+);
+assert(!appJs.includes("<br"), "La UI no debe depender de saltos de línea HTML forzados.");
 
 assert(toolingDocs.source === "docs/librerias-agentes-mcp.md", "El catálogo técnico debe apuntar a la documentación Markdown.");
 assert(toolingGroups.length >= 10, "El catálogo técnico debe incluir las familias principales.");

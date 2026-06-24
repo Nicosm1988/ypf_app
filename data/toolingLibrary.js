@@ -1,12 +1,12 @@
 export const toolingDocs = {
   source: "docs/librerias-agentes-mcp.md",
-  title: "Librerías, agentes y MCPs para proyectos BI/IA",
+  title: "Capacidades técnicas para automatizaciones BI/IA",
 };
 
 export const toolingGroups = [
   {
     group: "Bases de datos y almacenamiento",
-    description: "Motores transacciónales, analíticos, vectoriales y servicios cloud para persistencia, consulta y exploración.",
+    description: "Se eligen cuando la decisión requiere una fuente persistente, consultable, gobernable o preparada para exploración analítica.",
     items: [
       "PostgreSQL / CrystalDBA",
       "Qdrant",
@@ -30,7 +30,7 @@ export const toolingGroups = [
   },
   {
     group: "Infraestructura, nube y despliegue",
-    description: "Plataformas para ejecutar, escalar, desplegar y operar workloads de datos, aplicaciones y agentes.",
+    description: "Se incorporan cuando la solución debe ejecutar, escalar, aislar o desplegar workloads con control productivo.",
     items: [
       "Kubernetes",
       "AWS MCP",
@@ -52,7 +52,7 @@ export const toolingGroups = [
   },
   {
     group: "Desarrollo y control de versiones",
-    description: "Herramientas para programar, depurar, revisar cambios, documentar APIs y sostener delivery técnico.",
+    description: "Aportan trazabilidad cuando el equipo necesita programar, depurar, revisar cambios y documentar contratos técnicos.",
     items: [
       "GitHub",
       "GitLab",
@@ -69,7 +69,7 @@ export const toolingGroups = [
   },
   {
     group: "Busqueda, web y scraping",
-    description: "Herramientas de navegación, búsqueda, automatización web y extracción de información pública.",
+    description: "Sirven cuando el proceso necesita buscar, navegar, validar o extraer información externa de forma controlada.",
     items: [
       "Puppeteer",
       "Playwright",
@@ -87,7 +87,7 @@ export const toolingGroups = [
   },
   {
     group: "Monitorizacion y observabilidad",
-    description: "Servicios para detectar errores, medir salud, alertar y operar soluciones en producción.",
+    description: "Permiten detectar errores, medir salud, alertar y operar soluciones con responsables claros.",
     items: [
       "Sentry",
       "Grafana",
@@ -99,7 +99,7 @@ export const toolingGroups = [
   },
   {
     group: "Productividad y colaboración",
-    description: "Herramientas para requisitos, backlog, documentación, coordinacion y rutinas del equipo.",
+    description: "Sostienen requisitos, backlog, documentación, coordinación y memoria de decisiones del equipo.",
     items: [
       "Slack",
       "Atlassian Jira",
@@ -116,7 +116,7 @@ export const toolingGroups = [
   },
   {
     group: "IA, machine learning y APIs externas",
-    description: "Modelos, APIs y plataformas para agentes, ML, pagos, finanzas y capacidades externas.",
+    description: "Se usan cuando modelos, APIs o plataformas externas agregan lectura, recomendación, generación o integración útil.",
     items: [
       "OpenAI",
       "Perplexity",
@@ -132,7 +132,7 @@ export const toolingGroups = [
   },
   {
     group: "Agentes de IA e IDEs",
-    description: "Entornos que pueden consumir librerías, MCPs y contexto del repo para generar, refactorizar y verificar código.",
+    description: "Aceleran generación, refactorización y verificación cuando trabajan con contexto del repositorio y revisión humana.",
     items: [
       "Claude Code",
       "Aider",
@@ -156,7 +156,7 @@ export const toolingGroups = [
   },
   {
     group: "Sandboxing y ejecución aislada",
-    description: "Tecnologías para ejecutar código de agentes o usuarios con aislamiento fuerte y menor riesgo operativo.",
+    description: "Reducen riesgo cuando código, agentes o pruebas deben ejecutarse aislados de sistemas productivos.",
     items: [
       "Firecracker",
       "gVisor",
@@ -174,7 +174,7 @@ export const toolingGroups = [
   },
   {
     group: "Frameworks y librerías tradicionales",
-    description: "Frameworks de backend, frontend, ML y datos que suelen aparecer en specs, benchmarks o automatizaciones.",
+    description: "Resuelven componentes específicos de backend, frontend, ML o datos cuando el alcance supera a Power BI o Fabric.",
     items: [
       "Spring Boot",
       "Spring Data JPA",

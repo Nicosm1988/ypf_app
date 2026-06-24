@@ -1,5 +1,5 @@
 export const shortcutsPdf = {
-  title: "Atajos de teclado Power BI",
+  title: "Atajos que reducen fricción en Power BI",
   source: "assets/docs/atajos-power-bi.pdf",
   pages: 14,
 };
@@ -7,14 +7,14 @@ export const shortcutsPdf = {
 export const powerBiShortcuts = [
   {
     category: "Antes de empezar",
-    intro: "El punto de partida: Power BI Desktop muestra el panel completo de atajos.",
+    intro: "La primera decisión es conocer el panel oficial y elegir pocos atajos con impacto diario.",
     items: [
       { action: "Abrir ayuda de atajos", keys: ["Mayus", "?"] },
     ],
   },
   {
     category: "Uso frecuente",
-    intro: "Para navegar sin perder el foco entre secciones, objetos y cinta.",
+    intro: "Estos atajos protegen el foco porque reducen cambios de contexto entre secciones, objetos y cinta.",
     items: [
       { action: "Mover el foco entre secciones", keys: ["Ctrl", "F6"] },
       { action: "Enfocar hacia adelante", keys: ["Tab"] },
@@ -26,7 +26,7 @@ export const powerBiShortcuts = [
   },
   {
     category: "Objeto visual",
-    intro: "Atajos útiles para entrar, revisar datos y salir de un visual sin tocar el mouse.",
+    intro: "La prioridad es revisar evidencia dentro del visual sin romper el flujo de análisis.",
     items: [
       { action: "Abrir menú del visual", keys: ["Alt", "Mayus", "F10"] },
       { action: "Mostrar datos", keys: ["Alt", "Mayus", "F11"] },
@@ -40,7 +40,7 @@ export const powerBiShortcuts = [
   },
   {
     category: "Modo edición",
-    intro: "Para mover, ordenar y redimensionar visuales mientras se construye el informe.",
+    intro: "La edición gana precisión cuando mover, ordenar y redimensionar no depende de microajustes manuales.",
     items: [
       { action: "Mover un visual paso pequeño", keys: ["↑", "↓", "←", "→"] },
       { action: "Mover un visual paso grande", keys: ["Mayus", "↑/↓/←/→"] },
@@ -51,7 +51,7 @@ export const powerBiShortcuts = [
   },
   {
     category: "Tablas",
-    intro: "Navegación fina para recorrer celdas, filas y vínculos dentro de tablas.",
+    intro: "La navegación fina evita errores cuando el análisis depende de celdas, filas y vínculos.",
     items: [
       { action: "Mover el foco una celda", keys: ["↑", "↓", "←", "→"] },
       { action: "Ir a última celda de la fila", keys: ["Ctrl", "→"] },
@@ -66,7 +66,7 @@ export const powerBiShortcuts = [
   },
   {
     category: "Matrices y panel de campos",
-    intro: "Para expandir, contraer y seleccionar elementos del panel sin perder velocidad.",
+    intro: "Expandir, contraer y seleccionar con teclado acelera modelos con muchas tablas y jerarquías.",
     items: [
       { action: "Expandir matriz", keys: ["Mayus", "→"] },
       { action: "Contraer matriz", keys: ["Mayus", "←"] },
@@ -79,7 +79,7 @@ export const powerBiShortcuts = [
   },
   {
     category: "Lienzo",
-    intro: "Zoom y desplazamiento para revisar páginas grandes sin depender del mouse.",
+    intro: "Zoom y desplazamiento sostienen la revisión de páginas grandes sin interrumpir la lectura.",
     items: [
       { action: "Acercar el lienzo", keys: ["Ctrl", "+"] },
       { action: "Alejar el lienzo", keys: ["Ctrl", "-"] },
@@ -92,7 +92,7 @@ export const powerBiShortcuts = [
   },
   {
     category: "Segmentación",
-    intro: "Para operar slicers, moverse por opciones y abrir el menú contextual.",
+    intro: "Los slicers deben operarse con precisión porque cambian el contexto de decisión.",
     items: [
       { action: "Interactuar con la segmentación", keys: ["Enter"] },
       { action: "Mover entre elementos del menú", keys: ["↑", "↓"] },
@@ -104,7 +104,7 @@ export const powerBiShortcuts = [
   },
   {
     category: "Panel de selección",
-    intro: "Para ordenar capas y mostrar u ocultar elementos del informe sin tocar el mouse.",
+    intro: "El panel de selección controla capas, visibilidad y orden cuando el informe empieza a crecer.",
     items: [
       { action: "Activar panel de selección", keys: ["F6"] },
       { action: "Subir un objeto en las capas", keys: ["Ctrl", "Mayus", "F"] },
@@ -114,7 +114,7 @@ export const powerBiShortcuts = [
   },
   {
     category: "Barra DAX",
-    intro: "La barra de fórmulas se puede usar como editor: seleccionar, comentar, mover líneas y pedir sugerencias.",
+    intro: "La barra DAX gana velocidad cuando se trata como editor y no como campo de texto ocasional.",
     items: [
       { action: "Enviar fórmula", keys: ["Ctrl", "Enter"] },
       { action: "Subir o bajar línea actual", keys: ["Alt", "↑/↓"] },
@@ -133,7 +133,7 @@ export const powerBiShortcuts = [
   },
   {
     category: "Vista de modelo",
-    intro: "Para navegar relaciones y propiedades del modelo sin levantar las manos del teclado.",
+    intro: "La vista de modelo exige concentración; navegar relaciones con teclado reduce fricción técnica.",
     items: [
       { action: "Foco a la primera tarjeta", keys: ["Tab"] },
       { action: "Tarjeta siguiente", keys: ["Tab", "↓"] },

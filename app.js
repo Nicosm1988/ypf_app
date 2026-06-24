@@ -10,6 +10,7 @@ import {
   toyotaFourP,
 } from "./data/methodology.js";
 import { powerBiShortcuts, shortcutsPdf } from "./data/powerbiShortcuts.js";
+import { mintoPrinciples, pageNarratives } from "./data/pyramidNarrative.js";
 import { laneStyles, roadmapPhases } from "./data/roadmap.js";
 import { toolingDocs, toolingGroups } from "./data/toolingLibrary.js";
 
@@ -752,6 +753,8 @@ const interactiveSurfaceSelector = [
   ".feature-card",
   ".datalization-card",
   ".datalization-level",
+  ".pyramid-brief",
+  ".pyramid-support-card",
   ".workflow-lab",
   ".workflow-case",
   ".workflow-node-card",
@@ -1033,12 +1036,8 @@ function renderHomePage() {
           <div class="hero-copy">
             <span class="eyebrow">Automatización operativa</span>
             <h1>Datalización YPF</h1>
-            <p class="hero-kicker">Automatizar procesos con datos confiables.</p>
-            <p class="hero-text">
-              Datalizar es convertir procesos manuales o fragmentados en flujos automatizados:
-              datos confiables, reglas explícitas, disparadores, controles, acciones trazables y mejora continua.
-              El objetivo no es tener más reportes; es que la operación trabaje mejor y con menos retrabajo.
-            </p>
+            <p class="hero-kicker">La datalización convierte procesos manuales en decisiones trazables, controladas y medibles.</p>
+            <p class="hero-text">La conclusión ejecutiva es simple: el equipo no necesita más reportes aislados, sino un sistema de trabajo que conecte proceso, reglas, datos, acción, gobierno y mejora continua.</p>
             <div class="hero-actions">
               <a class="button" href="/roadmap" data-route>
                 ${icon("route")}
@@ -1064,8 +1063,10 @@ function renderHomePage() {
 
       <section class="quote-band page-inner">
         ${icon("quote")}
-        <strong>Datalizar es automatizar procesos: capturar datos, aplicar reglas, disparar acciones y medir resultados.</strong>
+        <strong>La respuesta va primero: datalizar es automatizar decisiones operativas con evidencia confiable y control sostenido.</strong>
       </section>
+
+      ${renderPyramidBrief(pageNarratives.home)}
 
       ${renderDatalizationDefinition()}
 
@@ -1074,15 +1075,15 @@ function renderHomePage() {
       <div class="section-title page-inner">
         <div>
           <h2>Recursos principales</h2>
-          <p>Entradas directas para diseñar, construir, gobernar y operar procesos automatizados con BI, Fabric y datos confiables.</p>
+          <p>Cada sección responde una decisión del sistema: qué mejorar, cómo medirlo, cómo construirlo, cómo gobernarlo y cómo sostenerlo.</p>
         </div>
       </div>
 
       <section class="feature-grid page-inner" aria-label="Secciones principales">
         <article class="feature-card">
           <span class="feature-icon">${icon("layers")}</span>
-          <h3>Guía + roadmap de automatización</h3>
-          <p>Flujo técnico para automatizar procesos: PRD, datos, modelado, DAX, seguridad, UX, aprobación, publicación y operación.</p>
+          <h3>La guía ordena la decisión</h3>
+          <p>Convierte PRD, datos, modelo, DAX, seguridad, UX, aprobación y operación en gates con evidencia verificable.</p>
           <a class="button small secondary" href="/guia-power-bi" data-route>
             Ver flujo
             ${icon("arrowRight")}
@@ -1090,8 +1091,8 @@ function renderHomePage() {
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("gauge")}</span>
-          <h3>Metodología de mejora BI</h3>
-          <p>OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata integrados al trabajo diario.</p>
+          <h3>La metodología explica la pérdida</h3>
+          <p>OEE BI, DMAIC, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata se usan para medir, mejorar y controlar.</p>
           <a class="button small secondary" href="/metodologia" data-route>
             Ver metodología
             ${icon("arrowRight")}
@@ -1099,8 +1100,8 @@ function renderHomePage() {
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("book")}</span>
-          <h3>Diccionario de automatización</h3>
-          <p>Conceptos clave para alinear procesos, reglas, datos, Fabric, Power BI, gobierno y operación.</p>
+          <h3>El diccionario fija lenguaje</h3>
+          <p>Define conceptos críticos para que negocio, datos, BI y operación decidan con el mismo criterio.</p>
           <a class="button small secondary" href="/diccionario" data-route>
             Explorar diccionario
             ${icon("arrowRight")}
@@ -1108,8 +1109,8 @@ function renderHomePage() {
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("route")}</span>
-          <h3>Modelos PRD y Spec</h3>
-          <p>Plantillas descargables para alinear el proceso y convertirlo en una implementación técnica revisable.</p>
+          <h3>Los modelos fijan contrato</h3>
+          <p>PRD y Spec separan la pregunta ejecutiva de la implementación técnica para reducir ambigüedad.</p>
           <a class="button small secondary" href="/guia-power-bi" data-route>
             Ver modelos
             ${icon("arrowRight")}
@@ -1117,8 +1118,8 @@ function renderHomePage() {
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("code")}</span>
-          <h3>Proyecto automatizable</h3>
-          <p>Estructura de proyecto con proceso, reglas, Spec, PBIP, TMDL, Git, documentación y scripts.</p>
+          <h3>El proyecto vuelve revisable la solución</h3>
+          <p>PBIP, TMDL, Git, documentación y scripts transforman la automatización en un activo controlado.</p>
           <a class="button small secondary" href="/proyecto-power-bi" data-route>
             Ver proyecto
             ${icon("arrowRight")}
@@ -1126,8 +1127,8 @@ function renderHomePage() {
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("folder")}</span>
-          <h3>Herramientas para automatizar</h3>
-          <p>Inventario documentado de MCPs, bases, cloud, agentes, sandboxes, APIs y frameworks para automatizaciones futuras.</p>
+          <h3>Las herramientas reducen riesgo</h3>
+          <p>MCPs, agentes, bases, cloud, sandboxes y APIs se seleccionan por valor operativo, seguridad y control.</p>
           <a class="button small secondary" href="/librerias" data-route>
             Ver librerías
             ${icon("arrowRight")}
@@ -1135,8 +1136,8 @@ function renderHomePage() {
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("terminal")}</span>
-          <h3>Atajos Power BI</h3>
-          <p>Resumen navegable de atajos del PDF subido al repo para trabajar más rápido en Desktop.</p>
+          <h3>Los atajos eliminan fricción diaria</h3>
+          <p>El resumen prioriza acciones repetidas de Power BI que ahorran foco, tiempo y errores.</p>
           <a class="button small secondary" href="/atajos" data-route>
             Ver atajos
             ${icon("arrowRight")}
@@ -1147,18 +1148,15 @@ function renderHomePage() {
       <section class="story-band">
         <div class="page-inner story-content">
           <span class="eyebrow">procesos que operan mejor</span>
-          <h2>De tareas manuales a procesos automatizados, trazables y medibles.</h2>
-          <p>
-            La diferencia está en identificar el proceso, explicitar reglas, gobernar datos,
-            disparar acciones y operar cada automatización con responsables, métricas e incidentes.
-          </p>
+          <h2>La mejora se demuestra cuando la operación decide mejor con menos retrabajo.</h2>
+          <p>La evidencia no está en la cantidad de páginas publicadas, sino en procesos con reglas explícitas, datos gobernados, responsables, métricas e incidentes controlados.</p>
         </div>
       </section>
 
       <div class="section-title page-inner">
         <div>
-          <h2>Madurez de automatización</h2>
-          <p>El roadmap arranca con el proceso y avanza por arquitectura, datos, modelo, reglas, confianza, experiencia, release y operación.</p>
+          <h2>La madurez avanza cuando cada gate deja una evidencia más fuerte.</h2>
+          <p>El recorrido empieza en el proceso, pasa por datos, modelo, reglas, confianza y experiencia, y termina en release, operación y mejora continua.</p>
         </div>
       </div>
 
@@ -1186,13 +1184,8 @@ function renderDatalizationDefinition() {
     <section class="datalization-section page-inner" aria-labelledby="datalizationTitle">
       <div class="datalization-copy">
         <span class="flow-chip">qué es datalizar</span>
-        <h2 id="datalizationTitle">Datalizar es automatizar procesos con datos gobernados.</h2>
-        <p>
-          Un proyecto está datalizado cuando un proceso de negocio deja de depender de tareas manuales,
-          planillas aisladas o interpretaciones individuales, y pasa a ejecutarse con datos confiables,
-          reglas explícitas, disparadores, acciones trazables y operación monitoreada. No alcanza con
-          mostrar información: la automatización debe reducir retrabajo, acelerar decisiones y dejar evidencia.
-        </p>
+        <h2 id="datalizationTitle">Un proceso está datalizado cuando decide y se controla con evidencia.</h2>
+        <p>Un proyecto alcanza datalización real cuando deja de depender de planillas aisladas, tareas manuales o criterios individuales, y pasa a operar con datos confiables, reglas explícitas, disparadores, acciones trazables, responsables y monitoreo continuo.</p>
       </div>
 
       <div class="datalization-grid" aria-label="Condiciones de datalización completa">
@@ -1231,6 +1224,37 @@ function renderDatalizationDefinition() {
   `;
 }
 
+function renderPyramidBrief(narrative, variant = "") {
+  if (!narrative) return "";
+
+  return `
+    <section class="pyramid-brief page-inner ${variant}" aria-label="Estructura ejecutiva Minto">
+      <div class="pyramid-answer">
+        <span class="flow-chip">${escapeHtml(narrative.eyebrow)}</span>
+        <h2>${escapeHtml(narrative.title)}</h2>
+        <p>${escapeHtml(narrative.summary)}</p>
+      </div>
+      <div class="pyramid-support" aria-label="Razones principales">
+        ${narrative.support
+          .map(
+            (item, index) => `
+              <article class="pyramid-support-card">
+                <span>${index + 1}</span>
+                <h3>${escapeHtml(item.title)}</h3>
+                <p>${escapeHtml(item.text)}</p>
+              </article>
+            `,
+          )
+          .join("")}
+      </div>
+      <div class="pyramid-action">
+        <strong>${escapeHtml(mintoPrinciples.author)}</strong>
+        <p>${escapeHtml(narrative.action)}</p>
+      </div>
+    </section>
+  `;
+}
+
 function renderWorkflowLab() {
   return `
     <section class="workflow-lab page-inner" aria-label="Flujo operativo de datalización">
@@ -1238,11 +1262,8 @@ function renderWorkflowLab() {
         <div class="workflow-board-head">
           <div>
             <span class="flow-chip">flujo de automatización</span>
-            <h2>Mapa de transformación: de tarea manual a automatización real.</h2>
-            <p>
-              Esta sección muestra qué debe cambiar para que un trabajo deje de ser seguimiento manual
-              y pase a operar como sistema: proceso, reglas, datos, motor, acción, orquestación y mejora.
-            </p>
+            <h2>La transformación ocurre cuando cada paso responde una pregunta ejecutiva.</h2>
+            <p>El flujo muestra cómo una tarea manual se convierte en sistema: primero se entiende el proceso, luego se fijan reglas y datos, después se automatiza la acción y finalmente se controla la mejora.</p>
           </div>
           <div class="workflow-lanes" aria-label="Carriles del flujo">
             <span>Proceso</span>
@@ -1303,8 +1324,8 @@ function renderWorkflowLab() {
         <div class="workflow-output">
           <span>${icon("spark")}</span>
           <div>
-            <strong>Qué se quiere contar</strong>
-            <p>Un reporte informa; una automatización toma una señal, aplica reglas, dispara una acción, registra evidencia y permite mejorar el proceso.</p>
+            <strong>Conclusión operativa</strong>
+            <p>Un reporte informa, pero una automatización toma una señal, aplica reglas, dispara una acción, registra evidencia y permite mejorar el proceso.</p>
           </div>
         </div>
       </div>
@@ -1348,24 +1369,17 @@ function renderMethodologyPage() {
     <section class="page tool-page methodology-page">
       <header class="page-heading page-inner methodology-hero">
         <span class="eyebrow">Metodología operativa</span>
-        <h1>Mejora continua aplicada a BI</h1>
-        <p class="lede">
-          Un marco para presentar a nivel gerencial y usar en la rutina diaria: OEE BI para medir
-          efectividad, DMAIC para ordenar el ciclo de mejora y herramientas Lean Six Sigma ubicadas
-          donde realmente agregan valor.
-        </p>
+        <h1>Pérdida, causa y control.</h1>
+        <p class="lede">La metodología queda presentada con lógica Minto: OEE BI cuantifica la efectividad, DMAIC ordena la intervención y Lean Six Sigma aporta herramientas solo cuando resuelven una pérdida concreta.</p>
       </header>
+
+      ${renderPyramidBrief(pageNarratives.methodology)}
 
       <section class="methodology-intro page-inner" aria-labelledby="methodologyIntroTitle">
         <div class="methodology-intro-copy">
           <span class="flow-chip">encuadre</span>
-          <h2 id="methodologyIntroTitle">No es un glosario de métodos. Es un sistema de gestión para productos BI.</h2>
-          <p>
-            La metodología entra en la página para responder una pregunta concreta: cómo sabemos que una
-            automatización BI mejora el proceso, se sostiene en producción y aprende con evidencia.
-            Por eso cada concepto se conecta con un momento del trabajo: definir, medir, analizar,
-            mejorar o controlar.
-          </p>
+          <h2 id="methodologyIntroTitle">La metodología sirve si convierte pérdida en decisión y decisión en control.</h2>
+          <p>La pregunta central es cómo sabemos que una automatización BI mejora el proceso, se sostiene en producción y aprende con evidencia; por eso cada concepto se conecta con un momento del trabajo: definir, medir, analizar, mejorar o controlar.</p>
         </div>
         <div class="methodology-principles" aria-label="Usos del marco metodológico">
           ${methodologyPrinciples.map(renderMethodologyPrinciple).join("")}
@@ -1375,12 +1389,8 @@ function renderMethodologyPage() {
       <section class="oee-section page-inner" aria-labelledby="oeeTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">OEE BI</span>
-          <h2 id="oeeTitle">Overall Equipment Effectiveness traducido a efectividad analítica.</h2>
-          <p>
-            En planta, OEE combina disponibilidad, rendimiento y calidad. En un equipo BI, el mismo
-            razonamiento sirve para medir si la solución está disponible, fluye con eficiencia y produce
-            salidas confiables para operar.
-          </p>
+          <h2 id="oeeTitle">OEE BI muestra dónde se pierde efectividad analítica.</h2>
+          <p>En planta, OEE combina disponibilidad, rendimiento y calidad; en un equipo BI, el mismo razonamiento mide si la solución está disponible, fluye con eficiencia y produce salidas confiables para operar.</p>
         </div>
         <div class="oee-formula" aria-label="Fórmula OEE BI">
           <strong>OEE BI</strong>
@@ -1398,12 +1408,8 @@ function renderMethodologyPage() {
       <section class="dmaic-section page-inner" aria-labelledby="dmaicTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">DMAIC</span>
-          <h2 id="dmaicTitle">El ciclo que evita construir sin aprender.</h2>
-          <p>
-            DMAIC ordena el flujo de mejora: primero se define el proceso, después se mide la pérdida,
-            se analiza la causa, se mejora el diseño y finalmente se controla la operación para no volver
-            al circuito manual.
-          </p>
+          <h2 id="dmaicTitle">DMAIC evita saltar del síntoma a la solución.</h2>
+          <p>DMAIC ordena el flujo de mejora: primero se define el proceso, después se mide la pérdida, se analiza la causa, se mejora el diseño y finalmente se controla la operación para no volver al circuito manual.</p>
         </div>
         <div class="dmaic-track" aria-label="Ciclo DMAIC aplicado a BI">
           ${dmaicStages.map(renderDmaicStage).join("")}
@@ -1413,12 +1419,8 @@ function renderMethodologyPage() {
       <section class="methodology-toolchain page-inner" aria-labelledby="toolchainTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">herramientas ubicadas</span>
-          <h2 id="toolchainTitle">Cada herramienta entra cuando responde una pregunta del proceso.</h2>
-          <p>
-            El criterio es simple: si no ayuda a decidir, medir, reducir riesgo o sostener la mejora,
-            no se fuerza. Así Lean Six Sigma, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata quedan integrados
-            al trabajo real del equipo.
-          </p>
+          <h2 id="toolchainTitle">Cada herramienta se justifica por la pregunta que responde.</h2>
+          <p>Si una herramienta no ayuda a decidir, medir, reducir riesgo o sostener la mejora, no se fuerza; así Lean Six Sigma, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata quedan integrados al trabajo real del equipo.</p>
         </div>
         <div class="methodology-tool-grid">
           ${methodologyTools.map(renderMethodologyTool).join("")}
@@ -1428,11 +1430,8 @@ function renderMethodologyPage() {
       <section class="toyota-section page-inner" aria-labelledby="toyotaTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">4P Toyota</span>
-          <h2 id="toyotaTitle">Una lectura de gestión para sostener la datalización.</h2>
-          <p>
-            Las 4P ayudan a que la conversación no quede atrapada en la herramienta. Primero se define
-            el propósito, luego el flujo, después los roles y finalmente la rutina de resolución de problemas.
-          </p>
+          <h2 id="toyotaTitle">Las 4P evitan que la conversación quede atrapada en la herramienta.</h2>
+          <p>Primero se define el propósito, luego el flujo, después los roles y finalmente la rutina de resolución de problemas; esa secuencia sostiene la datalización como sistema de gestión.</p>
         </div>
         <div class="toyota-layers" aria-label="Cuatro P de Toyota aplicadas a BI">
           ${toyotaFourP.map(renderToyotaLayer).join("")}
@@ -1442,11 +1441,8 @@ function renderMethodologyPage() {
       <section class="lean-practices-section page-inner" aria-labelledby="leanPracticesTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">patrones de mejora</span>
-          <h2 id="leanPracticesTitle">Prácticas que se traducen en decisiones de diseño BI.</h2>
-          <p>
-            Estas prácticas no aparecen como teoría separada: se convierten en requisitos de UX, controles
-            de datos, reglas de publicación, diseño de flujo y cadencia de operación.
-          </p>
+          <h2 id="leanPracticesTitle">Las prácticas Lean se vuelven útiles cuando cambian el diseño BI.</h2>
+          <p>Estas prácticas no aparecen como teoría separada: se convierten en requisitos de UX, controles de datos, reglas de publicación, diseño de flujo y cadencia de operación.</p>
         </div>
         <div class="lean-practice-grid">
           ${leanPractices.map(renderLeanPractice).join("")}
@@ -1456,11 +1452,8 @@ function renderMethodologyPage() {
       <section class="methodology-cadence page-inner" aria-labelledby="cadenceTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">operación diaria</span>
-          <h2 id="cadenceTitle">La metodología se vuelve útil cuando entra en la agenda del equipo.</h2>
-          <p>
-            El marco se sostiene con una cadencia liviana: salud diaria, Kaizen semanal, gate de release
-            y revisión mensual de efectividad. Esa rutina conecta gerencia, ingeniería y usuarios.
-          </p>
+          <h2 id="cadenceTitle">La metodología se sostiene cuando entra en la agenda del equipo.</h2>
+          <p>El marco se mantiene con una cadencia liviana: salud diaria, Kaizen semanal, gate de release y revisión mensual de efectividad. Esa rutina conecta gerencia, ingeniería y usuarios.</p>
         </div>
         <div class="cadence-grid">
           ${methodologyCadence.map(renderCadenceItem).join("")}
@@ -1471,11 +1464,7 @@ function renderMethodologyPage() {
         <div>
           <span class="eyebrow">criterio de uso</span>
           <h2>La metodología se aplica por problema, no por moda.</h2>
-          <p>
-            OEE BI muestra dónde se pierde efectividad. DMAIC ordena cómo intervenir. VSM, FMEA,
-            Kaizen, SMED, Poka-Yoke, Kata y 4P Toyota se eligen según la pérdida detectada y el momento
-            del proyecto. Ese es el hilo conductor para una presentación gerencial y para el trabajo diario.
-          </p>
+          <p>OEE BI muestra dónde se pierde efectividad. DMAIC ordena cómo intervenir. VSM, FMEA, Kaizen, SMED, Poka-Yoke, Kata y 4P Toyota se eligen según la pérdida detectada y el momento del proyecto.</p>
         </div>
         <a class="button secondary" href="/guia-power-bi" data-route>
           ${icon("route")}
@@ -1592,9 +1581,11 @@ function renderDictionaryPage() {
     <section class="page tool-page dictionary-layout">
       <header class="page-heading page-inner">
         <span class="eyebrow">Glosario operativo</span>
-        <h1>Diccionario BI</h1>
-        <p class="lede">Conceptos esenciales para hablar el mismo idioma entre negocio, datos y Power BI.</p>
+        <h1>Lenguaje común, menor riesgo.</h1>
+        <p class="lede">Cada término define una decisión, explica por qué importa, muestra un ejemplo y advierte el riesgo de interpretarlo mal.</p>
       </header>
+
+      ${renderPyramidBrief(pageNarratives.dictionary)}
 
       <section class="control-panel page-inner" aria-label="Filtros del diccionario">
         <div class="search-row">
@@ -1655,24 +1646,17 @@ function renderGuidePage() {
     <section class="page tool-page guide-story-page">
       <header class="page-heading page-inner guide-story-hero">
         <span class="eyebrow">Guía y roadmap de automatización BI/Fabric</span>
-        <h1>De proceso manual a automatización operativa</h1>
-        <p class="lede">
-          Una sola experiencia para entender, diseñar y gobernar la datalización: arriba, el flujo
-          operativo con gates clickeables; abajo, la historia completa de cómo una necesidad se convierte
-          en una automatización trazable, monitoreada y lista para mejorar.
-        </p>
+        <h1>Evidencia de control BI.</h1>
+        <p class="lede">La guía presenta la respuesta antes del detalle: cada gate existe para demostrar que el proceso puede avanzar con evidencia, responsabilidad y control operativo.</p>
       </header>
+
+      ${renderPyramidBrief(pageNarratives.guide)}
 
       <section class="guide-story-intro page-inner" aria-labelledby="guideStoryTitle">
         <div class="guide-story-copy">
           <span class="flow-chip">tesis de la guía</span>
-          <h2 id="guideStoryTitle">Datalizar es hacer que un proceso trabaje como sistema.</h2>
-          <p>
-            El punto de partida no es un reporte ni una herramienta. Es una tarea repetible que hoy
-            consume tiempo, depende de interpretación manual o pierde trazabilidad. La guía sigue ese
-            recorrido hasta convertirlo en un flujo con datos confiables, reglas explícitas, ejecución
-            controlada, salida accionable y operación continua.
-          </p>
+          <h2 id="guideStoryTitle">El proceso manda; la tecnología demuestra que puede sostenerlo.</h2>
+          <p>El punto de partida es una tarea repetible que consume tiempo, depende de interpretación manual o pierde trazabilidad; la guía la convierte en un flujo con datos confiables, reglas explícitas, ejecución controlada, salida accionable y operación continua.</p>
         </div>
         <div class="guide-story-proof" aria-label="Transformación esperada">
           <div>
@@ -1698,10 +1682,7 @@ function renderGuidePage() {
         <div class="guide-section-title">
           <span class="flow-chip">historia completa</span>
           <h2 id="guideJourneyTitle">Del caso operativo a la producción monitoreada.</h2>
-          <p>
-            Leé la secuencia como una historia única: cada etapa reduce trabajo manual, aumenta trazabilidad
-            y prepara la siguiente decisión técnica.
-          </p>
+          <p>La secuencia debe leerse como una pirámide de decisiones: cada etapa resume una respuesta, aporta evidencia y prepara el siguiente control.</p>
         </div>
         ${guideSections.map(renderGuideJourneyStep).join("")}
       </section>
@@ -1709,12 +1690,8 @@ function renderGuidePage() {
       <section class="guide-readiness-panel page-inner" aria-labelledby="guideReadinessTitle">
         <div class="guide-readiness-copy">
           <span class="flow-chip">control de salida</span>
-          <h2 id="guideReadinessTitle">Una automatización solo está lista cuando puede operar sin improvisación.</h2>
-          <p>
-            Antes de producción, el equipo debe poder demostrar que el proceso está entendido, las reglas
-            están versionadas, los datos tienen calidad, la seguridad fue probada y la operación sabe cómo
-            responder ante incidentes.
-          </p>
+          <h2 id="guideReadinessTitle">La salida a producción exige evidencia completa, no confianza informal.</h2>
+          <p>Antes de producción, el equipo debe demostrar que el proceso está entendido, las reglas están versionadas, los datos tienen calidad, la seguridad fue probada y la operación sabe cómo responder ante incidentes.</p>
         </div>
         <ol class="guide-readiness-flow">
           ${readinessChecklist
@@ -1775,8 +1752,8 @@ function renderUnifiedAutomationFlow() {
       <div class="flow-canvas unified-flow-canvas" aria-label="Canvas unificado de guía y roadmap">
         <div class="flow-canvas-copy">
           <span class="flow-chip">flujo Power BI/Fabric</span>
-          <h2 id="unifiedFlowTitle">Camino de datalización BI.</h2>
-          <p>La animación recorre el camino real: definición, datos, modelado, DAX, confianza, acción, aprobación, publicación y operación.</p>
+          <h2 id="unifiedFlowTitle">El camino correcto avanza de decisión en decisión.</h2>
+          <p>La animación muestra la lógica gerencial del roadmap: definición, datos, modelado, DAX, confianza, acción, aprobación, publicación y operación.</p>
         </div>
 
         <svg class="flow-lines unified-flow-lines" viewBox="0 0 1000 540" preserveAspectRatio="none" aria-hidden="true">
@@ -1902,11 +1879,8 @@ function renderPrdSpecModelSection() {
     <section class="guide-models-section page-inner" id="modelos-prd-spec" aria-labelledby="guideModelsTitle">
       <div class="guide-models-copy">
         <span class="flow-chip">modelos descargables</span>
-          <h2 id="guideModelsTitle">PRD y Spec: dos documentos, un mismo proceso.</h2>
-          <p>
-            El PRD alinea la necesidad operativa; la Spec convierte esa necesidad en una implementación revisable.
-            Los modelos se presentan como una vista previa limpia y se descargan como documentos Word editables.
-          </p>
+          <h2 id="guideModelsTitle">PRD y Spec separan la pregunta ejecutiva de la respuesta técnica.</h2>
+          <p>El PRD alinea la necesidad operativa; la Spec convierte esa necesidad en una implementación revisable. Los modelos se presentan como una vista previa limpia y se descargan como documentos Word editables.</p>
         </div>
 
       <div class="guide-models-grid">
@@ -1916,12 +1890,8 @@ function renderPrdSpecModelSection() {
       <div class="guide-process-contract" aria-labelledby="guideContractTitle">
         <div class="guide-contract-copy">
           <span class="flow-chip">primer acuerdo</span>
-          <h2 id="guideContractTitle">La automatización empieza cuando PRD y Spec dejan de mezclarse.</h2>
-          <p>
-            El PRD define el proceso que se quiere automatizar. La Spec define cómo se construye.
-            Separarlos evita discusiones ambiguas: negocio valida sentido, alcance y resultado;
-            ingeniería valida arquitectura, reglas, datos, seguridad y despliegue.
-          </p>
+          <h2 id="guideContractTitle">La automatización empieza cuando cada documento responde una pregunta distinta.</h2>
+          <p>El PRD define el proceso que se quiere automatizar y la Spec define cómo se construye. Separarlos evita discusiones ambiguas: negocio valida sentido, alcance y resultado; ingeniería valida arquitectura, reglas, datos, seguridad y despliegue.</p>
         </div>
         <div class="guide-contract-rows" aria-label="Contrato entre PRD y Spec">
           ${prdSpecComparison
@@ -2058,17 +2028,16 @@ function renderToolingPage() {
     <section class="page tool-page">
       <header class="page-heading page-inner">
         <span class="eyebrow">Documentación técnica</span>
-        <h1>Librerías, agentes y MCPs</h1>
-        <p class="lede">
-          Inventario para futuras automatizaciones: bases de datos, nube, desarrollo, búsqueda, observabilidad,
-          colaboración, IA, agentes, sandboxes y frameworks. No se instala todo por defecto; se elige según el proceso.
-        </p>
+        <h1>Herramientas por decisión.</h1>
+        <p class="lede">El catálogo agrupa librerías, agentes y MCPs como capacidades de operación: almacenar, ejecutar, observar, colaborar, extender y proteger automatizaciones.</p>
       </header>
+
+      ${renderPyramidBrief(pageNarratives.tooling)}
 
       <section class="shortcut-hero page-inner">
         <div>
           <span class="flow-chip">inventario del repo</span>
-          <h2>${escapeHtml(toolingDocs.title)}</h2>
+          <h2>El inventario sirve para decidir, no para instalar todo.</h2>
           <p>${toolingGroups.length} familias y ${totalItems} herramientas documentadas para evaluar cuando una automatización lo justifique.</p>
         </div>
         <a class="button" href="/${toolingDocs.source}" target="_blank" rel="noreferrer">
@@ -2245,11 +2214,8 @@ function renderRoadmapPipeline() {
     <section class="roadmap-pipeline page-inner" aria-label="Pipeline estructurado del roadmap BI">
       <div class="pipeline-intro">
         <span class="flow-chip">roadmap por flujo</span>
-        <h2>Una secuencia, cinco carriles y gates que automatizan la operación.</h2>
-        <p>
-          El proyecto avanza como un sistema vivo: proceso define el trabajo, reglas ordenan la lógica,
-          datos sostienen la ejecución, UX y seguridad cuidan la acción, y delivery mantiene viva la automatización.
-        </p>
+        <h2>El roadmap avanza cuando cada carril aporta evidencia a la decisión.</h2>
+        <p>El proyecto avanza como un sistema vivo: proceso define el trabajo, reglas ordenan la lógica, datos sostienen la ejecución, UX y seguridad cuidan la acción, y delivery mantiene viva la automatización.</p>
       </div>
 
       <div class="pipeline-track" aria-label="Secuencia de gates">
@@ -2290,22 +2256,17 @@ function renderProjectPage() {
     <section class="page tool-page">
       <header class="page-heading page-inner">
         <span class="eyebrow">PRD + Spec + PBIP</span>
-        <h1>Proyecto de Power BI con Visual Studio Code</h1>
-        <p class="lede">
-          Una automatización BI seria no empieza en el PBIX: empieza con un proceso claro, baja a reglas
-          técnicas y recién después se versiona el modelo como código con PBIP, TMDL, Git y scripts.
-        </p>
+        <h1>Contrato operativo Power BI.</h1>
+        <p class="lede">La construcción recién debe avanzar cuando el proceso, las reglas, la evidencia técnica, el versionado y la operación están conectados en una misma respuesta.</p>
       </header>
+
+      ${renderPyramidBrief(pageNarratives.project)}
 
       <section class="project-studio page-inner">
         <div class="project-copy">
           <span class="flow-chip">filosofía de trabajo</span>
-          <h2>No se trata de documentar por cumplir. Se trata de que negocio, BI e IA trabajen sobre el mismo proceso.</h2>
-          <p>
-            En proyectos reales, el problema rara vez es hacer un gráfico más. El problema es no tener claro
-            qué tarea manual se quiere eliminar, qué regla debe aplicar, qué dato sostiene la acción y cómo
-            se prueba que el proceso automatizado funciona. El PRD alinea el proceso; la Spec ordena la implementación.
-          </p>
+          <h2>La documentación vale cuando alinea la decisión, no cuando acumula archivos.</h2>
+          <p>En proyectos reales, el problema rara vez es hacer un gráfico más; el problema es no tener claro qué tarea manual se quiere eliminar, qué regla debe aplicar, qué dato sostiene la acción y cómo se prueba que el proceso automatizado funciona.</p>
         </div>
 
         <div class="code-window" aria-label="Estructura sugerida de proyecto Power BI">
@@ -2345,11 +2306,8 @@ function renderProjectPage() {
       <section class="project-method page-inner" aria-labelledby="projectMethodTitle">
         <div class="project-method-head">
           <span class="flow-chip">método de trabajo</span>
-          <h2 id="projectMethodTitle">Cómo trabajar con Visual Studio Code y Power BI sin perder control.</h2>
-          <p>
-            La idea es simple: Power BI construye la solución; Visual Studio Code ordena el proyecto; Git
-            controla los cambios; y la Spec explica por qué cada decisión técnica existe.
-          </p>
+          <h2 id="projectMethodTitle">Power BI construye la solución y Git conserva la responsabilidad.</h2>
+          <p>Power BI materializa el modelo y la experiencia; Visual Studio Code ordena el proyecto; Git controla los cambios; y la Spec explica por qué cada decisión técnica existe.</p>
         </div>
         <div class="project-step-list">
           ${projectBuildSteps.map(renderProjectBuildStep).join("")}
@@ -2359,11 +2317,8 @@ function renderProjectPage() {
       <section class="project-tools page-inner" aria-labelledby="projectToolsTitle">
         <div class="project-method-head">
           <span class="flow-chip">herramientas necesarias</span>
-          <h2 id="projectToolsTitle">Qué usa cada parte del equipo.</h2>
-          <p>
-            No todas las herramientas se usan al mismo tiempo. Se incorporan cuando el proyecto necesita
-            trazabilidad, revisión, performance, seguridad o publicación controlada.
-          </p>
+          <h2 id="projectToolsTitle">Cada herramienta entra cuando agrega trazabilidad, calidad o control.</h2>
+          <p>No todas las herramientas se usan al mismo tiempo; se incorporan cuando el proyecto necesita revisión, performance, seguridad, publicación controlada u operación sostenida.</p>
         </div>
         <div class="project-tool-grid">
           ${projectToolStack.map(renderProjectTool).join("")}
@@ -2380,13 +2335,8 @@ function renderProjectPage() {
       <section class="pbip-note page-inner">
         <div>
           <span class="eyebrow">modo proyecto</span>
-          <h2>PBIP como puente entre producto BI e ingeniería</h2>
-          <p>
-            Según la documentación oficial de Microsoft, Power BI Project permite guardar el reporte y el modelo
-            semántico como carpetas con archivos de texto. En ese escenario, Visual Studio Code, Git y la terminal
-            dejan de ser herramientas ajenas al BI: pasan a ser parte de una forma más ordenada de cuidar la automatización,
-            siempre apoyadas por PRD y Spec.
-          </p>
+          <h2>PBIP convierte el BI en un activo revisable.</h2>
+          <p>Power BI Project permite guardar el reporte y el modelo semántico como carpetas con archivos de texto; en ese escenario, Visual Studio Code, Git y la terminal dejan de ser herramientas ajenas al BI y pasan a cuidar la automatización con PRD y Spec.</p>
         </div>
         <ul>
           <li>Separar proceso operativo, reglas de negocio y decisiones técnicas.</li>
@@ -2441,17 +2391,16 @@ function renderShortcutsPage() {
     <section class="page tool-page">
       <header class="page-heading page-inner">
         <span class="eyebrow">Power BI Desktop</span>
-        <h1>Atajos Power BI</h1>
-        <p class="lede">
-          Un resumen práctico del PDF de atajos cargado en el repo. La idea no es memorizar todo:
-          es empezar por los que ahorran tiempo todos los días.
-        </p>
+        <h1>Menos fricción diaria.</h1>
+        <p class="lede">El resumen prioriza las acciones que más afectan el trabajo diario: navegar, seleccionar, editar, revisar datos, escribir DAX y controlar el modelo.</p>
       </header>
+
+      ${renderPyramidBrief(pageNarratives.shortcuts)}
 
       <section class="shortcut-hero page-inner">
         <div>
           <span class="flow-chip">recurso local</span>
-          <h2>${escapeHtml(shortcutsPdf.title)}</h2>
+          <h2>El PDF queda como evidencia y la página como guía de adopción.</h2>
           <p>${shortcutsPdf.pages} slides por categoría. Guardado en el proyecto y disponible para descargar.</p>
         </div>
         <a class="button" href="/${shortcutsPdf.source}" download>

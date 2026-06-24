@@ -1,4 +1,4 @@
-const CACHE_NAME = "datalizacion-ypf-v10";
+const CACHE_NAME = "datalizacion-ypf-v11";
 const PRECACHE_URLS = [
   "/",
   "/guia-power-bi",
@@ -14,6 +14,7 @@ const PRECACHE_URLS = [
   "/data/dictionary.js",
   "/data/engineeringGuide.js",
   "/data/methodology.js",
+  "/data/pyramidNarrative.js",
   "/data/roadmap.js",
   "/data/powerbiShortcuts.js",
   "/data/toolingLibrary.js",
