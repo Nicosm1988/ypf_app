@@ -10,7 +10,7 @@ import {
   toyotaFourP,
 } from "./data/methodology.js";
 import { powerBiShortcuts, shortcutsPdf } from "./data/powerbiShortcuts.js";
-import { mintoPrinciples, pageNarratives } from "./data/pyramidNarrative.js";
+import { conceptDecantation, narrativeFrame, pageNarratives } from "./data/executiveNarrative.js";
 import { laneStyles, roadmapPhases } from "./data/roadmap.js";
 import { toolingDocs, toolingGroups } from "./data/toolingLibrary.js";
 
@@ -753,8 +753,11 @@ const interactiveSurfaceSelector = [
   ".feature-card",
   ".datalization-card",
   ".datalization-level",
-  ".pyramid-brief",
-  ".pyramid-support-card",
+  ".executive-brief",
+  ".executive-support-card",
+  ".concept-tree",
+  ".concept-tree-level",
+  ".concept-branch",
   ".workflow-lab",
   ".workflow-case",
   ".workflow-node-card",
@@ -1066,7 +1069,9 @@ function renderHomePage() {
         <strong>La respuesta va primero: datalizar es automatizar decisiones operativas con evidencia confiable y control sostenido.</strong>
       </section>
 
-      ${renderPyramidBrief(pageNarratives.home)}
+      ${renderExecutiveBrief(pageNarratives.home)}
+
+      ${renderConceptDecantation()}
 
       ${renderDatalizationDefinition()}
 
@@ -1224,21 +1229,21 @@ function renderDatalizationDefinition() {
   `;
 }
 
-function renderPyramidBrief(narrative, variant = "") {
+function renderExecutiveBrief(narrative, variant = "") {
   if (!narrative) return "";
 
   return `
-    <section class="pyramid-brief page-inner ${variant}" aria-label="Estructura ejecutiva Minto">
-      <div class="pyramid-answer">
+    <section class="executive-brief page-inner ${variant}" aria-label="Síntesis ejecutiva">
+      <div class="executive-answer">
         <span class="flow-chip">${escapeHtml(narrative.eyebrow)}</span>
         <h2>${escapeHtml(narrative.title)}</h2>
         <p>${escapeHtml(narrative.summary)}</p>
       </div>
-      <div class="pyramid-support" aria-label="Razones principales">
+      <div class="executive-support" aria-label="Razones principales">
         ${narrative.support
           .map(
             (item, index) => `
-              <article class="pyramid-support-card">
+              <article class="executive-support-card">
                 <span>${index + 1}</span>
                 <h3>${escapeHtml(item.title)}</h3>
                 <p>${escapeHtml(item.text)}</p>
@@ -1247,9 +1252,50 @@ function renderPyramidBrief(narrative, variant = "") {
           )
           .join("")}
       </div>
-      <div class="pyramid-action">
-        <strong>${escapeHtml(mintoPrinciples.author)}</strong>
+      <div class="executive-action">
+        <strong>${escapeHtml(narrativeFrame.actionLabel)}</strong>
         <p>${escapeHtml(narrative.action)}</p>
+      </div>
+    </section>
+  `;
+}
+
+function renderConceptDecantation() {
+  return `
+    <section class="concept-tree page-inner" aria-labelledby="conceptTreeTitle">
+      <div class="concept-tree-head">
+        <span class="flow-chip">árbol de decantación conceptual</span>
+        <h2 id="conceptTreeTitle">La idea baja de decisión gerencial a ejecución cotidiana.</h2>
+        <p>La lógica del portal no es una acumulación de temas: cada concepto se decanta en una pregunta más concreta, hasta llegar a acciones, controles y evidencias que el equipo puede sostener.</p>
+      </div>
+      <div class="concept-tree-grid">
+        ${conceptDecantation
+          .map(
+            (level, index) => `
+              <article class="concept-tree-level" style="--tree-order:${index}">
+                <div class="concept-tree-level-head">
+                  <span>${index + 1}</span>
+                  <div>
+                    <small>${escapeHtml(level.level)}</small>
+                    <h3>${escapeHtml(level.statement)}</h3>
+                  </div>
+                </div>
+                <div class="concept-tree-branches">
+                  ${level.branches
+                    .map(
+                      (branch) => `
+                        <div class="concept-branch">
+                          <strong>${escapeHtml(branch.title)}</strong>
+                          <p>${escapeHtml(branch.text)}</p>
+                        </div>
+                      `,
+                    )
+                    .join("")}
+                </div>
+              </article>
+            `,
+          )
+          .join("")}
       </div>
     </section>
   `;
@@ -1370,10 +1416,12 @@ function renderMethodologyPage() {
       <header class="page-heading page-inner methodology-hero">
         <span class="eyebrow">Metodología operativa</span>
         <h1>Pérdida, causa y control.</h1>
-        <p class="lede">La metodología queda presentada con lógica Minto: OEE BI cuantifica la efectividad, DMAIC ordena la intervención y Lean Six Sigma aporta herramientas solo cuando resuelven una pérdida concreta.</p>
+        <p class="lede">La metodología se presenta como una cadena de razonamiento: primero se mide la pérdida, después se identifica la causa y, finalmente, se instala un control que el equipo pueda sostener.</p>
       </header>
 
-      ${renderPyramidBrief(pageNarratives.methodology)}
+      ${renderExecutiveBrief(pageNarratives.methodology)}
+
+      ${renderConceptDecantation()}
 
       <section class="methodology-intro page-inner" aria-labelledby="methodologyIntroTitle">
         <div class="methodology-intro-copy">
@@ -1511,9 +1559,11 @@ function renderOeeFactor(factor, index) {
 
 function renderDmaicStage(stage, index) {
   const colors = ["#ff6b3b", "#3aa0ff", "#8d72ff", "#30d174", "#35c9bd"];
+  const connectors = ["Primero", "Luego", "Entonces", "A partir de ahí", "Finalmente"];
   return `
     <article class="dmaic-stage" style="--method-color:${colors[index % colors.length]}; --method-order:${index}">
       <span>${String(index + 1).padStart(2, "0")}</span>
+      <small>${escapeHtml(connectors[index] || "Luego")}</small>
       <h3>${escapeHtml(stage.title)}</h3>
       <strong>${escapeHtml(stage.question)}</strong>
       <p>${escapeHtml(stage.biApplication)}</p>
@@ -1585,7 +1635,7 @@ function renderDictionaryPage() {
         <p class="lede">Cada término define una decisión, explica por qué importa, muestra un ejemplo y advierte el riesgo de interpretarlo mal.</p>
       </header>
 
-      ${renderPyramidBrief(pageNarratives.dictionary)}
+      ${renderExecutiveBrief(pageNarratives.dictionary)}
 
       <section class="control-panel page-inner" aria-label="Filtros del diccionario">
         <div class="search-row">
@@ -1650,7 +1700,7 @@ function renderGuidePage() {
         <p class="lede">La guía presenta la respuesta antes del detalle: cada gate existe para demostrar que el proceso puede avanzar con evidencia, responsabilidad y control operativo.</p>
       </header>
 
-      ${renderPyramidBrief(pageNarratives.guide)}
+      ${renderExecutiveBrief(pageNarratives.guide)}
 
       <section class="guide-story-intro page-inner" aria-labelledby="guideStoryTitle">
         <div class="guide-story-copy">
@@ -1682,7 +1732,7 @@ function renderGuidePage() {
         <div class="guide-section-title">
           <span class="flow-chip">historia completa</span>
           <h2 id="guideJourneyTitle">Del caso operativo a la producción monitoreada.</h2>
-          <p>La secuencia debe leerse como una pirámide de decisiones: cada etapa resume una respuesta, aporta evidencia y prepara el siguiente control.</p>
+          <p>La secuencia debe leerse de arriba hacia abajo: cada etapa resume una respuesta, aporta evidencia y prepara el siguiente control.</p>
         </div>
         ${guideSections.map(renderGuideJourneyStep).join("")}
       </section>
@@ -2032,7 +2082,7 @@ function renderToolingPage() {
         <p class="lede">El catálogo agrupa librerías, agentes y MCPs como capacidades de operación: almacenar, ejecutar, observar, colaborar, extender y proteger automatizaciones.</p>
       </header>
 
-      ${renderPyramidBrief(pageNarratives.tooling)}
+      ${renderExecutiveBrief(pageNarratives.tooling)}
 
       <section class="shortcut-hero page-inner">
         <div>
@@ -2260,7 +2310,7 @@ function renderProjectPage() {
         <p class="lede">La construcción recién debe avanzar cuando el proceso, las reglas, la evidencia técnica, el versionado y la operación están conectados en una misma respuesta.</p>
       </header>
 
-      ${renderPyramidBrief(pageNarratives.project)}
+      ${renderExecutiveBrief(pageNarratives.project)}
 
       <section class="project-studio page-inner">
         <div class="project-copy">
@@ -2395,7 +2445,7 @@ function renderShortcutsPage() {
         <p class="lede">El resumen prioriza las acciones que más afectan el trabajo diario: navegar, seleccionar, editar, revisar datos, escribir DAX y controlar el modelo.</p>
       </header>
 
-      ${renderPyramidBrief(pageNarratives.shortcuts)}
+      ${renderExecutiveBrief(pageNarratives.shortcuts)}
 
       <section class="shortcut-hero page-inner">
         <div>

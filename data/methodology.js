@@ -2,17 +2,17 @@ export const methodologyPrinciples = [
   {
     title: "Marco gerencial",
     text:
-      "Conecta cada iniciativa BI con efectividad operativa: disponibilidad de la informacion, eficiencia del flujo analitico y calidad de la decision.",
+      "Conecta cada iniciativa BI con una pregunta de gestión concreta: qué decisión mejora, qué pérdida reduce y cómo se demuestra el resultado.",
   },
   {
     title: "Trabajo diario",
     text:
-      "Da al equipo una forma concreta de priorizar problemas, documentar causas, probar mejoras y sostener controles sin depender de discusiones ad hoc.",
+      "Le da al equipo una rutina práctica para priorizar problemas, documentar causas, probar mejoras y sostener controles sin depender de conversaciones sueltas.",
   },
   {
     title: "Producto BI",
     text:
-      "Integra PRD, Spec, modelo, publicacion y operacion en un ciclo de mejora que puede auditarse, versionarse y presentarse ante direccion.",
+      "Integra PRD, Spec, modelo, publicación y operación en un ciclo verificable, versionable y presentable ante dirección.",
   },
 ];
 
@@ -20,22 +20,22 @@ export const oeeFactors = [
   {
     id: "availability",
     title: "Disponibilidad",
-    short: "La solucion esta disponible cuando la operacion la necesita.",
-    formula: "Tiempo util de servicio / tiempo comprometido",
+    short: "La solución está disponible cuando la operación la necesita.",
+    formula: "Tiempo útil de servicio / tiempo comprometido",
     biMeaning:
-      "Mide si datos, refresh, gateway, semantic model, reporte, permisos y salida operativa estan disponibles dentro de la ventana acordada.",
+      "Mide si las fuentes, el refresh, el gateway, el modelo semántico, el reporte, los permisos y la salida operativa están disponibles dentro de la ventana acordada.",
     signals: ["Refresh exitoso", "SLA cumplido", "Gateway estable", "Accesos correctos"],
-    failureModes: ["Datos vencidos", "Reporte caido", "Permisos mal aplicados", "Incidente sin responsable"],
+    failureModes: ["Datos vencidos", "Reporte caído", "Permisos mal aplicados", "Incidente sin responsable"],
   },
   {
     id: "performance",
     title: "Eficiencia",
-    short: "La solucion entrega senales sin friccion ni esperas innecesarias.",
+    short: "La solución entrega señales sin fricción ni esperas innecesarias.",
     formula: "Rendimiento real / rendimiento esperado",
     biMeaning:
-      "Mide velocidad y fluidez: tiempo de carga, duracion de refresh, costo de capacidad, pasos manuales eliminados y tiempo hasta la accion.",
-    signals: ["Consultas rapidas", "Menos reproceso", "Capacidad estable", "Flujo sin esperas"],
-    failureModes: ["Modelo lento", "Demasiados pasos manuales", "Throttling", "Usuarios exportando a Excel"],
+      "Mide velocidad y fluidez: tiempo de carga, duración del refresh, consumo de capacidad, pasos manuales eliminados y tiempo hasta la acción.",
+    signals: ["Consultas rápidas", "Menos reproceso", "Capacidad estable", "Flujo sin esperas"],
+    failureModes: ["Modelo lento", "Pasos manuales excesivos", "Throttling", "Exportaciones recurrentes a Excel"],
   },
   {
     id: "quality",
@@ -43,9 +43,9 @@ export const oeeFactors = [
     short: "La salida es confiable, entendible y accionable.",
     formula: "Casos correctos / casos procesados",
     biMeaning:
-      "Mide errores de datos, calculos, reglas, segmentacion, UX y decisiones. Una salida disponible y rapida igual falla si induce retrabajo.",
+      "Mide errores de datos, cálculos, reglas, segmentación, UX y decisiones. En definitiva, una salida disponible y rápida también falla si induce retrabajo.",
     signals: ["Datos conciliados", "Medidas validadas", "Reglas trazables", "Acciones aceptadas"],
-    failureModes: ["Numero discutido", "Regla ambigua", "Dato incompleto", "Accion incorrecta"],
+    failureModes: ["Número discutido", "Regla ambigua", "Dato incompleto", "Acción incorrecta"],
   },
 ];
 
@@ -53,47 +53,47 @@ export const dmaicStages = [
   {
     id: "define",
     title: "Definir",
-    question: "Que proceso se quiere mejorar y que decision debe habilitar?",
+    question: "¿Qué proceso se quiere mejorar y qué decisión debe habilitar?",
     biApplication:
-      "PRD, alcance, sponsor, usuarios, disparador, problema actual, metrica de exito, fuera de alcance y criterios de aceptacion.",
-    evidence: ["PRD aprobado", "VSM actual", "SIPOC ligero", "Hipotesis de perdida"],
+      "Se acuerdan PRD, alcance, sponsor, usuarios, disparador, problema actual, métrica de éxito, fuera de alcance y criterios de aceptación. Dicho de otro modo, se decide qué vale la pena automatizar antes de construir.",
+    evidence: ["PRD aprobado", "VSM actual", "SIPOC ligero", "Hipótesis de pérdida"],
     tools: ["PRD", "VSM actual", "4P Toyota"],
   },
   {
     id: "measure",
     title: "Medir",
-    question: "Donde se pierde disponibilidad, eficiencia o calidad?",
+    question: "¿Dónde se pierde disponibilidad, eficiencia o calidad?",
     biApplication:
-      "Linea base de OEE BI, tiempos de refresh, latencia, adopcion, volumen de excepciones, errores de datos y esfuerzo manual.",
-    evidence: ["Baseline OEE BI", "Mapa de fuentes", "Definicion de KPIs", "Plan de medicion"],
+      "Se arma una línea base con OEE BI, tiempos de refresh, latencia, adopción, volumen de excepciones, errores de datos y esfuerzo manual. Así, la discusión deja de apoyarse en percepciones y pasa a apoyarse en evidencia.",
+    evidence: ["Línea base OEE BI", "Mapa de fuentes", "Definición de KPIs", "Plan de medición"],
     tools: ["OEE BI", "Contratos de datos", "Checklist de calidad"],
   },
   {
     id: "analyze",
     title: "Analizar",
-    question: "Cual es la causa raiz y que falla podria repetirse?",
+    question: "¿Cuál es la causa raíz y qué falla podría repetirse?",
     biApplication:
-      "Analisis de modo y efecto de fallas para fuentes, reglas, modelo, seguridad, UX, despliegue y operacion.",
-    evidence: ["FMEA", "Causa raiz", "Priorizacion por riesgo", "Decision tecnica documentada"],
-    tools: ["FMEA", "5 porques", "Pareto"],
+      "Se analizan modos y efectos de falla en fuentes, reglas, modelo, seguridad, UX, despliegue y operación. Por lo tanto, el equipo distingue el síntoma visible de la causa que debe corregirse.",
+    evidence: ["FMEA", "Causa raíz", "Priorización por riesgo", "Decisión técnica documentada"],
+    tools: ["FMEA", "5 porqués", "Pareto"],
   },
   {
     id: "improve",
     title: "Mejorar",
-    question: "Que diseno futuro elimina desperdicio y reduce variacion?",
+    question: "¿Qué diseño futuro elimina desperdicio y reduce variación?",
     biApplication:
-      "Mapa de valor futuro, simplificacion de flujo, automatizacion de controles, SMED para releases, Poka-Yoke y pruebas.",
+      "Se diseña el mapa de valor futuro, se simplifica el flujo, se automatizan controles y se preparan releases con menos fricción. A partir de ahí, la mejora deja de ser intención y se convierte en una solución verificable.",
     evidence: ["VSM futuro", "Spec actualizada", "Backlog priorizado", "Piloto validado"],
     tools: ["VSM futuro", "SMED", "Poka-Yoke", "Flujo continuo"],
   },
   {
     id: "control",
     title: "Controlar",
-    question: "Como se sostiene la mejora sin volver al modo manual?",
+    question: "¿Cómo se sostiene la mejora sin volver al modo manual?",
     biApplication:
-      "Monitoreo de operacion, runbook, SLA, alertas, tablero de salud, ownership, ritual Kaizen y Kata de mejora.",
-    evidence: ["Runbook", "Dashboard operativo", "SLA", "Cadencia Kaizen"],
-    tools: ["Kaizen", "Kata", "Control plan"],
+      "Se instala monitoreo de operación, runbook, SLA, alertas, tablero de salud, ownership, ritual Kaizen y Kata de mejora. En consecuencia, el resultado queda incorporado a la rutina del equipo.",
+    evidence: ["Runbook", "Tablero operativo", "SLA", "Cadencia Kaizen"],
+    tools: ["Kaizen", "Kata", "Plan de control"],
   },
 ];
 
@@ -103,84 +103,84 @@ export const methodologyTools = [
     role: "Marco integrador",
     when: "Durante todo el ciclo",
     purpose:
-      "Lean reduce esperas, reprocesos y pasos que no agregan valor; Six Sigma reduce variacion y defectos en datos, reglas y decisiones.",
+      "Lean ayuda a eliminar esperas, reprocesos y pasos que no agregan valor; Six Sigma, por su parte, reduce variación y defectos en datos, reglas y decisiones.",
     biUse:
-      "Sirve para justificar por que una solucion BI no se mide por cantidad de paginas, sino por perdida eliminada y estabilidad ganada.",
+      "Sirve para explicar por qué una solución BI no se mide por cantidad de páginas, sino por pérdida eliminada, estabilidad ganada y decisión mejor sustentada.",
   },
   {
     title: "VSM actual",
-    role: "Diagnostico",
+    role: "Diagnóstico",
     when: "Definir y medir",
     purpose:
-      "Mapea como fluye hoy el trabajo: entradas, esperas, aprobaciones, planillas, reprocesos, sistemas y decisiones.",
+      "Mapea cómo fluye hoy el trabajo: entradas, esperas, aprobaciones, planillas, reprocesos, sistemas y decisiones.",
     biUse:
-      "Muestra donde el BI debe intervenir: no solo que dato falta, sino que espera, validacion o retrabajo debe desaparecer.",
+      "Muestra dónde debe intervenir el BI; no solo qué dato falta, sino qué espera, validación o retrabajo debe desaparecer.",
   },
   {
     title: "OEE BI",
-    role: "Medicion ejecutiva",
+    role: "Medición ejecutiva",
     when: "Medir y controlar",
     purpose:
-      "Traduce disponibilidad, eficiencia y calidad a una lectura unica de efectividad del proceso analitico.",
+      "Traduce disponibilidad, eficiencia y calidad en una lectura única de efectividad del proceso analítico.",
     biUse:
-      "Permite presentar si la automatizacion esta operando como servicio y donde se concentra la perdida.",
+      "Permite presentar si la automatización opera como servicio y, sobre todo, dónde se concentra la pérdida.",
   },
   {
     title: "FMEA",
     role: "Riesgo y causa",
     when: "Analizar",
     purpose:
-      "Identifica modos de falla, efectos, causas, controles actuales y prioridad de accion antes de que el error llegue al usuario.",
+      "Identifica modos de falla, efectos, causas, controles actuales y prioridad de acción antes de que el error llegue al usuario.",
     biUse:
-      "Aplica a fuentes, refresh, modelo, DAX, seguridad, UX, deployment y operacion.",
+      "Aplica a fuentes, refresh, modelo, DAX, seguridad, UX, deployment y operación.",
   },
   {
     title: "VSM futuro",
-    role: "Diseno objetivo",
+    role: "Diseño objetivo",
     when: "Mejorar",
     purpose:
-      "Redibuja el flujo con menos esperas, menos pases manuales, controles embebidos y accion directa desde la senal.",
+      "Redibuja el flujo con menos esperas, menos pases manuales, controles embebidos y acción directa desde la señal.",
     biUse:
-      "Se convierte en roadmap de automatizacion y en criterio para priorizar releases.",
+      "Se convierte en roadmap de automatización y en criterio para priorizar releases.",
   },
   {
     title: "Kaizen y Kata",
     role: "Sostenimiento",
     when: "Controlar",
     purpose:
-      "Kaizen captura mejoras incrementales; Kata instala una rutina de objetivo, condicion actual, obstaculo, experimento y aprendizaje.",
+      "Kaizen captura mejoras incrementales; Kata instala una rutina de objetivo, condición actual, obstáculo, experimento y aprendizaje.",
     biUse:
-      "Mantiene vivo el producto BI con evidencia de uso, incidentes, adopcion y mejoras pequenas pero constantes.",
+      "Mantiene vivo el producto BI con evidencia de uso, incidentes, adopción y mejoras pequeñas pero constantes.",
   },
 ];
 
 export const toyotaFourP = [
   {
-    title: "Filosofia",
-    subtitle: "Proposito de largo plazo",
+    title: "Filosofía",
+    subtitle: "Propósito de largo plazo",
     biTranslation:
-      "La solucion existe para mejorar un proceso operativo, no para sumar visuales. Cada KPI debe responder a una decision o accion.",
-    evidence: ["Objetivo ejecutivo", "Problema operativo", "Criterio de exito"],
+      "La solución existe para mejorar un proceso operativo, no para sumar visuales. Por eso, cada KPI debe responder a una decisión o acción concreta.",
+    evidence: ["Objetivo ejecutivo", "Problema operativo", "Criterio de éxito"],
   },
   {
     title: "Proceso",
     subtitle: "Flujo correcto",
     biTranslation:
-      "El diseno elimina esperas, reprocesos, validaciones duplicadas y pasos manuales; el reporte es una parte del flujo, no el final.",
+      "El diseño elimina esperas, reprocesos, validaciones duplicadas y pasos manuales. En ese sentido, el reporte es una parte del flujo, no el final.",
     evidence: ["VSM actual/futuro", "Flujo continuo", "Poka-Yoke"],
   },
   {
     title: "Personas",
     subtitle: "Roles y aprendizaje",
     biTranslation:
-      "Sponsor, owners, usuarios clave, BI y data engineering comparten lenguaje, responsabilidades, cadencia y criterios de aceptacion.",
-    evidence: ["RACI", "UAT", "Rituales de adopcion"],
+      "Sponsor, owners, usuarios clave, BI y data engineering comparten lenguaje, responsabilidades, cadencia y criterios de aceptación.",
+    evidence: ["RACI", "UAT", "Rituales de adopción"],
   },
   {
-    title: "Resolucion de problemas",
+    title: "Resolución de problemas",
     subtitle: "Mejora continua",
     biTranslation:
-      "Los incidentes y desvíos no se esconden: se convierten en causa raiz, backlog, experimento y control operativo.",
+      "Los incidentes y desvíos no se esconden; al contrario, se transforman en causa raíz, backlog, experimento y control operativo.",
     evidence: ["FMEA", "Kaizen", "Kata", "Runbook"],
   },
 ];
@@ -190,35 +190,35 @@ export const leanPractices = [
     title: "Flujo continuo",
     focus: "Reducir esperas",
     text:
-      "El usuario pasa de senal a accion sin exportar, reinterpretar ni pedir validaciones fuera del sistema.",
-    example: "Un desvio critico abre evidencia, responsable, accion esperada y estado de seguimiento en el mismo flujo.",
+      "El usuario pasa de señal a acción sin exportar, reinterpretar ni pedir validaciones por fuera del sistema.",
+    example: "Un desvío crítico abre evidencia, responsable, acción esperada y estado de seguimiento dentro del mismo flujo.",
   },
   {
     title: "SMED",
-    focus: "Preparaciones rapidas",
+    focus: "Preparaciones rápidas",
     text:
-      "Separa preparacion interna y externa para que releases, cambios de regla y pruebas tarden menos y tengan menos riesgo.",
-    example: "Checklist, parametros, ambientes Dev-Test-Prod y pruebas automatizables antes de la ventana de publicacion.",
+      "Separa preparación interna y externa para que releases, cambios de regla y pruebas demanden menos tiempo y tengan menos riesgo.",
+    example: "Checklist, parámetros, ambientes Dev-Test-Prod y pruebas listas antes de la ventana de publicación.",
   },
   {
     title: "Poka-Yoke",
     focus: "Prevenir errores",
     text:
-      "El sistema evita que datos invalidos, filtros peligrosos o reglas incompletas lleguen a la decision operativa.",
-    example: "Validaciones de nulos, duplicados, claves huerfanas, permisos y medidas criticas antes del go-live.",
+      "El sistema evita que datos inválidos, filtros peligrosos o reglas incompletas lleguen a la decisión operativa.",
+    example: "Validaciones de nulos, duplicados, claves huérfanas, permisos y medidas críticas antes del go-live.",
   },
   {
     title: "Kaizen",
     focus: "Mejoras incrementales",
     text:
-      "La mejora no espera a un proyecto grande: cada incidente, queja o friccion genera una accion pequena y medible.",
+      "La mejora no espera un proyecto grande; cada incidente, queja o fricción genera una acción pequeña, observable y medible.",
     example: "Reducir un refresh de 42 a 18 minutos, eliminar un paso manual o aclarar una regla ambigua.",
   },
   {
     title: "Kata",
     focus: "Rutina de aprendizaje",
     text:
-      "Define condicion objetivo, condicion actual, obstaculos, siguiente experimento y aprendizaje observado.",
+      "Define condición objetivo, condición actual, obstáculos, siguiente experimento y aprendizaje observado.",
     example: "Subir calidad de datos del 92% al 98% probando controles por fuente durante dos sprints.",
   },
 ];
@@ -227,21 +227,21 @@ export const methodologyCadence = [
   {
     title: "Revisión diaria",
     text:
-      "Mirar disponibilidad, refresh, incidentes, excepciones y acciones pendientes. El objetivo es sostener el servicio BI.",
+      "Mirar disponibilidad, refresh, incidentes, excepciones y acciones pendientes. El objetivo es sostener el servicio BI en condiciones reales de uso.",
   },
   {
     title: "Kaizen semanal",
     text:
-      "Elegir una perdida concreta del OEE BI, analizar causa, definir contramedida pequena y registrar aprendizaje.",
+      "Elegir una pérdida concreta del OEE BI, analizar la causa, definir una contramedida pequeña y registrar el aprendizaje.",
   },
   {
     title: "Gate de release",
     text:
-      "Antes de publicar, confirmar Spec, pruebas, seguridad, VSM futuro, FMEA actualizado, rollback y comunicacion.",
+      "Antes de publicar, confirmar Spec, pruebas, seguridad, VSM futuro, FMEA actualizado, rollback y comunicación.",
   },
   {
     title: "Comité mensual",
     text:
-      "Presentar efectividad, tendencia, perdidas principales, mejoras cerradas y proximas decisiones de roadmap.",
+      "Presentar efectividad, tendencia, pérdidas principales, mejoras cerradas y próximas decisiones de roadmap.",
   },
 ];
