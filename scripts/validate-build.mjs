@@ -141,6 +141,13 @@ assert(rewriteSources.has("/proyecto-power-bi"), "Vercel debe reescribir /proyec
 assert(rewriteSources.has("/atajos"), "Vercel debe reescribir /atajos a index.html.");
 assert(rewriteSources.has("/librerias"), "Vercel debe reescribir /librerias a index.html.");
 assert(vercelJson.outputDirectory === "dist", "Vercel debe publicar la carpeta dist.");
+const dataCacheHeader = (vercelJson.headers || [])
+  .find((item) => item.source === "/data/(.*)")
+  ?.headers.find((header) => header.key.toLowerCase() === "cache-control")?.value;
+assert(
+  dataCacheHeader && dataCacheHeader.includes("max-age=0") && dataCacheHeader.includes("must-revalidate"),
+  "Los módulos de data deben revalidar para no mezclar app.js nuevo con datos viejos.",
+);
 
 await rm("dist", { force: true, recursive: true });
 await mkdir("dist/guia-power-bi", { recursive: true });
