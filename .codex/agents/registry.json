@@ -1,0 +1,40 @@
+{
+  "version": "2026-06-24",
+  "agents": [
+    {
+      "id": "executive-editor",
+      "file": ".codex/agents/executive-editor.md",
+      "primarySkill": "ypf-executive-communication"
+    },
+    {
+      "id": "bi-methodology-architect",
+      "file": ".codex/agents/bi-methodology-architect.md",
+      "primarySkill": "ypf-bi-methodology"
+    },
+    {
+      "id": "powerbi-fabric-architect",
+      "file": ".codex/agents/powerbi-fabric-architect.md",
+      "primarySkill": "ypf-powerbi-fabric-architecture"
+    },
+    {
+      "id": "frontend-quality-engineer",
+      "file": ".codex/agents/frontend-quality-engineer.md",
+      "primarySkill": "ypf-frontend-quality"
+    },
+    {
+      "id": "tooling-curator",
+      "file": ".codex/agents/tooling-curator.md",
+      "primarySkill": "ypf-tooling-curator"
+    },
+    {
+      "id": "security-governance-reviewer",
+      "file": ".codex/agents/security-governance-reviewer.md",
+      "primarySkill": "ypf-security-governance"
+    },
+    {
+      "id": "release-manager",
+      "file": ".codex/agents/release-manager.md",
+      "primarySkill": "ypf-release-operations"
+    }
+  ]
+}

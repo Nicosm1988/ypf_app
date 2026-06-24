@@ -1,0 +1,4 @@
+interface:
+  display_name: "YPF Executive Communication"
+  short_description: "Narrativa ejecutiva clara para BI"
+  default_prompt: "Use $ypf-executive-communication to rewrite this portal section with executive clarity and Argentine formal Spanish."

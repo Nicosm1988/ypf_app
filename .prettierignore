@@ -1,0 +1,7 @@
+dist
+node_modules
+.git
+.qa
+.playwright-mcp
+assets/docs/**/*.pdf
+assets/docs/**/*.docx

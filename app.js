@@ -72,7 +72,6 @@ const dictionaryState = {
   category: "Todas",
 };
 
-let expandedPhase = 0;
 let pointerFrame = 0;
 
 const workflowSteps = [
@@ -2077,17 +2076,6 @@ function getGuideStory(section, index) {
   };
 }
 
-function renderGuideFlowNode(section, index) {
-  const story = getGuideStory(section, index);
-  return `
-    <li class="guide-flow-node" style="--guide-color:${story.color}; --guide-order:${index}">
-      <span>${index + 1}</span>
-      <strong>${escapeHtml(section.title)}</strong>
-      <small>${escapeHtml(story.flow || section.eyebrow)}</small>
-    </li>
-  `;
-}
-
 function renderGuideJourneyStep(section, index) {
   const story = getGuideStory(section, index);
   return `
@@ -2308,54 +2296,6 @@ function renderRoadmapPage() {
   renderGuidePage();
 }
 
-function renderRoadmapPipeline() {
-  const lanes = Object.keys(laneStyles).map((lane) => ({
-    lane,
-    style: laneStyles[lane],
-    phases: roadmapPhases.filter((phase) => phase.lane === lane),
-  }));
-
-  return `
-    <section class="roadmap-pipeline page-inner" aria-label="Pipeline estructurado del roadmap BI">
-      <div class="pipeline-intro">
-        <span class="flow-chip">roadmap por flujo</span>
-        <h2>El roadmap avanza cuando cada carril aporta evidencia a la decisión.</h2>
-        <p>El proyecto avanza como un sistema vivo: proceso define el trabajo, reglas ordenan la lógica, datos sostienen la ejecución, UX y seguridad cuidan la acción, y delivery mantiene viva la automatización.</p>
-      </div>
-
-      <div class="pipeline-track" aria-label="Secuencia de gates">
-        ${roadmapPhases
-          .map((phase) => {
-            const lane = laneStyles[phase.lane] || { color: "var(--ypf-blue)" };
-            return `
-              <article class="pipeline-step" style="--lane-color:${lane.color}; --step-order:${phase.id}">
-                <span>${phase.id + 1}</span>
-                <strong>${escapeHtml(phase.title)}</strong>
-                <small>${escapeHtml(phase.gate)}</small>
-              </article>
-            `;
-          })
-          .join("")}
-      </div>
-
-      <div class="pipeline-lanes" aria-label="Carriles del roadmap">
-        ${lanes
-          .map(
-            ({ lane, style, phases }) => `
-              <article class="pipeline-lane-card" style="--lane-color:${style.color}">
-                <h3><span></span>${escapeHtml(lane)}</h3>
-                <ol>
-                  ${phases.map((phase) => `<li><strong>${phase.id + 1}.</strong> ${escapeHtml(phase.title)}</li>`).join("")}
-                </ol>
-              </article>
-            `,
-          )
-          .join("")}
-      </div>
-    </section>
-  `;
-}
-
 function renderProjectPage() {
   appRoot.innerHTML = `
     <section class="page tool-page">
@@ -2514,7 +2454,7 @@ function renderShortcutsPage() {
         </a>
       </section>
 
-      <section class="shortcut-grid page-inner" aria-label="Atajos de Power BI">
+      <section class="shortcut-grid page-inner" aria-label="Atajos de Power BI" tabindex="0">
         ${powerBiShortcuts.map(renderShortcutCategory).join("")}
       </section>
     </section>
@@ -2528,7 +2468,7 @@ function renderShortcutCategory(category) {
         <h2>${escapeHtml(category.category)}</h2>
         <p>${escapeHtml(category.intro)}</p>
       </div>
-      <div class="shortcut-list">
+      <div class="shortcut-list" tabindex="0" aria-label="Lista de atajos: ${escapeHtml(category.category)}">
         ${category.items
           .map(
             (item) => `
@@ -2539,55 +2479,6 @@ function renderShortcutCategory(category) {
             `,
           )
           .join("")}
-      </div>
-    </article>
-  `;
-}
-
-function renderPhaseCard(phase) {
-  const lane = laneStyles[phase.lane] || { color: "var(--ypf-blue)", badge: "" };
-  const isExpanded = phase.id === expandedPhase;
-  return `
-    <article
-      class="phase-card ${isExpanded ? "expanded" : ""}"
-      data-phase="${phase.id}"
-      style="--lane-color:${lane.color}"
-    >
-      <div class="phase-index">
-        <span class="phase-number">${phase.id + 1}</span>
-        <div class="phase-meta">
-          <span>${escapeHtml(phase.lane)}</span>
-          <span class="badge ${lane.badge}">${escapeHtml(phase.gate)}</span>
-        </div>
-      </div>
-      <h2>${escapeHtml(phase.title)}</h2>
-      <p>${escapeHtml(phase.objective)}</p>
-
-      <button class="phase-toggle" type="button" data-phase-toggle="${phase.id}" aria-expanded="${isExpanded}">
-        Ver detalle
-        ${icon("chevronDown")}
-      </button>
-
-      <div class="phase-detail">
-        <div class="phase-block">
-          <h3>Actividades clave</h3>
-          <ul>
-            ${phase.keyActivities.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-          </ul>
-        </div>
-        <div class="phase-block">
-          <h3>Entregables</h3>
-          <ul>
-            ${phase.deliverables.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-          </ul>
-        </div>
-        <div class="phase-block">
-          <h3>Responsable principal</h3>
-          <p>${escapeHtml(phase.owner)}</p>
-        </div>
-        <div class="risk-note">
-          <strong>Riesgo si se saltea:</strong> ${escapeHtml(phase.riskIfSkipped)}
-        </div>
       </div>
     </article>
   `;

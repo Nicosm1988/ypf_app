@@ -1,0 +1,4 @@
+interface:
+  display_name: "YPF Power BI Fabric Architecture"
+  short_description: "Arquitectura Power BI/Fabric productiva"
+  default_prompt: "Use $ypf-powerbi-fabric-architecture to evolve the guide, roadmap or technical architecture for Power BI and Fabric."

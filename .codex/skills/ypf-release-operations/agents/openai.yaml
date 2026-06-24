@@ -1,0 +1,4 @@
+interface:
+  display_name: "YPF Release Operations"
+  short_description: "Build, GitHub y Vercel con control"
+  default_prompt: "Use $ypf-release-operations to prepare, validate, publish and verify a production change."

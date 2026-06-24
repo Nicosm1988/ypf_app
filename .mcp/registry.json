@@ -1,0 +1,113 @@
+{
+  "version": "2026-06-24",
+  "policy": {
+    "approvalRequiredForTokens": true,
+    "defaultMode": "document-first",
+    "notes": [
+      "Los MCP locales o sin token pueden quedar documentados y listos para configurar.",
+      "Los MCP con credenciales no deben activarse ni recibir tokens sin aprobacion explicita.",
+      "Ningun token, archivo .env o secreto debe guardarse en el repo."
+    ]
+  },
+  "servers": [
+    {
+      "id": "playwright-mcp",
+      "name": "Playwright MCP",
+      "provider": "Microsoft Playwright",
+      "status": "recommended-local",
+      "purpose": "Browser automation, structured accessibility snapshots and UI verification.",
+      "command": "npx @playwright/mcp@latest",
+      "requiresToken": false,
+      "risk": "medium",
+      "source": "https://playwright.dev/docs/getting-started-mcp"
+    },
+    {
+      "id": "chrome-devtools-mcp",
+      "name": "Chrome DevTools MCP",
+      "provider": "Google Chrome DevTools",
+      "status": "recommended-local",
+      "purpose": "Debugging, performance inspection and browser diagnostics.",
+      "command": "npx chrome-devtools-mcp@latest",
+      "requiresToken": false,
+      "risk": "medium",
+      "source": "https://developer.chrome.com/docs/devtools/agents/get-started"
+    },
+    {
+      "id": "filesystem-mcp",
+      "name": "Filesystem MCP",
+      "provider": "Model Context Protocol",
+      "status": "recommended-local",
+      "purpose": "Controlled local filesystem context for repo-aware agents.",
+      "command": "npx @modelcontextprotocol/server-filesystem@latest .",
+      "requiresToken": false,
+      "risk": "medium",
+      "source": "https://github.com/modelcontextprotocol/servers"
+    },
+    {
+      "id": "memory-mcp",
+      "name": "Memory MCP",
+      "provider": "Model Context Protocol",
+      "status": "optional-local",
+      "purpose": "Knowledge graph memory for stable project facts and decisions.",
+      "command": "npx @modelcontextprotocol/server-memory@latest",
+      "requiresToken": false,
+      "risk": "medium",
+      "source": "https://github.com/modelcontextprotocol/servers"
+    },
+    {
+      "id": "github-mcp",
+      "name": "GitHub MCP Server",
+      "provider": "GitHub",
+      "status": "requires-token",
+      "purpose": "Repository, issue, pull request and workflow operations.",
+      "command": "docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN ghcr.io/github/github-mcp-server",
+      "requiresToken": true,
+      "risk": "high",
+      "source": "https://github.com/github/github-mcp-server"
+    },
+    {
+      "id": "vercel-mcp",
+      "name": "Vercel MCP",
+      "provider": "Vercel",
+      "status": "requires-token",
+      "purpose": "Vercel documentation, project inspection and deployment operations.",
+      "command": "remote-approved-client",
+      "requiresToken": true,
+      "risk": "high",
+      "source": "https://vercel.com/docs/agent-resources/vercel-mcp"
+    },
+    {
+      "id": "figma-mcp",
+      "name": "Figma MCP",
+      "provider": "Figma",
+      "status": "requires-token",
+      "purpose": "Design system inspection, editable design handoff and UI review.",
+      "command": "configured-by-client",
+      "requiresToken": true,
+      "risk": "high",
+      "source": "https://www.figma.com/"
+    },
+    {
+      "id": "fetch-mcp",
+      "name": "Fetch MCP",
+      "provider": "Model Context Protocol",
+      "status": "documented",
+      "purpose": "Controlled web retrieval for documentation and source checks.",
+      "command": "uvx mcp-server-fetch",
+      "requiresToken": false,
+      "risk": "medium",
+      "source": "https://github.com/modelcontextprotocol/servers"
+    },
+    {
+      "id": "sequential-thinking-mcp",
+      "name": "Sequential Thinking MCP",
+      "provider": "Model Context Protocol",
+      "status": "optional-local",
+      "purpose": "Structured decomposition for complex architecture or methodology changes.",
+      "command": "npx @modelcontextprotocol/server-sequential-thinking@latest",
+      "requiresToken": false,
+      "risk": "medium",
+      "source": "https://github.com/modelcontextprotocol/servers"
+    }
+  ]
+}

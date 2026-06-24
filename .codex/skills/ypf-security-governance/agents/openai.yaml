@@ -1,0 +1,4 @@
+interface:
+  display_name: "YPF Security Governance"
+  short_description: "Seguridad, privacidad y gobierno BI"
+  default_prompt: "Use $ypf-security-governance to review this change for data, access, cache and deployment risk."

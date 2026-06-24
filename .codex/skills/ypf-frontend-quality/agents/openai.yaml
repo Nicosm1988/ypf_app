@@ -1,0 +1,4 @@
+interface:
+  display_name: "YPF Frontend Quality"
+  short_description: "QA visual, accesible y responsive"
+  default_prompt: "Use $ypf-frontend-quality to validate this page across desktop, mobile, accessibility and performance budgets."

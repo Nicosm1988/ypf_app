@@ -11,6 +11,7 @@ Datalización es la práctica de automatizar procesos mediante datos confiables,
 - Roadmap BI integrado en la guía, estructurado en 9 gates de ingeniería: PRD/Spec, datos/Power Query, modelado, DAX, seguridad/gobierno, UX/acción, versionado/aprobación, publicación y operación/mejora.
 - Proyecto de Power BI con Visual Studio para trabajar procesos, Spec, PBIP, TMDL, Git y documentación con criterio.
 - Catálogo de librerías, agentes, MCPs y sandboxes guardado en documentación local.
+- Sistema repo-local de skills, agentes, MCP registry y QA automatizada para evolucionar la web con criterio productivo.
 - Atajos Power BI extraidos del PDF local del repo.
 
 La app es estatica, sin credenciales, sin datos sensibles y compatible con Vercel.
@@ -21,6 +22,10 @@ La app es estatica, sin credenciales, sin datos sensibles y compatible con Verce
 - Modulos ES para separar datos de UI.
 - Contenido local editable en `data/dictionary.js`, `data/engineeringGuide.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
 - Documentación técnica en `docs/librerias-agentes-mcp.md`.
+- Skills repo-locales en `.codex/skills`.
+- Agentes operativos en `.codex/agents`.
+- Registry MCP gobernado en `.mcp/registry.json`.
+- QA automatizada con Playwright, axe-core, ESLint, Stylelint, HTML Validate, Markdownlint y Prettier.
 - Modelos descargables en `docs/modelos/prd-datalizacion.md` y `docs/modelos/spec-datalizacion.md`.
 - Deploy estatico en Vercel.
 
@@ -68,6 +73,30 @@ El build valida que:
 - Los datos tengan los campos requeridos.
 - Vercel tenga rewrites para `/guia-power-bi`, `/metodologia`, `/diccionario`, `/roadmap`, `/proyecto-power-bi`, `/librerias` y `/atajos`.
 - Se genere `dist/` con las rutas estaticas listas para Vercel.
+
+## Validar calidad completa
+
+```bash
+npm run quality
+```
+
+Este comando corre build, lint, validacion de agentes/skills/MCP y QA con navegador real.
+
+Comandos parciales:
+
+```bash
+npm run lint
+npm run qa:agents
+npm run qa:links
+npm run qa:e2e
+npm audit
+```
+
+Si Playwright necesita instalar Chromium en una maquina nueva:
+
+```bash
+npm run qa:install-browsers
+```
 
 ## Desplegar en Vercel
 
@@ -154,6 +183,14 @@ Editar `data/executiveNarrative.js`.
 ## Editar librerías, agentes y MCPs
 
 Editar `data/toolingLibrary.js` para la versión navegable y `docs/librerias-agentes-mcp.md` para la documentación Markdown.
+
+El sistema de trabajo vive en:
+
+- `.codex/skills`: skills especializados del portal.
+- `.codex/agents`: agentes operativos y registry.
+- `.mcp/registry.json`: MCPs recomendados, estado, riesgo y requerimiento de token.
+
+Los MCPs que requieren credenciales no deben activarse sin aprobacion explicita ni guardar tokens en el repo.
 
 ## Editar atajos Power BI
 

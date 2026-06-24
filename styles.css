@@ -2,6 +2,8 @@
   color-scheme: dark;
   --ypf-blue: #3aa0ff;
   --ypf-blue-2: #1277d8;
+  --ypf-blue-action: #0a5fb3;
+  --ypf-blue-action-hover: #084d91;
   --ypf-blue-3: #dcecff;
   --ypf-yellow: #35c9bd;
   --ypf-yellow-2: #67e8dc;
@@ -528,7 +530,7 @@ p {
   padding: 0 18px;
   border: 1px solid transparent;
   border-radius: 4px;
-  background: var(--ypf-blue);
+  background: var(--ypf-blue-action);
   color: #ffffff;
   font-weight: 900;
   text-decoration: none;
@@ -544,7 +546,7 @@ p {
 }
 
 .button:hover {
-  background: var(--ypf-blue-2);
+  background: var(--ypf-blue-action-hover);
   transform: translateY(-1px);
 }
 
@@ -3738,6 +3740,10 @@ p {
 }
 
 .tooling-card {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  padding: 20px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
@@ -3761,13 +3767,6 @@ p {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
-}
-
-.tooling-card {
-  display: grid;
-  gap: 14px;
-  align-content: start;
-  padding: 20px;
 }
 
 .tooling-card-head {

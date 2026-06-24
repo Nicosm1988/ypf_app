@@ -1,0 +1,4 @@
+interface:
+  display_name: "YPF Tooling Curator"
+  short_description: "Selección gobernada de librerías y MCP"
+  default_prompt: "Use $ypf-tooling-curator to decide whether a library, agent or MCP belongs in this BI portal."

@@ -5,6 +5,40 @@ export const toolingDocs = {
 
 export const toolingGroups = [
   {
+    group: "Sistema instalado en el repo",
+    description: "Capacidades ya incorporadas para evolucionar el portal con QA, agentes, skills, MCP registry y release controlado.",
+    items: [
+      "Skills repo-locales YPF",
+      "Agentes operativos Codex",
+      "MCP registry gobernado",
+      "Playwright",
+      "axe-core Playwright",
+      "ESLint",
+      "Stylelint",
+      "HTML Validate",
+      "Markdownlint",
+      "Prettier",
+      "Local link checker",
+      "Quality workflow GitHub Actions",
+      "QA Playwright end to end",
+    ],
+  },
+  {
+    group: "MCPs priorizados",
+    description: "Servidores MCP recomendados por utilidad real para investigar, diseñar, validar, desplegar y gobernar el portal.",
+    items: [
+      "Playwright MCP",
+      "Chrome DevTools MCP",
+      "Filesystem MCP",
+      "Memory MCP",
+      "GitHub MCP Server",
+      "Vercel MCP",
+      "Figma MCP",
+      "Fetch MCP",
+      "Sequential Thinking MCP",
+    ],
+  },
+  {
     group: "Bases de datos y almacenamiento",
     description: "Se eligen cuando la decisión requiere una fuente persistente, consultable, gobernable o preparada para exploración analítica.",
     items: [
@@ -106,7 +140,7 @@ export const toolingGroups = [
       "Atlassian Confluence",
       "Linear",
       "Notion",
-      "Obsidían",
+      "Obsidian",
       "Apple Notes",
       "Todoist",
       "Google Drive",

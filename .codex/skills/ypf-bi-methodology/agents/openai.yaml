@@ -1,0 +1,4 @@
+interface:
+  display_name: "YPF BI Methodology"
+  short_description: "OEE, DMAIC y Lean aplicados a BI"
+  default_prompt: "Use $ypf-bi-methodology to integrate OEE, DMAIC, Lean and Power BI engineering into this feature."
