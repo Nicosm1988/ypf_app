@@ -1,3 +1,168 @@
+export const methodologyProcessFlow = [
+  {
+    stage: "PRD y Spec",
+    method: "Definir + VSM actual + SIPOC ligero",
+    why:
+      "Porque antes de hablar de datos o visuales hay que explicitar qué proceso duele, dónde se pierde valor y qué decisión debe quedar mejor resuelta.",
+    purpose:
+      "Alinear sponsor, usuarios, BI y datos alrededor de una misma pregunta de negocio, con alcance, exclusiones y criterios de aceptación claros.",
+    how:
+      "Se describe el flujo actual, se identifican entradas y salidas, se ordenan actores y se separa la necesidad funcional de la respuesta técnica.",
+    technicalDefinition:
+      "Contrato inicial que transforma una necesidad de negocio en requerimientos verificables, criterios de aceptación, alcance técnico y base de trazabilidad.",
+    functionalDefinition:
+      "Acuerdo que deja claro qué trabajo manual se quiere reducir, quién lo usa, qué decisión habilita y cómo se sabrá que mejoró.",
+    examples: [
+      "Mapear cómo se detecta hoy un desvío operativo y qué validaciones manuales demoran la respuesta.",
+      "Separar en PRD el problema de negocio y en Spec las fuentes, reglas, seguridad y pruebas necesarias.",
+    ],
+  },
+  {
+    stage: "Datos y Power Query",
+    method: "Medir + OEE BI + calidad de datos",
+    why:
+      "Porque una automatización no puede sostener una decisión si las fuentes llegan tarde, incompletas, duplicadas o sin responsable claro.",
+    purpose:
+      "Construir una línea base de disponibilidad, eficiencia y calidad para entender si los datos están en condiciones de alimentar el proceso.",
+    how:
+      "Se relevan fuentes, owners, frecuencia, latencia, volumen, reglas de limpieza, controles de nulos, duplicados, claves huérfanas y plan de refresh.",
+    technicalDefinition:
+      "Capa de ingesta, preparación y control que convierte fuentes dispersas en datos actualizables, trazables y aptos para modelado.",
+    functionalDefinition:
+      "Base confiable para que el usuario no discuta si el dato llegó, si está vigente o si representa correctamente el proceso.",
+    examples: [
+      "Medir cuántos refresh fallan por semana y qué impacto tienen sobre la reunión operativa.",
+      "Bloquear registros sin clave válida antes de que lleguen al modelo semántico.",
+    ],
+  },
+  {
+    stage: "Modelado",
+    method: "Proceso + flujo continuo + criterio de granularidad",
+    why:
+      "Porque un modelo mal diseñado multiplica dudas: totales que no cierran, filtros ambiguos y decisiones que nadie puede explicar con seguridad.",
+    purpose:
+      "Ordenar hechos, dimensiones, relaciones y granularidad para que el negocio lea una única versión del proceso.",
+    how:
+      "Se define el grano de análisis, se separan hechos y dimensiones, se validan relaciones, calendario, cardinalidad y modo de almacenamiento.",
+    technicalDefinition:
+      "Estructura semántica que organiza tablas, relaciones y reglas de filtro para responder preguntas analíticas con consistencia y performance.",
+    functionalDefinition:
+      "Representación entendible del proceso para que áreas distintas puedan comparar el mismo número sin reinterpretarlo.",
+    examples: [
+      "Definir si el análisis ocurre por orden, día, activo, producto o cliente antes de calcular KPIs.",
+      "Evitar relaciones muchos a muchos cuando generan totales difíciles de defender.",
+    ],
+  },
+  {
+    stage: "DAX",
+    method: "Poka-Yoke + FMEA de reglas",
+    why:
+      "Porque las medidas son decisiones codificadas; si la regla es ambigua, lenta o duplicada, el reporte parece correcto pero induce retrabajo.",
+    purpose:
+      "Prevenir errores de cálculo y priorizar las reglas críticas que podrían afectar decisiones operativas o gerenciales.",
+    how:
+      "Se documenta cada medida relevante, se separan medidas base y derivadas, se prueban casos borde y se revisan severidad, ocurrencia y detección de fallas.",
+    technicalDefinition:
+      "Capa de cálculo que implementa reglas de negocio mediante medidas, formatos, dependencias y pruebas sobre el modelo semántico.",
+    functionalDefinition:
+      "Traducción transparente de los criterios del negocio en indicadores que el usuario puede interpretar y auditar.",
+    examples: [
+      "Probar una medida de margen contra casos con descuentos, devoluciones y costos faltantes.",
+      "Crear medidas base reutilizables para evitar que cada página calcule una variante distinta.",
+    ],
+  },
+  {
+    stage: "Seguridad y gobierno",
+    method: "FMEA + Poka-Yoke + ownership",
+    why:
+      "Porque una solución confiable también debe impedir accesos incorrectos, datos sensibles expuestos y decisiones sin dueño.",
+    purpose:
+      "Asegurar permisos, linaje, certificación, responsables y controles antes de abrir la solución a usuarios reales.",
+    how:
+      "Se definen roles, RLS/OLS, owners, stewards, sensibilidad, linaje, criterios de certificación y pruebas con usuarios reales.",
+    technicalDefinition:
+      "Conjunto de controles de acceso, trazabilidad, linaje, clasificación y administración que protege el activo BI durante su ciclo de vida.",
+    functionalDefinition:
+      "Garantía de que cada usuario ve lo que corresponde, entiende el origen del dato y sabe quién responde por la información.",
+    examples: [
+      "Probar un rol comercial y uno operativo con usuarios reales antes de publicar.",
+      "Documentar owner de datos y owner del producto para resolver incidentes sin ambigüedad.",
+    ],
+  },
+  {
+    stage: "UX y acción",
+    method: "VSM futuro + flujo continuo",
+    why:
+      "Porque el valor no se captura cuando el usuario mira un tablero, sino cuando entiende la señal, decide y actúa sin reconstruir el caso.",
+    purpose:
+      "Diseñar la experiencia futura con menos esperas, menos pasos manuales y una acción claramente indicada.",
+    how:
+      "Se prioriza la lectura ejecutiva, se muestra estado, causa, impacto y acción esperada, y se deja el detalle disponible sin saturar la primera vista.",
+    technicalDefinition:
+      "Capa de experiencia, navegación e interacción que conecta indicadores, filtros, detalle, alertas y salida operativa.",
+    functionalDefinition:
+      "Forma concreta en que el usuario pasa de una señal a una decisión, con evidencia suficiente y sin salir del flujo.",
+    examples: [
+      "Mostrar primero desvíos críticos, responsable y acción pendiente; dejar el detalle en drill-through.",
+      "Evitar slicers redundantes que obligan al usuario a reconstruir manualmente el contexto.",
+    ],
+  },
+  {
+    stage: "Versionado y aprobación",
+    method: "SMED + plan de control + revisión por pares",
+    why:
+      "Porque cada cambio productivo debe ser rápido, pero también revisable, reversible y suficientemente probado.",
+    purpose:
+      "Reducir fricción de release sin perder trazabilidad ni control de calidad.",
+    how:
+      "Se separa preparación previa y ventana de publicación, se versionan PBIP/TMDL, se revisan cambios, se ejecuta UAT y se deja rollback definido.",
+    technicalDefinition:
+      "Proceso de control de cambios que combina versionado, pruebas, revisión, aprobación y promoción entre ambientes.",
+    functionalDefinition:
+      "Acuerdo de salida que le permite al negocio saber qué cambia, por qué cambia, quién aprobó y cómo se vuelve atrás si algo falla.",
+    examples: [
+      "Preparar parámetros, credenciales, pruebas y comunicación antes de la ventana de go-live.",
+      "Revisar diferencias de medidas y relaciones antes de promover a producción.",
+    ],
+  },
+  {
+    stage: "Publicación",
+    method: "SMED operativo + Poka-Yoke de go-live",
+    why:
+      "Porque publicar no es subir un archivo; es habilitar un servicio con permisos, refresh, comunicación y soporte inicial.",
+    purpose:
+      "Asegurar que la solución llegue a usuarios reales sin improvisar accesos, credenciales, actualización ni mensaje de salida.",
+    how:
+      "Se confirma workspace productivo, app, audiencia, permisos, gateway, credenciales, refresh inicial, comunicación y monitoreo posterior.",
+    technicalDefinition:
+      "Promoción controlada de contenido BI a un ambiente productivo, con configuración de acceso, actualización, credenciales y disponibilidad.",
+    functionalDefinition:
+      "Momento en que la automatización queda disponible para operar, con usuarios informados y condiciones mínimas de servicio.",
+    examples: [
+      "Validar que la app productiva muestre la versión correcta y que el refresh inicial termine antes de comunicar la salida.",
+      "Confirmar que cada audiencia vea solo los reportes y datos que corresponden.",
+    ],
+  },
+  {
+    stage: "Operación y mejora",
+    method: "Controlar + OEE BI + Kaizen + Kata",
+    why:
+      "Porque el go-live no cierra el trabajo; apenas inaugura la etapa en la que la solución debe sostenerse, aprender y mejorar.",
+    purpose:
+      "Mantener el servicio BI saludable, medir adopción real, gestionar incidentes y priorizar mejoras con evidencia.",
+    how:
+      "Se monitorean refresh, errores, capacidad, uso, acciones pendientes, incidentes, SLA y backlog; luego se ejecutan mejoras incrementales con cadencia.",
+    technicalDefinition:
+      "Disciplina de operación que observa disponibilidad, performance, calidad, incidentes, adopción y evolución del producto BI.",
+    functionalDefinition:
+      "Rutina que asegura que la automatización siga sirviendo al negocio, aun cuando cambien datos, usuarios, reglas o prioridades.",
+    examples: [
+      "Revisar semanalmente qué alertas no se atienden y rediseñar la acción esperada.",
+      "Usar un incidente de refresh como aprendizaje para ajustar agenda, capacidad o modelo.",
+    ],
+  },
+];
+
 export const methodologyPrinciples = [
   {
     title: "Marco gerencial",

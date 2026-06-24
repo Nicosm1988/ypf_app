@@ -4,6 +4,7 @@ import {
   dmaicStages,
   leanPractices,
   methodologyCadence,
+  methodologyProcessFlow,
   methodologyPrinciples,
   methodologyTools,
   oeeFactors,
@@ -758,6 +759,9 @@ const interactiveSurfaceSelector = [
   ".concept-tree",
   ".concept-tree-level",
   ".concept-branch",
+  ".methodology-process",
+  ".methodology-process-step",
+  ".process-block",
   ".workflow-lab",
   ".workflow-case",
   ".workflow-node-card",
@@ -1419,6 +1423,8 @@ function renderMethodologyPage() {
         <p class="lede">La metodología se presenta como una cadena de razonamiento: primero se mide la pérdida, después se identifica la causa y, finalmente, se instala un control que el equipo pueda sostener.</p>
       </header>
 
+      ${renderMethodologyProcessFlow()}
+
       ${renderExecutiveBrief(pageNarratives.methodology)}
 
       ${renderConceptDecantation()}
@@ -1520,6 +1526,55 @@ function renderMethodologyPage() {
         </a>
       </section>
     </section>
+  `;
+}
+
+function renderMethodologyProcessFlow() {
+  return `
+    <section class="methodology-process page-inner" aria-labelledby="methodologyProcessTitle">
+      <div class="methodology-process-head">
+        <span class="flow-chip">proceso end to end</span>
+        <h2 id="methodologyProcessTitle">La guía y el roadmap se convierten en una secuencia de trabajo verificable.</h2>
+        <p>El recorrido ordena la necesidad inicial, la construcción del producto BI, la salida a producción y la mejora sostenida. En cada etapa queda explícito qué metodología corresponde, por qué se usa, para qué sirve, cómo se aplica y qué evidencia debe dejar.</p>
+      </div>
+      <div class="methodology-process-list">
+        ${methodologyProcessFlow.map(renderMethodologyProcessStep).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderMethodologyProcessStep(step, index) {
+  return `
+    <article class="methodology-process-step" style="--process-order:${index}">
+      <div class="methodology-process-index">
+        <span>${String(index + 1).padStart(2, "0")}</span>
+        <div>
+          <small>${escapeHtml(step.method)}</small>
+          <h3>${escapeHtml(step.stage)}</h3>
+        </div>
+      </div>
+      <div class="methodology-process-grid">
+        ${renderProcessBlock("Por qué", step.why)}
+        ${renderProcessBlock("Para qué", step.purpose)}
+        ${renderProcessBlock("Cómo", step.how)}
+        ${renderProcessBlock("Definición técnica", step.technicalDefinition)}
+        ${renderProcessBlock("Definición funcional", step.functionalDefinition)}
+        <div class="process-block process-examples">
+          <strong>Ejemplos</strong>
+          <ul>${step.examples.map((example) => `<li>${escapeHtml(example)}</li>`).join("")}</ul>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderProcessBlock(label, text) {
+  return `
+    <div class="process-block">
+      <strong>${escapeHtml(label)}</strong>
+      <p>${escapeHtml(text)}</p>
+    </div>
   `;
 }
 

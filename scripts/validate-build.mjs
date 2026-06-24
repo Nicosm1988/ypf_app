@@ -5,6 +5,7 @@ import {
   dmaicStages,
   leanPractices,
   methodologyCadence,
+  methodologyProcessFlow,
   methodologyPrinciples,
   methodologyTools,
   oeeFactors,
@@ -43,12 +44,14 @@ function hasFields(item, fields) {
 
 const indexHtml = await readFile("index.html", "utf8");
 const appJs = await readFile("app.js", "utf8");
+const stylesCss = await readFile("styles.css", "utf8");
 const vercelJson = JSON.parse(await readFile("vercel.json", "utf8"));
 
 assert(indexHtml.includes("Datalización YPF"), "index.html debe exponer el nombre del producto.");
 assert(indexHtml.includes('type="module" src="/app.js"'), "index.html debe cargar app.js como modulo.");
 assert(appJs.includes("renderDictionaryPage"), "app.js debe renderizar el diccionario.");
 assert(appJs.includes("renderMethodologyPage"), "app.js debe renderizar la metodología.");
+assert(appJs.includes("renderMethodologyProcessFlow"), "app.js debe renderizar el proceso metodológico end to end.");
 assert(appJs.includes("renderExecutiveBrief"), "app.js debe renderizar la síntesis ejecutiva.");
 assert(appJs.includes("renderConceptDecantation"), "app.js debe renderizar el árbol de decantación conceptual.");
 assert(appJs.includes("renderRoadmapPage"), "app.js debe renderizar el roadmap.");
@@ -74,6 +77,22 @@ assert(prdSpecComparison.length >= 4, "La guía debe comparar PRD y Spec.");
 assert(readinessChecklist.length >= 8, "La guía debe incluir checklist de salida a producción.");
 
 assert(methodologyPrinciples.length >= 3, "La metodología debe explicar su uso gerencial, diario y de producto.");
+assert(methodologyProcessFlow.length === 9, "La metodología debe cubrir el proceso end to end de 9 etapas.");
+assert(
+  methodologyProcessFlow.every(
+    (step) =>
+      step.stage &&
+      step.method &&
+      step.why &&
+      step.purpose &&
+      step.how &&
+      step.technicalDefinition &&
+      step.functionalDefinition &&
+      Array.isArray(step.examples) &&
+      step.examples.length >= 2,
+  ),
+  "Cada etapa end to end debe tener metodología, por qué, para qué, cómo, definiciones y ejemplos.",
+);
 assert(oeeFactors.length === 3, "OEE BI debe tener disponibilidad, eficiencia y calidad.");
 assert(oeeFactors.every((factor) => factor.title && factor.formula && factor.biMeaning), "Cada factor OEE BI debe tener fórmula y traducción BI.");
 assert(dmaicStages.map((stage) => normalizeForCheck(stage.title)).join("|") === "definir|medir|analizar|mejorar|controlar", "DMAIC debe mantener las cinco etapas en orden.");
@@ -94,6 +113,7 @@ assert(
   "Cada nivel del árbol conceptual debe tener tres ramas.",
 );
 assert(!appJs.includes("<br"), "La UI no debe depender de saltos de línea HTML forzados.");
+assert(!stylesCss.includes(".concept-tree-grid::before"), "El árbol conceptual no debe dibujar conectores horizontales.");
 
 assert(toolingDocs.source === "docs/librerias-agentes-mcp.md", "El catálogo técnico debe apuntar a la documentación Markdown.");
 assert(toolingGroups.length >= 10, "El catálogo técnico debe incluir las familias principales.");

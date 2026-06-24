@@ -935,17 +935,6 @@ p {
   gap: 16px;
 }
 
-.concept-tree-grid::before {
-  content: "";
-  position: absolute;
-  top: 42px;
-  right: 12%;
-  left: 12%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(53, 201, 189, 0.7), rgba(58, 160, 255, 0.52), transparent);
-  pointer-events: none;
-}
-
 .concept-tree-level {
   position: relative;
   display: grid;
@@ -3843,6 +3832,7 @@ p {
     url("/assets/energy-chain-v1-1280.webp") center / cover;
 }
 
+.methodology-process,
 .methodology-intro,
 .oee-section,
 .dmaic-section,
@@ -3861,10 +3851,130 @@ p {
 }
 
 .methodology-intro-copy,
-.methodology-section-head {
+.methodology-section-head,
+.methodology-process-head {
   display: grid;
   gap: 12px;
   max-width: 980px;
+}
+
+.methodology-process {
+  padding: clamp(20px, 3vw, 30px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(21, 26, 35, 0.98), rgba(8, 12, 18, 0.98)),
+    var(--surface);
+  box-shadow: 0 20px 56px rgba(0, 18, 36, 0.16);
+}
+
+.methodology-process-head {
+  max-width: 1040px;
+}
+
+.methodology-process-head h2 {
+  margin: 0;
+  color: var(--ypf-blue-3);
+  font-size: clamp(1.75rem, 3vw, 2.7rem);
+  line-height: 1.08;
+}
+
+.methodology-process-head p,
+.methodology-process-step p,
+.process-examples li {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.56;
+}
+
+.methodology-process-list {
+  display: grid;
+  gap: 14px;
+}
+
+.methodology-process-step {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid rgba(226, 224, 244, 0.14);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.methodology-process-index {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.methodology-process-index > span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius);
+  background: var(--ypf-yellow);
+  color: #071316;
+  font-weight: 950;
+}
+
+.methodology-process-index small {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--ypf-yellow);
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.methodology-process-index h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.18rem, 1.8vw, 1.55rem);
+  line-height: 1.12;
+}
+
+.methodology-process-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.process-block {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid rgba(226, 224, 244, 0.12);
+  border-radius: var(--radius);
+  background: rgba(6, 11, 17, 0.42);
+}
+
+.process-block strong {
+  color: var(--ypf-blue-3);
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+
+.process-block p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.56;
+}
+
+.process-examples ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.process-examples li::marker {
+  color: var(--ypf-yellow);
 }
 
 .methodology-intro-copy h2,
@@ -4822,7 +4932,8 @@ kbd {
   }
 
   .dmaic-track,
-  .lean-practice-grid {
+  .lean-practice-grid,
+  .methodology-process-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -4942,6 +5053,7 @@ kbd {
   .oee-grid,
   .oee-factor-columns,
   .dmaic-track,
+  .methodology-process-grid,
   .methodology-tool-grid,
   .toyota-layers,
   .lean-practice-grid,
@@ -4964,10 +5076,6 @@ kbd {
 
   .methodology-close .button {
     width: 100%;
-  }
-
-  .concept-tree-grid::before {
-    display: none;
   }
 
   .mini-roadmap::before,
