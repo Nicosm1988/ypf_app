@@ -25,7 +25,17 @@ const mimeTypes = {
 function toSafePath(urlPathname) {
   const decoded = decodeURIComponent(urlPathname);
   const routePath = decoded.replace(/\/+$/, "") || "/";
-  const appRoutes = new Set(["/", "/guia-power-bi", "/metodologia", "/diccionario", "/roadmap", "/proyecto-power-bi", "/atajos", "/librerias"]);
+  const appRoutes = new Set([
+    "/",
+    "/guia-power-bi",
+    "/metodo-datalizacion",
+    "/metodologia",
+    "/diccionario",
+    "/roadmap",
+    "/proyecto-power-bi",
+    "/atajos",
+    "/librerias",
+  ]);
   if (appRoutes.has(routePath)) {
     return path.join(root, "index.html");
   }

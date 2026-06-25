@@ -2,7 +2,17 @@ import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 
 const root = process.cwd();
-const appRoutes = new Set(["/", "/guia-power-bi", "/metodologia", "/diccionario", "/roadmap", "/proyecto-power-bi", "/atajos", "/librerias"]);
+const appRoutes = new Set([
+  "/",
+  "/guia-power-bi",
+  "/metodo-datalizacion",
+  "/metodologia",
+  "/diccionario",
+  "/roadmap",
+  "/proyecto-power-bi",
+  "/atajos",
+  "/librerias",
+]);
 const sourceFiles = ["index.html", "app.js", "styles.css", "manifest.webmanifest", "service-worker.js"];
 const problems = [];
 let checked = 0;

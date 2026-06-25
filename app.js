@@ -1,6 +1,26 @@
 import { dictionaryCategories, dictionaryTerms } from "./data/dictionary.js";
 import { guideSections, prdSpecComparison, readinessChecklist } from "./data/engineeringGuide.js";
 import {
+  methodBacklogColumns,
+  methodChannels,
+  methodCodeCatalog,
+  methodDecisions,
+  methodFunctionalLayers,
+  methodFutureBacklog,
+  methodNaming,
+  methodObjectiveSignals,
+  methodOperatingFlow,
+  methodPendingDecisions,
+  methodPlanes,
+  methodPrinciples,
+  methodProjectFolders,
+  methodRoadmap,
+  methodRoles,
+  methodTeamMetrics,
+  methodTypeCatalog,
+  methodVmcModel,
+} from "./data/datalizationMethod.js";
+import {
   dmaicStages,
   leanPractices,
   methodologyCadence,
@@ -20,20 +40,15 @@ const contentTarget = document.querySelector("#content");
 const navLinks = [...document.querySelectorAll("[data-route]")];
 
 const icons = {
-  arrowRight:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>',
-  book:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"></path></svg>',
-  chevronDown:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m6 9 6 6 6-6"></path></svg>',
+  arrowRight: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>',
+  book: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"></path></svg>',
+  chevronDown: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m6 9 6 6 6-6"></path></svg>',
   clipboard:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect width="8" height="4" x="8" y="2" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>',
-  code:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m16 18 6-6-6-6"></path><path d="m8 6-6 6 6 6"></path></svg>',
+  code: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m16 18 6-6-6-6"></path><path d="m8 6-6 6 6 6"></path></svg>',
   download:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>',
-  filter:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 3H2l8 9.5V20l4 2v-9.5L22 3z"></path></svg>',
+  filter: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 3H2l8 9.5V20l4 2v-9.5L22 3z"></path></svg>',
   folder:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7l-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"></path></svg>',
   gauge:
@@ -50,15 +65,14 @@ const icons = {
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>',
   shield:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.68 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1v7z"></path></svg>',
-  spark:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M13 2 3 14h8l-1 8 11-13h-8l1-7z"></path></svg>',
-  terminal:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m4 17 6-6-6-6"></path><path d="M12 19h8"></path></svg>',
+  spark: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M13 2 3 14h8l-1 8 11-13h-8l1-7z"></path></svg>',
+  terminal: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m4 17 6-6-6-6"></path><path d="M12 19h8"></path></svg>',
 };
 
 const routeTitles = {
   "/": "Datalización YPF",
   "/guia-power-bi": "Guía y roadmap de automatización BI/Fabric | Datalización YPF",
+  "/metodo-datalizacion": "Método de Datalización | Datalización YPF",
   "/metodologia": "Metodología de mejora continua BI | Datalización YPF",
   "/diccionario": "Diccionario BI | Datalización YPF",
   "/roadmap": "Guía y roadmap de automatización BI/Fabric | Datalización YPF",
@@ -112,8 +126,7 @@ const workflowSteps = [
     tone: "cyan",
     technical:
       "Integración de fuentes con owners, contratos de datos, frecuencia, linaje, controles de calidad, preparación, historización y trazabilidad.",
-    functional:
-      "Hace que la automatización use datos confiables en el momento correcto. Sin esta base, el proceso automatiza errores.",
+    functional: "Hace que la automatización use datos confiables en el momento correcto. Sin esta base, el proceso automatiza errores.",
     examples: [
       "El volumen despachado se toma del sistema transaccional con corte horario, responsable de negocio y regla de conciliación.",
       "Power Query elimina columnas innecesarias y preserva folding para que la actualización no bloquee el proceso.",
@@ -127,8 +140,7 @@ const workflowSteps = [
     tone: "green",
     technical:
       "Modelo semántico y motor de decisión que calculan estado, riesgo, prioridad, recomendación o resultado a partir de reglas y datos gobernados.",
-    functional:
-      "Transforma datos en señales accionables. La automatización sabe qué ocurrió, qué importa y qué debería pasar después.",
+    functional: "Transforma datos en señales accionables. La automatización sabe qué ocurrió, qué importa y qué debería pasar después.",
     examples: [
       "El motor prioriza desvíos por impacto económico, criticidad operativa y antigüedad del evento.",
       "El modelo calcula margen, volumen neto y variación con la misma lógica para Finanzas, Comercial y Operaciones.",
@@ -172,8 +184,7 @@ const workflowSteps = [
     tone: "orange",
     technical:
       "Monitoreo continuo de SLA, refresh, gateway, capacidad Fabric, latencia, errores, adopción, incidentes, auditoría y backlog de optimización.",
-    functional:
-      "Automatizar no es publicar una vez: es sostener el proceso, detectar fallas, medir impacto y mejorarlo con evidencia.",
+    functional: "Automatizar no es publicar una vez: es sostener el proceso, detectar fallas, medir impacto y mejorarlo con evidencia.",
     examples: [
       "Si falla un refresh, se registra incidente, responsable, causa y acción correctiva.",
       "Capacity Metrics muestra throttling y el equipo ajusta modelo, agenda o capacidad antes de afectar al usuario.",
@@ -272,7 +283,7 @@ const guideStoryDetails = {
       "Un modelo estrella bien diseñado permite que la automatización filtre, agregue y compare sin ambigüedad, con performance suficiente para acompañar la rutina operativa.",
     outcome: "Un motor semántico consistente y rápido.",
   },
-  "dax": {
+  dax: {
     iconName: "code",
     flow: "Las reglas se transforman en cálculo gobernado.",
     scene:
@@ -285,7 +296,7 @@ const guideStoryDetails = {
     iconName: "shield",
     flow: "La confianza se diseña antes de publicar.",
     scene:
-      "Una automatización operativa puede afectar decisiones, prioridades y responsabilidades. Por eso la seguridad, el linaje y el ownership no son una etapa administrativa: son parte del diseño del proceso.",
+      "Una automatización operativa puede afectar decisiones, prioridades y responsabilidades. Por eso la seguridad, el linaje y la responsabilidad operativa no son una etapa administrativa: son parte del diseño del proceso.",
     automation:
       "La automatización solo escala si cada usuario ve lo que corresponde, cada dato tiene responsable y cada decisión puede explicarse desde su origen.",
     outcome: "Permisos, linaje y responsabilidades explícitas.",
@@ -317,7 +328,7 @@ const guideStoryDetails = {
       "PBIP, TMDL, Git, pull requests y ambientes separados convierten el BI en un activo revisable y recuperable antes de llegar a producción.",
     outcome: "Solución aprobada para publicar.",
   },
-  "publicacion": {
+  publicacion: {
     iconName: "download",
     flow: "La automatización pasa a usuarios reales.",
     scene:
@@ -375,48 +386,42 @@ const guideDocumentTemplates = [
 const projectBuildSteps = [
   {
     title: "Acordar PRD y Spec antes de abrir Power BI",
-    easy:
-      "Primero se define qué tarea manual se quiere eliminar, qué salida espera el usuario y qué regla debe cumplirse.",
+    easy: "Primero se define qué tarea manual se quiere eliminar, qué salida espera el usuario y qué regla debe cumplirse.",
     technical:
       "El PRD fija objetivo, alcance, KPI, responsables y criterios de aceptación. La Spec baja eso a fuentes, modelo, DAX, seguridad, UX, pruebas y publicación.",
     tools: ["Word", "Markdown", "PRD", "Spec"],
   },
   {
     title: "Crear el proyecto PBIP desde Power BI Desktop",
-    easy:
-      "En lugar de guardar solo un PBIX cerrado, se guarda el proyecto como carpetas para que los cambios se puedan revisar.",
+    easy: "En lugar de guardar solo un PBIX cerrado, se guarda el proyecto como carpetas para que los cambios se puedan revisar.",
     technical:
       "PBIP separa reporte y modelo semántico en archivos versionables. Eso permite comparar medidas, relaciones, expresiones TMDL y metadatos.",
     tools: ["Power BI Desktop", "PBIP", "TMDL"],
   },
   {
     title: "Abrir la carpeta en Visual Studio Code",
-    easy:
-      "VS Code se usa como mesa de trabajo: ahí se ve la documentación, los archivos del modelo y los scripts en un solo lugar.",
+    easy: "VS Code se usa como mesa de trabajo: ahí se ve la documentación, los archivos del modelo y los scripts en un solo lugar.",
     technical:
       "La carpeta del proyecto debe incluir README, PRD, Spec, documentación técnica, scripts y archivos PBIP/TMDL. Cada cambio queda visible antes de publicarse.",
     tools: ["VS Code", "Explorador de archivos", "Markdown"],
   },
   {
     title: "Versionar con Git y trabajar por ramas",
-    easy:
-      "Cada mejora se hace en una rama. Antes de llegar a producción, alguien puede revisar qué cambió.",
+    easy: "Cada mejora se hace en una rama. Antes de llegar a producción, alguien puede revisar qué cambió.",
     technical:
       "Git permite diff, historial, pull request, rollback y trazabilidad. Sirve para controlar cambios de medidas, relaciones, documentación y scripts.",
     tools: ["Git", "GitHub", "Pull request"],
   },
   {
     title: "Validar modelo, DAX, seguridad y performance",
-    easy:
-      "No alcanza con que el reporte se vea bien: hay que probar números, permisos, tiempos de carga y actualización.",
+    easy: "No alcanza con que el reporte se vea bien: hay que probar números, permisos, tiempos de carga y actualización.",
     technical:
       "Se validan medidas DAX, relaciones, cardinalidad, RLS/OLS, refresh, Query Folding, Performance Analyzer y consumo de capacidad cuando aplique.",
     tools: ["DAX Studio", "Tabular Editor", "Performance Analyzer"],
   },
   {
     title: "Publicar, monitorear y dejar operación definida",
-    easy:
-      "Cuando se publica, la solución pasa a ser un servicio. Debe tener responsables, alertas y una forma clara de pedir mejoras.",
+    easy: "Cuando se publica, la solución pasa a ser un servicio. Debe tener responsables, alertas y una forma clara de pedir mejoras.",
     technical:
       "La salida requiere workspace, app o audiencia, credenciales, gateway, refresh, endorsement, monitoreo, runbook, SLA e incidentes.",
     tools: ["Power BI Service", "Deployment pipelines", "Capacity Metrics"],
@@ -493,7 +498,8 @@ const guideGlossaryCuratedTerms = [
   {
     id: "dax",
     title: "DAX",
-    definition: "Data Analysis Expressions: lenguaje de fórmulas de Power BI para crear medidas, reglas y cálculos sobre el modelo semántico.",
+    definition:
+      "Data Analysis Expressions: lenguaje de fórmulas de Power BI para crear medidas, reglas y cálculos sobre el modelo semántico.",
     whyItMatters: "Permite expresar reglas de negocio reutilizables y auditables.",
     aliases: ["DAX"],
   },
@@ -582,7 +588,8 @@ const guideGlossaryCuratedTerms = [
   {
     id: "fabric",
     title: "Microsoft Fabric",
-    definition: "Plataforma de Microsoft que integra almacenamiento, ingeniería, ciencia de datos, BI y operación analítica en una experiencia unificada.",
+    definition:
+      "Plataforma de Microsoft que integra almacenamiento, ingeniería, ciencia de datos, BI y operación analítica en una experiencia unificada.",
     whyItMatters: "Permite acercar datos, pipelines, lakehouse y Power BI en una arquitectura común.",
     aliases: ["Fabric", "Microsoft Fabric"],
   },
@@ -591,7 +598,8 @@ const guideGlossaryCuratedTerms = [
   {
     id: "delta-parquet",
     title: "Delta/Parquet",
-    definition: "Formatos de almacenamiento analítico usados en lakehouses: Parquet guarda columnas; Delta agrega transacciones y control de versiones.",
+    definition:
+      "Formatos de almacenamiento analítico usados en lakehouses: Parquet guarda columnas; Delta agrega transacciones y control de versiones.",
     whyItMatters: "Son la base habitual para que Fabric y Direct Lake lean datos de forma eficiente.",
     aliases: ["Delta/Parquet", "Delta", "Parquet"],
   },
@@ -605,7 +613,8 @@ const guideGlossaryCuratedTerms = [
   {
     id: "storage-mode",
     title: "Modo de almacenamiento",
-    definition: "Configuración que define cómo una tabla del modelo semántico accede a los datos: Import, DirectQuery, Direct Lake, Dual o combinaciones controladas.",
+    definition:
+      "Configuración que define cómo una tabla del modelo semántico accede a los datos: Import, DirectQuery, Direct Lake, Dual o combinaciones controladas.",
     whyItMatters: "Condiciona performance, refresh, seguridad, capacidad y comportamiento de las consultas.",
     aliases: ["storage", "storage mode", "modo de almacenamiento", "modo de storage"],
   },
@@ -677,7 +686,8 @@ const guideGlossaryCuratedTerms = [
   {
     id: "sla",
     title: "SLA",
-    definition: "Service Level Agreement: compromiso de nivel de servicio, como horario de disponibilidad, tiempo de respuesta o ventana de actualización.",
+    definition:
+      "Service Level Agreement: compromiso de nivel de servicio, como horario de disponibilidad, tiempo de respuesta o ventana de actualización.",
     whyItMatters: "Define qué espera la operación y contra qué se mide el cumplimiento.",
     aliases: ["SLA"],
   },
@@ -736,15 +746,88 @@ const guideGlossaryRegex = new RegExp(
 
 const guideGlossaryBySectionId = {
   "prd-spec": ["prd", "spec-producto-tecnica", "criterio-aceptacion", "disparador-proceso", "stakeholder", "bi", "power-query", "dax"],
-  "etl-power-query": ["etl", "power-query", "query-folding", "refresh", "data-quality", "incremental-refresh", "fabric", "lakehouse", "warehouse", "direct-lake", "import-mode", "directquery"],
-  "modelo-vertipaq": ["modelo-semantico", "storage-mode", "vertipaq", "direct-lake", "import-mode", "directquery", "directquery-fallback", "esquema-estrella", "granularidad", "cardinalidad", "tabla-hechos", "tabla-dimensiones", "relacion-uno-a-muchos"],
-  "dax": ["dax", "medida-dax", "var-dax", "iteradores-x", "formula-engine", "tabular-editor", "performance"],
-  "seguridad-gobierno": ["seguridad", "rls", "ols", "rls-ols", "userprincipalname", "lineage", "data-owner", "data-steward", "certificacion-dataset", "b2b"],
+  "etl-power-query": [
+    "etl",
+    "power-query",
+    "query-folding",
+    "refresh",
+    "data-quality",
+    "incremental-refresh",
+    "fabric",
+    "lakehouse",
+    "warehouse",
+    "direct-lake",
+    "import-mode",
+    "directquery",
+  ],
+  "modelo-vertipaq": [
+    "modelo-semantico",
+    "storage-mode",
+    "vertipaq",
+    "direct-lake",
+    "import-mode",
+    "directquery",
+    "directquery-fallback",
+    "esquema-estrella",
+    "granularidad",
+    "cardinalidad",
+    "tabla-hechos",
+    "tabla-dimensiones",
+    "relacion-uno-a-muchos",
+  ],
+  dax: ["dax", "medida-dax", "var-dax", "iteradores-x", "formula-engine", "tabular-editor", "performance"],
+  "seguridad-gobierno": [
+    "seguridad",
+    "rls",
+    "ols",
+    "rls-ols",
+    "userprincipalname",
+    "lineage",
+    "data-owner",
+    "data-steward",
+    "certificacion-dataset",
+    "b2b",
+  ],
   "ux-reportes": ["ux", "regla-3-30-300", "drill-through", "slicer", "visual", "performance", "accion-trazable"],
-  "fabric-direct-lake": ["fabric", "onelake", "lakehouse", "warehouse", "storage-mode", "direct-lake", "import-mode", "directquery", "delta-parquet", "v-order", "spark-optimize", "vacuum", "directquery-fallback"],
-  "cicd-pbip": ["cicd", "pbip", "tmdl", "pbip-tmdl", "git", "pull-request", "feature-branch", "dev-test-prod", "deployment-pipelines", "release"],
-  "publicacion": ["release", "deployment-pipelines", "pbip", "tmdl", "git", "pull-request"],
-  "operacion-capacidad": ["sla", "refresh", "gateway-power-bi", "capacity-units", "fabric-capacity-metrics", "throttling", "incremental-refresh", "incidente", "backlog"],
+  "fabric-direct-lake": [
+    "fabric",
+    "onelake",
+    "lakehouse",
+    "warehouse",
+    "storage-mode",
+    "direct-lake",
+    "import-mode",
+    "directquery",
+    "delta-parquet",
+    "v-order",
+    "spark-optimize",
+    "vacuum",
+    "directquery-fallback",
+  ],
+  "cicd-pbip": [
+    "cicd",
+    "pbip",
+    "tmdl",
+    "pbip-tmdl",
+    "git",
+    "pull-request",
+    "feature-branch",
+    "dev-test-prod",
+    "deployment-pipelines",
+    "release",
+  ],
+  publicacion: ["release", "deployment-pipelines", "pbip", "tmdl", "git", "pull-request"],
+  "operacion-capacidad": [
+    "sla",
+    "refresh",
+    "gateway-power-bi",
+    "capacity-units",
+    "fabric-capacity-metrics",
+    "throttling",
+    "incremental-refresh",
+    "incidente",
+    "backlog",
+  ],
 };
 
 const interactiveSurfaceSelector = [
@@ -758,6 +841,17 @@ const interactiveSurfaceSelector = [
   ".concept-tree",
   ".concept-tree-level",
   ".concept-branch",
+  ".method-flow-step",
+  ".method-command-card",
+  ".method-plane-card",
+  ".method-layer-card",
+  ".method-channel-card",
+  ".method-folder-detail",
+  ".method-naming-lab",
+  ".method-signal-card",
+  ".method-vmc-card",
+  ".method-roadmap-item",
+  ".method-role-card",
   ".methodology-process",
   ".methodology-process-step",
   ".process-block",
@@ -863,9 +957,7 @@ function renderInlineTerm(label, term) {
 }
 
 function renderGuideStepGlossary(section) {
-  const terms = (guideGlossaryBySectionId[section.id] || [])
-    .map((id) => guideGlossaryTermById.get(id))
-    .filter(Boolean);
+  const terms = (guideGlossaryBySectionId[section.id] || []).map((id) => guideGlossaryTermById.get(id)).filter(Boolean);
 
   if (!terms.length) return "";
 
@@ -891,7 +983,19 @@ function renderGuideStepGlossary(section) {
 
 function getRoute(pathname = window.location.pathname) {
   const cleanPath = pathname.replace(/\/+$/, "") || "/";
-  if (["/guia-power-bi", "/metodologia", "/diccionario", "/roadmap", "/proyecto-power-bi", "/atajos", "/librerias"].includes(cleanPath)) return cleanPath;
+  if (
+    [
+      "/guia-power-bi",
+      "/metodo-datalizacion",
+      "/metodologia",
+      "/diccionario",
+      "/roadmap",
+      "/proyecto-power-bi",
+      "/atajos",
+      "/librerias",
+    ].includes(cleanPath)
+  )
+    return cleanPath;
   return "/";
 }
 
@@ -981,6 +1085,8 @@ function renderRoute(route = getRoute()) {
 
   if (route === "/diccionario") {
     renderDictionaryPage();
+  } else if (route === "/metodo-datalizacion") {
+    renderDatalizationMethodPage();
   } else if (route === "/metodologia") {
     renderMethodologyPage();
   } else if (route === "/guia-power-bi") {
@@ -1057,6 +1163,10 @@ function renderHomePage() {
                 ${icon("gauge")}
                 Ver metodología
               </a>
+              <a class="button secondary" href="/metodo-datalizacion" data-route>
+                ${icon("folder")}
+                Ver método
+              </a>
             </div>
           </div>
         </div>
@@ -1088,6 +1198,15 @@ function renderHomePage() {
       </div>
 
       <section class="feature-grid page-inner" aria-label="Secciones principales">
+        <article class="feature-card">
+          <span class="feature-icon">${icon("folder")}</span>
+          <h3>El método ordena el trabajo</h3>
+          <p>Define Teams, SharePoint, carpetas, nombres, backlog, DEV/PROD, VMC y roles para que el sistema sea delegable.</p>
+          <a class="button small secondary" href="/metodo-datalizacion" data-route>
+            Ver método
+            ${icon("arrowRight")}
+          </a>
+        </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("layers")}</span>
           <h3>La guía ordena la decisión</h3>
@@ -1170,17 +1289,15 @@ function renderHomePage() {
 
       <section class="mini-roadmap page-inner" aria-label="Primeras fases del roadmap">
         ${roadmapPhases
-          .map(
-            (phase, index) => {
-              const lane = laneStyles[phase.lane] || { color: "var(--ypf-blue)" };
-              return `
+          .map((phase, index) => {
+            const lane = laneStyles[phase.lane] || { color: "var(--ypf-blue)" };
+            return `
               <article class="mini-step" style="--lane-color:${lane.color}; --step-order:${index}">
                 <span>${phase.id + 1}</span>
                 <strong>${escapeHtml(phase.title)}</strong>
               </article>
             `;
-            },
-          )
+          })
           .join("")}
       </section>
     </section>
@@ -1677,6 +1794,357 @@ function renderCadenceItem(item, index) {
       <h3>${escapeHtml(item.title)}</h3>
       <p>${escapeHtml(item.text)}</p>
     </article>
+  `;
+}
+
+function renderDatalizationMethodPage() {
+  appRoot.innerHTML = `
+    <section class="page tool-page method-page">
+      <header class="page-heading page-inner method-hero">
+        <span class="eyebrow">Método de Datalización v0.1</span>
+        <h1>Un sistema operativo para trabajar, entregar y sostener productos BI.</h1>
+        <p class="lede">El método ordena cómo el equipo organiza activos, nombra archivos, separa DEV de PROD, mide trabajo, usa Microsoft 365 y prepara el salto hacia VMC/Fabric sin depender de memoria individual.</p>
+      </header>
+
+      ${renderExecutiveBrief(pageNarratives.method)}
+
+      <section class="method-operating-flow page-inner" aria-labelledby="methodOperatingFlowTitle">
+        <div class="method-section-head">
+          <span class="flow-chip">proceso end to end</span>
+          <h2 id="methodOperatingFlowTitle">El método baja de una decisión de orden a una rutina concreta de entrega.</h2>
+          <p>La secuencia evita que el equipo acumule documentos sueltos: primero fija el estándar, después ordena DEV, construye evidencia, nombra activos, mide flujo y recién entonces publica y sostiene en VMC.</p>
+        </div>
+        <div class="method-flow-track" aria-label="Proceso operativo de Datalización">
+          ${methodOperatingFlow.map(renderMethodOperatingStep).join("")}
+        </div>
+      </section>
+
+      <section class="method-command page-inner" aria-labelledby="methodCommandTitle">
+        <div class="method-section-head">
+          <span class="flow-chip">respuesta ejecutiva</span>
+          <h2 id="methodCommandTitle">La reconstrucción del área necesita una forma común de trabajar antes de escalar.</h2>
+          <p>La decisión no es crear más carpetas: es instalar un estándar que vuelva cada producto encontrable, mantenible, medible y publicable con evidencia.</p>
+        </div>
+        <div class="method-command-grid">
+          ${methodPrinciples
+            .map(
+              (item, index) => `
+                <article class="method-command-card" style="--method-accent:${getMethodAccent(index)}">
+                  <span>${String(index + 1).padStart(2, "0")}</span>
+                  <h3>${escapeHtml(item.title)}</h3>
+                  <p>${escapeHtml(item.text)}</p>
+                </article>
+              `,
+            )
+            .join("")}
+        </div>
+      </section>
+
+      <section class="method-planes page-inner" aria-labelledby="methodPlanesTitle">
+        <div class="method-section-head">
+          <span class="flow-chip">arquitectura base</span>
+          <h2 id="methodPlanesTitle">DEV y PROD se separan para que el trabajo interno no contamine lo que consume el negocio.</h2>
+          <p>El Teams de Datalización es el taller controlado; VMC es el ambiente donde vive el producto publicado. Esa frontera evita acoplar borradores, fuentes y pruebas con tableros productivos.</p>
+        </div>
+        <div class="method-plane-flow" aria-label="Doble plano DEV y PROD">
+          ${methodPlanes.map(renderMethodPlane).join("")}
+        </div>
+      </section>
+
+      <section class="method-layers page-inner" aria-labelledby="methodLayersTitle">
+        <div class="method-section-head">
+          <span class="flow-chip">Microsoft 365 como base</span>
+          <h2 id="methodLayersTitle">Cada herramienta cumple una función del método, no una preferencia personal.</h2>
+          <p>Teams, SharePoint, Loop, Lists, OneNote y Copilot se usan como capas coordinadas para comunicación, documentos, seguimiento, conocimiento e IA contextual.</p>
+        </div>
+        <div class="method-layer-grid">
+          ${methodFunctionalLayers.map(renderMethodLayer).join("")}
+        </div>
+      </section>
+
+      <section class="method-channels page-inner" aria-labelledby="methodChannelsTitle">
+        <div class="method-section-head">
+          <span class="flow-chip">PARA + Johnny.Decimal lite</span>
+          <h2 id="methodChannelsTitle">Los canales separan proyecto, producto, área, recurso y archivo sin duplicar información.</h2>
+          <p>Los proyectos viven en Proyectos Activos y se vinculan a áreas por metadatos. Así un proyecto transversal se busca desde varios ángulos sin copiar carpetas.</p>
+        </div>
+        <div class="method-channel-track">
+          ${methodChannels.map(renderMethodChannel).join("")}
+        </div>
+      </section>
+
+      <section class="method-project-system page-inner" aria-labelledby="methodProjectTitle">
+        <div class="method-section-head">
+          <span class="flow-chip">plantilla intra-proyecto</span>
+          <h2 id="methodProjectTitle">Cada proyecto deja el mismo mapa, aunque cambien el área, el producto o el desarrollador.</h2>
+          <p>La plantilla se versiona en 00-Metodo-Datalizacion y cada proyecto registra qué versión aplicó. Eso permite mejorar el método sin romper proyectos existentes.</p>
+        </div>
+        <div class="method-project-grid">
+          <div class="method-folder-browser" aria-label="Explorador de carpetas del proyecto">
+            <div class="method-folder-root">
+              <span>PRJ001-MidGas-Tablero-Objetivos</span>
+              <small>plantilla viva de proyecto</small>
+            </div>
+            ${methodProjectFolders.map(renderMethodFolder).join("")}
+          </div>
+          <div class="method-folder-explain">
+            <article>
+              <span>${icon("book")}</span>
+              <h3>Cada subcarpeta lleva un README mínimo.</h3>
+              <p>Tres líneas alcanzan para explicar qué se guarda, qué no se guarda y quién debería usarlo. El sistema queda autodescubrible y delegable.</p>
+            </article>
+            <article>
+              <span>${icon("quote")}</span>
+              <h3>Minuta curada y reunión cruda no son lo mismo.</h3>
+              <p>Las decisiones, acuerdos y acciones quedan en 00-Gestion/Minutas; grabaciones, transcripciones y chats sin procesar quedan en 99-Reuniones.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="method-naming page-inner" aria-labelledby="methodNamingTitle">
+        <div class="method-section-head">
+          <span class="flow-chip">convención de nombres</span>
+          <h2 id="methodNamingTitle">El nombre del archivo debe explicar qué es, de quién es, cuándo nació y qué versión representa.</h2>
+          <p>La convención evita búsquedas eternas, versiones falsas y activos imposibles de mantener fuera del contexto de quien los creó.</p>
+        </div>
+        <div class="method-naming-grid">
+          <div class="method-naming-lab">
+            <span>patrón estándar</span>
+            <code>${escapeHtml(methodNaming.pattern)}</code>
+            <div>
+              ${methodNaming.examples.map((example) => `<p>${escapeHtml(example)}</p>`).join("")}
+            </div>
+          </div>
+          <div class="method-rule-grid">
+            ${methodNaming.rules.map((rule) => `<article class="method-rule"><span>${icon("shield")}</span><p>${escapeHtml(rule)}</p></article>`).join("")}
+          </div>
+        </div>
+        <details class="method-disclosure">
+          <summary>Ver catálogo de tipos y códigos</summary>
+          <div class="method-catalog-grid">
+            <div>
+              <h3>TIPO cerrado</h3>
+              <div class="method-code-table">
+                ${methodTypeCatalog.map(([code, type]) => `<span>${escapeHtml(code)}</span><p>${escapeHtml(type)}</p>`).join("")}
+              </div>
+            </div>
+            <div>
+              <h3>Código de proyecto o área</h3>
+              <div class="method-code-table method-code-table-wide">
+                ${methodCodeCatalog.map((item) => `<span>${escapeHtml(item.prefix)}</span><p>${escapeHtml(item.use)} · ${escapeHtml(item.example)}</p>`).join("")}
+              </div>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section class="method-backlog page-inner" aria-labelledby="methodBacklogTitle">
+        <div class="method-section-head">
+          <span class="flow-chip">Backlog Datalización v0</span>
+          <h2 id="methodBacklogTitle">El seguimiento mide flujo real, no esfuerzo declarado.</h2>
+          <p>La lista de SharePoint arranca simple: coexistencia con el sistema actual, backlog propio en paralelo y, más adelante, PowerApp de ingreso con tablero del equipo en Power BI.</p>
+        </div>
+        <div class="method-backlog-grid">
+          <div class="method-column-cloud" aria-label="Columnas del backlog">
+            ${methodBacklogColumns.map((column) => `<span>${escapeHtml(column)}</span>`).join("")}
+          </div>
+          <div class="method-signal-grid">
+            ${methodObjectiveSignals.map(renderMethodSignal).join("")}
+          </div>
+        </div>
+        <div class="method-metric-row" aria-label="Métricas del tablero del equipo">
+          ${methodTeamMetrics.map((metric) => `<article><span>${icon("gauge")}</span><p>${escapeHtml(metric)}</p></article>`).join("")}
+        </div>
+      </section>
+
+      <section class="method-vmc page-inner" aria-labelledby="methodVmcTitle">
+        <div class="method-section-head">
+          <span class="flow-chip">VMC / Fabric</span>
+          <h2 id="methodVmcTitle">La publicación productiva necesita workspaces, Lakehouse y permisos como arquitectura, no como costumbre.</h2>
+          <p>El método propone un modelo conceptual para pasar de Teams + SharePoint como DEV a VMC como PROD, con capas Bronze, Silver y Gold y promotion controlada.</p>
+        </div>
+        <div class="method-vmc-diagram">
+          <article class="method-vmc-card">
+            <span>Workspaces</span>
+            <h3>VMC-Datalizacion-[Dominio]-[Stage]</h3>
+            <ul>${methodVmcModel.workspaces.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+          </article>
+          <div class="method-vmc-bridge">
+            <span>Deployment Pipelines</span>
+            ${icon("arrowRight")}
+          </div>
+          <article class="method-vmc-card">
+            <span>Lakehouse</span>
+            <h3>Bronze, Silver y Gold</h3>
+            <ul>${methodVmcModel.lakehouse.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+          </article>
+        </div>
+        <details class="method-disclosure">
+          <summary>Ver ciclo de vida DEV → TEST → PROD</summary>
+          <ol class="method-lifecycle">
+            ${methodVmcModel.lifecycle.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+          </ol>
+        </details>
+      </section>
+
+      <section class="method-roadmap page-inner" aria-labelledby="methodRoadmapTitle">
+        <div class="method-section-head">
+          <span class="flow-chip">implementación</span>
+          <h2 id="methodRoadmapTitle">El método se instala con piloto, tablero, adopción y gobierno interno.</h2>
+          <p>No hace falta esperar una solución perfecta: la versión 0.1 se valida con un caso piloto, se mide y se mejora con feedback real.</p>
+        </div>
+        <div class="method-roadmap-track">
+          ${methodRoadmap.map(renderMethodRoadmapItem).join("")}
+        </div>
+      </section>
+
+      <section class="method-governance page-inner" aria-labelledby="methodGovernanceTitle">
+        <div class="method-section-head">
+          <span class="flow-chip">gobernanza</span>
+          <h2 id="methodGovernanceTitle">El método necesita dueños explícitos para no depender del entusiasmo inicial.</h2>
+          <p>Roles, decisiones tomadas, pendientes y backlog futuro mantienen el método vivo sin convertirlo en burocracia.</p>
+        </div>
+        <div class="method-governance-grid">
+          ${methodRoles.map(renderMethodRole).join("")}
+        </div>
+        <div class="method-decision-grid">
+          ${renderDecisionDisclosure("Decisiones tomadas", methodDecisions, "green")}
+          ${renderDecisionDisclosure("Decisiones pendientes", methodPendingDecisions, "orange")}
+          ${renderDecisionDisclosure(
+            "Backlog del método",
+            methodFutureBacklog.map(([version, item]) => `${version}: ${item}`),
+            "blue",
+          )}
+        </div>
+      </section>
+    </section>
+  `;
+}
+
+function getMethodAccent(index) {
+  const colors = ["#35c9bd", "#3aa0ff", "#ff6b3b", "#8d72ff", "#30d174"];
+  return colors[index % colors.length];
+}
+
+function renderMethodOperatingStep(step, index) {
+  return `
+    <article class="method-flow-step" style="--method-accent:${getMethodAccent(index)}">
+      <div class="method-flow-step-head">
+        <span>${String(index + 1).padStart(2, "0")}</span>
+        <h3>${escapeHtml(step.step)}</h3>
+      </div>
+      <p>${escapeHtml(step.what)}</p>
+      <dl>
+        <div><dt>Por qué</dt><dd>${escapeHtml(step.why)}</dd></div>
+        <div><dt>Para qué</dt><dd>${escapeHtml(step.purpose)}</dd></div>
+        <div><dt>Cómo</dt><dd>${escapeHtml(step.how)}</dd></div>
+      </dl>
+      <details class="method-step-detail">
+        <summary>Definición técnica, funcional y ejemplo</summary>
+        <div>
+          <strong>Definición técnica</strong>
+          <p>${escapeHtml(step.technical)}</p>
+        </div>
+        <div>
+          <strong>Definición funcional</strong>
+          <p>${escapeHtml(step.functional)}</p>
+        </div>
+        <div>
+          <strong>Ejemplo</strong>
+          <p>${escapeHtml(step.example)}</p>
+        </div>
+      </details>
+    </article>
+  `;
+}
+
+function renderMethodPlane(plane, index) {
+  return `
+    <article class="method-plane-card ${plane.id}" style="--method-accent:${getMethodAccent(index)}">
+      <span>${escapeHtml(plane.id.toUpperCase())}</span>
+      <h3>${escapeHtml(plane.title)}</h3>
+      <dl>
+        <div><dt>Dónde</dt><dd>${escapeHtml(plane.location)}</dd></div>
+        <div><dt>Para qué</dt><dd>${escapeHtml(plane.purpose)}</dd></div>
+        <div><dt>Acceso</dt><dd>${escapeHtml(plane.access)}</dd></div>
+      </dl>
+      <strong>${escapeHtml(plane.guardrail)}</strong>
+    </article>
+  `;
+}
+
+function renderMethodLayer(layer, index) {
+  return `
+    <article class="method-layer-card" style="--method-accent:${getMethodAccent(index)}">
+      <span>${escapeHtml(layer.tool)}</span>
+      <h3>${escapeHtml(layer.layer)}</h3>
+      <p>${escapeHtml(layer.use)}</p>
+    </article>
+  `;
+}
+
+function renderMethodChannel(channel, index) {
+  return `
+    <article class="method-channel-card" style="--method-accent:${getMethodAccent(index)}">
+      <span>${escapeHtml(channel.code)}</span>
+      <h3>${escapeHtml(channel.title)}</h3>
+      <p>${escapeHtml(channel.group)}</p>
+    </article>
+  `;
+}
+
+function renderMethodFolder(folder, index) {
+  return `
+    <details class="method-folder-detail" style="--method-accent:${getMethodAccent(index)}" ${index === 0 ? "open" : ""}>
+      <summary><span>${escapeHtml(folder.code)}</span><strong>${escapeHtml(folder.name)}</strong></summary>
+      <p>${escapeHtml(folder.purpose)}</p>
+    </details>
+  `;
+}
+
+function renderMethodSignal(signal) {
+  return `
+    <article class="method-signal-card">
+      <div>
+        <span>Evitar</span>
+        <p>${escapeHtml(signal.avoid)}</p>
+      </div>
+      <strong>${icon("arrowRight")}</strong>
+      <div>
+        <span>Preferir</span>
+        <p>${escapeHtml(signal.prefer)}</p>
+      </div>
+    </article>
+  `;
+}
+
+function renderMethodRoadmapItem(item, index) {
+  return `
+    <article class="method-roadmap-item" style="--method-accent:${getMethodAccent(index)}">
+      <span>${escapeHtml(item.moment)}</span>
+      <h3>${escapeHtml(item.focus)}</h3>
+      <p>${escapeHtml(item.deliverable)}</p>
+    </article>
+  `;
+}
+
+function renderMethodRole(item, index) {
+  return `
+    <article class="method-role-card" style="--method-accent:${getMethodAccent(index)}">
+      <span>${icon("shield")}</span>
+      <h3>${escapeHtml(item.role)}</h3>
+      <p>${escapeHtml(item.responsibility)}</p>
+    </article>
+  `;
+}
+
+function renderDecisionDisclosure(title, items, tone) {
+  return `
+    <details class="method-disclosure method-decision ${tone}">
+      <summary>${escapeHtml(title)}</summary>
+      <ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+    </details>
   `;
 }
 
@@ -2228,16 +2696,7 @@ function getFilteredTerms() {
     if (!matchesCategory) return false;
     if (!query) return true;
 
-    const haystack = normalizeText(
-      [
-        term.term,
-        term.category,
-        term.definition,
-        term.whyItMatters,
-        term.example,
-        term.risk,
-      ].join(" "),
-    );
+    const haystack = normalizeText([term.term, term.category, term.definition, term.whyItMatters, term.example, term.risk].join(" "));
     return haystack.includes(query);
   });
 }

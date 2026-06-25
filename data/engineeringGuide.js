@@ -122,7 +122,7 @@ export const guideSections = [
       "Versionar PBIP/TMDL, documentación, Spec y scripts cuando aplique",
       "Separar Dev, Test y Prod con reglas por ambiente",
       "Revisar cambios por pull request",
-      "Validar pruebas funcionales, seguridad, refresh y performance antes del go-live",
+      "Validar pruebas funcionales, seguridad, refresh y performance antes de la salida a producción",
     ],
     deliverables: ["Repositorio actualizado", "UAT aprobada", "Checklist de release", "Aprobación de publicación"],
     risk: "Publicar sin trazabilidad, sin pruebas suficientes o con diferencias entre ambientes que rompen producción.",
@@ -139,7 +139,7 @@ export const guideSections = [
       "Confirmar refresh inicial, gateway, parámetros y conexiones productivas",
       "Comunicar a usuarios dónde entrar, qué cambió y qué acción se espera",
     ],
-    deliverables: ["Reporte publicado", "Semantic model productivo", "App o acceso configurado", "Comunicación de go-live"],
+    deliverables: ["Reporte publicado", "Semantic model productivo", "App o acceso configurado", "Comunicación de salida a producción"],
     risk: "La solución queda en desarrollo o prueba, sin acceso real, sin refresh productivo o sin adopción clara.",
   },
   {
@@ -155,7 +155,7 @@ export const guideSections = [
       "Priorizar mejoras por impacto operativo y costo de mantenimiento",
     ],
     deliverables: ["Dashboard operativo", "Runbook de incidentes", "SLA y alertas", "Backlog de mejora continua"],
-    risk: "La automatización funciona el día del go-live, pero se degrada sin alertas, ownership ni aprendizaje operativo.",
+    risk: "La automatización funciona el día de la salida a producción, pero se degrada sin alertas, responsables claros ni aprendizaje operativo.",
   },
 ];
 

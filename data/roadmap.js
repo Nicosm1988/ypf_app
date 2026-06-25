@@ -1,6 +1,6 @@
 export const laneStyles = {
   "Producto y negocio": { color: "#ff5535", badge: "orange" },
-  "Datos": { color: "#2878ff", badge: "" },
+  Datos: { color: "#2878ff", badge: "" },
   "Desarrollo BI": { color: "#30d174", badge: "green" },
   "Gobierno y experiencia": { color: "#7c5cff", badge: "" },
   "Publicación y operación": { color: "#35c9bd", badge: "green" },
@@ -43,11 +43,7 @@ export const roadmapPhases = [
       "Preparar consultas con nombres claros, parámetros y pasos legibles",
       "Validar calidad, nulos, duplicados, claves huérfanas, Query Folding e incremental refresh",
     ],
-    keyActivities: [
-      "Mapear fuentes y contratos de datos",
-      "Preparar consultas o pipelines",
-      "Validar calidad y plan de refresh",
-    ],
+    keyActivities: ["Mapear fuentes y contratos de datos", "Preparar consultas o pipelines", "Validar calidad y plan de refresh"],
     deliverables: ["Mapa de fuentes", "Consultas o pipelines preparados", "Checklist de calidad", "Plan de refresh"],
     targetOutcome: "Datos confiables, actualizables y trazables antes del modelado.",
     owner: "Data Engineering + Power BI",
@@ -67,16 +63,11 @@ export const roadmapPhases = [
       "Controlar cardinalidad, columnas necesarias y tipos de datos",
       "Validar storage: Import, Direct Lake, DirectQuery o modelo compuesto cuando aplique",
     ],
-    keyActivities: [
-      "Diseñar esquema estrella",
-      "Definir relaciones y granularidad",
-      "Validar storage y performance base",
-    ],
+    keyActivities: ["Diseñar esquema estrella", "Definir relaciones y granularidad", "Validar storage y performance base"],
     deliverables: ["Modelo semántico", "Diagrama estrella", "Ficha de granularidad", "Diccionario de tablas"],
     targetOutcome: "Modelo semántico entendible, estable y listo para calcular reglas.",
     owner: "Arquitectura BI + Modelado Power BI",
-    riskIfSkipped:
-      "Aparecen totales inconsistentes, filtros ambiguos, relaciones frágiles y decisiones difíciles de explicar.",
+    riskIfSkipped: "Aparecen totales inconsistentes, filtros ambiguos, relaciones frágiles y decisiones difíciles de explicar.",
     gate: "Gate 3 - Modelo validado",
   },
   {
@@ -91,11 +82,7 @@ export const roadmapPhases = [
       "Reservar iteradores para casos que realmente lo requieran",
       "Documentar criterio funcional, fórmula, formato y prueba de cada medida crítica",
     ],
-    keyActivities: [
-      "Crear medidas de negocio",
-      "Ordenar carpetas y formatos",
-      "Probar resultados contra criterios de aceptación",
-    ],
+    keyActivities: ["Crear medidas de negocio", "Ordenar carpetas y formatos", "Probar resultados contra criterios de aceptación"],
     deliverables: ["Diccionario de medidas", "Medidas DAX probadas", "Carpetas de medidas", "Casos de prueba DAX"],
     targetOutcome: "Reglas calculadas de forma consistente y verificable.",
     owner: "Power BI Engineering",
@@ -115,16 +102,11 @@ export const roadmapPhases = [
       "Documentar linaje, owners, stewards, sensibilidad y certificación",
       "Validar que navegación, drill-through y medidas respeten seguridad",
     ],
-    keyActivities: [
-      "Definir matriz de permisos",
-      "Configurar y probar RLS/OLS",
-      "Documentar gobierno y linaje",
-    ],
+    keyActivities: ["Definir matriz de permisos", "Configurar y probar RLS/OLS", "Documentar gobierno y linaje"],
     deliverables: ["Matriz de permisos", "Reglas RLS/OLS probadas", "Mapa de linaje", "Criterios de certificación"],
     targetOutcome: "Confianza aprobada antes de abrir la solución a usuarios.",
     owner: "Gobierno de datos + Seguridad + BI",
-    riskIfSkipped:
-      "Se exponen datos, se habilitan acciones incorrectas o se publica una automatización sin responsable claro.",
+    riskIfSkipped: "Se exponen datos, se habilitan acciones incorrectas o se publica una automatización sin responsable claro.",
     gate: "Gate 5 - Confianza aprobada",
   },
   {
@@ -139,11 +121,7 @@ export const roadmapPhases = [
       "Reducir visuales, slicers e interacciones que no aportan a la decisión",
       "Validar adopción, acción esperada, trazabilidad y performance percibida",
     ],
-    keyActivities: [
-      "Diseñar salida operativa",
-      "Validar navegación y acción esperada",
-      "Probar experiencia con usuarios clave",
-    ],
+    keyActivities: ["Diseñar salida operativa", "Validar navegación y acción esperada", "Probar experiencia con usuarios clave"],
     deliverables: ["Reporte o salida operativa", "Mapa de navegación", "Checklist UX/performance", "Plan de adopción"],
     targetOutcome: "Salida accionable que permite decidir sin volver al circuito manual.",
     owner: "BI + UX + Usuarios clave",
@@ -163,16 +141,11 @@ export const roadmapPhases = [
       "Ejecutar pruebas funcionales, seguridad, refresh y performance",
       "Obtener aprobación formal para publicar en producción",
     ],
-    keyActivities: [
-      "Revisar cambios por pull request",
-      "Validar en Test",
-      "Preparar checklist de publicación",
-    ],
+    keyActivities: ["Revisar cambios por pull request", "Validar en Test", "Preparar checklist de publicación"],
     deliverables: ["Repositorio actualizado", "UAT aprobada", "Checklist de release", "Aprobación de publicación"],
     targetOutcome: "Solución aprobada para publicarse sin cambios manuales improvisados.",
     owner: "BI Engineering + DevOps + Usuarios clave",
-    riskIfSkipped:
-      "Se publica sin trazabilidad, sin pruebas suficientes o con diferencias entre ambientes que rompen producción.",
+    riskIfSkipped: "Se publica sin trazabilidad, sin pruebas suficientes o con diferencias entre ambientes que rompen producción.",
     gate: "Gate 7 - Aprobado para publicar",
   },
   {
@@ -187,16 +160,11 @@ export const roadmapPhases = [
       "Confirmar refresh inicial, gateway, parámetros y conexiones productivas",
       "Comunicar a usuarios qué cambió, dónde entra cada uno y qué acción se espera",
     ],
-    keyActivities: [
-      "Publicar en workspace productivo",
-      "Configurar app, permisos y refresh",
-      "Comunicar salida a usuarios",
-    ],
-    deliverables: ["Reporte publicado", "Semantic model productivo", "App o acceso configurado", "Comunicación de go-live"],
+    keyActivities: ["Publicar en workspace productivo", "Configurar app, permisos y refresh", "Comunicar salida a usuarios"],
+    deliverables: ["Reporte publicado", "Semantic model productivo", "App o acceso configurado", "Comunicación de salida a producción"],
     targetOutcome: "Automatización publicada y disponible para usuarios reales.",
     owner: "BI Engineering + Operación BI + Negocio",
-    riskIfSkipped:
-      "La solución queda en desarrollo o prueba, sin acceso real, sin refresh productivo o sin adopción clara.",
+    riskIfSkipped: "La solución queda en desarrollo o prueba, sin acceso real, sin refresh productivo o sin adopción clara.",
     gate: "Gate 8 - Publicado en producción",
   },
   {
@@ -211,16 +179,12 @@ export const roadmapPhases = [
       "Auditar uso real, adopción y acciones ejecutadas",
       "Priorizar mejoras por impacto operativo y costo de mantenimiento",
     ],
-    keyActivities: [
-      "Monitorear operación",
-      "Gestionar incidentes",
-      "Mantener backlog de mejora",
-    ],
+    keyActivities: ["Monitorear operación", "Gestionar incidentes", "Mantener backlog de mejora"],
     deliverables: ["Dashboard operativo", "Runbook de incidentes", "SLA y alertas", "Backlog de mejora continua"],
     targetOutcome: "Proceso publicado, monitoreado y mejorado con evidencia.",
     owner: "Operación BI + Plataforma + Negocio",
     riskIfSkipped:
-      "La automatización funciona el día del go-live, pero se degrada sin alertas, sin ownership y sin aprendizaje operativo.",
+      "La automatización funciona el día de la salida a producción, pero se degrada sin alertas, responsables claros y aprendizaje operativo.",
     gate: "Gate 9 - Operando y mejorando",
   },
 ];

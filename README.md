@@ -5,6 +5,7 @@ Portal interno para el área de Datalización de YPF con recursos de consulta y 
 Datalización es la práctica de automatizar procesos mediante datos confiables, reglas explícitas, acciones trazables y operación monitoreada. La web está replanteada con una estructura ejecutiva de síntesis, razones, evidencia, acción y control.
 
 - Guía + roadmap BI/Fabric para ordenar el ciclo completo desde proceso y reglas hasta operación.
+- Método de Datalización v0.1 para organizar DEV/PROD, Teams, SharePoint, canales, carpetas, naming, backlog, VMC y gobierno del equipo.
 - Metodología de mejora continua BI con OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, flujo continuo, SMED, Poka-Yoke y Kata.
 - Narrativa ejecutiva en cada página para presentar primero la conclusión, luego los argumentos y finalmente la evidencia operativa.
 - Diccionario BI para alinear conceptos de automatización, datos, Power BI, Fabric, performance, gobierno y adopción.
@@ -20,7 +21,7 @@ La app es estatica, sin credenciales, sin datos sensibles y compatible con Verce
 
 - HTML, CSS y JavaScript vanilla.
 - Modulos ES para separar datos de UI.
-- Contenido local editable en `data/dictionary.js`, `data/engineeringGuide.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
+- Contenido local editable en `data/dictionary.js`, `data/engineeringGuide.js`, `data/datalizationMethod.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
 - Documentación técnica en `docs/librerias-agentes-mcp.md`.
 - Skills repo-locales en `.codex/skills`.
 - Agentes operativos en `.codex/agents`.
@@ -45,6 +46,7 @@ El servidor local tambien soporta:
 
 ```text
 http://127.0.0.1:8001/guia-power-bi
+http://127.0.0.1:8001/metodo-datalizacion
 http://127.0.0.1:8001/metodologia
 http://127.0.0.1:8001/diccionario
 http://127.0.0.1:8001/roadmap
@@ -61,17 +63,18 @@ npm run build
 
 El build valida que:
 
-- Exista Home, Guía Power BI/Fabric, Metodología, Diccionario BI, Roadmap BI, Proyecto Power BI, Librerías y Atajos.
+- Exista Home, Guía Power BI/Fabric, Método de Datalización, Metodología, Diccionario BI, Roadmap BI, Proyecto Power BI, Librerías y Atajos.
 - El diccionario tenga al menos 65 términos.
 - El roadmap tenga los 9 gates obligatorios y arranque con PRD/Spec.
 - La guía tenga capítulos, comparacion PRD vs Spec y checklist de salida a producción.
 - La metodología tenga OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, SMED, Poka-Yoke, Kata y cadencias de operación.
+- El Método de Datalización tenga proceso end to end, separación DEV/PROD, 8 canales base, 12 subcarpetas estándar y naming gobernado.
 - Cada página principal tenga narrativa ejecutiva con tesis, tres soportes y acción.
 - El sitio incluya un árbol de decantación conceptual con niveles y ramas claras.
 - El catálogo técnico tenga documentación Markdown y familias de herramientas.
 - Los atajos tengan categorías e items navegables.
 - Los datos tengan los campos requeridos.
-- Vercel tenga rewrites para `/guia-power-bi`, `/metodologia`, `/diccionario`, `/roadmap`, `/proyecto-power-bi`, `/librerias` y `/atajos`.
+- Vercel tenga rewrites para `/guia-power-bi`, `/metodo-datalizacion`, `/metodologia`, `/diccionario`, `/roadmap`, `/proyecto-power-bi`, `/librerias` y `/atajos`.
 - Se genere `dist/` con las rutas estaticas listas para Vercel.
 
 ## Validar calidad completa
@@ -160,6 +163,18 @@ Editar `data/engineeringGuide.js`.
 
 El flujo interactivo combina esos capítulos con los 9 gates de `data/roadmap.js`.
 
+## Editar Método de Datalización
+
+Editar `data/datalizationMethod.js`.
+
+- `methodOperatingFlow`: proceso end to end con qué es, por qué, para qué, cómo, definición técnica, funcional y ejemplo.
+- `methodPlanes`: separación entre DEV Datalización y PROD VMC.
+- `methodFunctionalLayers`: capas Microsoft 365 para comunicación, documentos, co-creación, seguimiento, conocimiento e IA contextual.
+- `methodChannels`: canales Teams con criterio PARA + Johnny.Decimal lite.
+- `methodProjectFolders`: plantilla intra-proyecto de 12 subcarpetas.
+- `methodNaming`: patrón de nombres, reglas, ejemplos y catálogos.
+- `methodRoadmap`, `methodRoles`, `methodDecisions` y `methodPendingDecisions`: adopción, gobierno y decisiones.
+
 ## Editar metodología de mejora continua BI
 
 Editar `data/methodology.js`.
@@ -221,6 +236,7 @@ No conectar esta versión a sistemas internos, APIs privadas, tokens ni fuentes 
 - `app.js`
 - `data/dictionary.js`
 - `data/engineeringGuide.js`
+- `data/datalizationMethod.js`
 - `data/methodology.js`
 - `data/executiveNarrative.js`
 - `data/roadmap.js`

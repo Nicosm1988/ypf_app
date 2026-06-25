@@ -51,7 +51,12 @@ body {
     var(--bg);
   color: var(--ink);
   font-family:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
     sans-serif;
 }
 
@@ -189,9 +194,7 @@ p {
   overflow: hidden;
   border: 1px solid rgba(79, 179, 255, 0.62);
   border-radius: 8px;
-  background:
-    linear-gradient(135deg, #ffd200, #ffe675 58%, #fff2a6),
-    #ffd200;
+  background: linear-gradient(135deg, #ffd200, #ffe675 58%, #fff2a6), #ffd200;
   color: #0054a6;
   font-size: 0.92rem;
   font-weight: 950;
@@ -600,8 +603,7 @@ p {
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(53, 201, 189, 0.11), transparent 8rem),
-    rgba(18, 14, 30, 0.82);
+    radial-gradient(circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(53, 201, 189, 0.11), transparent 8rem), rgba(18, 14, 30, 0.82);
   box-shadow: var(--shadow);
   backdrop-filter: blur(14px);
 }
@@ -947,8 +949,7 @@ p {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at var(--spot-x, 50%) var(--spot-y, 18%), rgba(53, 201, 189, 0.1), transparent 10rem),
-    rgba(255, 255, 255, 0.045);
+    radial-gradient(circle at var(--spot-x, 50%) var(--spot-y, 18%), rgba(53, 201, 189, 0.1), transparent 10rem), rgba(255, 255, 255, 0.045);
 }
 
 .concept-tree-level-head {
@@ -1122,9 +1123,11 @@ p {
   border-radius: var(--radius);
   background:
     radial-gradient(circle at 52% 52%, rgba(38, 70, 95, 0.34), transparent 46%),
-    radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px),
-    rgba(8, 5, 16, 0.8);
-  background-size: auto, 18px 18px, auto;
+    radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px), rgba(8, 5, 16, 0.8);
+  background-size:
+    auto,
+    18px 18px,
+    auto;
 }
 
 .workflow-board::before {
@@ -1307,9 +1310,7 @@ p {
 
 .workflow-node-card.active {
   border-color: rgba(53, 201, 189, 0.48);
-  background:
-    linear-gradient(180deg, rgba(53, 201, 189, 0.12), rgba(255, 255, 255, 0.035)),
-    rgba(33, 28, 48, 0.9);
+  background: linear-gradient(180deg, rgba(53, 201, 189, 0.12), rgba(255, 255, 255, 0.035)), rgba(33, 28, 48, 0.9);
 }
 
 .workflow-detail-drawer {
@@ -1325,8 +1326,7 @@ p {
   border-radius: var(--radius);
   background:
     radial-gradient(circle at 10% 0%, rgba(53, 201, 189, 0.16), transparent 16rem),
-    linear-gradient(180deg, rgba(53, 201, 189, 0.1), transparent),
-    rgba(8, 12, 18, 0.94);
+    linear-gradient(180deg, rgba(53, 201, 189, 0.1), transparent), rgba(8, 12, 18, 0.94);
   color: rgba(255, 255, 255, 0.78);
   box-shadow:
     0 18px 44px rgba(0, 0, 0, 0.24),
@@ -1563,8 +1563,7 @@ p {
   left: 34px;
   height: 3px;
   border-radius: 999px;
-  background:
-    linear-gradient(90deg, rgba(58, 160, 255, 0.14), rgba(53, 201, 189, 0.72), rgba(58, 160, 255, 0.14));
+  background: linear-gradient(90deg, rgba(58, 160, 255, 0.14), rgba(53, 201, 189, 0.72), rgba(58, 160, 255, 0.14));
   background-size: 200% 100%;
   animation: flowSweep 6s linear infinite;
   opacity: 0.78;
@@ -1580,9 +1579,7 @@ p {
   padding: 16px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--lane-color), transparent 88%), transparent 72%),
-    var(--surface);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--lane-color), transparent 88%), transparent 72%), var(--surface);
   animation: flowBreathe 5.8s ease-in-out infinite;
   animation-delay: calc(var(--step-order) * 0.12s);
 }
@@ -1823,8 +1820,7 @@ p {
   border-radius: var(--radius);
   background:
     radial-gradient(circle at 72% 18%, rgba(255, 82, 46, 0.18), transparent 28%),
-    radial-gradient(circle at 48% 92%, rgba(94, 92, 255, 0.18), transparent 30%),
-    #0c0717;
+    radial-gradient(circle at 48% 92%, rgba(94, 92, 255, 0.18), transparent 30%), #0c0717;
   color: #ffffff;
   box-shadow: 0 24px 70px rgba(5, 3, 12, 0.28);
 }
@@ -1880,9 +1876,7 @@ p {
 
 .flow-tab.active {
   border-color: rgba(255, 255, 255, 0.08);
-  background:
-    linear-gradient(90deg, rgba(53, 201, 189, 0.16), rgba(255, 255, 255, 0.03)),
-    rgba(255, 255, 255, 0.04);
+  background: linear-gradient(90deg, rgba(53, 201, 189, 0.16), rgba(255, 255, 255, 0.03)), rgba(255, 255, 255, 0.04);
   color: #ffffff;
   box-shadow: inset 16px 0 38px rgba(53, 201, 189, 0.13);
 }
@@ -1909,7 +1903,9 @@ p {
   background:
     radial-gradient(circle at 50% 50%, rgba(55, 39, 92, 0.6), transparent 55%),
     radial-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px);
-  background-size: auto, 16px 16px;
+  background-size:
+    auto,
+    16px 16px;
 }
 
 .flow-canvas::before {
@@ -2271,7 +2267,9 @@ p {
   background:
     radial-gradient(circle at 50% 56%, rgba(55, 39, 92, 0.32), transparent 58%),
     radial-gradient(rgba(255, 255, 255, 0.13) 1px, transparent 1px);
-  background-size: auto, 17px 17px;
+  background-size:
+    auto,
+    17px 17px;
 }
 
 .unified-flow-canvas .flow-canvas-copy {
@@ -2315,9 +2313,7 @@ p {
   gap: 7px;
   padding: 13px 12px 12px;
   border-color: color-mix(in srgb, var(--flow-color), transparent 38%);
-  background:
-    linear-gradient(150deg, color-mix(in srgb, var(--flow-color), transparent 84%), transparent 70%),
-    rgba(33, 31, 44, 0.88);
+  background: linear-gradient(150deg, color-mix(in srgb, var(--flow-color), transparent 84%), transparent 70%), rgba(33, 31, 44, 0.88);
   font: inherit;
   cursor: pointer;
   animation: unifiedNodeTrace 18s linear infinite;
@@ -2603,9 +2599,7 @@ p {
   padding: clamp(18px, 3vw, 24px);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius);
-  background:
-    linear-gradient(150deg, rgba(53, 201, 189, 0.08), transparent 58%),
-    rgba(255, 255, 255, 0.045);
+  background: linear-gradient(150deg, rgba(53, 201, 189, 0.08), transparent 58%), rgba(255, 255, 255, 0.045);
 }
 
 .guide-model-head {
@@ -2637,9 +2631,7 @@ p {
   padding: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent),
-    rgba(8, 12, 18, 0.36);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent), rgba(8, 12, 18, 0.36);
 }
 
 .guide-model-paper {
@@ -2650,9 +2642,7 @@ p {
   padding: clamp(16px, 2vw, 22px);
   border: 1px solid rgba(5, 18, 36, 0.12);
   border-radius: 6px;
-  background:
-    linear-gradient(180deg, rgba(255, 210, 0, 0.16), transparent 88px),
-    #f8fbff;
+  background: linear-gradient(180deg, rgba(255, 210, 0, 0.16), transparent 88px), #f8fbff;
   color: #102334;
   box-shadow:
     0 18px 36px rgba(0, 0, 0, 0.18),
@@ -2875,8 +2865,7 @@ p {
   left: 32px;
   height: 3px;
   border-radius: 999px;
-  background:
-    linear-gradient(90deg, rgba(58, 160, 255, 0.16), rgba(53, 201, 189, 0.76), rgba(58, 160, 255, 0.16));
+  background: linear-gradient(90deg, rgba(58, 160, 255, 0.16), rgba(53, 201, 189, 0.76), rgba(58, 160, 255, 0.16));
   background-size: 220% 100%;
   animation: flowSweep 7s linear infinite;
   opacity: 0.7;
@@ -2892,9 +2881,7 @@ p {
   padding: 14px;
   border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: var(--radius);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--lane-color), transparent 88%), transparent 72%),
-    rgba(255, 255, 255, 0.055);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--lane-color), transparent 88%), transparent 72%), rgba(255, 255, 255, 0.055);
   scroll-snap-align: start;
   animation: flowBreathe 6.4s ease-in-out infinite;
   animation-delay: calc(var(--step-order) * 0.1s);
@@ -3363,8 +3350,13 @@ p {
   left: 30px;
   height: 3px;
   border-radius: 999px;
-  background:
-    linear-gradient(90deg, rgba(255, 107, 59, 0.2), rgba(53, 201, 189, 0.92), rgba(58, 160, 255, 0.45), rgba(141, 114, 255, 0.75));
+  background: linear-gradient(
+    90deg,
+    rgba(255, 107, 59, 0.2),
+    rgba(53, 201, 189, 0.92),
+    rgba(58, 160, 255, 0.45),
+    rgba(141, 114, 255, 0.75)
+  );
   background-size: 240% 100%;
   animation: flowSweep 7s linear infinite;
   opacity: 0.9;
@@ -3381,9 +3373,7 @@ p {
   padding: 14px;
   border: 1px solid color-mix(in srgb, var(--guide-color), transparent 58%);
   border-radius: var(--radius);
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--guide-color), transparent 84%), transparent 72%),
-    rgba(255, 255, 255, 0.055);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--guide-color), transparent 84%), transparent 72%), rgba(255, 255, 255, 0.055);
   scroll-snap-align: start;
   animation: flowBreathe 6.2s ease-in-out infinite;
   animation-delay: calc(var(--guide-order) * 0.12s);
@@ -3440,8 +3430,7 @@ p {
   left: 42px;
   width: 2px;
   border-radius: 999px;
-  background:
-    linear-gradient(180deg, var(--guide-color), color-mix(in srgb, var(--guide-color), transparent 92%));
+  background: linear-gradient(180deg, var(--guide-color), color-mix(in srgb, var(--guide-color), transparent 92%));
   opacity: 0.58;
 }
 
@@ -3466,9 +3455,7 @@ p {
   place-items: center;
   border: 1px solid color-mix(in srgb, var(--guide-color), transparent 26%);
   border-radius: 50%;
-  background:
-    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.48), transparent 28%),
-    var(--guide-color);
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.48), transparent 28%), var(--guide-color);
   color: #071316;
   font-weight: 950;
   box-shadow: 0 0 34px color-mix(in srgb, var(--guide-color), transparent 66%);
@@ -3494,9 +3481,7 @@ p {
   padding: clamp(20px, 3vw, 30px);
   border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: var(--radius);
-  background:
-    linear-gradient(120deg, color-mix(in srgb, var(--guide-color), transparent 90%), transparent 34%),
-    rgba(255, 255, 255, 0.05);
+  background: linear-gradient(120deg, color-mix(in srgb, var(--guide-color), transparent 90%), transparent 34%), rgba(255, 255, 255, 0.05);
   box-shadow: 0 14px 34px rgba(3, 8, 14, 0.18);
   transition:
     border-color 180ms ease,
@@ -3511,8 +3496,7 @@ p {
   right: 0;
   left: 0;
   height: 3px;
-  background:
-    linear-gradient(90deg, var(--guide-color), transparent 72%);
+  background: linear-gradient(90deg, var(--guide-color), transparent 72%);
 }
 
 .guide-journey-step:hover .guide-step-body {
@@ -3598,8 +3582,7 @@ p {
   gap: 6px;
   padding: 4px 0 4px 16px;
   border-left: 4px solid var(--guide-color);
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--guide-color), transparent 88%), transparent 74%);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--guide-color), transparent 88%), transparent 74%);
 }
 
 .guide-step-columns {
@@ -3659,9 +3642,7 @@ p {
   padding: 12px;
   border: 1px solid color-mix(in srgb, var(--guide-color), transparent 72%);
   border-radius: var(--radius);
-  background:
-    linear-gradient(150deg, color-mix(in srgb, var(--guide-color), transparent 90%), transparent 70%),
-    rgba(255, 255, 255, 0.035);
+  background: linear-gradient(150deg, color-mix(in srgb, var(--guide-color), transparent 90%), transparent 70%), rgba(255, 255, 255, 0.035);
 }
 
 .guide-glossary-card strong {
@@ -3715,9 +3696,7 @@ p {
   padding: 14px;
   border: 1px solid color-mix(in srgb, var(--guide-color), transparent 68%);
   border-radius: var(--radius);
-  background:
-    linear-gradient(150deg, color-mix(in srgb, var(--guide-color), transparent 88%), transparent 72%),
-    rgba(255, 255, 255, 0.045);
+  background: linear-gradient(150deg, color-mix(in srgb, var(--guide-color), transparent 88%), transparent 72%), rgba(255, 255, 255, 0.045);
   animation: flowBreathe 6.8s ease-in-out infinite;
   animation-delay: calc(var(--guide-order) * 0.1s);
 }
@@ -3861,9 +3840,7 @@ p {
   padding: clamp(20px, 3vw, 30px);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background:
-    linear-gradient(135deg, rgba(21, 26, 35, 0.98), rgba(8, 12, 18, 0.98)),
-    var(--surface);
+  background: linear-gradient(135deg, rgba(21, 26, 35, 0.98), rgba(8, 12, 18, 0.98)), var(--surface);
   box-shadow: 0 20px 56px rgba(0, 18, 36, 0.16);
 }
 
@@ -4016,7 +3993,11 @@ p {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at var(--spot-x, 50%) var(--spot-y, 18%), color-mix(in srgb, var(--method-color, var(--ypf-blue)), transparent 88%), transparent 11rem),
+    radial-gradient(
+      circle at var(--spot-x, 50%) var(--spot-y, 18%),
+      color-mix(in srgb, var(--method-color, var(--ypf-blue)), transparent 88%),
+      transparent 11rem
+    ),
     var(--surface);
   box-shadow: 0 14px 30px rgba(0, 40, 78, 0.08);
 }
@@ -4379,6 +4360,785 @@ p {
   gap: 12px;
 }
 
+.method-page {
+  gap: 36px;
+}
+
+.method-hero::before {
+  background:
+    linear-gradient(180deg, rgba(14, 18, 24, 0) 54%, rgba(14, 18, 24, 0.96) 100%),
+    linear-gradient(90deg, rgba(7, 18, 28, 0.94), rgba(9, 61, 98, 0.7), rgba(53, 201, 189, 0.24)),
+    url("/assets/energy-chain-v1-1280.webp") center / cover;
+}
+
+.method-section-head {
+  display: grid;
+  gap: 12px;
+  max-width: 1060px;
+}
+
+.method-section-head h2 {
+  margin: 0;
+  color: var(--ypf-blue-3);
+  font-size: clamp(1.7rem, 3vw, 2.72rem);
+  line-height: 1.07;
+}
+
+.method-section-head p {
+  max-width: 920px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.58;
+}
+
+.method-command,
+.method-operating-flow,
+.method-planes,
+.method-layers,
+.method-channels,
+.method-project-system,
+.method-naming,
+.method-backlog,
+.method-vmc,
+.method-roadmap,
+.method-governance {
+  display: grid;
+  gap: 18px;
+}
+
+.method-flow-track {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.method-flow-step {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid color-mix(in srgb, var(--method-accent), transparent 62%);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(
+      circle at var(--spot-x, 78%) var(--spot-y, 18%),
+      color-mix(in srgb, var(--method-accent), transparent 82%),
+      transparent 10rem
+    ),
+    linear-gradient(160deg, rgba(27, 32, 42, 0.96), rgba(10, 15, 22, 0.98));
+  box-shadow:
+    0 20px 42px rgba(0, 24, 48, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.method-flow-step::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, var(--method-accent), transparent 72%);
+  opacity: 0.78;
+  pointer-events: none;
+}
+
+.method-flow-step-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.method-flow-step-head span,
+.method-command-card > span,
+.method-plane-card > span,
+.method-channel-card > span,
+.method-folder-detail summary span,
+.method-roadmap-item > span {
+  display: grid;
+  place-items: center;
+  min-width: 38px;
+  min-height: 38px;
+  border-radius: var(--radius);
+  background: var(--method-accent);
+  color: #061217;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.method-flow-step h3,
+.method-command-card h3,
+.method-plane-card h3,
+.method-layer-card h3,
+.method-channel-card h3,
+.method-folder-explain h3,
+.method-vmc-card h3,
+.method-roadmap-item h3,
+.method-role-card h3,
+.method-disclosure h3 {
+  margin: 0;
+  color: var(--ypf-blue-3);
+  line-height: 1.16;
+}
+
+.method-flow-step p,
+.method-command-card p,
+.method-plane-card dd,
+.method-plane-card strong,
+.method-layer-card p,
+.method-channel-card p,
+.method-folder-detail p,
+.method-folder-explain p,
+.method-naming-lab p,
+.method-rule p,
+.method-signal-card p,
+.method-metric-row p,
+.method-vmc-card li,
+.method-roadmap-item p,
+.method-role-card p,
+.method-disclosure li {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.56;
+}
+
+.method-flow-step > p {
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.method-flow-step dl,
+.method-plane-card dl {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+}
+
+.method-flow-step dl div,
+.method-plane-card dl div {
+  display: grid;
+  gap: 4px;
+  padding: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  background: rgba(4, 10, 16, 0.32);
+}
+
+.method-flow-step dt,
+.method-plane-card dt,
+.method-signal-card span,
+.method-naming-lab > span,
+.method-vmc-card > span {
+  color: var(--method-accent, var(--ypf-yellow));
+  font-size: 0.76rem;
+  font-weight: 950;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.method-flow-step dd {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.52;
+}
+
+.method-step-detail,
+.method-disclosure {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.method-step-detail summary,
+.method-disclosure summary,
+.method-folder-detail summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  cursor: pointer;
+  list-style: none;
+}
+
+.method-step-detail summary::-webkit-details-marker,
+.method-disclosure summary::-webkit-details-marker,
+.method-folder-detail summary::-webkit-details-marker {
+  display: none;
+}
+
+.method-step-detail summary {
+  padding: 12px;
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.method-step-detail summary::after,
+.method-disclosure summary::after,
+.method-folder-detail summary::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  border-right: 2px solid currentcolor;
+  border-bottom: 2px solid currentcolor;
+  transition: transform 0.18s ease;
+}
+
+.method-step-detail[open] summary::after,
+.method-disclosure[open] summary::after,
+.method-folder-detail[open] summary::after {
+  transform: rotate(225deg) translate(-2px, -2px);
+}
+
+.method-step-detail > div {
+  display: grid;
+  gap: 5px;
+  padding: 0 12px 12px;
+}
+
+.method-step-detail strong {
+  color: var(--ypf-blue-3);
+  font-size: 0.86rem;
+}
+
+.method-command-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.method-command-card,
+.method-plane-card,
+.method-layer-card,
+.method-channel-card,
+.method-roadmap-item,
+.method-role-card {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--method-accent), transparent 68%);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(
+      circle at var(--spot-x, 72%) var(--spot-y, 18%),
+      color-mix(in srgb, var(--method-accent), transparent 88%),
+      transparent 10rem
+    ),
+    var(--surface);
+  box-shadow: 0 16px 34px rgba(0, 30, 60, 0.12);
+}
+
+.method-command-card {
+  min-height: 210px;
+  padding: 18px;
+}
+
+.method-plane-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.method-plane-flow::before {
+  content: "control de frontera";
+  align-self: center;
+  min-width: 118px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.055);
+  color: var(--ypf-yellow-2);
+  font-size: 0.74rem;
+  font-weight: 950;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.method-plane-card {
+  min-height: 350px;
+  padding: 20px;
+}
+
+.method-plane-card.dev {
+  order: -1;
+}
+
+.method-plane-card.prod {
+  --method-accent: var(--green);
+}
+
+.method-plane-card strong {
+  display: block;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--method-accent), transparent 88%);
+  color: #ffffff;
+  font-weight: 850;
+}
+
+.method-layer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.method-layer-card {
+  min-height: 166px;
+  padding: 18px;
+}
+
+.method-layer-card > span {
+  justify-self: start;
+  padding: 7px 10px;
+  border: 1px solid color-mix(in srgb, var(--method-accent), transparent 58%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--method-accent), transparent 88%);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.method-channel-track {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.method-channel-card {
+  min-height: 156px;
+  padding: 16px;
+}
+
+.method-channel-card > span {
+  justify-self: start;
+  min-width: 44px;
+}
+
+.method-project-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.method-folder-browser {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(160deg, rgba(30, 36, 47, 0.92), rgba(9, 14, 21, 0.98)), var(--surface);
+  box-shadow: 0 20px 46px rgba(0, 18, 36, 0.16);
+}
+
+.method-folder-root {
+  display: grid;
+  gap: 5px;
+  padding: 13px;
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, rgba(53, 201, 189, 0.18), rgba(58, 160, 255, 0.12));
+}
+
+.method-folder-root span {
+  color: #ffffff;
+  font-weight: 950;
+  overflow-wrap: anywhere;
+}
+
+.method-folder-root small {
+  color: var(--ypf-yellow-2);
+  font-weight: 850;
+}
+
+.method-folder-detail {
+  border: 1px solid color-mix(in srgb, var(--method-accent), transparent 72%);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.method-folder-detail summary {
+  padding: 10px 12px;
+  color: #ffffff;
+}
+
+.method-folder-detail summary strong {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.method-folder-detail summary span {
+  min-width: 34px;
+  min-height: 34px;
+}
+
+.method-folder-detail p {
+  padding: 0 12px 12px 58px;
+}
+
+.method-folder-explain {
+  display: grid;
+  gap: 14px;
+}
+
+.method-folder-explain article {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.method-folder-explain span,
+.method-role-card > span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius);
+  background: rgba(53, 201, 189, 0.14);
+  color: var(--ypf-yellow-2);
+}
+
+.method-folder-explain svg,
+.method-role-card svg,
+.method-rule svg,
+.method-metric-row svg,
+.method-vmc-bridge svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.method-naming-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(420px, 1.08fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.method-naming-lab {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid rgba(53, 201, 189, 0.34);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at var(--spot-x, 84%) var(--spot-y, 14%), rgba(53, 201, 189, 0.16), transparent 10rem),
+    linear-gradient(150deg, rgba(20, 28, 38, 0.98), rgba(7, 13, 19, 0.98));
+}
+
+.method-naming-lab code {
+  display: block;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius);
+  background: rgba(5, 10, 16, 0.78);
+  color: #ffffff;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.92rem;
+  font-weight: 800;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.method-naming-lab div {
+  display: grid;
+  gap: 8px;
+}
+
+.method-naming-lab p {
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.045);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.method-rule-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.method-rule {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.method-rule span,
+.method-metric-row span {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius);
+  background: rgba(58, 160, 255, 0.12);
+  color: var(--ypf-blue-3);
+}
+
+.method-disclosure {
+  --method-accent: var(--ypf-yellow);
+  overflow: hidden;
+}
+
+.method-disclosure summary {
+  padding: 14px 16px;
+  background: color-mix(in srgb, var(--method-accent), transparent 92%);
+  color: #ffffff;
+  font-weight: 950;
+  line-height: 1.25;
+}
+
+.method-catalog-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  padding: 16px;
+}
+
+.method-catalog-grid > div {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.method-code-table {
+  display: grid;
+  grid-template-columns: minmax(82px, auto) minmax(0, 1fr);
+  gap: 8px 10px;
+  align-items: start;
+}
+
+.method-code-table span {
+  padding: 7px 9px;
+  border-radius: var(--radius);
+  background: rgba(53, 201, 189, 0.13);
+  color: var(--ypf-yellow-2);
+  font-size: 0.78rem;
+  font-weight: 950;
+  overflow-wrap: anywhere;
+}
+
+.method-code-table p {
+  min-height: 31px;
+  margin: 0;
+  padding: 6px 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.method-backlog-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.7fr) minmax(0, 1.3fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.method-column-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  align-content: start;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(150deg, rgba(58, 160, 255, 0.1), rgba(255, 255, 255, 0.03)), var(--surface);
+}
+
+.method-column-cloud span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid rgba(58, 160, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(58, 160, 255, 0.1);
+  color: var(--ypf-blue-3);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.method-signal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.method-signal-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 9px;
+  align-items: center;
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.method-signal-card div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.method-signal-card strong {
+  color: var(--ypf-yellow-2);
+}
+
+.method-signal-card svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentcolor;
+}
+
+.method-metric-row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.method-metric-row article {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.method-vmc-diagram {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.method-vmc-card {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid rgba(53, 201, 189, 0.28);
+  border-radius: var(--radius);
+  background: linear-gradient(145deg, rgba(53, 201, 189, 0.1), rgba(58, 160, 255, 0.06)), var(--surface);
+}
+
+.method-vmc-card ul,
+.method-disclosure ul,
+.method-lifecycle {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.method-vmc-card li::marker,
+.method-disclosure li::marker,
+.method-lifecycle li::marker {
+  color: var(--method-accent, var(--ypf-yellow));
+}
+
+.method-vmc-bridge {
+  display: grid;
+  place-items: center;
+  align-self: center;
+  gap: 8px;
+  min-width: 140px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.055);
+  color: var(--ypf-yellow-2);
+  font-size: 0.76rem;
+  font-weight: 950;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.method-lifecycle {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 16px 16px 16px 34px;
+}
+
+.method-lifecycle li {
+  color: var(--muted);
+  line-height: 1.48;
+}
+
+.method-roadmap-track {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.method-roadmap-item {
+  min-height: 170px;
+  padding: 16px;
+}
+
+.method-roadmap-item > span {
+  justify-self: start;
+  width: auto;
+  padding: 0 10px;
+}
+
+.method-governance-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.method-role-card {
+  min-height: 210px;
+  padding: 16px;
+}
+
+.method-decision-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.method-decision.green {
+  --method-accent: var(--green);
+}
+
+.method-decision.orange {
+  --method-accent: var(--orange);
+}
+
+.method-decision.blue {
+  --method-accent: var(--ypf-blue);
+}
+
+.method-decision ul {
+  padding: 14px 16px 16px 34px;
+}
+
 .project-studio {
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(360px, 1.08fr);
@@ -4559,9 +5319,7 @@ p {
   display: grid;
   align-content: start;
   min-height: 520px;
-  background:
-    linear-gradient(180deg, rgba(53, 201, 189, 0.06), transparent 28%),
-    #0e1118;
+  background: linear-gradient(180deg, rgba(53, 201, 189, 0.06), transparent 28%), #0e1118;
   color: #edf3ff;
   box-shadow: 0 22px 56px rgba(5, 18, 36, 0.26);
 }
@@ -4731,9 +5489,7 @@ p {
   gap: 8px;
   padding: 18px 18px 16px;
   border-bottom: 1px solid var(--line);
-  background:
-    linear-gradient(90deg, rgba(58, 160, 255, 0.12), transparent),
-    rgba(255, 255, 255, 0.045);
+  background: linear-gradient(90deg, rgba(58, 160, 255, 0.12), transparent), rgba(255, 255, 255, 0.045);
 }
 
 .shortcut-card h2 {
@@ -4926,7 +5682,33 @@ kbd {
   .oee-grid,
   .methodology-tool-grid,
   .toyota-layers,
+  .method-flow-track,
+  .method-command-grid,
+  .method-layer-grid,
+  .method-channel-track,
+  .method-signal-grid,
+  .method-metric-row,
+  .method-roadmap-track,
+  .method-governance-grid,
+  .method-decision-grid,
   .cadence-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .method-plane-flow,
+  .method-project-grid,
+  .method-naming-grid,
+  .method-backlog-grid,
+  .method-vmc-diagram {
+    grid-template-columns: 1fr;
+  }
+
+  .method-plane-flow::before,
+  .method-vmc-bridge {
+    min-width: 0;
+  }
+
+  .method-lifecycle {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -5048,6 +5830,23 @@ kbd {
   .executive-support,
   .executive-action,
   .concept-tree-grid,
+  .method-flow-track,
+  .method-command-grid,
+  .method-plane-flow,
+  .method-layer-grid,
+  .method-channel-track,
+  .method-project-grid,
+  .method-naming-grid,
+  .method-rule-grid,
+  .method-catalog-grid,
+  .method-backlog-grid,
+  .method-signal-grid,
+  .method-metric-row,
+  .method-vmc-diagram,
+  .method-lifecycle,
+  .method-roadmap-track,
+  .method-governance-grid,
+  .method-decision-grid,
   .methodology-principles,
   .oee-grid,
   .oee-factor-columns,
@@ -5075,6 +5874,38 @@ kbd {
 
   .methodology-close .button {
     width: 100%;
+  }
+
+  .method-flow-step,
+  .method-command-card,
+  .method-plane-card,
+  .method-layer-card,
+  .method-channel-card,
+  .method-roadmap-item,
+  .method-role-card {
+    min-height: 0;
+  }
+
+  .method-plane-flow::before,
+  .method-vmc-bridge {
+    width: 100%;
+  }
+
+  .method-folder-detail p {
+    padding-left: 12px;
+  }
+
+  .method-code-table {
+    grid-template-columns: 1fr;
+  }
+
+  .method-signal-card {
+    grid-template-columns: 1fr;
+  }
+
+  .method-signal-card strong {
+    justify-self: start;
+    transform: rotate(90deg);
   }
 
   .mini-roadmap::before,

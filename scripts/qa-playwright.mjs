@@ -10,6 +10,7 @@ const baseUrl = `http://127.0.0.1:${port}`;
 const routes = [
   { path: "/", selector: ".hero", name: "Inicio" },
   { path: "/guia-power-bi", selector: ".guide-journey", name: "Guia + Roadmap" },
+  { path: "/metodo-datalizacion", selector: ".method-page", name: "Metodo de Datalizacion" },
   { path: "/metodologia", selector: ".methodology-process", name: "Metodologia" },
   { path: "/diccionario", selector: ".dictionary-layout", name: "Diccionario" },
   { path: "/roadmap", selector: ".guide-journey", name: "Roadmap" },
@@ -103,7 +104,9 @@ try {
       });
 
       if (pageReport.bodyOverflow || pageReport.textOverflowing.length) {
-        throw new Error(`${route.name} (${viewport.label}) tiene overflow horizontal: ${JSON.stringify(pageReport.textOverflowing, null, 2)}`);
+        throw new Error(
+          `${route.name} (${viewport.label}) tiene overflow horizontal: ${JSON.stringify(pageReport.textOverflowing, null, 2)}`,
+        );
       }
 
       if (pageReport.loadMs > 8000) {
@@ -112,9 +115,7 @@ try {
 
       const accessibility = await new AxeBuilder({ page }).analyze();
       if (accessibility.violations.length) {
-        const summary = accessibility.violations
-          .map((violation) => `${violation.id}: ${violation.nodes.length} nodo(s)`)
-          .join("; ");
+        const summary = accessibility.violations.map((violation) => `${violation.id}: ${violation.nodes.length} nodo(s)`).join("; ");
         throw new Error(`${route.name} (${viewport.label}) tiene violaciones de accesibilidad: ${summary}`);
       }
 
@@ -124,8 +125,31 @@ try {
           processBlocks: document.querySelectorAll(".process-block").length,
           conceptConnector: getComputedStyle(document.querySelector(".concept-tree-grid"), "::before").content,
         }));
-        if (methodologyReport.processSteps !== 9 || methodologyReport.processBlocks !== 54 || methodologyReport.conceptConnector !== "none") {
+        if (
+          methodologyReport.processSteps !== 9 ||
+          methodologyReport.processBlocks !== 54 ||
+          methodologyReport.conceptConnector !== "none"
+        ) {
           throw new Error(`Metodologia no cumple estructura esperada: ${JSON.stringify(methodologyReport)}`);
+        }
+      }
+
+      if (route.path === "/metodo-datalizacion") {
+        const methodReport = await page.evaluate(() => ({
+          operatingSteps: document.querySelectorAll(".method-flow-step").length,
+          folders: document.querySelectorAll(".method-folder-detail").length,
+          layers: document.querySelectorAll(".method-layer-card").length,
+          channels: document.querySelectorAll(".method-channel-card").length,
+          disclosures: document.querySelectorAll(".method-disclosure").length,
+        }));
+        if (
+          methodReport.operatingSteps !== 6 ||
+          methodReport.folders !== 12 ||
+          methodReport.layers !== 6 ||
+          methodReport.channels !== 8 ||
+          methodReport.disclosures < 5
+        ) {
+          throw new Error(`Metodo de Datalizacion no cumple estructura esperada: ${JSON.stringify(methodReport)}`);
         }
       }
     }

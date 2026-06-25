@@ -13,21 +13,12 @@ import {
 } from "../data/methodology.js";
 import { powerBiShortcuts, shortcutsPdf } from "../data/powerbiShortcuts.js";
 import { conceptDecantation, pageNarratives } from "../data/executiveNarrative.js";
+import { methodChannels, methodNaming, methodOperatingFlow, methodPlanes, methodProjectFolders } from "../data/datalizationMethod.js";
 import { roadmapPhases } from "../data/roadmap.js";
 import { toolingDocs, toolingGroups } from "../data/toolingLibrary.js";
 
 const requiredTermFields = ["id", "term", "category", "definition", "whyItMatters", "example", "risk"];
-const requiredPhaseFields = [
-  "id",
-  "title",
-  "lane",
-  "objective",
-  "keyActivities",
-  "deliverables",
-  "owner",
-  "riskIfSkipped",
-  "gate",
-];
+const requiredPhaseFields = ["id", "title", "lane", "objective", "keyActivities", "deliverables", "owner", "riskIfSkipped", "gate"];
 
 function assert(condition, message) {
   if (!condition) {
@@ -51,6 +42,7 @@ assert(indexHtml.includes("Datalización YPF"), "index.html debe exponer el nomb
 assert(indexHtml.includes('type="module" src="/app.js"'), "index.html debe cargar app.js como modulo.");
 assert(appJs.includes("renderDictionaryPage"), "app.js debe renderizar el diccionario.");
 assert(appJs.includes("renderMethodologyPage"), "app.js debe renderizar la metodología.");
+assert(appJs.includes("renderDatalizationMethodPage"), "app.js debe renderizar el Método de Datalización.");
 assert(appJs.includes("renderMethodologyProcessFlow"), "app.js debe renderizar el proceso metodológico end to end.");
 assert(appJs.includes("renderExecutiveBrief"), "app.js debe renderizar la síntesis ejecutiva.");
 assert(appJs.includes("renderConceptDecantation"), "app.js debe renderizar el árbol de decantación conceptual.");
@@ -62,14 +54,29 @@ assert(appJs.includes("renderToolingPage"), "app.js debe renderizar librerías y
 
 assert(dictionaryCategories.length >= 15, "El diccionario debe incluir categorías de producto, Fabric, performance y operación.");
 assert(dictionaryTerms.length >= 65, "El diccionario debe incluir al menos 65 términos.");
-assert(dictionaryTerms.every((term) => hasFields(term, requiredTermFields)), "Cada término debe tener todos los campos requeridos.");
+assert(
+  dictionaryTerms.every((term) => hasFields(term, requiredTermFields)),
+  "Cada término debe tener todos los campos requeridos.",
+);
 assert(new Set(dictionaryTerms.map((term) => term.id)).size === dictionaryTerms.length, "Los ids del diccionario deben ser únicos.");
-assert(dictionaryTerms.some((term) => term.id === "prd"), "El diccionario debe incluir PRD.");
-assert(dictionaryTerms.some((term) => term.id === "spec-producto-tecnica"), "El diccionario debe incluir Spec.");
+assert(
+  dictionaryTerms.some((term) => term.id === "prd"),
+  "El diccionario debe incluir PRD.",
+);
+assert(
+  dictionaryTerms.some((term) => term.id === "spec-producto-tecnica"),
+  "El diccionario debe incluir Spec.",
+);
 
 assert(roadmapPhases.length === 9, "El roadmap debe incluir exactamente los 9 gates de ingeniería.");
-assert(roadmapPhases.every((phase) => hasFields(phase, requiredPhaseFields)), "Cada fase debe tener todos los campos requeridos.");
-assert(roadmapPhases.every((phase, index) => phase.id === index), "Los gates deben estar numerados de 0 a 8.");
+assert(
+  roadmapPhases.every((phase) => hasFields(phase, requiredPhaseFields)),
+  "Cada fase debe tener todos los campos requeridos.",
+);
+assert(
+  roadmapPhases.every((phase, index) => phase.id === index),
+  "Los gates deben estar numerados de 0 a 8.",
+);
 assert(normalizeForCheck(roadmapPhases[0].title).includes("prd"), "El roadmap debe comenzar con PRD y Spec.");
 
 assert(guideSections.length >= 9, "La guía debe cubrir el ciclo completo de Power BI/Fabric.");
@@ -94,17 +101,41 @@ assert(
   "Cada etapa end to end debe tener metodología, por qué, para qué, cómo, definiciones y ejemplos.",
 );
 assert(oeeFactors.length === 3, "OEE BI debe tener disponibilidad, eficiencia y calidad.");
-assert(oeeFactors.every((factor) => factor.title && factor.formula && factor.biMeaning), "Cada factor OEE BI debe tener fórmula y traducción BI.");
-assert(dmaicStages.map((stage) => normalizeForCheck(stage.title)).join("|") === "definir|medir|analizar|mejorar|controlar", "DMAIC debe mantener las cinco etapas en orden.");
+assert(
+  oeeFactors.every((factor) => factor.title && factor.formula && factor.biMeaning),
+  "Cada factor OEE BI debe tener fórmula y traducción BI.",
+);
+assert(
+  dmaicStages.map((stage) => normalizeForCheck(stage.title)).join("|") === "definir|medir|analizar|mejorar|controlar",
+  "DMAIC debe mantener las cinco etapas en orden.",
+);
 assert(methodologyTools.length >= 6, "La metodología debe ubicar Lean Six Sigma, VSM, OEE, FMEA, VSM futuro y Kaizen/Kata.");
 assert(toyotaFourP.length === 4, "La metodología debe incluir las 4P de Toyota.");
 assert(leanPractices.length >= 5, "La metodología debe cubrir flujo continuo, SMED, Poka-Yoke, Kaizen y Kata.");
 assert(methodologyCadence.length >= 4, "La metodología debe incluir cadencias de operación.");
 
-const requiredNarratives = ["home", "guide", "methodology", "project", "dictionary", "tooling", "shortcuts"];
-assert(requiredNarratives.every((key) => pageNarratives[key]), "Todas las páginas principales deben tener narrativa ejecutiva.");
+assert(methodOperatingFlow.length === 6, "El Método de Datalización debe incluir el proceso operativo end to end.");
 assert(
-  requiredNarratives.every((key) => pageNarratives[key].title && pageNarratives[key].summary && pageNarratives[key].support.length === 3 && pageNarratives[key].action),
+  methodOperatingFlow.every(
+    (step) => step.step && step.what && step.why && step.purpose && step.how && step.technical && step.functional && step.example,
+  ),
+  "Cada etapa del Método de Datalización debe explicar qué es, por qué, para qué, cómo, definición técnica, funcional y ejemplo.",
+);
+assert(methodPlanes.length === 2, "El Método de Datalización debe separar DEV y PROD.");
+assert(methodChannels.length === 8, "El Método de Datalización debe incluir los 8 canales base.");
+assert(methodProjectFolders.length === 12, "La plantilla de proyecto debe incluir 12 subcarpetas estándar.");
+assert(methodNaming.pattern.includes("[CODIGO]"), "La convención de nombres debe incluir código, tipo, fecha y versión.");
+
+const requiredNarratives = ["home", "guide", "method", "methodology", "project", "dictionary", "tooling", "shortcuts"];
+assert(
+  requiredNarratives.every((key) => pageNarratives[key]),
+  "Todas las páginas principales deben tener narrativa ejecutiva.",
+);
+assert(
+  requiredNarratives.every(
+    (key) =>
+      pageNarratives[key].title && pageNarratives[key].summary && pageNarratives[key].support.length === 3 && pageNarratives[key].action,
+  ),
   "Cada narrativa ejecutiva debe incluir tesis, resumen, tres soportes y acción.",
 );
 assert(conceptDecantation.length >= 3, "El sitio debe incluir árbol de decantación conceptual.");
@@ -117,7 +148,10 @@ assert(!stylesCss.includes(".concept-tree-grid::before"), "El árbol conceptual 
 
 assert(toolingDocs.source === "docs/librerias-agentes-mcp.md", "El catálogo técnico debe apuntar a la documentación Markdown.");
 assert(toolingGroups.length >= 10, "El catálogo técnico debe incluir las familias principales.");
-assert(toolingGroups.reduce((total, group) => total + group.items.length, 0) >= 100, "El catálogo técnico debe registrar al menos 100 herramientas.");
+assert(
+  toolingGroups.reduce((total, group) => total + group.items.length, 0) >= 100,
+  "El catálogo técnico debe registrar al menos 100 herramientas.",
+);
 
 assert(shortcutsPdf.source === "assets/docs/atajos-power-bi.pdf", "El PDF de atajos debe estar publicado en assets/docs.");
 await access("assets/docs/modelos/prd-datalizacion.docx");
@@ -134,6 +168,7 @@ assert(
 
 const rewriteSources = new Set((vercelJson.rewrites || []).map((rewrite) => rewrite.source));
 assert(rewriteSources.has("/guia-power-bi"), "Vercel debe reescribir /guia-power-bi a index.html.");
+assert(rewriteSources.has("/metodo-datalizacion"), "Vercel debe reescribir /metodo-datalizacion a index.html.");
 assert(rewriteSources.has("/metodologia"), "Vercel debe reescribir /metodologia a index.html.");
 assert(rewriteSources.has("/diccionario"), "Vercel debe reescribir /diccionario a index.html.");
 assert(rewriteSources.has("/roadmap"), "Vercel debe reescribir /roadmap a index.html.");
@@ -151,6 +186,7 @@ assert(
 
 await rm("dist", { force: true, recursive: true });
 await mkdir("dist/guia-power-bi", { recursive: true });
+await mkdir("dist/metodo-datalizacion", { recursive: true });
 await mkdir("dist/metodologia", { recursive: true });
 await mkdir("dist/diccionario", { recursive: true });
 await mkdir("dist/roadmap", { recursive: true });
@@ -167,6 +203,7 @@ for (const file of rootFiles) {
 }
 
 await writeFile("dist/guia-power-bi/index.html", indexHtml);
+await writeFile("dist/metodo-datalizacion/index.html", indexHtml);
 await writeFile("dist/metodologia/index.html", indexHtml);
 await writeFile("dist/diccionario/index.html", indexHtml);
 await writeFile("dist/roadmap/index.html", indexHtml);

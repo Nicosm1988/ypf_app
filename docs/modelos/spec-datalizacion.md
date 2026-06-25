@@ -34,9 +34,9 @@ PRD/Spec -> Datos/Power Query -> Modelado -> DAX -> Seguridad/gobierno -> UX/acc
 
 ## 4. Datos, fuentes y preparación
 
-| Fuente / capa | Owner | Frecuencia | Storage esperado | Uso en el proceso |
-| --- | --- | --- | --- | --- |
-|  |  |  | Import / Direct Lake / DirectQuery / Lakehouse / Warehouse |  |
+| Fuente / capa | Owner | Frecuencia | Storage esperado                                           | Uso en el proceso |
+| ------------- | ----- | ---------- | ---------------------------------------------------------- | ----------------- |
+|               |       |            | Import / Direct Lake / DirectQuery / Lakehouse / Warehouse |                   |
 
 Documentar:
 
@@ -65,8 +65,8 @@ Documentar:
 ## 6. DAX
 
 | Medida o regla | Descripción | Fórmula / criterio | Validación |
-| --- | --- | --- | --- |
-|  |  |  |  |
+| -------------- | ----------- | ------------------ | ---------- |
+|                |             |                    |            |
 
 Buenas prácticas esperadas:
 
@@ -123,7 +123,7 @@ Documentar:
 - Refresh inicial.
 - Deployment Pipelines.
 - Reglas por ambiente.
-- Comunicación de go-live.
+- Comunicación de salida a producción.
 
 ## 11. Operación
 

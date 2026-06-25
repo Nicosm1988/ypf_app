@@ -23,7 +23,8 @@ export const pageNarratives = {
         text: "Porque una mejora solo se captura cuando hay responsables, acciones, SLA, incidentes gestionados y aprendizaje continuo.",
       },
     ],
-    action: "Recorrer la web como una secuencia de trabajo: entender el proceso, medir la pérdida, construir la solución, gobernarla y sostenerla.",
+    action:
+      "Recorrer la web como una secuencia de trabajo: entender el proceso, medir la pérdida, construir la solución, gobernarla y sostenerla.",
   },
   guide: {
     eyebrow: "decisión de avance",
@@ -41,10 +42,31 @@ export const pageNarratives = {
       },
       {
         title: "Se opera la mejora",
-        text: "Publicación, monitoreo, incidentes y backlog aseguran que el beneficio sobreviva al go-live y no vuelva al circuito manual.",
+        text: "Publicación, monitoreo, incidentes y backlog aseguran que el beneficio sobreviva a la salida a producción y no vuelva al circuito manual.",
       },
     ],
     action: "Avanzar de gate únicamente cuando la evidencia anterior permita decidir sin improvisación.",
+  },
+  method: {
+    eyebrow: "método operativo",
+    title: "Orden común, ejecución delegable.",
+    summary:
+      "El Método de Datalización convierte la reconstrucción del área en una forma de trabajo replicable: dónde se guarda cada activo, cómo se nombra, cómo avanza, quién responde y cómo se mide.",
+    support: [
+      {
+        title: "Organiza el trabajo",
+        text: "Teams, SharePoint, canales, carpetas y metadatos separan proyectos vivos, productos en vida, recursos, áreas y archivo sin duplicar información.",
+      },
+      {
+        title: "Reduce dependencia",
+        text: "La estructura común, los README mínimos, las minutas curadas y el naming permiten que otro integrante mantenga un producto que no desarrolló.",
+      },
+      {
+        title: "Mide con evidencia",
+        text: "El backlog evita horas estimadas y esfuerzo subjetivo; prioriza lead time, cycle time, iteraciones, actividad, uso y áreas impactadas.",
+      },
+    ],
+    action: "Aprobar la versión 0.1, crear la base en Teams/SharePoint y ejecutar un piloto antes de escalar el método.",
   },
   methodology: {
     eyebrow: "criterio de mejora",
@@ -107,7 +129,7 @@ export const pageNarratives = {
         text: "Cada ejemplo y cada riesgo funcionan como criterio de diseño, validación y adopción.",
       },
     ],
-    action: "Usarlo como referencia de aceptación, documentación, capacitación y onboarding del equipo.",
+    action: "Usarlo como referencia de aceptación, documentación, capacitación e incorporación del equipo.",
   },
   tooling: {
     eyebrow: "criterio técnico",

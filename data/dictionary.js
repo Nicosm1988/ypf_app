@@ -52,8 +52,7 @@ export const dictionaryTerms = [
     category: "Mejora continua",
     definition:
       "Adaptación del Overall Equipment Effectiveness para medir la efectividad de un proceso analítico con disponibilidad, eficiencia y calidad.",
-    whyItMatters:
-      "Permite explicar ante gerencia si una automatización BI opera como servicio confiable, rápido y útil para decidir.",
+    whyItMatters: "Permite explicar ante gerencia si una automatización BI opera como servicio confiable, rápido y útil para decidir.",
     example: "Disponibilidad de refresh, eficiencia del flujo y calidad de datos multiplicadas como índice de salud del proceso.",
     risk: "Usarlo como número decorativo, sin línea base ni pérdidas accionables, lo vuelve una métrica vacía.",
   },
@@ -62,8 +61,7 @@ export const dictionaryTerms = [
     term: "DMAIC",
     category: "Mejora continua",
     definition: "Ciclo de mejora de Lean Six Sigma: definir, medir, analizar, mejorar y controlar.",
-    whyItMatters:
-      "Ordena proyectos BI desde el problema operativo hasta el control posterior a producción, evitando construir sin medir.",
+    whyItMatters: "Ordena proyectos BI desde el problema operativo hasta el control posterior a producción, evitando construir sin medir.",
     example: "Definir el proceso, medir OEE BI, analizar fallas, mejorar el flujo y controlar con SLA y runbook.",
     risk: "Saltear la medición o el control suele dejar mejoras difíciles de sostener.",
   },
@@ -71,8 +69,7 @@ export const dictionaryTerms = [
     id: "lean-six-sigma",
     term: "Lean Six Sigma",
     category: "Mejora continua",
-    definition:
-      "Enfoque que combina eliminación de desperdicios de Lean con reducción de variación y defectos de Six Sigma.",
+    definition: "Enfoque que combina eliminación de desperdicios de Lean con reducción de variación y defectos de Six Sigma.",
     whyItMatters:
       "Ayuda a evaluar el BI por pérdidas eliminadas, estabilidad del proceso y calidad de la decisión, no por cantidad de gráficos.",
     example: "Reducir esperas de validación y defectos de datos en un tablero operativo.",
@@ -83,8 +80,7 @@ export const dictionaryTerms = [
     term: "VSM actual",
     category: "Mejora continua",
     definition: "Mapa de valor del estado actual: representación de cómo fluye hoy el trabajo y dónde se pierde valor.",
-    whyItMatters:
-      "Muestra esperas, retrabajos, planillas, aprobaciones y handoffs que una automatización BI debe resolver.",
+    whyItMatters: "Muestra esperas, retrabajos, planillas, aprobaciones y handoffs que una automatización BI debe resolver.",
     example: "Mapear desde la detección de un desvío hasta la acción correctiva, incluyendo demoras y responsables.",
     risk: "Diseñar un reporte sin entender el flujo actual puede automatizar una parte irrelevante del problema.",
   },
@@ -93,8 +89,7 @@ export const dictionaryTerms = [
     term: "VSM futuro",
     category: "Mejora continua",
     definition: "Mapa de valor objetivo que describe cómo debería operar el proceso después de la mejora.",
-    whyItMatters:
-      "Convierte el diagnóstico en roadmap: qué pasos se eliminan, qué controles se automatizan y qué acción queda integrada.",
+    whyItMatters: "Convierte el diagnóstico en roadmap: qué pasos se eliminan, qué controles se automatizan y qué acción queda integrada.",
     example: "Pasar de validar datos por correo a un flujo con alerta, evidencia, responsable y seguimiento.",
     risk: "Sin estado futuro, el backlog puede llenarse de mejoras inconexas.",
   },
@@ -103,8 +98,7 @@ export const dictionaryTerms = [
     term: "FMEA",
     category: "Mejora continua",
     definition: "Análisis de modo y efecto de fallas para anticipar errores, causas, efectos y controles.",
-    whyItMatters:
-      "Permite priorizar riesgos de datos, modelo, seguridad, UX y operación antes de publicar una solución BI.",
+    whyItMatters: "Permite priorizar riesgos de datos, modelo, seguridad, UX y operación antes de publicar una solución BI.",
     example: "Evaluar severidad, ocurrencia y detección de un refresh fallido o una regla DAX ambigua.",
     risk: "Ignorar fallas previsibles hace que el usuario encuentre errores que el equipo pudo controlar antes.",
   },
@@ -114,7 +108,7 @@ export const dictionaryTerms = [
     category: "Mejora continua",
     definition: "Práctica de mejora incremental y continua basada en problemas observables y acciones pequeñas.",
     whyItMatters:
-      "Mantiene vivo el producto BI después del go-live, usando incidentes, adopción y feedback como insumo de mejora.",
+      "Mantiene vivo el producto BI después de la salida a producción, usando incidentes, adopción y feedback como insumo de mejora.",
     example: "Reducir semanalmente una pérdida del OEE BI, como refresh lento o baja acción sobre alertas.",
     risk: "Sin cadencia, la mejora continua queda como intención y no como rutina del equipo.",
   },
@@ -132,8 +126,7 @@ export const dictionaryTerms = [
     id: "smed",
     term: "SMED",
     category: "Mejora continua",
-    definition:
-      "Método de preparaciones rápidas que separa actividades internas y externas para reducir tiempos de cambio.",
+    definition: "Método de preparaciones rápidas que separa actividades internas y externas para reducir tiempos de cambio.",
     whyItMatters:
       "En BI ayuda a acelerar releases y cambios de regla con checklists, ambientes, pruebas y rollback preparados antes de publicar.",
     example: "Dejar datos, pruebas y aprobaciones listos antes de la ventana de despliegue productivo.",
@@ -144,8 +137,7 @@ export const dictionaryTerms = [
     term: "Poka-Yoke",
     category: "Mejora continua",
     definition: "Mecanismo a prueba de errores que previene o detecta fallas antes de que afecten al proceso.",
-    whyItMatters:
-      "En BI transforma controles de calidad, seguridad y reglas críticas en barreras previas al usuario final.",
+    whyItMatters: "En BI transforma controles de calidad, seguridad y reglas críticas en barreras previas al usuario final.",
     example: "Bloquear publicación si hay claves huérfanas, refresh fallido o RLS sin prueba con usuarios reales.",
     risk: "Confiar solo en revisión manual deja pasar errores repetibles.",
   },
@@ -154,8 +146,7 @@ export const dictionaryTerms = [
     term: "Kata",
     category: "Mejora continua",
     definition: "Rutina de aprendizaje que compara condición objetivo, condición actual, obstáculos, experimento y aprendizaje.",
-    whyItMatters:
-      "Da estructura al aprendizaje del equipo BI, especialmente cuando una mejora requiere experimentos cortos y medibles.",
+    whyItMatters: "Da estructura al aprendizaje del equipo BI, especialmente cuando una mejora requiere experimentos cortos y medibles.",
     example: "Probar durante dos sprints controles de calidad para subir la confianza de una fuente crítica.",
     risk: "Sin aprendizaje explícito, el equipo repite soluciones por costumbre aunque el contexto cambie.",
   },
@@ -164,8 +155,7 @@ export const dictionaryTerms = [
     term: "4P de Toyota",
     category: "Mejora continua",
     definition: "Modelo de gestión basado en filosofía, proceso, personas y resolución de problemas.",
-    whyItMatters:
-      "Ayuda a ubicar la datalización como sistema de trabajo: propósito, flujo, roles y mejora continua.",
+    whyItMatters: "Ayuda a ubicar la datalización como sistema de trabajo: propósito, flujo, roles y mejora continua.",
     example: "Alinear objetivo ejecutivo, VSM, owners y Kaizen de operación para una solución BI crítica.",
     risk: "Tomarlo como teoría aislada, sin traducirlo a entregables y cadencias del proyecto.",
   },
@@ -372,7 +362,7 @@ export const dictionaryTerms = [
     term: "Gobierno de datos",
     category: "Gobierno",
     definition: "Conjunto de reglas, roles y controles para asegurar datos confiables y bien usados.",
-    whyItMatters: "Define ownership, calidad, trazabilidad, seguridad y criterios de certificación.",
+    whyItMatters: "Define responsables, calidad, trazabilidad, seguridad y criterios de certificación.",
     example: "Políticas de definición de KPI, lineage, permisos y stewardship.",
     risk: "Sin gobierno, cada equipo puede construir su propia versión de la verdad.",
   },
@@ -491,7 +481,7 @@ export const dictionaryTerms = [
     definition: "Fuente oficial aceptada para una definición, métrica o dominio de datos.",
     whyItMatters: "Evita debates repetidos sobre qué número es correcto.",
     example: "Un dataset certificado para ventas netas usado por todas las áreas.",
-    risk: "Declararla sin ownership ni controles no resuelve inconsistencias reales.",
+    risk: "Declararla sin responsables claros ni controles no resuelve inconsistencias reales.",
   },
   {
     id: "data-quality",
@@ -506,7 +496,8 @@ export const dictionaryTerms = [
     id: "prd",
     term: "PRD",
     category: "Producto",
-    definition: "Product Requirements Document: documento que define qué se necesita construir, para quién, por qué importa y cómo se medirá el éxito.",
+    definition:
+      "Product Requirements Document: documento que define qué se necesita construir, para quién, por qué importa y cómo se medirá el éxito.",
     whyItMatters: "Alinea negocio, producto, BI e ingeniería antes de diseñar o programar.",
     example: "PRD para un tablero de margen con problema, usuarios, KPIs, alcance, fuera de alcance y criterios de aceptación.",
     risk: "Sin PRD, el equipo puede implementar una solución técnicamente correcta para un problema mal entendido.",
@@ -515,7 +506,8 @@ export const dictionaryTerms = [
     id: "spec-producto-tecnica",
     term: "Spec de producto o técnica",
     category: "Producto",
-    definition: "Documento que baja el PRD a decisiones de implementación: arquitectura, datos, lógica, seguridad, UX, pruebas y despliegue.",
+    definition:
+      "Documento que baja el PRD a decisiones de implementación: arquitectura, datos, lógica, seguridad, UX, pruebas y despliegue.",
     whyItMatters: "Evita que cada desarrollador interprete distinto cómo debe comportarse el sistema.",
     example: "Spec con fuentes, modelo estrella, medidas DAX, reglas RLS, wireframes y casos de prueba.",
     risk: "Una Spec vaga genera retrabajo, criterios contradictorios y defectos en la entrega.",
@@ -542,7 +534,8 @@ export const dictionaryTerms = [
     id: "spec-driven-development",
     term: "Spec Driven Development",
     category: "Delivery BI",
-    definition: "Forma de trabajo donde la especificación viva, versionada y revisada guía la construcción del software o producto analítico.",
+    definition:
+      "Forma de trabajo donde la especificación viva, versionada y revisada guía la construcción del software o producto analítico.",
     whyItMatters: "Permite que personas y agentes de IA implementen con contexto compartido en lugar de prompts improvisados.",
     example: "Actualizar la Spec del modelo antes de pedirle a una IA que refactorice medidas DAX.",
     risk: "Si la Spec queda desactualizada, se transforma en documentación decorativa y pierde valor.",
@@ -551,7 +544,8 @@ export const dictionaryTerms = [
     id: "vertipaq",
     term: "VertiPaq",
     category: "Performance",
-    definition: "Motor columnar en memoria de Power BI que comprime datos y responde consultas analíticas; si aparece escrito como VeryPaq, se refiere al mismo concepto pero con una grafía incorrecta.",
+    definition:
+      "Motor columnar en memoria de Power BI que comprime datos y responde consultas analíticas; si aparece escrito como VeryPaq, se refiere al mismo concepto pero con una grafía incorrecta.",
     whyItMatters: "Su rendimiento depende mucho del modelo, la cardinalidad y el tipo de columnas cargadas.",
     example: "Un modelo estrella con claves numéricas suele comprimir mejor que una tabla plana con textos repetidos.",
     risk: "Ignorar VertiPaq lleva a modelos grandes, lentos y difíciles de refrescar.",
@@ -587,7 +581,8 @@ export const dictionaryTerms = [
     id: "direct-lake",
     term: "Direct Lake",
     category: "Microsoft Fabric",
-    definition: "Modo de almacenamiento de Fabric que consulta tablas Delta/Parquet en OneLake cargando columnas hacia VertiPaq sin importar copias tradicionales.",
+    definition:
+      "Modo de almacenamiento de Fabric que consulta tablas Delta/Parquet en OneLake cargando columnas hacia VertiPaq sin importar copias tradicionales.",
     whyItMatters: "Busca combinar velocidad de import con datos cercanos al lago.",
     example: "Reporte conectado a una tabla Delta Gold en OneLake sin programar refresh histórico completo.",
     risk: "Si hay fallback a DirectQuery o mala optimización de archivos, la experiencia puede degradarse.",
@@ -596,7 +591,8 @@ export const dictionaryTerms = [
     id: "onelake",
     term: "OneLake",
     category: "Microsoft Fabric",
-    definition: "Capa de almacenamiento unificada de Microsoft Fabric para datos organizados en lakehouses, warehouses y artefactos relacionados.",
+    definition:
+      "Capa de almacenamiento unificada de Microsoft Fabric para datos organizados en lakehouses, warehouses y artefactos relacionados.",
     whyItMatters: "Permite centralizar datos analíticos y reducir copias innecesarias.",
     example: "Tablas Delta consumidas por notebooks, pipelines y modelos Power BI.",
     risk: "Sin gobierno de dominios y permisos, un lago único puede transformarse en desorden compartido.",
@@ -632,7 +628,8 @@ export const dictionaryTerms = [
     id: "fabric-capacity-metrics",
     term: "Fabric Capacity Metrics",
     category: "Operaciones",
-    definition: "Aplicación de Microsoft Fabric para monitorear consumo, operaciones interactivas, operaciones de fondo y posibles cuellos de botella.",
+    definition:
+      "Aplicación de Microsoft Fabric para monitorear consumo, operaciones interactivas, operaciones de fondo y posibles cuellos de botella.",
     whyItMatters: "Da visibilidad operativa sobre la salud de la capacidad.",
     example: "Identificar reportes que disparan throttling durante horario de negocio.",
     risk: "Sin métricas, la performance se gestiona por quejas y no por evidencia.",
@@ -668,7 +665,8 @@ export const dictionaryTerms = [
     id: "pbir",
     term: "PBIR",
     category: "Delivery BI",
-    definition: "Formato mejorado de reporte Power BI pensado para representar definiciones del informe en archivos más editables y versionables.",
+    definition:
+      "Formato mejorado de reporte Power BI pensado para representar definiciones del informe en archivos más editables y versionables.",
     whyItMatters: "Complementa PBIP/TMDL al volver más controlable la capa de reporte.",
     example: "Versionar cambios de páginas o visuales dentro de un repo de Power BI Project.",
     risk: "Adoptarlo sin entender su estado y limitaciones puede complicar el flujo de release.",
@@ -758,7 +756,8 @@ export const dictionaryTerms = [
     id: "datalizacion",
     term: "Datalización",
     category: "Producto",
-    definition: "Práctica de automatizar procesos mediante datos confiables, reglas explícitas, acciones trazables y operación monitoreada.",
+    definition:
+      "Práctica de automatizar procesos mediante datos confiables, reglas explícitas, acciones trazables y operación monitoreada.",
     whyItMatters: "Cambia el foco de mirar información a ejecutar mejor un proceso real.",
     example: "Un circuito de alertas que detecta desvíos, prioriza casos y registra acciones tomadas.",
     risk: "Confundirla con hacer reportes deja tareas manuales intactas y no reduce retrabajo.",
@@ -767,7 +766,8 @@ export const dictionaryTerms = [
     id: "automatizacion-procesos",
     term: "Automatización de procesos",
     category: "Operaciones",
-    definition: "Conversión de una tarea repetible en un flujo que se dispara, calcula, controla y registra con mínima intervención manual.",
+    definition:
+      "Conversión de una tarea repetible en un flujo que se dispara, calcula, controla y registra con mínima intervención manual.",
     whyItMatters: "Permite escalar operación sin depender de planillas, correos o interpretaciones individuales.",
     example: "Actualizar datos cada mañana, calcular criticidad y crear una tarea para cada excepción relevante.",
     risk: "Automatizar sin reglas claras acelera errores en lugar de resolverlos.",

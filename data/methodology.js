@@ -2,12 +2,10 @@ export const methodologyProcessFlow = [
   {
     stage: "PRD y Spec",
     method: "Definir + VSM actual + SIPOC ligero",
-    why:
-      "Porque antes de hablar de datos o visuales hay que explicitar qué proceso duele, dónde se pierde valor y qué decisión debe quedar mejor resuelta.",
+    why: "Porque antes de hablar de datos o visuales hay que explicitar qué proceso duele, dónde se pierde valor y qué decisión debe quedar mejor resuelta.",
     purpose:
       "Alinear sponsor, usuarios, BI y datos alrededor de una misma pregunta de negocio, con alcance, exclusiones y criterios de aceptación claros.",
-    how:
-      "Se describe el flujo actual, se identifican entradas y salidas, se ordenan actores y se separa la necesidad funcional de la respuesta técnica.",
+    how: "Se describe el flujo actual, se identifican entradas y salidas, se ordenan actores y se separa la necesidad funcional de la respuesta técnica.",
     technicalDefinition:
       "Contrato inicial que transforma una necesidad de negocio en requerimientos verificables, criterios de aceptación, alcance técnico y base de trazabilidad.",
     functionalDefinition:
@@ -20,12 +18,10 @@ export const methodologyProcessFlow = [
   {
     stage: "Datos y Power Query",
     method: "Medir + OEE BI + calidad de datos",
-    why:
-      "Porque una automatización no puede sostener una decisión si las fuentes llegan tarde, incompletas, duplicadas o sin responsable claro.",
+    why: "Porque una automatización no puede sostener una decisión si las fuentes llegan tarde, incompletas, duplicadas o sin responsable claro.",
     purpose:
       "Construir una línea base de disponibilidad, eficiencia y calidad para entender si los datos están en condiciones de alimentar el proceso.",
-    how:
-      "Se relevan fuentes, owners, frecuencia, latencia, volumen, reglas de limpieza, controles de nulos, duplicados, claves huérfanas y plan de refresh.",
+    how: "Se relevan fuentes, owners, frecuencia, latencia, volumen, reglas de limpieza, controles de nulos, duplicados, claves huérfanas y plan de refresh.",
     technicalDefinition:
       "Capa de ingesta, preparación y control que convierte fuentes dispersas en datos actualizables, trazables y aptos para modelado.",
     functionalDefinition:
@@ -38,12 +34,9 @@ export const methodologyProcessFlow = [
   {
     stage: "Modelado",
     method: "Proceso + flujo continuo + criterio de granularidad",
-    why:
-      "Porque un modelo mal diseñado multiplica dudas: totales que no cierran, filtros ambiguos y decisiones que nadie puede explicar con seguridad.",
-    purpose:
-      "Ordenar hechos, dimensiones, relaciones y granularidad para que el negocio lea una única versión del proceso.",
-    how:
-      "Se define el grano de análisis, se separan hechos y dimensiones, se validan relaciones, calendario, cardinalidad y modo de almacenamiento.",
+    why: "Porque un modelo mal diseñado multiplica dudas: totales que no cierran, filtros ambiguos y decisiones que nadie puede explicar con seguridad.",
+    purpose: "Ordenar hechos, dimensiones, relaciones y granularidad para que el negocio lea una única versión del proceso.",
+    how: "Se define el grano de análisis, se separan hechos y dimensiones, se validan relaciones, calendario, cardinalidad y modo de almacenamiento.",
     technicalDefinition:
       "Estructura semántica que organiza tablas, relaciones y reglas de filtro para responder preguntas analíticas con consistencia y performance.",
     functionalDefinition:
@@ -56,16 +49,12 @@ export const methodologyProcessFlow = [
   {
     stage: "DAX",
     method: "Poka-Yoke + FMEA de reglas",
-    why:
-      "Porque las medidas son decisiones codificadas; si la regla es ambigua, lenta o duplicada, el reporte parece correcto pero induce retrabajo.",
-    purpose:
-      "Prevenir errores de cálculo y priorizar las reglas críticas que podrían afectar decisiones operativas o gerenciales.",
-    how:
-      "Se documenta cada medida relevante, se separan medidas base y derivadas, se prueban casos borde y se revisan severidad, ocurrencia y detección de fallas.",
+    why: "Porque las medidas son decisiones codificadas; si la regla es ambigua, lenta o duplicada, el reporte parece correcto pero induce retrabajo.",
+    purpose: "Prevenir errores de cálculo y priorizar las reglas críticas que podrían afectar decisiones operativas o gerenciales.",
+    how: "Se documenta cada medida relevante, se separan medidas base y derivadas, se prueban casos borde y se revisan severidad, ocurrencia y detección de fallas.",
     technicalDefinition:
       "Capa de cálculo que implementa reglas de negocio mediante medidas, formatos, dependencias y pruebas sobre el modelo semántico.",
-    functionalDefinition:
-      "Traducción transparente de los criterios del negocio en indicadores que el usuario puede interpretar y auditar.",
+    functionalDefinition: "Traducción transparente de los criterios del negocio en indicadores que el usuario puede interpretar y auditar.",
     examples: [
       "Probar una medida de margen contra casos con descuentos, devoluciones y costos faltantes.",
       "Crear medidas base reutilizables para evitar que cada página calcule una variante distinta.",
@@ -73,13 +62,10 @@ export const methodologyProcessFlow = [
   },
   {
     stage: "Seguridad y gobierno",
-    method: "FMEA + Poka-Yoke + ownership",
-    why:
-      "Porque una solución confiable también debe impedir accesos incorrectos, datos sensibles expuestos y decisiones sin dueño.",
-    purpose:
-      "Asegurar permisos, linaje, certificación, responsables y controles antes de abrir la solución a usuarios reales.",
-    how:
-      "Se definen roles, RLS/OLS, owners, stewards, sensibilidad, linaje, criterios de certificación y pruebas con usuarios reales.",
+    method: "FMEA + Poka-Yoke + responsables explícitos",
+    why: "Porque una solución confiable también debe impedir accesos incorrectos, datos sensibles expuestos y decisiones sin dueño.",
+    purpose: "Asegurar permisos, linaje, certificación, responsables y controles antes de abrir la solución a usuarios reales.",
+    how: "Se definen roles, RLS/OLS, owners, stewards, sensibilidad, linaje, criterios de certificación y pruebas con usuarios reales.",
     technicalDefinition:
       "Conjunto de controles de acceso, trazabilidad, linaje, clasificación y administración que protege el activo BI durante su ciclo de vida.",
     functionalDefinition:
@@ -92,12 +78,9 @@ export const methodologyProcessFlow = [
   {
     stage: "UX y acción",
     method: "VSM futuro + flujo continuo",
-    why:
-      "Porque el valor no se captura cuando el usuario mira un tablero, sino cuando entiende la señal, decide y actúa sin reconstruir el caso.",
-    purpose:
-      "Diseñar la experiencia futura con menos esperas, menos pasos manuales y una acción claramente indicada.",
-    how:
-      "Se prioriza la lectura ejecutiva, se muestra estado, causa, impacto y acción esperada, y se deja el detalle disponible sin saturar la primera vista.",
+    why: "Porque el valor no se captura cuando el usuario mira un tablero, sino cuando entiende la señal, decide y actúa sin reconstruir el caso.",
+    purpose: "Diseñar la experiencia futura con menos esperas, menos pasos manuales y una acción claramente indicada.",
+    how: "Se prioriza la lectura ejecutiva, se muestra estado, causa, impacto y acción esperada, y se deja el detalle disponible sin saturar la primera vista.",
     technicalDefinition:
       "Capa de experiencia, navegación e interacción que conecta indicadores, filtros, detalle, alertas y salida operativa.",
     functionalDefinition:
@@ -110,30 +93,23 @@ export const methodologyProcessFlow = [
   {
     stage: "Versionado y aprobación",
     method: "SMED + plan de control + revisión por pares",
-    why:
-      "Porque cada cambio productivo debe ser rápido, pero también revisable, reversible y suficientemente probado.",
-    purpose:
-      "Reducir fricción de release sin perder trazabilidad ni control de calidad.",
-    how:
-      "Se separa preparación previa y ventana de publicación, se versionan PBIP/TMDL, se revisan cambios, se ejecuta UAT y se deja rollback definido.",
-    technicalDefinition:
-      "Proceso de control de cambios que combina versionado, pruebas, revisión, aprobación y promoción entre ambientes.",
+    why: "Porque cada cambio productivo debe ser rápido, pero también revisable, reversible y suficientemente probado.",
+    purpose: "Reducir fricción de release sin perder trazabilidad ni control de calidad.",
+    how: "Se separa preparación previa y ventana de publicación, se versionan PBIP/TMDL, se revisan cambios, se ejecuta UAT y se deja rollback definido.",
+    technicalDefinition: "Proceso de control de cambios que combina versionado, pruebas, revisión, aprobación y promoción entre ambientes.",
     functionalDefinition:
       "Acuerdo de salida que le permite al negocio saber qué cambia, por qué cambia, quién aprobó y cómo se vuelve atrás si algo falla.",
     examples: [
-      "Preparar parámetros, credenciales, pruebas y comunicación antes de la ventana de go-live.",
+      "Preparar parámetros, credenciales, pruebas y comunicación antes de la ventana de puesta en producción.",
       "Revisar diferencias de medidas y relaciones antes de promover a producción.",
     ],
   },
   {
     stage: "Publicación",
-    method: "SMED operativo + Poka-Yoke de go-live",
-    why:
-      "Porque publicar no es subir un archivo; es habilitar un servicio con permisos, refresh, comunicación y soporte inicial.",
-    purpose:
-      "Asegurar que la solución llegue a usuarios reales sin improvisar accesos, credenciales, actualización ni mensaje de salida.",
-    how:
-      "Se confirma workspace productivo, app, audiencia, permisos, gateway, credenciales, refresh inicial, comunicación y monitoreo posterior.",
+    method: "SMED operativo + Poka-Yoke de salida a producción",
+    why: "Porque publicar no es subir un archivo; es habilitar un servicio con permisos, refresh, comunicación y soporte inicial.",
+    purpose: "Asegurar que la solución llegue a usuarios reales sin improvisar accesos, credenciales, actualización ni mensaje de salida.",
+    how: "Se confirma workspace productivo, app, audiencia, permisos, gateway, credenciales, refresh inicial, comunicación y monitoreo posterior.",
     technicalDefinition:
       "Promoción controlada de contenido BI a un ambiente productivo, con configuración de acceso, actualización, credenciales y disponibilidad.",
     functionalDefinition:
@@ -146,12 +122,9 @@ export const methodologyProcessFlow = [
   {
     stage: "Operación y mejora",
     method: "Controlar + OEE BI + Kaizen + Kata",
-    why:
-      "Porque el go-live no cierra el trabajo; apenas inaugura la etapa en la que la solución debe sostenerse, aprender y mejorar.",
-    purpose:
-      "Mantener el servicio BI saludable, medir adopción real, gestionar incidentes y priorizar mejoras con evidencia.",
-    how:
-      "Se monitorean refresh, errores, capacidad, uso, acciones pendientes, incidentes, SLA y backlog; luego se ejecutan mejoras incrementales con cadencia.",
+    why: "Porque la salida a producción no cierra el trabajo; apenas inaugura la etapa en la que la solución debe sostenerse, aprender y mejorar.",
+    purpose: "Mantener el servicio BI saludable, medir adopción real, gestionar incidentes y priorizar mejoras con evidencia.",
+    how: "Se monitorean refresh, errores, capacidad, uso, acciones pendientes, incidentes, SLA y backlog; luego se ejecutan mejoras incrementales con cadencia.",
     technicalDefinition:
       "Disciplina de operación que observa disponibilidad, performance, calidad, incidentes, adopción y evolución del producto BI.",
     functionalDefinition:
@@ -166,18 +139,15 @@ export const methodologyProcessFlow = [
 export const methodologyPrinciples = [
   {
     title: "Marco gerencial",
-    text:
-      "Conecta cada iniciativa BI con una pregunta de gestión concreta: qué decisión mejora, qué pérdida reduce y cómo se demuestra el resultado.",
+    text: "Conecta cada iniciativa BI con una pregunta de gestión concreta: qué decisión mejora, qué pérdida reduce y cómo se demuestra el resultado.",
   },
   {
     title: "Trabajo diario",
-    text:
-      "Le da al equipo una rutina práctica para priorizar problemas, documentar causas, probar mejoras y sostener controles sin depender de conversaciones sueltas.",
+    text: "Le da al equipo una rutina práctica para priorizar problemas, documentar causas, probar mejoras y sostener controles sin depender de conversaciones sueltas.",
   },
   {
     title: "Producto BI",
-    text:
-      "Integra PRD, Spec, modelo, publicación y operación en un ciclo verificable, versionable y presentable ante dirección.",
+    text: "Integra PRD, Spec, modelo, publicación y operación en un ciclo verificable, versionable y presentable ante dirección.",
   },
 ];
 
@@ -256,7 +226,7 @@ export const dmaicStages = [
     title: "Controlar",
     question: "¿Cómo se sostiene la mejora sin volver al modo manual?",
     biApplication:
-      "Se instala monitoreo de operación, runbook, SLA, alertas, tablero de salud, ownership, ritual Kaizen y Kata de mejora. En consecuencia, el resultado queda incorporado a la rutina del equipo.",
+      "Se instala monitoreo de operación, runbook, SLA, alertas, tablero de salud, responsables explícitos, ritual Kaizen y Kata de mejora. En consecuencia, el resultado queda incorporado a la rutina del equipo.",
     evidence: ["Runbook", "Tablero operativo", "SLA", "Cadencia Kaizen"],
     tools: ["Kaizen", "Kata", "Plan de control"],
   },
@@ -276,19 +246,15 @@ export const methodologyTools = [
     title: "VSM actual",
     role: "Diagnóstico",
     when: "Definir y medir",
-    purpose:
-      "Mapea cómo fluye hoy el trabajo: entradas, esperas, aprobaciones, planillas, reprocesos, sistemas y decisiones.",
-    biUse:
-      "Muestra dónde debe intervenir el BI; no solo qué dato falta, sino qué espera, validación o retrabajo debe desaparecer.",
+    purpose: "Mapea cómo fluye hoy el trabajo: entradas, esperas, aprobaciones, planillas, reprocesos, sistemas y decisiones.",
+    biUse: "Muestra dónde debe intervenir el BI; no solo qué dato falta, sino qué espera, validación o retrabajo debe desaparecer.",
   },
   {
     title: "OEE BI",
     role: "Medición ejecutiva",
     when: "Medir y controlar",
-    purpose:
-      "Traduce disponibilidad, eficiencia y calidad en una lectura única de efectividad del proceso analítico.",
-    biUse:
-      "Permite presentar si la automatización opera como servicio y, sobre todo, dónde se concentra la pérdida.",
+    purpose: "Traduce disponibilidad, eficiencia y calidad en una lectura única de efectividad del proceso analítico.",
+    biUse: "Permite presentar si la automatización opera como servicio y, sobre todo, dónde se concentra la pérdida.",
   },
   {
     title: "FMEA",
@@ -296,17 +262,14 @@ export const methodologyTools = [
     when: "Analizar",
     purpose:
       "Identifica modos de falla, efectos, causas, controles actuales y prioridad de acción antes de que el error llegue al usuario.",
-    biUse:
-      "Aplica a fuentes, refresh, modelo, DAX, seguridad, UX, deployment y operación.",
+    biUse: "Aplica a fuentes, refresh, modelo, DAX, seguridad, UX, deployment y operación.",
   },
   {
     title: "VSM futuro",
     role: "Diseño objetivo",
     when: "Mejorar",
-    purpose:
-      "Redibuja el flujo con menos esperas, menos pases manuales, controles embebidos y acción directa desde la señal.",
-    biUse:
-      "Se convierte en roadmap de automatización y en criterio para priorizar releases.",
+    purpose: "Redibuja el flujo con menos esperas, menos pases manuales, controles embebidos y acción directa desde la señal.",
+    biUse: "Se convierte en roadmap de automatización y en criterio para priorizar releases.",
   },
   {
     title: "Kaizen y Kata",
@@ -314,8 +277,7 @@ export const methodologyTools = [
     when: "Controlar",
     purpose:
       "Kaizen captura mejoras incrementales; Kata instala una rutina de objetivo, condición actual, obstáculo, experimento y aprendizaje.",
-    biUse:
-      "Mantiene vivo el producto BI con evidencia de uso, incidentes, adopción y mejoras pequeñas pero constantes.",
+    biUse: "Mantiene vivo el producto BI con evidencia de uso, incidentes, adopción y mejoras pequeñas pero constantes.",
   },
 ];
 
@@ -354,36 +316,31 @@ export const leanPractices = [
   {
     title: "Flujo continuo",
     focus: "Reducir esperas",
-    text:
-      "El usuario pasa de señal a acción sin exportar, reinterpretar ni pedir validaciones por fuera del sistema.",
+    text: "El usuario pasa de señal a acción sin exportar, reinterpretar ni pedir validaciones por fuera del sistema.",
     example: "Un desvío crítico abre evidencia, responsable, acción esperada y estado de seguimiento dentro del mismo flujo.",
   },
   {
     title: "SMED",
     focus: "Preparaciones rápidas",
-    text:
-      "Separa preparación interna y externa para que releases, cambios de regla y pruebas demanden menos tiempo y tengan menos riesgo.",
+    text: "Separa preparación interna y externa para que releases, cambios de regla y pruebas demanden menos tiempo y tengan menos riesgo.",
     example: "Checklist, parámetros, ambientes Dev-Test-Prod y pruebas listas antes de la ventana de publicación.",
   },
   {
     title: "Poka-Yoke",
     focus: "Prevenir errores",
-    text:
-      "El sistema evita que datos inválidos, filtros peligrosos o reglas incompletas lleguen a la decisión operativa.",
-    example: "Validaciones de nulos, duplicados, claves huérfanas, permisos y medidas críticas antes del go-live.",
+    text: "El sistema evita que datos inválidos, filtros peligrosos o reglas incompletas lleguen a la decisión operativa.",
+    example: "Validaciones de nulos, duplicados, claves huérfanas, permisos y medidas críticas antes de la salida a producción.",
   },
   {
     title: "Kaizen",
     focus: "Mejoras incrementales",
-    text:
-      "La mejora no espera un proyecto grande; cada incidente, queja o fricción genera una acción pequeña, observable y medible.",
+    text: "La mejora no espera un proyecto grande; cada incidente, queja o fricción genera una acción pequeña, observable y medible.",
     example: "Reducir un refresh de 42 a 18 minutos, eliminar un paso manual o aclarar una regla ambigua.",
   },
   {
     title: "Kata",
     focus: "Rutina de aprendizaje",
-    text:
-      "Define condición objetivo, condición actual, obstáculos, siguiente experimento y aprendizaje observado.",
+    text: "Define condición objetivo, condición actual, obstáculos, siguiente experimento y aprendizaje observado.",
     example: "Subir calidad de datos del 92% al 98% probando controles por fuente durante dos sprints.",
   },
 ];
@@ -391,22 +348,18 @@ export const leanPractices = [
 export const methodologyCadence = [
   {
     title: "Revisión diaria",
-    text:
-      "Mirar disponibilidad, refresh, incidentes, excepciones y acciones pendientes. El objetivo es sostener el servicio BI en condiciones reales de uso.",
+    text: "Mirar disponibilidad, refresh, incidentes, excepciones y acciones pendientes. El objetivo es sostener el servicio BI en condiciones reales de uso.",
   },
   {
     title: "Kaizen semanal",
-    text:
-      "Elegir una pérdida concreta del OEE BI, analizar la causa, definir una contramedida pequeña y registrar el aprendizaje.",
+    text: "Elegir una pérdida concreta del OEE BI, analizar la causa, definir una contramedida pequeña y registrar el aprendizaje.",
   },
   {
     title: "Gate de release",
-    text:
-      "Antes de publicar, confirmar Spec, pruebas, seguridad, VSM futuro, FMEA actualizado, rollback y comunicación.",
+    text: "Antes de publicar, confirmar Spec, pruebas, seguridad, VSM futuro, FMEA actualizado, rollback y comunicación.",
   },
   {
     title: "Comité mensual",
-    text:
-      "Presentar efectividad, tendencia, pérdidas principales, mejoras cerradas y próximas decisiones de roadmap.",
+    text: "Presentar efectividad, tendencia, pérdidas principales, mejoras cerradas y próximas decisiones de roadmap.",
   },
 ];

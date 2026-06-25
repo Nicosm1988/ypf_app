@@ -88,8 +88,7 @@ const models = [
     title: "Modelo Spec Técnica de Datalización",
     subtitle: "Arquitectura, datos, modelo, DAX, seguridad, UX, release y operación",
     owner: "Equipo de Datalización - Piso 16",
-    purpose:
-      "Transformar el PRD aprobado en una implementación construible, versionable, testeable y operable con Power BI/Fabric.",
+    purpose: "Transformar el PRD aprobado en una implementación construible, versionable, testeable y operable con Power BI/Fabric.",
     sections: [
       {
         title: "1. Arquitectura y fuentes",
@@ -143,7 +142,7 @@ const models = [
       },
       {
         title: "6. Versionado, publicación y operación",
-        objective: "Controlar el paso a producción y sostener la solución después del go-live.",
+        objective: "Controlar el paso a producción y sostener la solución después de la salida a producción.",
         prompts: [
           "PBIP/TMDL, Git, ramas, pull request, Dev-Test-Prod y checklist de release.",
           "Publicación, credenciales, refresh inicial, endorsement y comunicación.",

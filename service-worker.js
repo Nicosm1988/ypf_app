@@ -1,7 +1,8 @@
-const CACHE_NAME = "datalizacion-ypf-v14";
+const CACHE_NAME = "datalizacion-ypf-v15";
 const PRECACHE_URLS = [
   "/",
   "/guia-power-bi",
+  "/metodo-datalizacion",
   "/metodologia",
   "/roadmap",
   "/proyecto-power-bi",
@@ -14,6 +15,7 @@ const PRECACHE_URLS = [
   "/data/dictionary.js",
   "/data/engineeringGuide.js",
   "/data/methodology.js",
+  "/data/datalizationMethod.js",
   "/data/executiveNarrative.js",
   "/data/roadmap.js",
   "/data/powerbiShortcuts.js",
@@ -34,12 +36,15 @@ const PRECACHE_URLS = [
   "/assets/energy-chain-v1-960.webp",
   "/assets/energy-chain-v1-1280.webp",
   "/assets/energy-chain-v1-1672.webp",
-  "/assets/energy-chain.png"
+  "/assets/energy-chain.png",
 ];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS)).then(() => self.skipWaiting())
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => cache.addAll(PRECACHE_URLS))
+      .then(() => self.skipWaiting()),
   );
 });
 
@@ -48,7 +53,7 @@ self.addEventListener("activate", (event) => {
     caches
       .keys()
       .then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))))
-      .then(() => self.clients.claim())
+      .then(() => self.clients.claim()),
   );
 });
 
@@ -76,6 +81,6 @@ self.addEventListener("fetch", (event) => {
         .catch(() => cached);
 
       return shouldPreferNetwork ? networkFetch || cached : cached || networkFetch;
-    })
+    }),
   );
 });
