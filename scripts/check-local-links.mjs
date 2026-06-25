@@ -7,6 +7,7 @@ const appRoutes = new Set([
   "/guia-power-bi",
   "/metodo-datalizacion",
   "/metodologia",
+  "/design-system",
   "/diccionario",
   "/roadmap",
   "/proyecto-power-bi",

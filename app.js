@@ -1,4 +1,16 @@
 import { dictionaryCategories, dictionaryTerms } from "./data/dictionary.js";
+import {
+  designSystemBenefits,
+  designSystemComparison,
+  designSystemComponents,
+  designSystemDefinition,
+  designSystemDeliverables,
+  designSystemFoundations,
+  designSystemHeroMetrics,
+  designSystemPrinciples,
+  designSystemQualityRules,
+  designSystemScope,
+} from "./data/designSystem.js";
 import { guideSections, prdSpecComparison, readinessChecklist } from "./data/engineeringGuide.js";
 import {
   methodBacklogColumns,
@@ -81,6 +93,7 @@ const routeTitles = {
   "/guia-power-bi": "Guía y roadmap de automatización BI/Fabric | Datalización YPF",
   "/metodo-datalizacion": "Método de Datalización | Datalización YPF",
   "/metodologia": "Metodología de mejora continua BI | Datalización YPF",
+  "/design-system": "Design System | Datalización Hub",
   "/diccionario": "Diccionario BI | Datalización YPF",
   "/roadmap": "Guía y roadmap de automatización BI/Fabric | Datalización YPF",
   "/proyecto-power-bi": "Proyecto de Power BI con Visual Studio Code | Datalización YPF",
@@ -92,6 +105,57 @@ const dictionaryState = {
   query: "",
   category: "Todas",
 };
+
+const hubNavigationSections = [
+  {
+    title: "Guía + Roadmap",
+    route: "/guia-power-bi",
+    iconName: "route",
+    text: "Proceso end-to-end para construir, validar, publicar y operar productos BI.",
+  },
+  {
+    title: "Método",
+    route: "/metodo-datalizacion",
+    iconName: "folder",
+    text: "Estructura de trabajo, Teams, SharePoint, naming, backlog, VMC y gobierno.",
+  },
+  {
+    title: "Metodología",
+    route: "/metodologia",
+    iconName: "gauge",
+    text: "OEE BI, DMAIC, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata aplicados a BI.",
+  },
+  {
+    title: "Proyecto Power BI",
+    route: "/proyecto-power-bi",
+    iconName: "code",
+    text: "PRD, Spec, PBIP, TMDL, Git, documentación técnica y operación del producto.",
+  },
+  {
+    title: "Diccionario BI",
+    route: "/diccionario",
+    iconName: "book",
+    text: "Lenguaje común para negocio, datos, BI, gobierno, seguridad y adopción.",
+  },
+  {
+    title: "Design System",
+    route: "/design-system",
+    iconName: "layers",
+    text: "Lenguaje visual y funcional para escalar la plataforma sin perder coherencia.",
+  },
+  {
+    title: "Librerías",
+    route: "/librerias",
+    iconName: "terminal",
+    text: "Catálogo técnico de agentes, MCPs, sandboxes, APIs y librerías evaluables.",
+  },
+  {
+    title: "Atajos",
+    route: "/atajos",
+    iconName: "spark",
+    text: "Acciones frecuentes de Power BI para reducir fricción diaria y errores.",
+  },
+];
 
 let pointerFrame = 0;
 
@@ -848,6 +912,11 @@ const interactiveSurfaceSelector = [
   ".platform-timeline-card",
   ".platform-discipline-card",
   ".platform-metric",
+  ".hub-nav-card",
+  ".design-system-card",
+  ".design-system-benefit",
+  ".design-system-component",
+  ".design-system-final",
   ".executive-brief",
   ".executive-support-card",
   ".concept-tree",
@@ -1000,6 +1069,7 @@ function getRoute(pathname = window.location.pathname) {
       "/guia-power-bi",
       "/metodo-datalizacion",
       "/metodologia",
+      "/design-system",
       "/diccionario",
       "/roadmap",
       "/proyecto-power-bi",
@@ -1101,6 +1171,8 @@ function renderRoute(route = getRoute()) {
     renderDatalizationMethodPage();
   } else if (route === "/metodologia") {
     renderMethodologyPage();
+  } else if (route === "/design-system") {
+    renderDesignSystemPage();
   } else if (route === "/guia-power-bi") {
     renderGuidePage();
     setupUnifiedFlowInteractions();
@@ -1129,30 +1201,30 @@ function renderHomePage() {
           <source
             type="image/avif"
             srcset="
-              /assets/energy-chain-v1-640.avif 640w,
-              /assets/energy-chain-v1-960.avif 960w,
-              /assets/energy-chain-v1-1280.avif 1280w,
-              /assets/energy-chain-v1-1672.avif 1672w
+              /assets/ypf-industrial-hero-640.avif 640w,
+              /assets/ypf-industrial-hero-960.avif 960w,
+              /assets/ypf-industrial-hero-1280.avif 1280w,
+              /assets/ypf-industrial-hero-1672.avif 1672w
             "
             sizes="100vw"
           />
           <source
             type="image/webp"
             srcset="
-              /assets/energy-chain-v1-640.webp 640w,
-              /assets/energy-chain-v1-960.webp 960w,
-              /assets/energy-chain-v1-1280.webp 1280w,
-              /assets/energy-chain-v1-1672.webp 1672w
+              /assets/ypf-industrial-hero-640.webp 640w,
+              /assets/ypf-industrial-hero-960.webp 960w,
+              /assets/ypf-industrial-hero-1280.webp 1280w,
+              /assets/ypf-industrial-hero-1672.webp 1672w
             "
             sizes="100vw"
           />
           <img
-            src="/assets/energy-chain.png"
+            src="/assets/ypf-industrial-hero.png"
             width="1672"
             height="941"
             fetchpriority="high"
             decoding="async"
-            alt="Cadena operativa de energía con pozo, ductos, refinería y mercado"
+            alt="Complejo industrial energético con refinería, ductos y puerto"
           />
           </picture>
         <div class="hero-shade" aria-hidden="true"></div>
@@ -1194,6 +1266,8 @@ function renderHomePage() {
       </section>
 
       ${renderPlatformExecutiveSection()}
+
+      ${renderHubSectionLauncher()}
 
       ${renderExecutiveBrief(pageNarratives.home)}
 
@@ -1383,6 +1457,32 @@ function renderPlatformExecutiveSection() {
   `;
 }
 
+function renderHubSectionLauncher() {
+  return `
+    <section class="hub-nav page-inner" aria-labelledby="hubNavTitle">
+      <div class="hub-nav-head">
+        <span class="flow-chip">mapa de navegación</span>
+        <h2 id="hubNavTitle">Cada sección del hub responde una decisión del sistema de Datalización.</h2>
+        <p>La plataforma se recorre como una botonera ejecutiva: método, guía, metodología, proyecto, lenguaje, diseño, herramientas y operación diaria conectados en una misma experiencia.</p>
+      </div>
+      <div class="hub-nav-grid">
+        ${hubNavigationSections.map(renderHubNavCard).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderHubNavCard(item, index) {
+  return `
+    <a class="hub-nav-card" href="${escapeHtml(item.route)}" data-route style="--hub-order:${index}">
+      <span>${icon(item.iconName)}</span>
+      <strong>${escapeHtml(item.title)}</strong>
+      <p>${escapeHtml(item.text)}</p>
+      <small>Entrar ${icon("arrowRight")}</small>
+    </a>
+  `;
+}
+
 function renderPlatformPillar(item, index) {
   return `
     <article class="platform-card platform-pillar" style="--platform-order:${index}">
@@ -1422,6 +1522,190 @@ function renderPlatformDisciplineCard(item, index) {
         <strong>${escapeHtml(item.to)}</strong>
       </div>
       <p>${escapeHtml(item.detail)}</p>
+    </article>
+  `;
+}
+
+function renderDesignSystemPage() {
+  appRoot.innerHTML = `
+    <section class="page tool-page design-system-page">
+      <header class="page-heading page-inner design-system-hero">
+        <span class="eyebrow">Design System</span>
+        <h1>Una base común para construir experiencias digitales consistentes, escalables y gobernadas.</h1>
+        <p class="lede">El Design System ordena cómo diseñamos, documentamos, comunicamos y evolucionamos la plataforma interna de Datalización.</p>
+        <div class="design-system-hero-metrics" aria-label="Capacidades principales del Design System">
+          ${designSystemHeroMetrics.map(renderDesignSystemHeroMetric).join("")}
+        </div>
+      </header>
+
+      <section class="design-system-intro page-inner" aria-labelledby="designSystemIntroTitle">
+        <div>
+          <span class="flow-chip">mensaje central</span>
+          <h2 id="designSystemIntroTitle">El Design System nos permite pasar de soluciones visuales aisladas a una experiencia digital consistente, gobernada y escalable.</h2>
+          <p>En Datalización no se trata solamente de definir colores, tipografías o componentes visuales. Se trata de establecer un lenguaje común de diseño, documentación, interacción y comunicación para todo el ecosistema de inteligencia de datos del área.</p>
+        </div>
+        <div class="design-system-definition-grid">
+          ${designSystemDefinition.map(renderDesignSystemDefinition).join("")}
+        </div>
+      </section>
+
+      <section class="design-system-why page-inner" aria-labelledby="designSystemWhyTitle">
+        <div class="design-system-section-head">
+          <span class="flow-chip">por qué lo necesitamos</span>
+          <h2 id="designSystemWhyTitle">La plataforma crece; la experiencia debe crecer con coherencia.</h2>
+          <p>A medida que la plataforma de Datalización suma módulos, también crece la necesidad de mantener claridad y escalabilidad. Sin un sistema común, cada nueva sección puede resolver de forma distinta problemas similares: botones, cards, estados, alertas, navegación, jerarquías, bloques de documentación, indicadores, componentes de proceso o visualizaciones.</p>
+        </div>
+        <div class="design-system-comparison">
+          ${renderDesignSystemComparisonColumn("Sin Design System", designSystemComparison.without, "without")}
+          ${renderDesignSystemComparisonColumn("Con Design System", designSystemComparison.with, "with")}
+        </div>
+      </section>
+
+      <section class="design-system-benefits page-inner" aria-labelledby="designSystemBenefitsTitle">
+        <div class="design-system-section-head">
+          <span class="flow-chip">beneficios esperados</span>
+          <h2 id="designSystemBenefitsTitle">El sistema mejora velocidad, calidad, adopción y mantenimiento.</h2>
+          <p>La ganancia no es estética: es operativa. Cada patrón reutilizable reduce decisiones repetitivas, acelera nuevas secciones y sostiene una experiencia interna más profesional.</p>
+        </div>
+        <div class="design-system-benefit-grid">
+          ${designSystemBenefits.map(renderDesignSystemBenefit).join("")}
+        </div>
+      </section>
+
+      <section class="design-system-foundations page-inner" aria-labelledby="designSystemFoundationsTitle">
+        <div class="design-system-section-head">
+          <span class="flow-chip">fundamentos</span>
+          <h2 id="designSystemFoundationsTitle">Cada decisión de diseño debe tener una función dentro del sistema.</h2>
+        </div>
+        <div class="design-system-token-grid">
+          ${designSystemFoundations.map(renderDesignSystemToken).join("")}
+        </div>
+      </section>
+
+      <section class="design-system-principles page-inner" aria-labelledby="designSystemPrinciplesTitle">
+        <div class="design-system-section-head">
+          <span class="flow-chip">principios de diseño</span>
+          <h2 id="designSystemPrinciplesTitle">La interfaz debe ayudar a comprender, decidir y sostener.</h2>
+        </div>
+        <div class="design-system-principle-grid">
+          ${designSystemPrinciples.map(renderDesignSystemPrinciple).join("")}
+        </div>
+      </section>
+
+      <section class="design-system-scope page-inner" aria-labelledby="designSystemScopeTitle">
+        <div class="design-system-section-head">
+          <span class="flow-chip">alcance inicial</span>
+          <h2 id="designSystemScopeTitle">El primer alcance cubre los patrones que más se repiten en la plataforma.</h2>
+        </div>
+        <div class="design-system-chip-cloud">
+          ${designSystemScope.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+        </div>
+      </section>
+
+      <section class="design-system-components page-inner" aria-labelledby="designSystemComponentsTitle">
+        <div class="design-system-section-head">
+          <span class="flow-chip">componentes esperados</span>
+          <h2 id="designSystemComponentsTitle">La visión del sistema se materializa en componentes reutilizables.</h2>
+          <p>No hace falta desarrollar todo en detalle en esta primera sección. El objetivo es mostrar la arquitectura de componentes que ordenará futuras páginas, dashboards, guías y documentación.</p>
+        </div>
+        <div class="design-system-component-grid">
+          ${designSystemComponents.map(renderDesignSystemComponent).join("")}
+        </div>
+      </section>
+
+      <section class="design-system-delivery page-inner" aria-labelledby="designSystemDeliveryTitle">
+        <div class="design-system-section-head">
+          <span class="flow-chip">entregables y reglas</span>
+          <h2 id="designSystemDeliveryTitle">El sistema se gobierna con entregables claros y reglas de calidad.</h2>
+        </div>
+        <div class="design-system-delivery-grid">
+          ${renderDesignSystemList("Entregables esperados", designSystemDeliverables)}
+          ${renderDesignSystemList("Reglas de calidad", designSystemQualityRules)}
+        </div>
+      </section>
+
+      <section class="design-system-final page-inner">
+        <div>
+          <span class="eyebrow">resultado esperado</span>
+          <h2>Una herramienta de madurez digital para construir con mayor velocidad, calidad y consistencia.</h2>
+          <p>El Design System debe asegurar que cada nueva sección, componente o contenido mantenga el mismo estándar corporativo, la misma lógica de experiencia y la misma orientación a valor.</p>
+        </div>
+        <strong>El Design System no solo ordena cómo se ve la plataforma. Ordena cómo construimos, comunicamos y escalamos nuestra forma de trabajar.</strong>
+      </section>
+    </section>
+  `;
+}
+
+function renderDesignSystemHeroMetric(item) {
+  return `
+    <article>
+      <strong>${escapeHtml(item.value)}</strong>
+      <span>${escapeHtml(item.label)}</span>
+    </article>
+  `;
+}
+
+function renderDesignSystemDefinition(item, index) {
+  return `
+    <article class="design-system-card" style="--ds-order:${index}">
+      <span>${String(index + 1).padStart(2, "0")}</span>
+      <h3>${escapeHtml(item.title)}</h3>
+      <p>${escapeHtml(item.text)}</p>
+    </article>
+  `;
+}
+
+function renderDesignSystemComparisonColumn(title, items, tone) {
+  return `
+    <article class="design-system-compare ${tone}">
+      <h3>${escapeHtml(title)}</h3>
+      <ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+    </article>
+  `;
+}
+
+function renderDesignSystemBenefit([title, text], index) {
+  return `
+    <article class="design-system-benefit" style="--ds-order:${index}">
+      <span>${String(index + 1).padStart(2, "0")}</span>
+      <h3>${escapeHtml(title)}</h3>
+      <p>${escapeHtml(text)}</p>
+    </article>
+  `;
+}
+
+function renderDesignSystemToken([title, text]) {
+  return `
+    <article class="design-system-token">
+      <strong>${escapeHtml(title)}</strong>
+      <p>${escapeHtml(text)}</p>
+    </article>
+  `;
+}
+
+function renderDesignSystemPrinciple([title, text], index) {
+  return `
+    <article class="design-system-principle" style="--ds-order:${index}">
+      <h3>${escapeHtml(title)}</h3>
+      <p>${escapeHtml(text)}</p>
+    </article>
+  `;
+}
+
+function renderDesignSystemComponent(item, index) {
+  return `
+    <article class="design-system-component" style="--ds-order:${index}">
+      <span>${icon(index % 3 === 0 ? "layers" : index % 3 === 1 ? "shield" : "route")}</span>
+      <strong>${escapeHtml(item)}</strong>
+    </article>
+  `;
+}
+
+function renderDesignSystemList(title, items) {
+  return `
+    <article class="design-system-list">
+      <h3>${escapeHtml(title)}</h3>
+      <ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
     </article>
   `;
 }

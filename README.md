@@ -5,8 +5,10 @@ Portal interno para el área de Datalización de YPF con recursos de consulta, g
 Datalización es la práctica de automatizar procesos mediante datos confiables, reglas explícitas, acciones trazables y operación monitoreada. La web está replanteada con una estructura ejecutiva de síntesis, razones, evidencia, acción y control.
 
 - Portada ejecutiva Datalización Hub / BI Delivery Playbook para posicionar la plataforma como capacidad organizacional.
+- Portadas con imagen industrial de alta calidad vinculada a refinería, ductos y puerto energético.
 - Guía + roadmap BI/Fabric para ordenar el ciclo completo desde proceso y reglas hasta operación.
 - Método de Datalización v0.1 para organizar DEV/PROD, Teams, SharePoint, canales, carpetas, naming, backlog, VMC y gobierno del equipo.
+- Design System para consolidar patrones visuales, componentes, reglas de experiencia y criterios de calidad.
 - Metodología de mejora continua BI con OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, flujo continuo, SMED, Poka-Yoke y Kata.
 - Narrativa ejecutiva en cada página para presentar primero la conclusión, luego los argumentos y finalmente la evidencia operativa.
 - Diccionario BI para alinear conceptos de automatización, datos, Power BI, Fabric, performance, gobierno y adopción.
@@ -22,7 +24,7 @@ La app es estatica, sin credenciales, sin datos sensibles y compatible con Verce
 
 - HTML, CSS y JavaScript vanilla.
 - Modulos ES para separar datos de UI.
-- Contenido local editable en `data/platformIntro.js`, `data/dictionary.js`, `data/engineeringGuide.js`, `data/datalizationMethod.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
+- Contenido local editable en `data/platformIntro.js`, `data/designSystem.js`, `data/dictionary.js`, `data/engineeringGuide.js`, `data/datalizationMethod.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
 - Documentación técnica en `docs/librerias-agentes-mcp.md`.
 - Skills repo-locales en `.codex/skills`.
 - Agentes operativos en `.codex/agents`.
@@ -49,6 +51,7 @@ El servidor local tambien soporta:
 http://127.0.0.1:8001/guia-power-bi
 http://127.0.0.1:8001/metodo-datalizacion
 http://127.0.0.1:8001/metodologia
+http://127.0.0.1:8001/design-system
 http://127.0.0.1:8001/diccionario
 http://127.0.0.1:8001/roadmap
 http://127.0.0.1:8001/proyecto-power-bi
@@ -66,6 +69,7 @@ El build valida que:
 
 - Exista Home, Guía Power BI/Fabric, Método de Datalización, Metodología, Diccionario BI, Roadmap BI, Proyecto Power BI, Librerías y Atajos.
 - La Home tenga portada ejecutiva Datalización Hub, narrativa Antes/Ahora/Después y transición de tableros a disciplina.
+- La Home tenga botonera para las secciones principales y el Design System tenga estructura ejecutiva completa.
 - El diccionario tenga al menos 65 términos.
 - El roadmap tenga los 9 gates obligatorios y arranque con PRD/Spec.
 - La guía tenga capítulos, comparacion PRD vs Spec y checklist de salida a producción.
@@ -76,7 +80,7 @@ El build valida que:
 - El catálogo técnico tenga documentación Markdown y familias de herramientas.
 - Los atajos tengan categorías e items navegables.
 - Los datos tengan los campos requeridos.
-- Vercel tenga rewrites para `/guia-power-bi`, `/metodo-datalizacion`, `/metodologia`, `/diccionario`, `/roadmap`, `/proyecto-power-bi`, `/librerias` y `/atajos`.
+- Vercel tenga rewrites para `/guia-power-bi`, `/metodo-datalizacion`, `/metodologia`, `/design-system`, `/diccionario`, `/roadmap`, `/proyecto-power-bi`, `/librerias` y `/atajos`.
 - Se genere `dist/` con las rutas estaticas listas para Vercel.
 
 ## Validar calidad completa
@@ -175,6 +179,19 @@ Editar `data/platformIntro.js`.
 - `platformBeforeAfter`: narrativa Antes, Ahora y Después.
 - `platformCapabilityShift`: transición de tableros aislados a disciplina interna de inteligencia.
 
+## Editar Design System
+
+Editar `data/designSystem.js`.
+
+- `designSystemDefinition`: definición ejecutiva del sistema.
+- `designSystemComparison`: comparación Sin Design System / Con Design System.
+- `designSystemBenefits`: beneficios esperados.
+- `designSystemFoundations`: fundamentos.
+- `designSystemPrinciples`: principios de diseño.
+- `designSystemScope`: alcance inicial.
+- `designSystemComponents`: componentes esperados.
+- `designSystemDeliverables` y `designSystemQualityRules`: entregables y reglas.
+
 ## Editar Método de Datalización
 
 Editar `data/datalizationMethod.js`.
@@ -247,6 +264,7 @@ No conectar esta versión a sistemas internos, APIs privadas, tokens ni fuentes 
 - `styles.css`
 - `app.js`
 - `data/platformIntro.js`
+- `data/designSystem.js`
 - `data/dictionary.js`
 - `data/engineeringGuide.js`
 - `data/datalizationMethod.js`

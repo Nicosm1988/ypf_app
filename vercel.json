@@ -17,6 +17,10 @@
       "destination": "/index.html"
     },
     {
+      "source": "/design-system",
+      "destination": "/index.html"
+    },
+    {
       "source": "/diccionario",
       "destination": "/index.html"
     },

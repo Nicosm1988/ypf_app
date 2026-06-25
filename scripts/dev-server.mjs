@@ -30,6 +30,7 @@ function toSafePath(urlPathname) {
     "/guia-power-bi",
     "/metodo-datalizacion",
     "/metodologia",
+    "/design-system",
     "/diccionario",
     "/roadmap",
     "/proyecto-power-bi",

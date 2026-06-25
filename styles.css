@@ -394,9 +394,9 @@ p {
   bottom: -54px;
   left: calc((100vw - 100%) / -2);
   background:
-    linear-gradient(180deg, rgba(14, 18, 24, 0) 62%, rgba(14, 18, 24, 0.92) 100%),
-    linear-gradient(90deg, rgba(0, 47, 97, 0.95), rgba(0, 84, 166, 0.82)),
-    url("/assets/energy-chain-v1-1280.webp") center / cover;
+    linear-gradient(180deg, rgba(14, 18, 24, 0.08) 48%, rgba(14, 18, 24, 0.92) 100%),
+    linear-gradient(90deg, rgba(5, 14, 24, 0.9), rgba(0, 47, 97, 0.58), rgba(5, 14, 24, 0.18)),
+    url("/assets/ypf-industrial-hero-1280.webp") center bottom / cover;
 }
 
 .eyebrow {
@@ -469,12 +469,14 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center bottom;
+  filter: saturate(1.14) contrast(1.1) brightness(0.76);
 }
 
 .hero-shade {
   background:
-    linear-gradient(90deg, rgba(6, 17, 30, 0.93) 0%, rgba(8, 32, 54, 0.78) 46%, rgba(0, 84, 166, 0.28) 100%),
-    linear-gradient(0deg, rgba(5, 14, 24, 0.66), transparent 46%);
+    linear-gradient(180deg, rgba(5, 12, 20, 0.56) 0%, rgba(5, 12, 20, 0.14) 36%, rgba(5, 12, 20, 0.6) 100%),
+    linear-gradient(90deg, rgba(5, 12, 20, 0.96) 0%, rgba(5, 12, 20, 0.84) 44%, rgba(5, 12, 20, 0.34) 70%, rgba(5, 12, 20, 0.08) 100%);
 }
 
 .hero-grid {
@@ -974,6 +976,417 @@ p {
 .platform-discipline-card strong {
   color: #ffffff;
   font-size: 1.04rem;
+}
+
+.hub-nav {
+  display: grid;
+  gap: 18px;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid rgba(53, 201, 189, 0.22);
+  border-radius: var(--radius);
+  background: linear-gradient(140deg, rgba(9, 16, 24, 0.96), rgba(16, 38, 52, 0.9)), var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.hub-nav-head {
+  display: grid;
+  gap: 10px;
+  max-width: 980px;
+}
+
+.hub-nav-head h2 {
+  margin: 0;
+  color: var(--ypf-blue-3);
+  font-size: clamp(1.6rem, 3vw, 2.45rem);
+  line-height: 1.08;
+}
+
+.hub-nav-head p,
+.hub-nav-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.56;
+}
+
+.hub-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.hub-nav-card {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+  min-height: 210px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at var(--spot-x, 78%) var(--spot-y, 20%), rgba(53, 201, 189, 0.13), transparent 9rem), rgba(255, 255, 255, 0.045);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.hub-nav-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 4px;
+  background: linear-gradient(90deg, var(--ypf-yellow), transparent 70%);
+  opacity: 0.8;
+}
+
+.hub-nav-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(53, 201, 189, 0.42);
+  background:
+    radial-gradient(circle at var(--spot-x, 78%) var(--spot-y, 20%), rgba(53, 201, 189, 0.18), transparent 9rem), rgba(255, 255, 255, 0.065);
+}
+
+.hub-nav-card > span {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius);
+  background: rgba(53, 201, 189, 0.14);
+  color: var(--ypf-yellow-2);
+}
+
+.hub-nav-card svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hub-nav-card strong {
+  color: #ffffff;
+  font-size: 1.08rem;
+  line-height: 1.16;
+}
+
+.hub-nav-card small {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: auto;
+  color: var(--ypf-yellow-2);
+  font-weight: 900;
+}
+
+.design-system-page {
+  gap: 34px;
+}
+
+.design-system-hero::before {
+  background:
+    linear-gradient(180deg, rgba(14, 18, 24, 0.08) 48%, rgba(14, 18, 24, 0.94) 100%),
+    linear-gradient(90deg, rgba(4, 16, 27, 0.92), rgba(7, 46, 74, 0.5), rgba(53, 201, 189, 0.16)),
+    url("/assets/ypf-industrial-hero-1280.webp") center bottom / cover;
+}
+
+.design-system-hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 940px;
+  margin-top: 10px;
+}
+
+.design-system-hero-metrics article {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.23);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.075);
+  backdrop-filter: blur(14px);
+}
+
+.design-system-hero-metrics strong {
+  color: #ffffff;
+  line-height: 1.15;
+}
+
+.design-system-hero-metrics span {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.84rem;
+  line-height: 1.42;
+}
+
+.design-system-intro,
+.design-system-why,
+.design-system-benefits,
+.design-system-foundations,
+.design-system-principles,
+.design-system-scope,
+.design-system-components,
+.design-system-delivery {
+  display: grid;
+  gap: 18px;
+}
+
+.design-system-intro {
+  grid-template-columns: minmax(0, 0.85fr) minmax(460px, 1.15fr);
+  align-items: start;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid rgba(53, 201, 189, 0.22);
+  border-radius: var(--radius);
+  background: linear-gradient(140deg, rgba(9, 15, 24, 0.98), rgba(15, 36, 49, 0.94)), var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.design-system-intro > div:first-child,
+.design-system-section-head {
+  display: grid;
+  gap: 12px;
+  max-width: 1040px;
+}
+
+.design-system-intro h2,
+.design-system-section-head h2,
+.design-system-final h2 {
+  margin: 0;
+  color: var(--ypf-blue-3);
+  font-size: clamp(1.68rem, 3vw, 2.65rem);
+  line-height: 1.07;
+}
+
+.design-system-intro p,
+.design-system-section-head p,
+.design-system-card p,
+.design-system-benefit p,
+.design-system-token p,
+.design-system-principle p,
+.design-system-final p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.58;
+}
+
+.design-system-definition-grid,
+.design-system-benefit-grid,
+.design-system-token-grid,
+.design-system-principle-grid,
+.design-system-component-grid,
+.design-system-delivery-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.design-system-definition-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.design-system-card,
+.design-system-benefit,
+.design-system-token,
+.design-system-principle,
+.design-system-component,
+.design-system-list,
+.design-system-final {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: radial-gradient(circle at var(--spot-x, 72%) var(--spot-y, 18%), rgba(53, 201, 189, 0.1), transparent 10rem), var(--surface);
+  box-shadow: 0 16px 34px rgba(0, 30, 60, 0.1);
+}
+
+.design-system-card,
+.design-system-benefit,
+.design-system-token,
+.design-system-principle,
+.design-system-component {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 16px;
+}
+
+.design-system-card {
+  min-height: 220px;
+}
+
+.design-system-card > span,
+.design-system-benefit > span {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius);
+  background: var(--ypf-yellow);
+  color: #071316;
+  font-weight: 950;
+}
+
+.design-system-card h3,
+.design-system-benefit h3,
+.design-system-token strong,
+.design-system-principle h3,
+.design-system-component strong,
+.design-system-list h3 {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.18;
+}
+
+.design-system-comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.design-system-compare {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.design-system-compare.with {
+  border-color: rgba(53, 201, 189, 0.36);
+  background: linear-gradient(145deg, rgba(53, 201, 189, 0.11), rgba(58, 160, 255, 0.05)), rgba(255, 255, 255, 0.045);
+}
+
+.design-system-compare.without {
+  border-color: rgba(255, 107, 59, 0.26);
+}
+
+.design-system-compare h3 {
+  margin: 0;
+  color: #ffffff;
+}
+
+.design-system-compare ul,
+.design-system-list ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.design-system-compare li,
+.design-system-list li {
+  color: var(--muted);
+  line-height: 1.48;
+}
+
+.design-system-compare li::marker,
+.design-system-list li::marker {
+  color: var(--ypf-yellow);
+}
+
+.design-system-benefit-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.design-system-token-grid,
+.design-system-principle-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.design-system-token,
+.design-system-principle {
+  min-height: 150px;
+}
+
+.design-system-chip-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.design-system-chip-cloud span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid rgba(53, 201, 189, 0.28);
+  border-radius: 999px;
+  background: rgba(53, 201, 189, 0.1);
+  color: var(--ypf-blue-3);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.design-system-component-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.design-system-component {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  min-height: 86px;
+}
+
+.design-system-component span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius);
+  background: rgba(53, 201, 189, 0.14);
+  color: var(--ypf-yellow-2);
+}
+
+.design-system-component svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.design-system-delivery-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.design-system-list {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+}
+
+.design-system-final {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 0.72fr);
+  gap: 18px;
+  align-items: center;
+  padding: clamp(22px, 3vw, 30px);
+  background: linear-gradient(135deg, rgba(53, 201, 189, 0.12), rgba(58, 160, 255, 0.08)), var(--surface);
+}
+
+.design-system-final > div {
+  display: grid;
+  gap: 12px;
+}
+
+.design-system-final strong {
+  display: block;
+  padding: 16px;
+  border: 1px solid rgba(53, 201, 189, 0.3);
+  border-radius: var(--radius);
+  background: rgba(53, 201, 189, 0.1);
+  color: #ffffff;
+  font-size: 1.05rem;
+  line-height: 1.45;
 }
 
 .datalization-section {
@@ -1800,8 +2213,8 @@ p {
   align-items: center;
   margin-top: 10px;
   background:
-    linear-gradient(90deg, rgba(0, 47, 97, 0.95), rgba(0, 84, 166, 0.68)),
-    url("/assets/energy-chain-v1-1280.webp") center / cover;
+    linear-gradient(90deg, rgba(5, 14, 24, 0.88), rgba(0, 47, 97, 0.54), rgba(5, 14, 24, 0.26)),
+    url("/assets/ypf-industrial-hero-1280.webp") center bottom / cover;
   color: #ffffff;
 }
 
@@ -4087,9 +4500,9 @@ p {
 
 .methodology-hero::before {
   background:
-    linear-gradient(180deg, rgba(14, 18, 24, 0) 58%, rgba(14, 18, 24, 0.94) 100%),
-    linear-gradient(90deg, rgba(8, 34, 57, 0.94), rgba(0, 84, 166, 0.68), rgba(53, 201, 189, 0.24)),
-    url("/assets/energy-chain-v1-1280.webp") center / cover;
+    linear-gradient(180deg, rgba(14, 18, 24, 0.08) 48%, rgba(14, 18, 24, 0.94) 100%),
+    linear-gradient(90deg, rgba(5, 14, 24, 0.92), rgba(0, 84, 166, 0.52), rgba(53, 201, 189, 0.16)),
+    url("/assets/ypf-industrial-hero-1280.webp") center bottom / cover;
 }
 
 .methodology-process,
@@ -4648,9 +5061,9 @@ p {
 
 .method-hero::before {
   background:
-    linear-gradient(180deg, rgba(14, 18, 24, 0) 54%, rgba(14, 18, 24, 0.96) 100%),
-    linear-gradient(90deg, rgba(7, 18, 28, 0.94), rgba(9, 61, 98, 0.7), rgba(53, 201, 189, 0.24)),
-    url("/assets/energy-chain-v1-1280.webp") center / cover;
+    linear-gradient(180deg, rgba(14, 18, 24, 0.08) 48%, rgba(14, 18, 24, 0.96) 100%),
+    linear-gradient(90deg, rgba(5, 14, 24, 0.92), rgba(9, 61, 98, 0.52), rgba(53, 201, 189, 0.16)),
+    url("/assets/ypf-industrial-hero-1280.webp") center bottom / cover;
 }
 
 .method-section-head {
@@ -5946,6 +6359,12 @@ kbd {
   .term-grid,
   .platform-purpose-grid,
   .platform-definition-panel,
+  .hub-nav-grid,
+  .design-system-intro,
+  .design-system-definition-grid,
+  .design-system-comparison,
+  .design-system-delivery-grid,
+  .design-system-final,
   .executive-brief,
   .concept-tree-grid,
   .project-studio,
@@ -5966,6 +6385,11 @@ kbd {
   .platform-definition-grid,
   .platform-timeline-grid,
   .platform-discipline-grid,
+  .design-system-hero-metrics,
+  .design-system-benefit-grid,
+  .design-system-token-grid,
+  .design-system-principle-grid,
+  .design-system-component-grid,
   .executive-support,
   .oee-grid,
   .methodology-tool-grid,
@@ -6113,6 +6537,17 @@ kbd {
 
   .stat-grid,
   .platform-metric-row,
+  .hub-nav-grid,
+  .design-system-hero-metrics,
+  .design-system-intro,
+  .design-system-definition-grid,
+  .design-system-comparison,
+  .design-system-benefit-grid,
+  .design-system-token-grid,
+  .design-system-principle-grid,
+  .design-system-component-grid,
+  .design-system-delivery-grid,
+  .design-system-final,
   .platform-purpose-grid,
   .platform-pillar-grid,
   .platform-definition-panel,
@@ -6172,6 +6607,12 @@ kbd {
   }
 
   .platform-metric,
+  .hub-nav-card,
+  .design-system-card,
+  .design-system-benefit,
+  .design-system-token,
+  .design-system-principle,
+  .design-system-component,
   .platform-thesis,
   .platform-pillar,
   .platform-definition-card,

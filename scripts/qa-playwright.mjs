@@ -12,6 +12,7 @@ const routes = [
   { path: "/guia-power-bi", selector: ".guide-journey", name: "Guia + Roadmap" },
   { path: "/metodo-datalizacion", selector: ".method-page", name: "Metodo de Datalizacion" },
   { path: "/metodologia", selector: ".methodology-process", name: "Metodologia" },
+  { path: "/design-system", selector: ".design-system-page", name: "Design System" },
   { path: "/diccionario", selector: ".dictionary-layout", name: "Diccionario" },
   { path: "/roadmap", selector: ".guide-journey", name: "Roadmap" },
   { path: "/proyecto-power-bi", selector: ".project-studio", name: "Proyecto Power BI" },
@@ -122,6 +123,7 @@ try {
       if (route.path === "/") {
         const homeReport = await page.evaluate(() => ({
           metrics: document.querySelectorAll(".platform-metric").length,
+          hubNavCards: document.querySelectorAll(".hub-nav-card").length,
           pillars: document.querySelectorAll(".platform-pillar").length,
           definitionCards: document.querySelectorAll(".platform-definition-card").length,
           timelineCards: document.querySelectorAll(".platform-timeline-card").length,
@@ -130,6 +132,7 @@ try {
         }));
         if (
           homeReport.metrics !== 3 ||
+          homeReport.hubNavCards !== 8 ||
           homeReport.pillars !== 3 ||
           homeReport.definitionCards !== 3 ||
           homeReport.timelineCards !== 3 ||
@@ -137,6 +140,27 @@ try {
           !homeReport.hero?.includes("disciplina interna")
         ) {
           throw new Error(`Inicio no cumple estructura ejecutiva esperada: ${JSON.stringify(homeReport)}`);
+        }
+      }
+
+      if (route.path === "/design-system") {
+        const designSystemReport = await page.evaluate(() => ({
+          heroMetrics: document.querySelectorAll(".design-system-hero-metrics article").length,
+          definitions: document.querySelectorAll(".design-system-card").length,
+          comparisons: document.querySelectorAll(".design-system-compare").length,
+          benefits: document.querySelectorAll(".design-system-benefit").length,
+          components: document.querySelectorAll(".design-system-component").length,
+          finalText: document.querySelector(".design-system-final strong")?.textContent?.trim(),
+        }));
+        if (
+          designSystemReport.heroMetrics !== 3 ||
+          designSystemReport.definitions !== 3 ||
+          designSystemReport.comparisons !== 2 ||
+          designSystemReport.benefits !== 8 ||
+          designSystemReport.components < 16 ||
+          !designSystemReport.finalText?.includes("Ordena cómo construimos")
+        ) {
+          throw new Error(`Design System no cumple estructura esperada: ${JSON.stringify(designSystemReport)}`);
         }
       }
 

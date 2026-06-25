@@ -1,9 +1,10 @@
-const CACHE_NAME = "datalizacion-ypf-v16";
+const CACHE_NAME = "datalizacion-ypf-v18";
 const PRECACHE_URLS = [
   "/",
   "/guia-power-bi",
   "/metodo-datalizacion",
   "/metodologia",
+  "/design-system",
   "/roadmap",
   "/proyecto-power-bi",
   "/atajos",
@@ -13,6 +14,7 @@ const PRECACHE_URLS = [
   "/styles.css",
   "/app.js",
   "/data/dictionary.js",
+  "/data/designSystem.js",
   "/data/engineeringGuide.js",
   "/data/methodology.js",
   "/data/datalizationMethod.js",
@@ -29,15 +31,15 @@ const PRECACHE_URLS = [
   "/assets/docs/modelos/prd-datalizacion.docx",
   "/assets/docs/modelos/spec-datalizacion.docx",
   "/assets/favicon.svg",
-  "/assets/energy-chain-v1-640.avif",
-  "/assets/energy-chain-v1-960.avif",
-  "/assets/energy-chain-v1-1280.avif",
-  "/assets/energy-chain-v1-1672.avif",
-  "/assets/energy-chain-v1-640.webp",
-  "/assets/energy-chain-v1-960.webp",
-  "/assets/energy-chain-v1-1280.webp",
-  "/assets/energy-chain-v1-1672.webp",
-  "/assets/energy-chain.png",
+  "/assets/ypf-industrial-hero-640.avif",
+  "/assets/ypf-industrial-hero-960.avif",
+  "/assets/ypf-industrial-hero-1280.avif",
+  "/assets/ypf-industrial-hero-1672.avif",
+  "/assets/ypf-industrial-hero-640.webp",
+  "/assets/ypf-industrial-hero-960.webp",
+  "/assets/ypf-industrial-hero-1280.webp",
+  "/assets/ypf-industrial-hero-1672.webp",
+  "/assets/ypf-industrial-hero.png",
 ];
 
 self.addEventListener("install", (event) => {

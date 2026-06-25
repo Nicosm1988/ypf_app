@@ -1,4 +1,14 @@
 import { access, cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import {
+  designSystemBenefits,
+  designSystemComparison,
+  designSystemComponents,
+  designSystemDeliverables,
+  designSystemFoundations,
+  designSystemPrinciples,
+  designSystemQualityRules,
+  designSystemScope,
+} from "../data/designSystem.js";
 import { dictionaryCategories, dictionaryTerms } from "../data/dictionary.js";
 import { guideSections, prdSpecComparison, readinessChecklist } from "../data/engineeringGuide.js";
 import {
@@ -50,9 +60,11 @@ assert(indexHtml.includes('type="module" src="/app.js"'), "index.html debe carga
 assert(appJs.includes("renderDictionaryPage"), "app.js debe renderizar el diccionario.");
 assert(appJs.includes("renderMethodologyPage"), "app.js debe renderizar la metodología.");
 assert(appJs.includes("renderDatalizationMethodPage"), "app.js debe renderizar el Método de Datalización.");
+assert(appJs.includes("renderDesignSystemPage"), "app.js debe renderizar el Design System.");
 assert(appJs.includes("renderMethodologyProcessFlow"), "app.js debe renderizar el proceso metodológico end to end.");
 assert(appJs.includes("renderExecutiveBrief"), "app.js debe renderizar la síntesis ejecutiva.");
 assert(appJs.includes("renderPlatformExecutiveSection"), "app.js debe renderizar la sección ejecutiva inicial.");
+assert(appJs.includes("renderHubSectionLauncher"), "app.js debe renderizar la botonera de secciones.");
 assert(appJs.includes("renderConceptDecantation"), "app.js debe renderizar el árbol de decantación conceptual.");
 assert(appJs.includes("renderRoadmapPage"), "app.js debe renderizar el roadmap.");
 assert(appJs.includes("renderGuidePage"), "app.js debe renderizar la guía Power BI/Fabric.");
@@ -134,6 +146,20 @@ assert(methodChannels.length === 8, "El Método de Datalización debe incluir lo
 assert(methodProjectFolders.length === 12, "La plantilla de proyecto debe incluir 12 subcarpetas estándar.");
 assert(methodNaming.pattern.includes("[CODIGO]"), "La convención de nombres debe incluir código, tipo, fecha y versión.");
 
+assert(designSystemBenefits.length === 8, "El Design System debe incluir 8 beneficios esperados.");
+assert(designSystemComparison.without.length === 8, "El Design System debe explicar 8 problemas sin sistema.");
+assert(designSystemComparison.with.length === 8, "El Design System debe explicar 8 mejoras con sistema.");
+assert(designSystemFoundations.length === 8, "El Design System debe incluir 8 fundamentos.");
+assert(designSystemPrinciples.length === 6, "El Design System debe incluir 6 principios.");
+assert(designSystemScope.length >= 18, "El Design System debe cubrir el alcance inicial completo.");
+assert(designSystemComponents.length >= 16, "El Design System debe mostrar componentes esperados.");
+assert(designSystemDeliverables.length >= 13, "El Design System debe listar entregables esperados.");
+assert(designSystemQualityRules.length >= 11, "El Design System debe listar reglas de calidad.");
+assert(appJs.includes("/design-system"), "La UI debe incluir acceso a /design-system.");
+assert(appJs.includes("Design System"), "La UI debe exponer el módulo Design System.");
+assert(appJs.includes("ypf-industrial-hero"), "Las portadas deben usar el asset industrial de alta calidad.");
+assert(!appJs.includes("/assets/energy-chain.png"), "La portada principal no debe usar el asset viejo.");
+
 assert(platformHeroMetrics.length === 3, "La portada ejecutiva debe mostrar tres capacidades principales.");
 assert(platformPillars.length === 3, "La sección ejecutiva debe explicar tres ganancias del área.");
 assert(platformDefinitionCards.length === 3, "La definición de datalización debe tener tres dimensiones.");
@@ -187,6 +213,9 @@ assert(
 assert(shortcutsPdf.source === "assets/docs/atajos-power-bi.pdf", "El PDF de atajos debe estar publicado en assets/docs.");
 await access("assets/docs/modelos/prd-datalizacion.docx");
 await access("assets/docs/modelos/spec-datalizacion.docx");
+await access("assets/ypf-industrial-hero-1280.webp");
+await access("assets/ypf-industrial-hero-1280.avif");
+await access("assets/ypf-industrial-hero.png");
 assert(powerBiShortcuts.length >= 7, "Los atajos deben estar agrupados en categorías útiles.");
 assert(
   powerBiShortcuts.every((category) => category.category && category.intro && Array.isArray(category.items) && category.items.length),
@@ -201,6 +230,7 @@ const rewriteSources = new Set((vercelJson.rewrites || []).map((rewrite) => rewr
 assert(rewriteSources.has("/guia-power-bi"), "Vercel debe reescribir /guia-power-bi a index.html.");
 assert(rewriteSources.has("/metodo-datalizacion"), "Vercel debe reescribir /metodo-datalizacion a index.html.");
 assert(rewriteSources.has("/metodologia"), "Vercel debe reescribir /metodologia a index.html.");
+assert(rewriteSources.has("/design-system"), "Vercel debe reescribir /design-system a index.html.");
 assert(rewriteSources.has("/diccionario"), "Vercel debe reescribir /diccionario a index.html.");
 assert(rewriteSources.has("/roadmap"), "Vercel debe reescribir /roadmap a index.html.");
 assert(rewriteSources.has("/proyecto-power-bi"), "Vercel debe reescribir /proyecto-power-bi a index.html.");
@@ -219,6 +249,7 @@ await rm("dist", { force: true, recursive: true });
 await mkdir("dist/guia-power-bi", { recursive: true });
 await mkdir("dist/metodo-datalizacion", { recursive: true });
 await mkdir("dist/metodologia", { recursive: true });
+await mkdir("dist/design-system", { recursive: true });
 await mkdir("dist/diccionario", { recursive: true });
 await mkdir("dist/roadmap", { recursive: true });
 await mkdir("dist/proyecto-power-bi", { recursive: true });
@@ -236,6 +267,7 @@ for (const file of rootFiles) {
 await writeFile("dist/guia-power-bi/index.html", indexHtml);
 await writeFile("dist/metodo-datalizacion/index.html", indexHtml);
 await writeFile("dist/metodologia/index.html", indexHtml);
+await writeFile("dist/design-system/index.html", indexHtml);
 await writeFile("dist/diccionario/index.html", indexHtml);
 await writeFile("dist/roadmap/index.html", indexHtml);
 await writeFile("dist/proyecto-power-bi/index.html", indexHtml);
