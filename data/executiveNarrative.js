@@ -6,25 +6,25 @@ export const narrativeFrame = {
 export const pageNarratives = {
   home: {
     eyebrow: "síntesis ejecutiva",
-    title: "Sistema de decisiones datalizadas.",
+    title: "Capacidad organizacional, no inventario de tableros.",
     summary:
-      "La propuesta central es directa: el equipo necesita transformar procesos manuales en decisiones trazables, con datos confiables, reglas explícitas y control operativo permanente.",
+      "La propuesta central es directa: Datalización Hub instala una forma común, gobernada y escalable de convertir necesidades de negocio en inteligencia de datos confiable.",
     support: [
       {
-        title: "Primero, proceso",
-        text: "Porque el valor no nace del reporte, sino de la decisión operativa que deja de depender de planillas, correos o criterios dispersos.",
+        title: "Orden común",
+        text: "Porque cada iniciativa necesita el mismo hilo conductor: problema, alcance, dato, regla, modelo, experiencia, seguridad y operación.",
       },
       {
-        title: "Luego, evidencia",
-        text: "Porque la confianza se sostiene con fuentes gobernadas, reglas documentadas, calidad medible, seguridad probada y linaje claro.",
+        title: "Gobierno técnico",
+        text: "Porque la confianza se sostiene con documentación, linaje, RLS, calidad, performance, permisos y publicación controlada.",
       },
       {
-        title: "Finalmente, control",
-        text: "Porque una mejora solo se captura cuando hay responsables, acciones, SLA, incidentes gestionados y aprendizaje continuo.",
+        title: "Escala operativa",
+        text: "Porque el área gana continuidad cuando los productos BI se construyen con estándares reutilizables y responsables explícitos.",
       },
     ],
     action:
-      "Recorrer la web como una secuencia de trabajo: entender el proceso, medir la pérdida, construir la solución, gobernarla y sostenerla.",
+      "Usar la plataforma como referencia viva para iniciar, construir, revisar, publicar y sostener productos BI con estándar corporativo.",
   },
   guide: {
     eyebrow: "decisión de avance",

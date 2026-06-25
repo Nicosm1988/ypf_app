@@ -32,6 +32,13 @@ import {
 } from "./data/methodology.js";
 import { powerBiShortcuts, shortcutsPdf } from "./data/powerbiShortcuts.js";
 import { conceptDecantation, narrativeFrame, pageNarratives } from "./data/executiveNarrative.js";
+import {
+  platformBeforeAfter,
+  platformCapabilityShift,
+  platformDefinitionCards,
+  platformHeroMetrics,
+  platformPillars,
+} from "./data/platformIntro.js";
 import { laneStyles, roadmapPhases } from "./data/roadmap.js";
 import { toolingDocs, toolingGroups } from "./data/toolingLibrary.js";
 
@@ -70,7 +77,7 @@ const icons = {
 };
 
 const routeTitles = {
-  "/": "Datalización YPF",
+  "/": "Datalización Hub | BI Delivery Playbook",
   "/guia-power-bi": "Guía y roadmap de automatización BI/Fabric | Datalización YPF",
   "/metodo-datalizacion": "Método de Datalización | Datalización YPF",
   "/metodologia": "Metodología de mejora continua BI | Datalización YPF",
@@ -836,6 +843,11 @@ const interactiveSurfaceSelector = [
   ".feature-card",
   ".datalization-card",
   ".datalization-level",
+  ".platform-card",
+  ".platform-definition-card",
+  ".platform-timeline-card",
+  ".platform-discipline-card",
+  ".platform-metric",
   ".executive-brief",
   ".executive-support-card",
   ".concept-tree",
@@ -1112,7 +1124,7 @@ function renderRoute(route = getRoute()) {
 function renderHomePage() {
   appRoot.innerHTML = `
     <section class="page home-page">
-      <section class="hero" aria-label="Datalización YPF">
+      <section class="hero" aria-label="Datalización Hub">
         <picture class="hero-media">
           <source
             type="image/avif"
@@ -1146,27 +1158,26 @@ function renderHomePage() {
         <div class="hero-shade" aria-hidden="true"></div>
         <div class="page-inner hero-grid">
           <div class="hero-copy">
-            <span class="eyebrow">Automatización operativa</span>
-            <h1>Datalización YPF</h1>
-            <p class="hero-kicker">La datalización convierte procesos manuales en decisiones trazables, controladas y medibles.</p>
-            <p class="hero-text">La conclusión ejecutiva es simple: el equipo no necesita más reportes aislados, sino un sistema de trabajo que conecte proceso, reglas, datos, acción, gobierno y mejora continua.</p>
+            <span class="eyebrow">Datalización Hub | BI Delivery Playbook</span>
+            <h1>De tableros aislados a una disciplina interna de inteligencia de datos.</h1>
+            <p class="hero-kicker">Esta plataforma nace para ordenar, estandarizar y escalar la forma en que el área construye inteligencia de datos.</p>
+            <p class="hero-text">Lo que estamos construyendo no es solo una web. Es una capacidad organizacional: una guía viva, clara y gobernada para estructurar proyectos BI end-to-end con estándar técnico, metodológico y operativo.</p>
             <div class="hero-actions">
-              <a class="button" href="/roadmap" data-route>
+              <a class="button" href="/guia-power-bi" data-route>
                 ${icon("route")}
-                Ver guía + roadmap
-              </a>
-              <a class="button secondary" href="/diccionario" data-route>
-                ${icon("book")}
-                Explorar conceptos
-              </a>
-              <a class="button secondary" href="/metodologia" data-route>
-                ${icon("gauge")}
-                Ver metodología
+                Ver playbook
               </a>
               <a class="button secondary" href="/metodo-datalizacion" data-route>
                 ${icon("folder")}
                 Ver método
               </a>
+              <a class="button secondary" href="/metodologia" data-route>
+                ${icon("gauge")}
+                Ver metodología
+              </a>
+            </div>
+            <div class="platform-metric-row" aria-label="Capacidades principales de la plataforma">
+              ${platformHeroMetrics.map(renderPlatformMetric).join("")}
             </div>
           </div>
         </div>
@@ -1179,8 +1190,10 @@ function renderHomePage() {
 
       <section class="quote-band page-inner">
         ${icon("quote")}
-        <strong>La respuesta va primero: datalizar es automatizar decisiones operativas con evidencia confiable y control sostenido.</strong>
+        <strong>Esta gestión busca marcar un punto de inflexión: pasar de construir tableros a construir una disciplina interna de inteligencia de datos.</strong>
       </section>
+
+      ${renderPlatformExecutiveSection()}
 
       ${renderExecutiveBrief(pageNarratives.home)}
 
@@ -1301,6 +1314,115 @@ function renderHomePage() {
           .join("")}
       </section>
     </section>
+  `;
+}
+
+function renderPlatformMetric(item) {
+  return `
+    <article class="platform-metric">
+      <strong>${escapeHtml(item.value)}</strong>
+      <span>${escapeHtml(item.label)}</span>
+    </article>
+  `;
+}
+
+function renderPlatformExecutiveSection() {
+  return `
+    <section class="platform-executive page-inner" aria-labelledby="platformExecutiveTitle">
+      <div class="platform-executive-head">
+        <span class="flow-chip">plataforma interna de estándares, gobierno y delivery</span>
+        <h2 id="platformExecutiveTitle">Datalización Hub convierte una necesidad de orden en una capacidad permanente del área.</h2>
+        <p>La plataforma funciona como sistema operativo metodológico: define cómo se relevan requerimientos, cómo se documentan decisiones, cómo se construyen modelos y cómo se publican productos BI con trazabilidad, gobierno y continuidad.</p>
+      </div>
+
+      <div class="platform-purpose-grid">
+        <article class="platform-card platform-thesis">
+          <span>Por qué existe esta plataforma</span>
+          <h3>El crecimiento del área exige pasar de prácticas dispersas a una forma común de entregar inteligencia de datos.</h3>
+          <p>Antes se hizo lo posible con las herramientas y condiciones disponibles. Ahora el desafío es elevar el estándar técnico, metodológico y de gobierno para que cada entrega sea consistente, mantenible y confiable.</p>
+          <strong>Lo que estamos construyendo no es solo una web. Es una capacidad organizacional.</strong>
+        </article>
+        <div class="platform-pillar-grid" aria-label="Ganancias principales del área">
+          ${platformPillars.map(renderPlatformPillar).join("")}
+        </div>
+      </div>
+
+      <div class="platform-definition-panel" aria-labelledby="platformDefinitionTitle">
+        <div>
+          <span class="flow-chip">qué entendemos por datalizar</span>
+          <h3 id="platformDefinitionTitle">Datalizar no es simplemente automatizar procesos. Es estructurar información, definir estándares, asegurar trazabilidad, gobernar datos y convertirlos en decisiones confiables.</h3>
+          <p>Automatizar acelera una tarea; datalizar instala una disciplina. Por eso el foco no está solo en publicar un tablero, sino en asegurar que cada dato, regla, permiso, medida y decisión pueda explicarse, sostenerse y mejorarse.</p>
+        </div>
+        <div class="platform-definition-grid">
+          ${platformDefinitionCards.map(renderPlatformDefinitionCard).join("")}
+        </div>
+      </div>
+
+      <div class="platform-timeline" aria-labelledby="platformTimelineTitle">
+        <div class="platform-block-head">
+          <span class="flow-chip">antes / ahora / después</span>
+          <h3 id="platformTimelineTitle">La iniciativa marca un punto de inflexión sin negar el recorrido previo.</h3>
+          <p>La lectura institucional es evolutiva: se reconoce lo construido, se ordena la etapa actual y se prepara un estándar más escalable para el futuro.</p>
+        </div>
+        <div class="platform-timeline-grid">
+          ${platformBeforeAfter.map(renderPlatformTimelineCard).join("")}
+        </div>
+      </div>
+
+      <div class="platform-discipline" aria-labelledby="platformDisciplineTitle">
+        <div class="platform-block-head">
+          <span class="flow-chip">de tableros a disciplina de inteligencia</span>
+          <h3 id="platformDisciplineTitle">El objetivo final es pasar de entregables aislados a una práctica interna gobernada, escalable y trazable.</h3>
+          <p>Cada producto BI debe integrarse a un sistema de trabajo que conecte necesidad, dato, modelo, seguridad, visualización, publicación, adopción y mejora continua.</p>
+        </div>
+        <div class="platform-discipline-grid">
+          ${platformCapabilityShift.map(renderPlatformDisciplineCard).join("")}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderPlatformPillar(item, index) {
+  return `
+    <article class="platform-card platform-pillar" style="--platform-order:${index}">
+      <span>${String(index + 1).padStart(2, "0")}</span>
+      <h3>${escapeHtml(item.title)}</h3>
+      <p>${escapeHtml(item.text)}</p>
+    </article>
+  `;
+}
+
+function renderPlatformDefinitionCard(item, index) {
+  return `
+    <article class="platform-definition-card" style="--platform-order:${index}">
+      <span>${icon(index === 0 ? "layers" : index === 1 ? "shield" : "gauge")}</span>
+      <h4>${escapeHtml(item.title)}</h4>
+      <p>${escapeHtml(item.text)}</p>
+    </article>
+  `;
+}
+
+function renderPlatformTimelineCard(item, index) {
+  return `
+    <article class="platform-timeline-card" style="--platform-order:${index}">
+      <span>${escapeHtml(item.moment)}</span>
+      <h4>${escapeHtml(item.claim)}</h4>
+      <p>${escapeHtml(item.text)}</p>
+    </article>
+  `;
+}
+
+function renderPlatformDisciplineCard(item, index) {
+  return `
+    <article class="platform-discipline-card" style="--platform-order:${index}">
+      <div>
+        <span>${escapeHtml(item.from)}</span>
+        ${icon("arrowRight")}
+        <strong>${escapeHtml(item.to)}</strong>
+      </div>
+      <p>${escapeHtml(item.detail)}</p>
+    </article>
   `;
 }
 

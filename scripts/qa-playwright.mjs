@@ -119,6 +119,27 @@ try {
         throw new Error(`${route.name} (${viewport.label}) tiene violaciones de accesibilidad: ${summary}`);
       }
 
+      if (route.path === "/") {
+        const homeReport = await page.evaluate(() => ({
+          metrics: document.querySelectorAll(".platform-metric").length,
+          pillars: document.querySelectorAll(".platform-pillar").length,
+          definitionCards: document.querySelectorAll(".platform-definition-card").length,
+          timelineCards: document.querySelectorAll(".platform-timeline-card").length,
+          disciplineCards: document.querySelectorAll(".platform-discipline-card").length,
+          hero: document.querySelector(".hero h1")?.textContent?.trim(),
+        }));
+        if (
+          homeReport.metrics !== 3 ||
+          homeReport.pillars !== 3 ||
+          homeReport.definitionCards !== 3 ||
+          homeReport.timelineCards !== 3 ||
+          homeReport.disciplineCards !== 4 ||
+          !homeReport.hero?.includes("disciplina interna")
+        ) {
+          throw new Error(`Inicio no cumple estructura ejecutiva esperada: ${JSON.stringify(homeReport)}`);
+        }
+      }
+
       if (route.path === "/metodologia") {
         const methodologyReport = await page.evaluate(() => ({
           processSteps: document.querySelectorAll(".methodology-process-step").length,

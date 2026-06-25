@@ -11,6 +11,13 @@ import {
   oeeFactors,
   toyotaFourP,
 } from "../data/methodology.js";
+import {
+  platformBeforeAfter,
+  platformCapabilityShift,
+  platformDefinitionCards,
+  platformHeroMetrics,
+  platformPillars,
+} from "../data/platformIntro.js";
 import { powerBiShortcuts, shortcutsPdf } from "../data/powerbiShortcuts.js";
 import { conceptDecantation, pageNarratives } from "../data/executiveNarrative.js";
 import { methodChannels, methodNaming, methodOperatingFlow, methodPlanes, methodProjectFolders } from "../data/datalizationMethod.js";
@@ -45,6 +52,7 @@ assert(appJs.includes("renderMethodologyPage"), "app.js debe renderizar la metod
 assert(appJs.includes("renderDatalizationMethodPage"), "app.js debe renderizar el Método de Datalización.");
 assert(appJs.includes("renderMethodologyProcessFlow"), "app.js debe renderizar el proceso metodológico end to end.");
 assert(appJs.includes("renderExecutiveBrief"), "app.js debe renderizar la síntesis ejecutiva.");
+assert(appJs.includes("renderPlatformExecutiveSection"), "app.js debe renderizar la sección ejecutiva inicial.");
 assert(appJs.includes("renderConceptDecantation"), "app.js debe renderizar el árbol de decantación conceptual.");
 assert(appJs.includes("renderRoadmapPage"), "app.js debe renderizar el roadmap.");
 assert(appJs.includes("renderGuidePage"), "app.js debe renderizar la guía Power BI/Fabric.");
@@ -125,6 +133,29 @@ assert(methodPlanes.length === 2, "El Método de Datalización debe separar DEV 
 assert(methodChannels.length === 8, "El Método de Datalización debe incluir los 8 canales base.");
 assert(methodProjectFolders.length === 12, "La plantilla de proyecto debe incluir 12 subcarpetas estándar.");
 assert(methodNaming.pattern.includes("[CODIGO]"), "La convención de nombres debe incluir código, tipo, fecha y versión.");
+
+assert(platformHeroMetrics.length === 3, "La portada ejecutiva debe mostrar tres capacidades principales.");
+assert(platformPillars.length === 3, "La sección ejecutiva debe explicar tres ganancias del área.");
+assert(platformDefinitionCards.length === 3, "La definición de datalización debe tener tres dimensiones.");
+assert(
+  platformBeforeAfter.map((item) => normalizeForCheck(item.moment)).join("|") === "antes|ahora|después",
+  "La narrativa ejecutiva debe mantener Antes, Ahora y Después.",
+);
+assert(platformCapabilityShift.length === 4, "La transición de tableros a disciplina debe tener cuatro cambios de capacidad.");
+assert(
+  appJs.includes("Esta plataforma nace para ordenar, estandarizar y escalar la forma en que el área construye inteligencia de datos."),
+  "La portada debe incluir el texto clave de origen de la plataforma.",
+);
+assert(
+  appJs.includes("Lo que estamos construyendo no es solo una web. Es una capacidad organizacional."),
+  "La portada debe incluir el texto clave de capacidad organizacional.",
+);
+assert(
+  appJs.includes(
+    "Datalizar no es simplemente automatizar procesos. Es estructurar información, definir estándares, asegurar trazabilidad, gobernar datos y convertirlos en decisiones confiables.",
+  ),
+  "La sección debe incluir la definición estratégica de datalización.",
+);
 
 const requiredNarratives = ["home", "guide", "method", "methodology", "project", "dictionary", "tooling", "shortcuts"];
 assert(

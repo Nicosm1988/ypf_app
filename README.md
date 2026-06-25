@@ -1,9 +1,10 @@
 # Datalización YPF
 
-Portal interno para el área de Datalización de YPF con recursos de consulta y trabajo.
+Portal interno para el área de Datalización de YPF con recursos de consulta, gobierno y trabajo.
 
 Datalización es la práctica de automatizar procesos mediante datos confiables, reglas explícitas, acciones trazables y operación monitoreada. La web está replanteada con una estructura ejecutiva de síntesis, razones, evidencia, acción y control.
 
+- Portada ejecutiva Datalización Hub / BI Delivery Playbook para posicionar la plataforma como capacidad organizacional.
 - Guía + roadmap BI/Fabric para ordenar el ciclo completo desde proceso y reglas hasta operación.
 - Método de Datalización v0.1 para organizar DEV/PROD, Teams, SharePoint, canales, carpetas, naming, backlog, VMC y gobierno del equipo.
 - Metodología de mejora continua BI con OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, flujo continuo, SMED, Poka-Yoke y Kata.
@@ -21,7 +22,7 @@ La app es estatica, sin credenciales, sin datos sensibles y compatible con Verce
 
 - HTML, CSS y JavaScript vanilla.
 - Modulos ES para separar datos de UI.
-- Contenido local editable en `data/dictionary.js`, `data/engineeringGuide.js`, `data/datalizationMethod.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
+- Contenido local editable en `data/platformIntro.js`, `data/dictionary.js`, `data/engineeringGuide.js`, `data/datalizationMethod.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
 - Documentación técnica en `docs/librerias-agentes-mcp.md`.
 - Skills repo-locales en `.codex/skills`.
 - Agentes operativos en `.codex/agents`.
@@ -64,6 +65,7 @@ npm run build
 El build valida que:
 
 - Exista Home, Guía Power BI/Fabric, Método de Datalización, Metodología, Diccionario BI, Roadmap BI, Proyecto Power BI, Librerías y Atajos.
+- La Home tenga portada ejecutiva Datalización Hub, narrativa Antes/Ahora/Después y transición de tableros a disciplina.
 - El diccionario tenga al menos 65 términos.
 - El roadmap tenga los 9 gates obligatorios y arranque con PRD/Spec.
 - La guía tenga capítulos, comparacion PRD vs Spec y checklist de salida a producción.
@@ -163,6 +165,16 @@ Editar `data/engineeringGuide.js`.
 
 El flujo interactivo combina esos capítulos con los 9 gates de `data/roadmap.js`.
 
+## Editar portada ejecutiva
+
+Editar `data/platformIntro.js`.
+
+- `platformHeroMetrics`: capacidades principales que aparecen en el hero.
+- `platformPillars`: ganancias ejecutivas del área.
+- `platformDefinitionCards`: dimensiones de la definición de datalización.
+- `platformBeforeAfter`: narrativa Antes, Ahora y Después.
+- `platformCapabilityShift`: transición de tableros aislados a disciplina interna de inteligencia.
+
 ## Editar Método de Datalización
 
 Editar `data/datalizationMethod.js`.
@@ -234,6 +246,7 @@ No conectar esta versión a sistemas internos, APIs privadas, tokens ni fuentes 
 - `index.html`
 - `styles.css`
 - `app.js`
+- `data/platformIntro.js`
 - `data/dictionary.js`
 - `data/engineeringGuide.js`
 - `data/datalizationMethod.js`

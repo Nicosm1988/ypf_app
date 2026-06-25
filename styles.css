@@ -481,7 +481,7 @@ p {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 860px);
+  grid-template-columns: minmax(0, 1120px);
   gap: clamp(20px, 4vw, 48px);
   align-items: end;
   padding-top: 90px;
@@ -496,12 +496,12 @@ p {
 }
 
 .hero-copy h1 {
-  max-width: 780px;
+  max-width: 1120px;
   color: #ffffff;
 }
 
 .hero-kicker {
-  max-width: 680px;
+  max-width: 920px;
   margin: 0;
   color: #ffffff;
   font-size: clamp(1.2rem, 2.4vw, 1.75rem);
@@ -510,7 +510,7 @@ p {
 }
 
 .hero-text {
-  max-width: 710px;
+  max-width: 880px;
   margin: 0;
   color: rgba(255, 255, 255, 0.86);
   font-size: 1.04rem;
@@ -672,6 +672,39 @@ p {
   background: var(--ypf-yellow);
 }
 
+.platform-metric-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 980px;
+  margin-top: 8px;
+}
+
+.platform-metric {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  min-height: 92px;
+  padding: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.075);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+.platform-metric strong {
+  color: #ffffff;
+  font-size: 0.98rem;
+  line-height: 1.15;
+}
+
+.platform-metric span {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.82rem;
+  line-height: 1.42;
+}
+
 .quote-band {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -692,6 +725,255 @@ p {
   max-width: 850px;
   font-size: clamp(1.25rem, 2vw, 1.75rem);
   line-height: 1.24;
+}
+
+.platform-executive {
+  display: grid;
+  gap: 22px;
+}
+
+.platform-executive-head,
+.platform-block-head {
+  display: grid;
+  gap: 12px;
+  max-width: 1040px;
+}
+
+.platform-executive-head h2,
+.platform-block-head h3,
+.platform-definition-panel h3 {
+  margin: 0;
+  color: var(--ypf-blue-3);
+  font-size: clamp(1.72rem, 3vw, 2.7rem);
+  line-height: 1.07;
+}
+
+.platform-executive-head p,
+.platform-block-head p,
+.platform-card p,
+.platform-definition-panel p,
+.platform-definition-card p,
+.platform-timeline-card p,
+.platform-discipline-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.58;
+}
+
+.platform-purpose-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(460px, 1.05fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+.platform-card,
+.platform-definition-card,
+.platform-timeline-card,
+.platform-discipline-card {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: radial-gradient(circle at var(--spot-x, 72%) var(--spot-y, 18%), rgba(53, 201, 189, 0.1), transparent 10rem), var(--surface);
+  box-shadow: 0 16px 34px rgba(0, 30, 60, 0.1);
+}
+
+.platform-thesis {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-height: 360px;
+  padding: clamp(20px, 3vw, 28px);
+  background: linear-gradient(135deg, rgba(53, 201, 189, 0.12), rgba(58, 160, 255, 0.06)), var(--surface);
+}
+
+.platform-thesis > span,
+.platform-pillar > span,
+.platform-timeline-card > span {
+  width: fit-content;
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(53, 201, 189, 0.12);
+  color: var(--ypf-yellow-2);
+  font-size: 0.76rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.platform-thesis h3,
+.platform-pillar h3,
+.platform-definition-card h4,
+.platform-timeline-card h4,
+.platform-discipline-card strong {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.18;
+}
+
+.platform-thesis h3 {
+  font-size: clamp(1.32rem, 2vw, 1.8rem);
+}
+
+.platform-thesis strong {
+  align-self: end;
+  display: block;
+  padding: 14px;
+  border: 1px solid rgba(53, 201, 189, 0.28);
+  border-radius: var(--radius);
+  background: rgba(53, 201, 189, 0.09);
+  color: #ffffff;
+  line-height: 1.42;
+}
+
+.platform-pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.platform-pillar {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-height: 260px;
+  padding: 18px;
+}
+
+.platform-pillar > span {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: var(--radius);
+  background: var(--ypf-yellow);
+  color: #071316;
+}
+
+.platform-pillar:nth-child(2) > span {
+  background: var(--ypf-blue);
+  color: #ffffff;
+}
+
+.platform-pillar:nth-child(3) > span {
+  background: var(--orange);
+  color: #071316;
+}
+
+.platform-definition-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.88fr) minmax(440px, 1.12fr);
+  gap: 18px;
+  align-items: start;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid rgba(53, 201, 189, 0.22);
+  border-radius: var(--radius);
+  background: linear-gradient(140deg, rgba(8, 13, 20, 0.98), rgba(15, 32, 43, 0.94)), var(--surface);
+}
+
+.platform-definition-panel > div:first-child {
+  display: grid;
+  gap: 12px;
+}
+
+.platform-definition-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.platform-definition-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-height: 230px;
+  padding: 16px;
+}
+
+.platform-definition-card > span {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  background: rgba(53, 201, 189, 0.14);
+  color: var(--ypf-yellow-2);
+}
+
+.platform-definition-card svg,
+.platform-discipline-card svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentcolor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.platform-timeline,
+.platform-discipline {
+  display: grid;
+  gap: 16px;
+}
+
+.platform-timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.platform-timeline-card {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-height: 250px;
+  padding: 18px;
+}
+
+.platform-timeline-card:nth-child(2) {
+  border-color: rgba(53, 201, 189, 0.34);
+  background: radial-gradient(circle at var(--spot-x, 72%) var(--spot-y, 18%), rgba(53, 201, 189, 0.14), transparent 10rem), var(--surface);
+}
+
+.platform-timeline-card:nth-child(3) {
+  border-color: rgba(48, 209, 116, 0.28);
+}
+
+.platform-discipline-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.platform-discipline-card {
+  display: grid;
+  align-content: start;
+  gap: 13px;
+  min-height: 232px;
+  padding: 16px;
+}
+
+.platform-discipline-card > div {
+  display: grid;
+  gap: 8px;
+}
+
+.platform-discipline-card span {
+  color: var(--muted-2);
+  font-size: 0.82rem;
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+.platform-discipline-card svg {
+  color: var(--ypf-yellow-2);
+}
+
+.platform-discipline-card strong {
+  color: #ffffff;
+  font-size: 1.04rem;
 }
 
 .datalization-section {
@@ -5662,6 +5944,8 @@ kbd {
 
   .feature-grid,
   .term-grid,
+  .platform-purpose-grid,
+  .platform-definition-panel,
   .executive-brief,
   .concept-tree-grid,
   .project-studio,
@@ -5678,6 +5962,10 @@ kbd {
 
   .guide-story-proof,
   .guide-readiness-flow,
+  .platform-pillar-grid,
+  .platform-definition-grid,
+  .platform-timeline-grid,
+  .platform-discipline-grid,
   .executive-support,
   .oee-grid,
   .methodology-tool-grid,
@@ -5824,6 +6112,13 @@ kbd {
   }
 
   .stat-grid,
+  .platform-metric-row,
+  .platform-purpose-grid,
+  .platform-pillar-grid,
+  .platform-definition-panel,
+  .platform-definition-grid,
+  .platform-timeline-grid,
+  .platform-discipline-grid,
   .datalization-grid,
   .datalization-level-grid,
   .executive-brief,
@@ -5874,6 +6169,15 @@ kbd {
 
   .methodology-close .button {
     width: 100%;
+  }
+
+  .platform-metric,
+  .platform-thesis,
+  .platform-pillar,
+  .platform-definition-card,
+  .platform-timeline-card,
+  .platform-discipline-card {
+    min-height: 0;
   }
 
   .method-flow-step,
