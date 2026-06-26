@@ -8,7 +8,17 @@ import { chromium } from "playwright";
 const port = Number(process.env.QA_PORT || 8123);
 const baseUrl = `http://127.0.0.1:${port}`;
 const routes = [
-  { path: "/", selector: ".hero", name: "Inicio" },
+  { path: "/", selector: ".datalization-home", name: "Inicio" },
+  { path: "/que-es-datalizacion", selector: ".definition-compare", name: "Que es Datalizacion" },
+  { path: "/pilares-datalizacion", selector: ".pillar-system", name: "Pilares de Datalizacion" },
+  { path: "/intake-aprobacion", selector: ".intake-funnel", name: "Intake y Aprobacion" },
+  { path: "/indice-datalizacion", selector: ".score-ring", name: "Indice de Datalizacion" },
+  { path: "/ponderacion-esfuerzo", selector: ".weight-grid", name: "Ponderacion y Esfuerzo" },
+  { path: "/metadata-documentacion", selector: ".metadata-grid", name: "Metadata y Documentacion" },
+  { path: "/alcance-bmc", selector: ".scope-grid", name: "Alcance BMC" },
+  { path: "/metodologia-flujo", selector: ".framework-flow-track", name: "Metodologia y Flujo" },
+  { path: "/recursos-templates", selector: ".resource-grid", name: "Recursos y Templates" },
+  { path: "/roadmap-futuro", selector: ".future-roadmap", name: "Roadmap futuro" },
   { path: "/guia-power-bi", selector: ".guide-journey", name: "Guia + Roadmap" },
   { path: "/metodo-datalizacion", selector: ".method-page", name: "Metodo de Datalizacion" },
   { path: "/metodologia", selector: ".methodology-process", name: "Metodologia" },
@@ -123,24 +133,43 @@ try {
 
       if (route.path === "/") {
         const homeReport = await page.evaluate(() => ({
-          metrics: document.querySelectorAll(".platform-metric").length,
-          hubNavCards: document.querySelectorAll(".hub-nav-card").length,
-          pillars: document.querySelectorAll(".platform-pillar").length,
-          definitionCards: document.querySelectorAll(".platform-definition-card").length,
-          timelineCards: document.querySelectorAll(".platform-timeline-card").length,
-          disciplineCards: document.querySelectorAll(".platform-discipline-card").length,
-          hero: document.querySelector(".hero h1")?.textContent?.trim(),
+          metrics: document.querySelectorAll(".framework-strip .framework-card").length,
+          pillarCards: document.querySelectorAll(".pillar-card").length,
+          actionCards: document.querySelectorAll(".framework-action").length,
+          scoreRing: Boolean(document.querySelector(".score-ring")),
+          flowSteps: document.querySelectorAll(".framework-flow-step").length,
+          hero: document.querySelector(".framework-hero h1")?.textContent?.trim(),
         }));
         if (
-          homeReport.metrics !== 3 ||
-          homeReport.hubNavCards !== 9 ||
-          homeReport.pillars !== 3 ||
-          homeReport.definitionCards !== 3 ||
-          homeReport.timelineCards !== 3 ||
-          homeReport.disciplineCards !== 4 ||
-          !homeReport.hero?.includes("disciplina interna")
+          homeReport.metrics !== 4 ||
+          homeReport.pillarCards !== 5 ||
+          homeReport.actionCards !== 8 ||
+          !homeReport.scoreRing ||
+          homeReport.flowSteps !== 7 ||
+          !homeReport.hero?.includes("Datalizar no es solo automatizar")
         ) {
-          throw new Error(`Inicio no cumple estructura ejecutiva esperada: ${JSON.stringify(homeReport)}`);
+          throw new Error(`Inicio no cumple estructura de datalizacion esperada: ${JSON.stringify(homeReport)}`);
+        }
+      }
+
+      if (route.path === "/pilares-datalizacion") {
+        const pillarReport = await page.evaluate(() => ({
+          pillarCards: document.querySelectorAll(".pillar-card").length,
+          openCards: document.querySelectorAll(".pillar-card[open]").length,
+          total: document.querySelector(".pillar-core strong")?.textContent?.trim(),
+        }));
+        if (pillarReport.pillarCards !== 5 || pillarReport.openCards !== 5 || pillarReport.total !== "100%") {
+          throw new Error(`Pilares no cumple estructura esperada: ${JSON.stringify(pillarReport)}`);
+        }
+      }
+
+      if (route.path === "/metadata-documentacion") {
+        const metadataReport = await page.evaluate(() => ({
+          groups: document.querySelectorAll(".metadata-group").length,
+          samples: document.querySelectorAll(".metadata-sample").length,
+        }));
+        if (metadataReport.groups !== 5 || metadataReport.samples < 3) {
+          throw new Error(`Metadata no cumple estructura esperada: ${JSON.stringify(metadataReport)}`);
         }
       }
 

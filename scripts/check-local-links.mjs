@@ -4,6 +4,16 @@ import path from "node:path";
 const root = process.cwd();
 const appRoutes = new Set([
   "/",
+  "/que-es-datalizacion",
+  "/pilares-datalizacion",
+  "/intake-aprobacion",
+  "/indice-datalizacion",
+  "/ponderacion-esfuerzo",
+  "/metadata-documentacion",
+  "/alcance-bmc",
+  "/metodologia-flujo",
+  "/recursos-templates",
+  "/roadmap-futuro",
   "/guia-power-bi",
   "/metodo-datalizacion",
   "/metodologia",
@@ -48,7 +58,7 @@ console.log(`Local links OK (${checked} checked)`);
 
 function extractLinks(text) {
   const links = new Set();
-  const attrPattern = /\b(?:href|src)\s*=\s*["']([^"']+)["']/gi;
+  const attrPattern = /\b(?:href|src)\b\s*=\s*["']([^"']+)["']/gi;
   const cssUrlPattern = /url\(\s*["']?([^"')]+)["']?\s*\)/gi;
   const stringPathPattern = /["'](\/(?:assets|docs|data)\/[^"']+)["']/g;
 
@@ -65,6 +75,7 @@ function shouldSkip(link) {
   return (
     !link ||
     link.includes("${") ||
+    (link.includes(",") && /\s\d+w\b/.test(link)) ||
     link.startsWith("#") ||
     link.startsWith("data:") ||
     link.startsWith("mailto:") ||

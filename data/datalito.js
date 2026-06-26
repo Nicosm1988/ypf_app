@@ -1,4 +1,14 @@
 import { designSystemBenefits, designSystemComponents, designSystemPrinciples } from "./designSystem.js";
+import {
+  bmcScopeStages,
+  datalizationDefinition,
+  datalizationIndex,
+  datalizationPillars,
+  frameworkFlow,
+  metadataGroups,
+  weightingModel,
+  weightingVariables,
+} from "./datalizationFramework.js";
 import { dictionaryTerms } from "./dictionary.js";
 import { guideSections, prdSpecComparison, readinessChecklist } from "./engineeringGuide.js";
 import { methodOperatingFlow, methodPlanes, methodProjectFolders, methodRoles } from "./datalizationMethod.js";
@@ -115,8 +125,59 @@ export const datalitoSuggestedPrompts = {
   global: [
     "Hola Datalito",
     "¿Qué es la plataforma de Datalización?",
+    "¿Cuáles son los 5 pilares de la datalización?",
     "¿Cuál es la diferencia entre PRD y Spec?",
-    "¿Qué entregables corresponden al proceso BI end-to-end?",
+    "¿Cómo se calcula el Índice de Datalización?",
+  ],
+  "/que-es-datalizacion": [
+    "¿Por qué datalizar no es solo automatizar?",
+    "¿Qué condiciones debe cumplir un activo datalizado?",
+    "Explicalo para un gerente.",
+  ],
+  "/pilares-datalizacion": [
+    "¿Cuáles son los 5 pilares?",
+    "Dame preguntas de validación por pilar.",
+    "¿Qué evidencia necesita cada pilar?",
+  ],
+  "/intake-aprobacion": [
+    "¿Qué trabajos entran al proceso?",
+    "¿Cuándo queda pendiente de información?",
+    "¿Qué significa fuera de alcance inicial?",
+  ],
+  "/indice-datalizacion": [
+    "¿Cómo se calcula el índice?",
+    "¿Qué significa estar en nivel avanzado?",
+    "¿Cómo interpreto un score de 68%?",
+  ],
+  "/ponderacion-esfuerzo": [
+    "¿Por qué no pesa igual cada activo?",
+    "Explicame la fórmula de ponderación.",
+    "Compará un tablero con 75 KPIs contra un Excel puntual.",
+  ],
+  "/metadata-documentacion": [
+    "¿Qué metadata mínima necesito?",
+    "¿Qué campos documentan ownership?",
+    "¿Qué evidencia debería quedar registrada?",
+  ],
+  "/alcance-bmc": [
+    "¿Cuál es el alcance inicial?",
+    "¿Por qué empieza por BMC?",
+    "¿Cómo se escala después?",
+  ],
+  "/metodologia-flujo": [
+    "Explicame el flujo de siete etapas.",
+    "¿Qué pasa después del intake?",
+    "¿Cómo se conecta metadata con scoring?",
+  ],
+  "/recursos-templates": [
+    "¿Dónde encuentro templates?",
+    "¿Qué recurso uso para PRD y Spec?",
+    "¿Dónde veo herramientas y atajos?",
+  ],
+  "/roadmap-futuro": [
+    "¿Cuál es el roadmap futuro?",
+    "¿Qué debería pasar en los primeros 30 días?",
+    "¿Cuándo escala el método?",
   ],
   "/guia-power-bi": [
     "Resumime esta guía para un gerente.",
@@ -370,16 +431,72 @@ export const datalitoKnowledgeSources = [
     id: "datalization-definition",
     title: "Definición de datalización",
     slug: "definicion-datalizacion",
-    section: "Inicio",
+    section: "Qué es Datalización",
     contentType: "standard",
-    url: "/",
+    url: "/que-es-datalizacion",
     summary: "Datalizar no es solo automatizar; implica estructurar información, gobernar decisiones y sostener operación.",
     keywords: ["datalizar", "automatizar", "trazabilidad", "gobierno", "decisiones", "operacion"],
     content: [
-      "Datalizar no es simplemente automatizar procesos.",
+      datalizationDefinition,
       "Datalizar es estructurar información, definir estándares, asegurar trazabilidad, gobernar datos y convertirlos en decisiones confiables.",
       "Automatizar acelera una tarea; datalizar instala una disciplina.",
       ...platformDefinitionCards.map((item) => `${item.title}: ${item.text}`),
+    ],
+  }),
+  createSource({
+    id: "datalization-five-pillars",
+    title: "Los 5 pilares de la Datalización",
+    slug: "cinco-pilares-datalizacion",
+    section: "Pilares de Datalización",
+    contentType: "standard",
+    url: "/pilares-datalizacion",
+    summary: "Los cinco pilares obligatorios completan el 100% del modelo de datalización.",
+    keywords: ["pilares", "centralizacion", "linaje", "automatizacion", "gobernanza", "calidad", "auditoria"],
+    content: datalizationPillars.map(
+      (pillar) =>
+        `${pillar.title} (${pillar.weight}%): ${pillar.definition} Por qué importa: ${pillar.why} Subcriterios: ${pillar.subcriteria.join(", ")}.`,
+    ),
+  }),
+  createSource({
+    id: "datalization-index-weighting",
+    title: "Índice de Datalización y ponderación",
+    slug: "indice-datalizacion-ponderacion",
+    section: "Índice y Ponderación",
+    contentType: "standard",
+    url: "/indice-datalizacion",
+    summary: "El score combina cumplimiento por pilar y lectura ponderada por complejidad, criticidad, alcance y esfuerzo.",
+    keywords: ["indice", "score", "ponderacion", "madurez", "factor", "complejidad", "criticidad"],
+    content: [
+      datalizationIndex.formula,
+      datalizationIndex.baseWeights,
+      weightingModel.formula,
+      weightingModel.aggregateFormula,
+      ...weightingVariables.map((item) => `${item.title} (${item.weight}%): ${item.text}`),
+    ],
+  }),
+  createSource({
+    id: "metadata-datalization-bmc",
+    title: "Metadata mínima para evaluar datalización",
+    slug: "metadata-datalizacion-bmc",
+    section: "Metadata y Documentación",
+    contentType: "standard",
+    url: "/metadata-documentacion",
+    summary: "Cada activo debe tener metadata mínima para poder evaluarse, auditarse y sostenerse.",
+    keywords: ["metadata", "documentacion", "activo", "owner", "fuente", "evidencia", "auditoria"],
+    content: metadataGroups.map((group) => `${group.title}: ${group.fields.join(", ")}.`),
+  }),
+  createSource({
+    id: "bmc-scope-framework-flow",
+    title: "Alcance BMC y flujo metodológico",
+    slug: "alcance-bmc-flujo-metodologico",
+    section: "Alcance BMC",
+    contentType: "standard",
+    url: "/alcance-bmc",
+    summary: "El alcance inicial se limita al BMC / Value Management Center y se opera con flujo de siete etapas.",
+    keywords: ["bmc", "vmc", "alcance", "flujo", "metodologia", "intake", "metadata"],
+    content: [
+      ...bmcScopeStages.map((stage) => `${stage.moment}: ${stage.title}. ${stage.text}`),
+      ...frameworkFlow.map((step) => `${step.stage}. ${step.title}: ${step.text}`),
     ],
   }),
   createSource({
