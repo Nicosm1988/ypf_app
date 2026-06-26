@@ -4530,7 +4530,7 @@ document.addEventListener("click", (event) => {
   if (url.origin !== window.location.origin) return;
 
   event.preventDefault();
-  if (link.closest(".datalito-panel")) closeDatalitoPanel();
+  if (link.closest(".datalito-chat")) closeDatalitoPanel();
   navigate(`${url.pathname}${url.hash}`);
 });
 
