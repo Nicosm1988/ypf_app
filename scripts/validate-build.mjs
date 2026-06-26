@@ -74,6 +74,8 @@ assert(appJs.includes("renderDatalizationMethodPage"), "app.js debe renderizar e
 assert(appJs.includes("renderDesignSystemPage"), "app.js debe renderizar el Design System.");
 assert(appJs.includes("renderDatalitoPage"), "app.js debe renderizar Datalito.");
 assert(appJs.includes("renderDatalitoGlobalShell"), "app.js debe montar el launcher global de Datalito.");
+assert(appJs.includes("renderDatalitoAvatar"), "Datalito debe usar un avatar propio.");
+assert(appJs.includes("buildDatalitoConversationalResponse"), "Datalito debe manejar conversación natural antes del retrieval.");
 assert(appJs.includes("renderMethodologyProcessFlow"), "app.js debe renderizar el proceso metodológico end to end.");
 assert(appJs.includes("renderExecutiveBrief"), "app.js debe renderizar la síntesis ejecutiva.");
 assert(appJs.includes("renderPlatformExecutiveSection"), "app.js debe renderizar la sección ejecutiva inicial.");
@@ -196,7 +198,7 @@ assert(datalitoNoAnswerCases.length >= 5, "Datalito debe incluir casos sin evide
 assert(datalitoSecurityCases.length >= 5, "Datalito debe incluir casos adversariales.");
 assert(appJs.includes("recordDatalitoFeedback"), "Datalito debe registrar feedback.");
 assert(appJs.includes("recordDatalitoGap"), "Datalito debe registrar brechas de conocimiento.");
-assert(appJs.includes("No encuentro una definición aprobada suficiente"), "Datalito debe manejar falta de evidencia sin inventar.");
+assert(appJs.includes("No lo tengo en la base aprobada todavía"), "Datalito debe manejar falta de evidencia sin inventar.");
 
 assert(platformHeroMetrics.length === 3, "La portada ejecutiva debe mostrar tres capacidades principales.");
 assert(platformPillars.length === 3, "La sección ejecutiva debe explicar tres ganancias del área.");
@@ -254,6 +256,9 @@ await access("assets/docs/modelos/spec-datalizacion.docx");
 await access("assets/ypf-industrial-hero-1280.webp");
 await access("assets/ypf-industrial-hero-1280.avif");
 await access("assets/ypf-industrial-hero.png");
+await access("assets/datalito-avatar.png");
+await access("assets/datalito-avatar-512.webp");
+await access("assets/datalito-avatar-256.webp");
 await access("docs/datalito-architecture.md");
 await access("docs/datalito-content-governance.md");
 await access("docs/datalito-runbook.md");

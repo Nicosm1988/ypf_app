@@ -113,10 +113,10 @@ export const datalitoKpis = [
 
 export const datalitoSuggestedPrompts = {
   global: [
+    "Hola Datalito",
     "¿Qué es la plataforma de Datalización?",
     "¿Cuál es la diferencia entre PRD y Spec?",
     "¿Qué entregables corresponden al proceso BI end-to-end?",
-    "¿Qué significa datalizar y por qué no es solo automatizar?",
   ],
   "/guia-power-bi": [
     "Resumime esta guía para un gerente.",

@@ -137,6 +137,12 @@ const datalitoStorageKeys = {
   gaps: "datalito.gaps.v1",
 };
 
+const datalitoAvatar = {
+  png: "/assets/datalito-avatar.png",
+  webp256: "/assets/datalito-avatar-256.webp",
+  webp512: "/assets/datalito-avatar-512.webp",
+};
+
 const datalitoState = {
   isOpen: false,
   mode: "brief",
@@ -145,9 +151,9 @@ const datalitoState = {
       id: "welcome",
       role: "assistant",
       answer:
-        "Hola, soy Datalito. Te ayudo a encontrar, entender y aplicar los estándares, procesos y contenidos de Datalización.",
-      confidence: "high",
-      grounded: true,
+        "Hola, soy Datalito. Estoy acá para charlar con vos sobre la plataforma, ayudarte a encontrar cosas y bajarte a tierra cualquier concepto de BI, gobierno o metodología. Podés saludarme, pedirme contexto o preguntarme algo puntual.",
+      confidence: null,
+      grounded: false,
       unresolved: false,
       citations: [],
       relatedContent: [],
@@ -1784,30 +1790,33 @@ function renderDatalitoPage() {
   appRoot.innerHTML = `
     <section class="page tool-page datalito-page">
       <header class="page-heading page-inner datalito-hero">
-        <span class="eyebrow">Datalito</span>
-        <h1>Un asistente interno para volver encontrable, comprensible y trazable el conocimiento de Datalización.</h1>
-        <p class="lede">Datalito convierte el contenido publicado del hub en una experiencia activa: responde con fuentes, reconoce brechas y orienta al usuario hacia el estándar correcto.</p>
+        <div class="datalito-hero-avatar">
+          ${renderDatalitoAvatar("hero")}
+          <span>Hola, soy Datalito</span>
+        </div>
+        <h1>Hablemos de BI, estándares y proyectos sin vueltas.</h1>
+        <p class="lede">Datalito es el personaje del hub: conversa con vos, te orienta, busca en las fuentes disponibles y te acompaña cuando necesitás entender qué hacer después.</p>
         <div class="datalito-hero-metrics" aria-label="Capacidades principales de Datalito">
           <article>
+            <strong>Conversación</strong>
+            <span>saludos, repreguntas y continuidad de contexto</span>
+          </article>
+          <article>
             <strong>${datalitoKnowledgeSources.length}</strong>
-            <span>fuentes locales indexadas</span>
+            <span>fuentes locales disponibles cuando hace falta citar</span>
           </article>
           <article>
-            <strong>${datalitoEvaluationQuestions.length}</strong>
-            <span>preguntas de evaluación</span>
-          </article>
-          <article>
-            <strong>Read-only</strong>
-            <span>sin acciones sobre Power BI, Fabric ni permisos</span>
+            <strong>Seguro</strong>
+            <span>sin inventar reglas internas ni exponer información sensible</span>
           </article>
         </div>
       </header>
 
       <section class="datalito-intro page-inner" aria-labelledby="datalitoIntroTitle">
         <div>
-          <span class="flow-chip">vertical slice funcional</span>
-          <h2 id="datalitoIntroTitle">Datalito ya puede buscar en fuentes aprobadas, responder con citas y registrar señales de mejora.</h2>
-          <p>Esta implementación respeta el límite del entorno actual: no simula SSO, LLM, base de datos ni RAG corporativo. En cambio, deja operativa una V1 local, trazable y preparada para evolucionar cuando existan credenciales, proveedor aprobado y política de retención.</p>
+          <span class="flow-chip">conversación viva</span>
+          <h2 id="datalitoIntroTitle">La experiencia empieza como una charla simple y, cuando hace falta precisión, baja a fuentes y evidencia.</h2>
+          <p>Podés escribirle como a un compañero de trabajo: “hola”, “explicame esto”, “seguí con más detalle” o “dónde está el template”. Si la pregunta necesita respaldo, Datalito trae la fuente; si no hay evidencia suficiente, lo dice sin inventar.</p>
         </div>
         <div class="datalito-card-grid">
           ${datalitoProductPrinciples.map(renderDatalitoPrinciple).join("")}
@@ -1817,8 +1826,8 @@ function renderDatalitoPage() {
       <section class="datalito-workbench page-inner" aria-labelledby="datalitoWorkbenchTitle">
         <div class="datalito-workbench-main">
           <div class="datalito-section-head">
-            <span class="flow-chip">conversación con fuentes</span>
-            <h2 id="datalitoWorkbenchTitle">Preguntá sobre estándares, etapas, templates, definiciones, metodología o navegación.</h2>
+            <span class="flow-chip">probalo ahora</span>
+            <h2 id="datalitoWorkbenchTitle">Escribile como hablarías en el equipo.</h2>
           </div>
           <div class="datalito-chat-shell" data-datalito-chat="page">
             ${renderDatalitoChat("page")}
@@ -1950,6 +1959,18 @@ function renderDatalitoSourceTypeSummary() {
     .join("");
 }
 
+function renderDatalitoAvatar(size = "medium") {
+  const priority = ["hero", "page", "chat"].includes(size) ? "high" : "auto";
+
+  return `
+    <picture class="datalito-avatar ${escapeHtml(size)}">
+      <source srcset="${datalitoAvatar.webp256}" type="image/webp" media="(max-width: 720px)" />
+      <source srcset="${datalitoAvatar.webp512}" type="image/webp" />
+      <img src="${datalitoAvatar.png}" alt="Datalito, asistente de conocimiento" width="512" height="512" loading="eager" decoding="async" fetchpriority="${priority}" />
+    </picture>
+  `;
+}
+
 function renderDatalitoGlobalShell() {
   if (document.querySelector("[data-datalito-global]")) return;
 
@@ -1963,7 +1984,7 @@ function renderDatalitoGlobalShell() {
           </div>
         </div>
         <button class="datalito-launcher" type="button" data-datalito-open aria-expanded="false" aria-label="Preguntale a Datalito">
-          ${icon("bot")}
+          ${renderDatalitoAvatar("launcher")}
           <span>Datalito</span>
         </button>
       </div>
@@ -1974,16 +1995,18 @@ function renderDatalitoGlobalShell() {
 }
 
 function renderDatalitoChat(surface) {
-  const prompts = getDatalitoPromptsForCurrentRoute();
   const isPanel = surface === "panel";
+  const prompts = getDatalitoPromptsForCurrentRoute().slice(0, isPanel ? 3 : 4);
 
   return `
     <div class="datalito-chat ${isPanel ? "compact" : ""}">
       <div class="datalito-chat-header">
-        <div>
-          <span class="flow-chip">asistente de conocimiento</span>
-          <h3>${isPanel ? "¿En qué te ayudo?" : "Conversación"}</h3>
-          <p>Puedo explicarte procesos, encontrar estándares, ubicar templates y ayudarte a navegar la plataforma.</p>
+        <div class="datalito-chat-identity">
+          ${renderDatalitoAvatar(isPanel ? "chat" : "page")}
+          <div>
+            <h3>${isPanel ? "Hola, soy Datalito" : "Charlá con Datalito"}</h3>
+            <p>Preguntame natural. Si hace falta precisión, busco fuentes; si querés conversar, seguimos el hilo.</p>
+          </div>
         </div>
         <div class="datalito-chat-actions">
           <button class="icon-button" type="button" data-datalito-new title="Nueva conversación" aria-label="Nueva conversación">
@@ -2000,8 +2023,11 @@ function renderDatalitoChat(surface) {
         </div>
       </div>
 
-      <div class="datalito-mode-row" role="group" aria-label="Modo de respuesta">
-        ${datalitoAnswerModes.map(renderDatalitoModeButton).join("")}
+      <div class="datalito-chat-tools">
+        <span>Modo</span>
+        <div class="datalito-mode-row" role="group" aria-label="Modo de respuesta">
+          ${datalitoAnswerModes.map(renderDatalitoModeButton).join("")}
+        </div>
       </div>
 
       <div class="datalito-suggestions" aria-label="Preguntas sugeridas">
@@ -2020,7 +2046,7 @@ function renderDatalitoChat(surface) {
           type="text"
           maxlength="420"
           autocomplete="off"
-          placeholder="Preguntá por un estándar, etapa, template, definición o sección"
+          placeholder="Escribí: hola, explicame esto, dónde está..., seguí..."
           required
         />
         <button class="button" type="submit">
@@ -2062,7 +2088,10 @@ function renderDatalitoMessage(message) {
   return `
     <article class="datalito-message assistant ${message.unresolved ? "unresolved" : ""}">
       <div class="datalito-message-head">
-        <strong>${icon(message.unresolved ? "alert" : "bot")} Datalito</strong>
+        <div class="datalito-message-speaker">
+          ${renderDatalitoAvatar("message")}
+          <strong>Datalito</strong>
+        </div>
         ${
           message.confidence
             ? `<span class="datalito-confidence ${escapeHtml(message.confidence)}">${renderDatalitoConfidence(message)}</span>`
@@ -2075,9 +2104,13 @@ function renderDatalitoMessage(message) {
       ${renderDatalitoCitations(message.citations || [])}
       ${renderDatalitoRelatedContent(message.relatedContent || [])}
       ${renderDatalitoFollowUps(message.suggestedFollowUps || [])}
-      ${message.id !== "welcome" ? renderDatalitoFeedbackActions(message) : ""}
+      ${shouldShowDatalitoFeedback(message) ? renderDatalitoFeedbackActions(message) : ""}
     </article>
   `;
+}
+
+function shouldShowDatalitoFeedback(message) {
+  return message.id !== "welcome" && (message.unresolved || message.confidence || message.citations?.length);
 }
 
 function renderDatalitoConfidence(message) {
@@ -2177,9 +2210,8 @@ function runDatalitoQuestion(question) {
 
   const response = buildDatalitoResponse(cleanQuestion, datalitoState.mode);
   datalitoState.messages.push(response);
-  datalitoState.status = response.unresolved
-    ? "No se encontró evidencia suficiente; podés registrar la brecha."
-    : "Respuesta generada con fuentes locales aprobadas.";
+  datalitoState.status =
+    response.statusText || (response.unresolved ? "No lo tengo en la base aprobada; podés registrar la brecha." : "Listo, seguimos.");
   refreshDatalitoViews();
 }
 
@@ -2205,6 +2237,9 @@ function buildDatalitoResponse(question, mode) {
       suggestedFollowUps: ["¿Qué sí puede responder Datalito?", "¿Cómo reporto una brecha?", "¿Qué controles de seguridad aplica?"],
     };
   }
+
+  const conversationalResponse = buildDatalitoConversationalResponse(question, mode);
+  if (conversationalResponse) return conversationalResponse;
 
   const matches = searchDatalitoSources(question, context);
   const strongMatches = matches.filter((match) => match.score >= 5).slice(0, 4);
@@ -2243,7 +2278,7 @@ function buildDatalitoNoEvidenceResponse(question, mode, relatedMatches) {
     role: "assistant",
     question,
     answer:
-      "No encuentro una definición aprobada suficiente para responder esto con confianza. Puedo mostrarte contenidos cercanos de la plataforma, pero no voy a completar el vacío con una suposición. Si esta pregunta es relevante para el trabajo diario, conviene registrarla como brecha de conocimiento.",
+      "No lo tengo en la base aprobada todavía. Para no inventarte una respuesta, prefiero dejarlo claro: puedo mostrarte contenidos cercanos si sirven, o registrar la pregunta como brecha para que después se convierta en conocimiento curado.",
     intent: ["insufficient_evidence"],
     answerMode: mode,
     confidence: "low",
@@ -2256,6 +2291,116 @@ function buildDatalitoNoEvidenceResponse(question, mode, relatedMatches) {
       reason: `Coincidencia parcial con la consulta`,
     })),
     suggestedFollowUps: ["¿Dónde encuentro templates?", "¿Qué fuentes tiene Datalito?", "¿Cómo registro esta brecha?"],
+  };
+}
+
+function buildDatalitoConversationalResponse(question, mode) {
+  const normalized = normalizeText(question).trim();
+  const lastGrounded = [...datalitoState.messages].reverse().find((message) => message.role === "assistant" && message.citations?.length);
+  const lastSource = lastGrounded?.citations?.[0]?.sourceId
+    ? datalitoKnowledgeSources.find((source) => source.id === lastGrounded.citations[0].sourceId)
+    : null;
+
+  if (/^(hola|holis|buenas|buen dia|buenos dias|buenas tardes|buenas noches|hey)(\b|$)/.test(normalized)) {
+    return createDatalitoConversationMessage({
+      question,
+      mode,
+      answer:
+        "Hola. Qué bueno verte por acá. Soy Datalito: puedo charlar con vos, ayudarte a ubicar una sección, explicarte un concepto o bajar a pasos concretos algo del método. Decime qué estás armando y lo vemos juntos.",
+      followUps: ["Estoy armando un PRD", "Explicame la metodología", "Dónde encuentro templates"],
+    });
+  }
+
+  if (/(como estas|como andas|todo bien|que tal)/.test(normalized)) {
+    return createDatalitoConversationMessage({
+      question,
+      mode,
+      answer:
+        "Estoy bien, listo para ayudar. Me gusta cuando arrancamos simple: contame si querés encontrar algo, entender una etapa o ordenar una idea de proyecto.",
+      followUps: ["Ayudame a ordenar una idea", "Necesito ubicar una sección", "Quiero entender OEE BI"],
+    });
+  }
+
+  if (/(gracias|genial|perfecto|buenisimo|buenísimo|joya)/.test(normalized)) {
+    return createDatalitoConversationMessage({
+      question,
+      mode,
+      answer:
+        "De nada. Seguimos cuando quieras. Si te sirve, puedo profundizar, resumirlo para gerencia o convertirlo en una lista de próximos pasos.",
+      followUps: ["Profundizá", "Resumilo para gerencia", "Armame próximos pasos"],
+    });
+  }
+
+  if (/(que podes hacer|qué podés hacer|ayuda|ayudame|como te uso|cómo te uso)/.test(normalized)) {
+    return createDatalitoConversationMessage({
+      question,
+      mode,
+      answer:
+        "Podés usarme como compañero de trabajo del hub. Puedo conversar, explicar conceptos, buscar secciones, comparar alternativas, resumir una página, armar pasos de trabajo y decirte cuándo no hay una fuente aprobada suficiente.",
+      followUps: ["Compará PRD y Spec", "Resumime esta página", "Armame un checklist"],
+    });
+  }
+
+  if (/(quien sos|quién sos|que sos|qué sos|sos una ia|sos un bot|datalito)/.test(normalized)) {
+    return createDatalitoConversationMessage({
+      question,
+      mode,
+      answer:
+        "Soy Datalito, el personaje-asistente del hub. Mi trabajo es conversar con vos, ayudarte a ubicar conocimiento y, cuando la pregunta necesita precisión, responder con fuentes aprobadas para no chamuyarte.",
+      followUps: ["Qué podés hacer", "Ayudame a empezar", "Mostrame fuentes"],
+    });
+  }
+
+  if (/(no entiendo|me perdi|me perdí|explicamelo simple|explicámelo simple|por donde empiezo|por dónde empiezo)/.test(normalized)) {
+    return createDatalitoConversationMessage({
+      question,
+      mode,
+      answer:
+        "Vamos de a poco. Primero ubicamos qué necesitás lograr; después vemos si conviene ir al PRD, a la Spec, al método de trabajo o a una definición del diccionario. Si me contás el caso en una frase, te ayudo a ordenarlo.",
+      followUps: ["Estoy armando un PRD", "Tengo una duda técnica", "Necesito explicarlo a gerencia"],
+    });
+  }
+
+  if (/^(dale|ok|okay|bueno|bien|sigamos|seguimos|arranquemos|empecemos|vamos)(\b|$)/.test(normalized)) {
+    return createDatalitoConversationMessage({
+      question,
+      mode,
+      answer:
+        "Dale, sigamos. Podemos arrancar por tres caminos: ordenar una idea de proyecto, encontrar una sección del hub o bajar una metodología a pasos concretos. Elegí uno y lo trabajamos juntos.",
+      followUps: ["Ordenemos una idea", "Busquemos una sección", "Bajemos una metodología"],
+    });
+  }
+
+  if (lastSource && /(segui|seguí|profundiza|profundizá|amplia|ampliá|mas detalle|más detalle|explicame mejor|y eso|por que|por qué)/.test(normalized)) {
+    return createDatalitoConversationMessage({
+      question,
+      mode,
+      answer:
+        `Sí, te lo desarrollo un poco más. Veníamos hablando de “${lastSource.title}”. La idea central es esta: ${lastSource.summary} Si lo llevamos al trabajo diario, lo importante es identificar qué decisión habilita, qué evidencia deja y qué riesgo evita. Si querés, después lo bajo a pasos concretos o lo resumo para una presentación.`,
+      citations: [toDatalitoCitation(lastSource)],
+      grounded: true,
+      followUps: ["Bajalo a pasos", "Resumilo para gerencia", "Dame un ejemplo"],
+    });
+  }
+
+  return null;
+}
+
+function createDatalitoConversationMessage({ question, mode, answer, followUps, citations = [], grounded = false }) {
+  return {
+    id: createDatalitoId("assistant"),
+    role: "assistant",
+    question,
+    answer,
+    intent: ["conversation"],
+    answerMode: mode,
+    confidence: null,
+    grounded,
+    unresolved: false,
+    citations,
+    relatedContent: [],
+    suggestedFollowUps: followUps,
+    statusText: "Seguimos conversando.",
   };
 }
 
@@ -2421,6 +2566,16 @@ function refreshDatalitoViews() {
   if (launcher) launcher.setAttribute("aria-expanded", datalitoState.isOpen ? "true" : "false");
   if (panelChat) panelChat.innerHTML = renderDatalitoChat("panel");
   if (pageChat) pageChat.innerHTML = renderDatalitoChat("page");
+
+  requestAnimationFrame(scrollDatalitoThreadsToLatest);
+}
+
+function scrollDatalitoThreadsToLatest() {
+  document.querySelectorAll(".datalito-thread").forEach((thread) => {
+    const latestMessage = thread.lastElementChild;
+    if (!latestMessage) return;
+    thread.scrollTop = Math.max(0, latestMessage.offsetTop - thread.offsetTop);
+  });
 }
 
 function openDatalitoPanel() {

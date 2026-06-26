@@ -9,7 +9,7 @@ Datalización es la práctica de automatizar procesos mediante datos confiables,
 - Guía + roadmap BI/Fabric para ordenar el ciclo completo desde proceso y reglas hasta operación.
 - Método de Datalización v0.1 para organizar DEV/PROD, Teams, SharePoint, canales, carpetas, naming, backlog, VMC y gobierno del equipo.
 - Design System para consolidar patrones visuales, componentes, reglas de experiencia y criterios de calidad.
-- Datalito, asistente interno de conocimiento con launcher global, página dedicada, búsqueda local, citas, feedback y brechas.
+- Datalito, asistente interno de conocimiento con avatar propio, launcher global, conversación natural, búsqueda local, citas, feedback y brechas.
 - Metodología de mejora continua BI con OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, flujo continuo, SMED, Poka-Yoke y Kata.
 - Narrativa ejecutiva en cada página para presentar primero la conclusión, luego los argumentos y finalmente la evidencia operativa.
 - Diccionario BI para alinear conceptos de automatización, datos, Power BI, Fabric, performance, gobierno y adopción.
@@ -207,7 +207,13 @@ Editar `data/datalito.js`.
 - `datalitoEvaluationQuestions`: banco de 170 preguntas benchmark.
 - `datalitoSecurityCases` y `datalitoNoAnswerCases`: pruebas adversariales y de falta de evidencia.
 
-La V1 es read-only y local: no usa proveedor externo de IA, no tiene SSO real y no persiste conversaciones en backend. Feedback y brechas se guardan en `localStorage` para demostrar el flujo sin inventar infraestructura corporativa.
+La V1 conversa en frontend, responde saludos y repreguntas simples, y usa fuentes cuando la consulta requiere conocimiento aprobado. Es read-only y local: no usa proveedor externo de IA, no tiene SSO real y no persiste conversaciones en backend. Feedback y brechas se guardan en `localStorage` para demostrar el flujo sin inventar infraestructura corporativa.
+
+El avatar vive en:
+
+- `assets/datalito-avatar.png`
+- `assets/datalito-avatar-512.webp`
+- `assets/datalito-avatar-256.webp`
 
 Documentación relacionada:
 
