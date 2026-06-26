@@ -3585,11 +3585,27 @@ function renderMethodEvaluationModel() {
       </div>
 
       <div class="method-evaluation-panel" aria-label="Pilares, intake, índice, ponderación y metadata">
-        <div class="method-evaluation-rail" aria-label="Cinco pilares de datalización">
-          ${methodEvaluationModel.pillars.map(renderMethodEvaluationPillar).join("")}
-        </div>
+        <article class="method-evaluation-rail" aria-label="Cinco pilares de datalización">
+          <div class="method-evaluation-panel-head">
+            <span>01</span>
+            <div>
+              <strong>Pilares de evaluación</strong>
+              <p>Cada activo se lee con la misma vara: cinco dimensiones, evidencia concreta y un peso inicial común.</p>
+            </div>
+          </div>
+          <div class="method-evaluation-pillar-stack">
+            ${methodEvaluationModel.pillars.map(renderMethodEvaluationPillar).join("")}
+          </div>
+        </article>
 
         <div class="method-evaluation-lab">
+          <div class="method-evaluation-panel-head">
+            <span>02</span>
+            <div>
+              <strong>Lectura operativa</strong>
+              <p>El método define si el activo entra, cuánto avanzó, cuánto pesa y qué metadata deja para gobierno.</p>
+            </div>
+          </div>
           <article class="method-evaluation-card intake">
             <div>
               <span>${icon("filter")}</span>
@@ -3655,7 +3671,7 @@ function renderMethodEvaluationPillar(pillar, index) {
         <span>${pillar.weight}%</span>
         <strong>${escapeHtml(pillar.title)}</strong>
       </summary>
-      <div>
+      <div class="method-evaluation-pillar-body">
         <p>${escapeHtml(pillar.definition)}</p>
         <dl>
           <div>

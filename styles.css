@@ -6036,23 +6036,54 @@ html body .datalito-chat .icon-button:hover {
 }
 
 .method-evaluation {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: 18px;
   padding: clamp(22px, 4vw, 32px);
   border: 1px solid rgba(53, 201, 189, 0.22);
   border-radius: var(--radius);
   background:
-    radial-gradient(circle at 18% 18%, rgba(53, 201, 189, 0.14), transparent 22rem),
-    linear-gradient(180deg, rgba(248, 251, 253, 0.98), rgba(238, 245, 248, 0.98));
-  box-shadow: 0 22px 54px rgba(0, 26, 52, 0.12);
+    radial-gradient(circle at var(--spot-x, 18%) var(--spot-y, 10%), rgba(53, 201, 189, 0.16), transparent 21rem),
+    radial-gradient(circle at 86% 28%, rgba(58, 160, 255, 0.12), transparent 24rem),
+    linear-gradient(160deg, rgba(17, 23, 32, 0.98), rgba(8, 13, 20, 0.99));
+  box-shadow:
+    0 26px 68px rgba(0, 18, 38, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.method-evaluation::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(180deg, black, transparent 78%);
+  opacity: 0.36;
+}
+
+.method-evaluation::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ypf-yellow), var(--ypf-blue), transparent 72%);
+  opacity: 0.88;
+  pointer-events: none;
 }
 
 .method-evaluation .method-section-head h2 {
-  color: #102033;
+  color: #ffffff;
 }
 
 .method-evaluation .flow-chip {
-  border-color: rgba(0, 124, 122, 0.26);
-  background: rgba(0, 124, 122, 0.08);
-  color: #006b69;
+  border-color: rgba(103, 232, 220, 0.34);
+  background: rgba(53, 201, 189, 0.12);
+  color: var(--ypf-yellow-2);
 }
 
 .method-evaluation-grid {
@@ -6066,10 +6097,15 @@ html body .datalito-chat .icon-button:hover {
 .method-evaluation-scope,
 .method-evaluation-card,
 .method-evaluation-pillar {
-  border: 1px solid rgba(15, 45, 68, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.86);
-  box-shadow: 0 14px 30px rgba(0, 26, 52, 0.08);
+  background:
+    radial-gradient(circle at var(--spot-x, 78%) var(--spot-y, 16%), rgba(53, 201, 189, 0.08), transparent 11rem),
+    rgba(255, 255, 255, 0.045);
+  box-shadow:
+    0 18px 42px rgba(0, 14, 28, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
 }
 
 .method-evaluation-definition,
@@ -6084,7 +6120,7 @@ html body .datalito-chat .icon-button:hover {
 .method-evaluation-scope span,
 .method-evaluation-card h3,
 .method-evaluation-pillar summary span {
-  color: #007c7a;
+  color: var(--ypf-yellow-2);
   font-size: 0.76rem;
   font-weight: 950;
   letter-spacing: 0.03em;
@@ -6098,13 +6134,13 @@ html body .datalito-chat .icon-button:hover {
 .method-evaluation-pillar dd,
 .method-evaluation-detail li {
   margin: 0;
-  color: #4e5e70;
+  color: var(--muted);
   line-height: 1.55;
 }
 
 .method-evaluation-definition p {
   margin-top: 10px;
-  color: #102033;
+  color: rgba(255, 255, 255, 0.92);
   font-size: 1.04rem;
   font-weight: 820;
 }
@@ -6112,7 +6148,7 @@ html body .datalito-chat .icon-button:hover {
 .method-evaluation-definition strong {
   display: block;
   margin-top: 12px;
-  color: #425264;
+  color: rgba(255, 255, 255, 0.68);
   font-weight: 760;
   line-height: 1.55;
 }
@@ -6124,26 +6160,46 @@ html body .datalito-chat .icon-button:hover {
 }
 
 .method-evaluation-score strong {
-  color: #102033;
+  color: #ffffff;
   font-size: clamp(2.8rem, 5vw, 4.1rem);
   line-height: 0.9;
+  text-shadow: 0 0 28px rgba(53, 201, 189, 0.3);
 }
 
 .method-evaluation-score p {
   margin: 8px 0 0;
-  color: #5d6b79;
+  color: rgba(255, 255, 255, 0.66);
 }
 
 .method-evaluation-scope h3 {
   margin: 8px 0 10px;
-  color: #102033;
+  color: #ffffff;
   font-size: 1.25rem;
 }
 
 .method-evaluation-panel {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(260px, 0.62fr) minmax(0, 1fr);
   gap: 14px;
+  align-items: start;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(90deg, rgba(53, 201, 189, 0.08), transparent 35%),
+    rgba(4, 10, 16, 0.34);
+}
+
+.method-evaluation-panel::before {
+  content: "";
+  position: absolute;
+  top: 64px;
+  bottom: 18px;
+  left: calc(38.2% + 7px);
+  width: 1px;
+  background: linear-gradient(180deg, rgba(53, 201, 189, 0.38), rgba(58, 160, 255, 0.14), transparent);
+  pointer-events: none;
 }
 
 .method-evaluation-rail,
@@ -6152,9 +6208,92 @@ html body .datalito-chat .icon-button:hover {
   gap: 10px;
 }
 
+.method-evaluation-rail {
+  align-self: start;
+  align-content: start;
+  padding: 14px;
+  border: 1px solid rgba(53, 201, 189, 0.18);
+  border-radius: var(--radius);
+  background: rgba(9, 15, 22, 0.64);
+}
+
+.method-evaluation-panel-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  min-width: 0;
+}
+
+.method-evaluation-panel-head > span {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(103, 232, 220, 0.26);
+  border-radius: var(--radius);
+  background: rgba(53, 201, 189, 0.14);
+  color: var(--ypf-yellow-2);
+  font-size: 0.84rem;
+  font-weight: 950;
+}
+
+.method-evaluation-panel-head strong {
+  display: block;
+  color: #ffffff;
+  font-weight: 950;
+  line-height: 1.2;
+}
+
+.method-evaluation-panel-head p {
+  margin: 5px 0 0;
+  color: rgba(255, 255, 255, 0.66);
+  line-height: 1.45;
+}
+
+.method-evaluation-pillar-stack {
+  position: relative;
+  display: grid;
+  gap: 10px;
+}
+
+.method-evaluation-pillar-stack::before {
+  content: "";
+  position: absolute;
+  top: 22px;
+  bottom: 22px;
+  left: 31px;
+  width: 1px;
+  background: linear-gradient(180deg, var(--ypf-yellow), rgba(58, 160, 255, 0.4), transparent);
+  opacity: 0.46;
+  pointer-events: none;
+}
+
 .method-evaluation-pillar {
+  position: relative;
   overflow: hidden;
   border-color: color-mix(in srgb, var(--method-accent), transparent 68%);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.method-evaluation-pillar::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--method-accent), transparent);
+  opacity: 0.82;
+}
+
+.method-evaluation-pillar:hover,
+.method-evaluation-card:hover {
+  border-color: color-mix(in srgb, var(--method-accent, var(--ypf-yellow)), transparent 42%);
+  background:
+    radial-gradient(circle at var(--spot-x, 74%) var(--spot-y, 14%), color-mix(in srgb, var(--method-accent, var(--ypf-yellow)), transparent 84%), transparent 11rem),
+    rgba(255, 255, 255, 0.062);
 }
 
 .method-evaluation-pillar summary {
@@ -6178,13 +6317,14 @@ html body .datalito-chat .icon-button:hover {
   min-height: 38px;
   border-radius: 8px;
   background: color-mix(in srgb, var(--method-accent), transparent 82%);
+  color: #061217;
 }
 
 .method-evaluation-pillar summary strong {
-  color: #102033;
+  color: #ffffff;
 }
 
-.method-evaluation-pillar > div {
+.method-evaluation-pillar-body {
   display: grid;
   gap: 12px;
   padding: 0 12px 14px;
@@ -6199,11 +6339,12 @@ html body .datalito-chat .icon-button:hover {
 .method-evaluation-pillar dl div {
   padding: 10px;
   border-radius: 8px;
-  background: #f4f8fa;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(4, 10, 16, 0.36);
 }
 
 .method-evaluation-pillar dt {
-  color: #007c7a;
+  color: var(--method-accent);
   font-size: 0.72rem;
   font-weight: 950;
   text-transform: uppercase;
@@ -6215,12 +6356,36 @@ html body .datalito-chat .icon-button:hover {
 
 .method-evaluation-lab {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+}
+
+.method-evaluation-lab > .method-evaluation-panel-head {
+  grid-column: 1 / -1;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.045);
 }
 
 .method-evaluation-card {
+  position: relative;
   display: grid;
   gap: 12px;
   align-content: start;
+  min-height: 228px;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.method-evaluation-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ypf-yellow), transparent 72%);
+  opacity: 0.58;
 }
 
 .method-evaluation-card > div:first-child {
@@ -6234,13 +6399,14 @@ html body .datalito-chat .icon-button:hover {
   height: 38px;
   place-items: center;
   border-radius: 8px;
+  border: 1px solid rgba(103, 232, 220, 0.22);
   background: rgba(53, 201, 189, 0.12);
-  color: #007c7a;
+  color: var(--ypf-yellow-2);
 }
 
 .method-evaluation-card h3 {
   margin: 0;
-  color: #102033;
+  color: #ffffff;
   font-size: 1.08rem;
   letter-spacing: 0;
   text-transform: none;
@@ -6258,34 +6424,55 @@ html body .datalito-chat .icon-button:hover {
 .method-evaluation-levels small,
 .method-evaluation-metadata span {
   padding: 6px 9px;
-  border: 1px solid rgba(15, 45, 68, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;
-  background: #f5f8fb;
-  color: #263b50;
+  background: rgba(255, 255, 255, 0.055);
+  color: rgba(255, 255, 255, 0.82);
   font-size: 0.78rem;
   font-weight: 850;
 }
 
 .method-evaluation-formula {
   padding: 12px;
-  border: 1px solid rgba(0, 124, 122, 0.2);
+  border: 1px solid rgba(103, 232, 220, 0.22);
   border-radius: 8px;
-  background: rgba(53, 201, 189, 0.08);
-  color: #153145;
+  background:
+    linear-gradient(90deg, rgba(53, 201, 189, 0.14), rgba(58, 160, 255, 0.08)),
+    rgba(4, 10, 16, 0.28);
+  color: rgba(255, 255, 255, 0.88);
   font-size: 0.9rem;
   font-weight: 820;
   line-height: 1.5;
 }
 
 .method-evaluation-detail {
-  border-top: 1px solid rgba(15, 45, 68, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 10px;
 }
 
 .method-evaluation-detail summary {
-  color: #102033;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #ffffff;
   cursor: pointer;
   font-weight: 900;
+}
+
+.method-evaluation-detail summary::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  border-right: 2px solid currentcolor;
+  border-bottom: 2px solid currentcolor;
+  transition: transform 0.18s ease;
+}
+
+.method-evaluation-detail[open] summary::after {
+  transform: rotate(225deg) translate(-2px, -2px);
 }
 
 .method-evaluation-detail ul {
