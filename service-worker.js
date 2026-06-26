@@ -1,4 +1,4 @@
-const CACHE_NAME = "datalizacion-ypf-v21";
+const CACHE_NAME = "datalizacion-ypf-v22";
 const PRECACHE_URLS = [
   "/",
   "/guia-power-bi",
@@ -38,9 +38,9 @@ const PRECACHE_URLS = [
   "/assets/docs/modelos/prd-datalizacion.docx",
   "/assets/docs/modelos/spec-datalizacion.docx",
   "/assets/favicon.svg",
-  "/assets/datalito-avatar.png",
-  "/assets/datalito-avatar-256.webp",
-  "/assets/datalito-avatar-512.webp",
+  "/assets/datalito-robot-v22.png",
+  "/assets/datalito-robot-v22-256.webp",
+  "/assets/datalito-robot-v22-512.webp",
   "/assets/ypf-industrial-hero-640.avif",
   "/assets/ypf-industrial-hero-960.avif",
   "/assets/ypf-industrial-hero-1280.avif",

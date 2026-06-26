@@ -219,6 +219,7 @@ try {
             item.textContent.includes("No lo tengo en la base aprobada todavía"),
           ),
           mascot: Boolean(document.querySelector(".datalito-launcher .datalito-avatar.launcher img")),
+          mascotSource: document.querySelector(".datalito-launcher .datalito-avatar.launcher img")?.currentSrc || "",
           mascotFrame: getComputedStyle(document.querySelector(".datalito-avatar.launcher")).borderWidth !== "0px",
           mascotBackground: getComputedStyle(document.querySelector(".datalito-avatar.launcher")).backgroundColor,
           altNoise: document.body.innerText.includes("Datalito, asistente de conocimiento"),
@@ -231,6 +232,7 @@ try {
           datalitoChatReport.citations < 1 ||
           !datalitoChatReport.unresolved ||
           !datalitoChatReport.mascot ||
+          !datalitoChatReport.mascotSource.includes("datalito-robot-v22") ||
           datalitoChatReport.mascotFrame ||
           datalitoChatReport.mascotBackground !== "rgba(0, 0, 0, 0)" ||
           datalitoChatReport.altNoise

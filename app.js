@@ -138,9 +138,9 @@ const datalitoStorageKeys = {
 };
 
 const datalitoAvatar = {
-  png: "/assets/datalito-avatar.png",
-  webp256: "/assets/datalito-avatar-256.webp",
-  webp512: "/assets/datalito-avatar-512.webp",
+  png: "/assets/datalito-robot-v22.png",
+  webp256: "/assets/datalito-robot-v22-256.webp",
+  webp512: "/assets/datalito-robot-v22-512.webp",
 };
 
 const datalitoState = {

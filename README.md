@@ -211,9 +211,9 @@ La V1 conversa en frontend, responde saludos, repreguntas y pedidos de continuid
 
 El avatar vive en:
 
-- `assets/datalito-avatar.png`
-- `assets/datalito-avatar-512.webp`
-- `assets/datalito-avatar-256.webp`
+- `assets/datalito-robot-v22.png`
+- `assets/datalito-robot-v22-512.webp`
+- `assets/datalito-robot-v22-256.webp`
 
 Documentación relacionada:
 
