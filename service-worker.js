@@ -1,4 +1,4 @@
-const CACHE_NAME = "datalizacion-ypf-v20";
+const CACHE_NAME = "datalizacion-ypf-v21";
 const PRECACHE_URLS = [
   "/",
   "/guia-power-bi",

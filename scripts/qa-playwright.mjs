@@ -218,7 +218,9 @@ try {
           unresolved: [...document.querySelectorAll(".datalito-message")].some((item) =>
             item.textContent.includes("No lo tengo en la base aprobada todavía"),
           ),
-          mascot: Boolean(document.querySelector(".datalito-mascot-aura")),
+          mascot: Boolean(document.querySelector(".datalito-launcher .datalito-avatar.launcher img")),
+          mascotFrame: getComputedStyle(document.querySelector(".datalito-avatar.launcher")).borderWidth !== "0px",
+          mascotBackground: getComputedStyle(document.querySelector(".datalito-avatar.launcher")).backgroundColor,
           altNoise: document.body.innerText.includes("Datalito, asistente de conocimiento"),
         }));
         if (
@@ -229,10 +231,31 @@ try {
           datalitoChatReport.citations < 1 ||
           !datalitoChatReport.unresolved ||
           !datalitoChatReport.mascot ||
+          datalitoChatReport.mascotFrame ||
+          datalitoChatReport.mascotBackground !== "rgba(0, 0, 0, 0)" ||
           datalitoChatReport.altNoise
         ) {
           throw new Error(`Datalito no responde con citas y no-answer: ${JSON.stringify(datalitoChatReport)}`);
         }
+
+        await page.locator("#datalitoInput-page").fill("¿Qué es flujo continuo?");
+        await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
+        await page.waitForFunction(() => [...document.querySelectorAll(".datalito-source-card")].some((item) => item.href.includes("#flujo-continuo")));
+        await page.locator('.datalito-source-card[href*="#flujo-continuo"]').first().click();
+        await page.waitForURL(/\/diccionario#flujo-continuo$/);
+        await page.waitForFunction(() => {
+          const target = document.getElementById("flujo-continuo");
+          if (!target) return false;
+          const rect = target.getBoundingClientRect();
+          return window.location.hash === "#flujo-continuo" && rect.top >= 0 && rect.top < window.innerHeight * 0.55;
+        });
+        const anchored = await page.evaluate(() => {
+          const target = document.getElementById("flujo-continuo");
+          if (!target) return false;
+          const rect = target.getBoundingClientRect();
+          return window.location.hash === "#flujo-continuo" && rect.top >= 0 && rect.top < window.innerHeight * 0.55;
+        });
+        if (!anchored) throw new Error("El link de fuente de Datalito no navega al ancla #flujo-continuo.");
       }
 
       if (route.path === "/metodologia") {

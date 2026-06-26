@@ -1861,15 +1861,14 @@ body .datalito-chat.compact {
   position: relative;
   display: grid;
   place-items: center;
-  width: 92px;
-  height: 92px;
+  width: 96px;
+  height: 132px;
   padding: 0;
   border: 0;
   border-radius: 50%;
   background: transparent;
   color: #ffffff;
   pointer-events: auto;
-  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.38));
   transition:
     filter 180ms ease,
     transform 180ms ease;
@@ -1877,6 +1876,10 @@ body .datalito-chat.compact {
 
 .datalito-launcher:hover {
   transform: translateY(-3px) scale(1.03);
+}
+
+.datalito-launcher[aria-expanded="true"] {
+  pointer-events: none;
 }
 
 .datalito-panel-wrap {
@@ -1908,49 +1911,47 @@ body .datalito-panel {
 
 .datalito-avatar {
   display: grid;
-  overflow: hidden;
+  overflow: visible;
   place-items: center;
   flex: 0 0 auto;
-  border: 1px solid rgba(12, 47, 72, 0.1);
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow: 0 10px 26px rgba(3, 8, 14, 0.18);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .datalito-avatar img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
+  filter: drop-shadow(0 10px 16px rgba(3, 8, 14, 0.22));
 }
 
 .datalito-avatar.hero {
-  width: 116px;
-  height: 116px;
+  width: 90px;
+  height: 130px;
 }
 
 .datalito-avatar.page,
 .datalito-avatar.chat {
-  width: 62px;
-  height: 62px;
+  width: 54px;
+  height: 74px;
 }
 
 .datalito-avatar.message {
-  width: 34px;
-  height: 34px;
-  box-shadow: 0 6px 16px rgba(3, 8, 14, 0.12);
+  width: 28px;
+  height: 38px;
 }
 
 .datalito-avatar.launcher {
   position: relative;
   z-index: 2;
-  width: 76px;
-  height: 76px;
-  border: 3px solid rgba(255, 255, 255, 0.96);
-  box-shadow:
-    0 16px 34px rgba(3, 8, 14, 0.26),
-    0 0 0 8px rgba(53, 201, 189, 0.13);
+  width: 86px;
+  height: 124px;
+  border: 0;
+  box-shadow: none;
   animation: datalitoMascotFloat 4.4s ease-in-out infinite;
 }
 
@@ -1959,13 +1960,12 @@ body .datalito-panel {
   align-items: center;
   gap: 14px;
   max-width: max-content;
-  padding: 10px 14px 10px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   color: #ffffff;
   font-weight: 950;
-  backdrop-filter: blur(14px);
 }
 
 html body .datalito-chat {
@@ -2204,65 +2204,6 @@ html body .datalito-chat .icon-button:hover {
   border-color: rgba(16, 119, 216, 0.24);
   background: #eaf6ff;
   color: #084d91;
-}
-
-.datalito-mascot-aura {
-  position: absolute;
-  inset: 6px;
-  z-index: 0;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle, rgba(255, 230, 80, 0.34), transparent 34%),
-    radial-gradient(circle at 70% 28%, rgba(53, 201, 189, 0.72), transparent 38%),
-    linear-gradient(135deg, rgba(10, 95, 179, 0.8), rgba(20, 151, 151, 0.66));
-  filter: blur(2px);
-  animation: datalitoMascotAura 3.6s ease-in-out infinite;
-}
-
-.datalito-mascot-bubble {
-  position: absolute;
-  right: 70px;
-  bottom: 58px;
-  z-index: 3;
-  min-width: max-content;
-  padding: 8px 11px;
-  border: 1px solid rgba(53, 201, 189, 0.35);
-  border-radius: 999px 999px 8px;
-  background: rgba(246, 249, 252, 0.96);
-  color: #102033;
-  font-size: 0.78rem;
-  font-weight: 950;
-  box-shadow: 0 12px 28px rgba(3, 8, 14, 0.22);
-  animation: datalitoMascotBubble 5.8s ease-in-out infinite;
-}
-
-.datalito-launcher[aria-expanded="true"] .datalito-mascot-bubble {
-  display: none;
-}
-
-.datalito-mascot-spark {
-  position: absolute;
-  z-index: 1;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--ypf-yellow);
-  box-shadow: 0 0 16px rgba(255, 230, 80, 0.9);
-  animation: datalitoMascotSpark 4.8s ease-in-out infinite;
-}
-
-.datalito-mascot-spark.one {
-  top: 14px;
-  right: 7px;
-}
-
-.datalito-mascot-spark.two {
-  right: 20px;
-  bottom: 5px;
-  width: 7px;
-  height: 7px;
-  background: #35c9bd;
-  animation-delay: 1.4s;
 }
 
 .sr-only {
@@ -7620,18 +7561,14 @@ kbd {
   }
 
   .datalito-launcher {
-    width: 82px;
-    height: 82px;
+    width: 84px;
+    height: 116px;
     justify-self: end;
   }
 
   .datalito-avatar.launcher {
-    width: 68px;
-    height: 68px;
-  }
-
-  .datalito-mascot-bubble {
-    display: none;
+    width: 74px;
+    height: 106px;
   }
 
   .datalito-panel-wrap {

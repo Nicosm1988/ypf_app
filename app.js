@@ -1152,13 +1152,39 @@ function getRoute(pathname = window.location.pathname) {
 }
 
 function navigate(path) {
-  const route = getRoute(path);
-  if (window.location.pathname !== route) {
-    window.history.pushState({}, "", route);
+  const UrlCtor = window.URL;
+  const targetUrl = new UrlCtor(path, window.location.origin);
+  const route = getRoute(targetUrl.pathname);
+  const targetPath = `${route}${targetUrl.hash}`;
+
+  if (`${window.location.pathname}${window.location.hash}` !== targetPath) {
+    window.history.pushState({}, "", targetPath);
   }
+
   renderRoute(route);
   contentTarget.focus({ preventScroll: true });
-  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  if (targetUrl.hash) {
+    scrollToRouteHash(targetUrl.hash);
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
+function scrollToRouteHash(hash) {
+  const targetId = decodeURIComponent(hash.slice(1));
+  const target = document.getElementById(targetId);
+
+  if (!target) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+
+  target.setAttribute("tabindex", "-1");
+  const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0;
+  const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - headerHeight - 18);
+  window.scrollTo({ top, behavior: "smooth" });
+  window.requestAnimationFrame(() => target.focus({ preventScroll: true }));
 }
 
 function setupAmbientPointer() {
@@ -1266,7 +1292,10 @@ function renderRoute(route = getRoute()) {
     refreshDatalitoViews();
   }
 
-  requestAnimationFrame(enhanceInteractiveSurfaces);
+  requestAnimationFrame(() => {
+    enhanceInteractiveSurfaces();
+    if (window.location.hash) scrollToRouteHash(window.location.hash);
+  });
 }
 
 function renderHomePage() {
@@ -1985,11 +2014,7 @@ function renderDatalitoGlobalShell() {
           </div>
         </div>
         <button class="datalito-launcher" type="button" data-datalito-open aria-expanded="false" aria-label="Abrir conversación con Datalito">
-          <span class="datalito-mascot-aura" aria-hidden="true"></span>
           ${renderDatalitoAvatar("launcher")}
-          <span class="datalito-mascot-spark one" aria-hidden="true"></span>
-          <span class="datalito-mascot-spark two" aria-hidden="true"></span>
-          <span class="datalito-mascot-bubble" aria-hidden="true">Hablame</span>
         </button>
       </div>
     `,
@@ -4205,7 +4230,7 @@ function renderDictionaryResults() {
   container.innerHTML = results
     .map(
       (term) => `
-        <article class="term-card">
+        <article class="term-card" id="${escapeHtml(term.id)}">
           <div class="card-topline">
             <h2>${escapeHtml(term.term)}</h2>
             <span class="badge">${escapeHtml(term.category)}</span>
@@ -4505,7 +4530,8 @@ document.addEventListener("click", (event) => {
   if (url.origin !== window.location.origin) return;
 
   event.preventDefault();
-  navigate(url.pathname);
+  if (link.closest(".datalito-panel")) closeDatalitoPanel();
+  navigate(`${url.pathname}${url.hash}`);
 });
 
 window.addEventListener("popstate", () => renderRoute());
