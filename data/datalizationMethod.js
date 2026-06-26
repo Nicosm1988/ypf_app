@@ -282,3 +282,104 @@ export const methodPendingDecisions = [
   "Validar convención previa de workspaces con IT.",
   "Identificar equipo corporativo de gobierno de datos.",
 ];
+
+export const methodEvaluationModel = {
+  definition:
+    "Datalizar no es simplemente automatizar. Es lograr que un activo analítico, proceso, tablero, KPI o fuente dependa de una fuente original confiable, esté centralizado, trazado, automatizado, gobernado y documentado, con capacidad de auditoría y sostenimiento.",
+  pureData:
+    "La datalización pura implica trabajar sobre la fuente original del dato. Una ingesta automática no alcanza si no puede explicarse de dónde viene el dato, cómo se transforma, quién lo gobierna, bajo qué reglas se consume, cómo se valida y cómo se audita.",
+  scope:
+    "En esta etapa, el modelo de evaluación de datalización aplica al universo del Value Management Center / VMC. El objetivo es construir una metodología clara, medible y replicable antes de extenderla a otros ámbitos.",
+  pillars: [
+    {
+      title: "Centralización",
+      weight: 20,
+      definition:
+        "La información deja de depender de archivos aislados, fuentes dispersas o repositorios personales y se consolida en estructuras comunes y sostenibles.",
+      implies: "Fuente común, acceso organizado y menor dependencia de archivos o personas puntuales.",
+      evidence: "Repositorio controlado, fuente original identificada y mapa de accesos.",
+    },
+    {
+      title: "Trazabilidad y Linaje",
+      weight: 20,
+      definition: "Puede explicarse el recorrido completo del dato desde su origen hasta su consumo final en tableros, modelos, KPIs o procesos.",
+      implies: "Origen, transformaciones, modelo, KPI y consumo quedan vinculados.",
+      evidence: "Diagrama de linaje, reglas de transformación y relación fuente-KPI.",
+    },
+    {
+      title: "Automatización",
+      weight: 20,
+      definition: "Se reducen tareas manuales de carga, actualización y tratamiento, priorizando flujos repetibles y sostenibles.",
+      implies: "Refresh controlado, cargas repetibles y menor intervención manual cotidiana.",
+      evidence: "Plan de refresh, registro de fallas y runbook operativo.",
+    },
+    {
+      title: "Gobernanza",
+      weight: 20,
+      definition: "Existen responsables, dueños del dato, reglas de uso, interesados y mecanismos de control.",
+      implies: "Owner funcional, owner técnico, reglas de acceso y criterios de mantenimiento.",
+      evidence: "RACI liviano, matriz de acceso y reglas de uso documentadas.",
+    },
+    {
+      title: "Calidad y Auditoría",
+      weight: 20,
+      definition: "Existen documentación, validaciones, versionado, criterios de revisión y capacidad de auditoría histórica.",
+      implies: "Validaciones, versionado, historial y evidencias de revisión.",
+      evidence: "Checklist de calidad, release notes y evidencia de validación.",
+    },
+  ],
+  intake: {
+    claim: "Antes de medir datalización, se define si el activo es elegible para ingresar al proceso.",
+    states: [
+      "Aprobado para datalizar",
+      "Aprobado con observaciones",
+      "Pendiente de información",
+      "No apto por ahora",
+      "Fuera de alcance inicial",
+    ],
+    criteria: [
+      "Pertenece al universo VMC.",
+      "Tiene objetivo de negocio claro.",
+      "Existe un activo concreto.",
+      "Tiene fuente identificable.",
+      "Existe referente funcional o técnico.",
+      "Puede documentarse.",
+      "Tiene potencial de mejora o valor operativo.",
+    ],
+  },
+  index: {
+    formula: "Índice de Datalización = Σ (Peso del pilar x Cumplimiento del pilar)",
+    levels: ["0-20 Inicial", "21-40 Bajo", "41-60 En desarrollo", "61-80 Avanzado", "81-100 Datalizado"],
+  },
+  weighting: {
+    formula:
+      "Factor de Ponderación = 0,30 x Complejidad técnica + 0,30 x Criticidad de negocio + 0,20 x Magnitud / alcance + 0,20 x Dependencia / esfuerzo",
+    aggregate:
+      "Avance ponderado VMC = Σ (Índice de Datalización del activo x Factor de Ponderación) / Σ (Factores de Ponderación)",
+    variables: ["Complejidad técnica", "Criticidad de negocio", "Magnitud / alcance", "Dependencia operativa / esfuerzo"],
+    example: "No pesa igual un tablero con 75 KPIs que una dependencia puntual basada en Excel.",
+  },
+  metadataFields: [
+    "ID",
+    "Nombre del activo",
+    "Tipo de activo",
+    "Dominio / área",
+    "Pertenece a VMC",
+    "Owner funcional",
+    "Owner técnico",
+    "Fuente original",
+    "Fuente actual",
+    "Estado de centralización",
+    "Estado de trazabilidad",
+    "Estado de automatización",
+    "Estado de gobernanza",
+    "Estado de calidad / auditoría",
+    "Índice de datalización",
+    "Factor de ponderación",
+    "Estado de elegibilidad",
+    "Fecha de revisión",
+    "Evidencia documental",
+    "Observaciones",
+    "Próximo paso",
+  ],
+};

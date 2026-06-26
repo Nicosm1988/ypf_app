@@ -41,7 +41,14 @@ import {
 } from "../data/platformIntro.js";
 import { powerBiShortcuts, shortcutsPdf } from "../data/powerbiShortcuts.js";
 import { conceptDecantation, pageNarratives } from "../data/executiveNarrative.js";
-import { methodChannels, methodNaming, methodOperatingFlow, methodPlanes, methodProjectFolders } from "../data/datalizationMethod.js";
+import {
+  methodChannels,
+  methodEvaluationModel,
+  methodNaming,
+  methodOperatingFlow,
+  methodPlanes,
+  methodProjectFolders,
+} from "../data/datalizationMethod.js";
 import { roadmapPhases } from "../data/roadmap.js";
 import { toolingDocs, toolingGroups } from "../data/toolingLibrary.js";
 
@@ -88,6 +95,34 @@ assert(appJs.includes("renderGuidePage"), "app.js debe renderizar la guía Power
 assert(appJs.includes("renderProjectPage"), "app.js debe renderizar el proyecto Power BI.");
 assert(appJs.includes("renderShortcutsPage"), "app.js debe renderizar los atajos Power BI.");
 assert(appJs.includes("renderToolingPage"), "app.js debe renderizar librerías y agentes.");
+assert(appJs.includes("renderMethodEvaluationModel"), "El Método debe integrar el Modelo de Evaluación de Datalización.");
+assert(
+  appJs.includes('id="modelo-evaluacion-datalizacion"'),
+  "El módulo de evaluación debe tener ancla #modelo-evaluacion-datalizacion.",
+);
+assert(
+  !indexHtml.includes("/que-es-datalizacion") &&
+    !indexHtml.includes("/pilares-datalizacion") &&
+    !indexHtml.includes("/intake-aprobacion") &&
+    !indexHtml.includes("/indice-datalizacion") &&
+    !indexHtml.includes("/ponderacion-esfuerzo") &&
+    !indexHtml.includes("/metadata-documentacion"),
+  "La navegación principal no debe fragmentar el marco de datalización en páginas separadas.",
+);
+
+assert(methodEvaluationModel.pillars.length === 5, "El modelo debe tener cinco pilares.");
+assert(
+  methodEvaluationModel.pillars.every((pillar) => pillar.weight === 20 && pillar.definition && pillar.implies && pillar.evidence),
+  "Cada pilar debe tener peso 20%, definición, implicancia y evidencia.",
+);
+assert(methodEvaluationModel.pillars.reduce((total, pillar) => total + pillar.weight, 0) === 100, "Los pilares deben sumar 100%.");
+assert(methodEvaluationModel.definition.includes("Datalizar no es simplemente automatizar"), "El modelo debe incluir la definición actualizada.");
+assert(methodEvaluationModel.scope.includes("VMC") && !methodEvaluationModel.scope.includes("BMC"), "El alcance debe usar VMC, no BMC.");
+assert(methodEvaluationModel.intake.states.length === 5, "El intake debe incluir cinco estados.");
+assert(methodEvaluationModel.intake.criteria.length >= 7, "El intake debe incluir criterios mínimos.");
+assert(methodEvaluationModel.index.formula.includes("Peso del pilar"), "El índice debe explicar la fórmula base.");
+assert(methodEvaluationModel.weighting.variables.length === 4, "La ponderación debe incluir cuatro variables.");
+assert(methodEvaluationModel.metadataFields.length >= 20, "La metadata mínima debe incluir los campos requeridos.");
 
 assert(dictionaryCategories.length >= 15, "El diccionario debe incluir categorías de producto, Fabric, performance y operación.");
 assert(dictionaryTerms.length >= 65, "El diccionario debe incluir al menos 65 términos.");

@@ -32,6 +32,7 @@ import {
   methodChannels,
   methodCodeCatalog,
   methodDecisions,
+  methodEvaluationModel,
   methodFunctionalLayers,
   methodFutureBacklog,
   methodNaming,
@@ -991,6 +992,13 @@ const interactiveSurfaceSelector = [
   ".concept-tree",
   ".concept-tree-level",
   ".concept-branch",
+  ".method-model-cta",
+  ".method-evaluation",
+  ".method-evaluation-definition",
+  ".method-evaluation-score",
+  ".method-evaluation-scope",
+  ".method-evaluation-card",
+  ".method-evaluation-pillar",
   ".method-flow-step",
   ".method-command-card",
   ".method-plane-card",
@@ -1368,6 +1376,18 @@ function renderHomePage() {
       <section class="quote-band page-inner">
         ${icon("quote")}
         <strong>Esta gestión busca marcar un punto de inflexión: pasar de construir tableros a construir una disciplina interna de inteligencia de datos.</strong>
+      </section>
+
+      <section class="method-model-cta page-inner" aria-label="Nuevo marco de evaluación de datalización">
+        <div>
+          <span class="flow-chip">nuevo módulo metodológico</span>
+          <h2>Marco de Datalización VMC</h2>
+          <p>Definición, cinco pilares, intake, índice, ponderación, metadata mínima y alcance inicial integrados dentro del Método.</p>
+        </div>
+        <a class="button secondary" href="/metodo-datalizacion#modelo-evaluacion-datalizacion" data-route>
+          Ver modelo dentro del Método
+          ${icon("arrowRight")}
+        </a>
       </section>
 
       ${renderPlatformExecutiveSection()}
@@ -3314,6 +3334,8 @@ function renderDatalizationMethodPage() {
 
       ${renderExecutiveBrief(pageNarratives.method)}
 
+      ${renderMethodEvaluationModel()}
+
       <section class="method-operating-flow page-inner" aria-labelledby="methodOperatingFlowTitle">
         <div class="method-section-head">
           <span class="flow-chip">proceso end to end</span>
@@ -3531,6 +3553,123 @@ function renderDatalizationMethodPage() {
 function getMethodAccent(index) {
   const colors = ["#35c9bd", "#3aa0ff", "#ff6b3b", "#8d72ff", "#30d174"];
   return colors[index % colors.length];
+}
+
+function renderMethodEvaluationModel() {
+  const totalWeight = methodEvaluationModel.pillars.reduce((total, pillar) => total + pillar.weight, 0);
+
+  return `
+    <section class="method-evaluation page-inner" id="modelo-evaluacion-datalizacion" aria-labelledby="methodEvaluationTitle">
+      <div class="method-section-head">
+        <span class="flow-chip">Marco de Datalización VMC</span>
+        <h2 id="methodEvaluationTitle">Un único modelo para decidir si un activo entra, cómo se mide y qué evidencia debe dejar.</h2>
+        <p>El marco concentra definición, pilares, intake, índice, ponderación, metadata y alcance VMC sin convertir cada concepto en una página separada.</p>
+      </div>
+
+      <div class="method-evaluation-grid">
+        <article class="method-evaluation-definition">
+          <span>Definición actualizada</span>
+          <p>${escapeHtml(methodEvaluationModel.definition)}</p>
+          <strong>${escapeHtml(methodEvaluationModel.pureData)}</strong>
+        </article>
+        <article class="method-evaluation-score" aria-label="Peso base del modelo">
+          <span>base metodológica</span>
+          <strong>${totalWeight}%</strong>
+          <p>5 pilares obligatorios con peso inicial de 20% cada uno.</p>
+        </article>
+        <article class="method-evaluation-scope">
+          <span>alcance inicial</span>
+          <h3>Value Management Center / VMC</h3>
+          <p>${escapeHtml(methodEvaluationModel.scope)}</p>
+        </article>
+      </div>
+
+      <div class="method-evaluation-panel" aria-label="Pilares, intake, índice, ponderación y metadata">
+        <div class="method-evaluation-rail" aria-label="Cinco pilares de datalización">
+          ${methodEvaluationModel.pillars.map(renderMethodEvaluationPillar).join("")}
+        </div>
+
+        <div class="method-evaluation-lab">
+          <article class="method-evaluation-card intake">
+            <div>
+              <span>${icon("filter")}</span>
+              <h3>Elegibilidad / Intake</h3>
+              <p>${escapeHtml(methodEvaluationModel.intake.claim)}</p>
+            </div>
+            <div class="method-evaluation-chip-grid">
+              ${methodEvaluationModel.intake.states.map((state) => `<small>${escapeHtml(state)}</small>`).join("")}
+            </div>
+            <details class="method-evaluation-detail">
+              <summary>Criterios mínimos</summary>
+              <ul>${methodEvaluationModel.intake.criteria.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+            </details>
+          </article>
+
+          <article class="method-evaluation-card">
+            <div>
+              <span>${icon("gauge")}</span>
+              <h3>Índice de Datalización</h3>
+              <p>${escapeHtml(methodEvaluationModel.index.formula)}</p>
+            </div>
+            <div class="method-evaluation-levels">
+              ${methodEvaluationModel.index.levels.map((level) => `<small>${escapeHtml(level)}</small>`).join("")}
+            </div>
+          </article>
+
+          <article class="method-evaluation-card">
+            <div>
+              <span>${icon("route")}</span>
+              <h3>Ponderación</h3>
+              <p>${escapeHtml(methodEvaluationModel.weighting.example)}</p>
+            </div>
+            <div class="method-evaluation-formula">${escapeHtml(methodEvaluationModel.weighting.formula)}</div>
+            <details class="method-evaluation-detail">
+              <summary>Variables y avance agregado</summary>
+              <div class="method-evaluation-chip-grid">
+                ${methodEvaluationModel.weighting.variables.map((item) => `<small>${escapeHtml(item)}</small>`).join("")}
+              </div>
+              <p>${escapeHtml(methodEvaluationModel.weighting.aggregate)}</p>
+            </details>
+          </article>
+
+          <article class="method-evaluation-card metadata">
+            <div>
+              <span>${icon("clipboard")}</span>
+              <h3>Metadata mínima</h3>
+              <p>La ficha vuelve evaluable, auditable y gobernable cada activo de datalización.</p>
+            </div>
+            <div class="method-evaluation-metadata" tabindex="0" role="region" aria-label="Campos de metadata mínima para datalización">
+              ${methodEvaluationModel.metadataFields.map((field) => `<span>${escapeHtml(field)}</span>`).join("")}
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderMethodEvaluationPillar(pillar, index) {
+  return `
+    <details class="method-evaluation-pillar" style="--method-accent:${getMethodAccent(index)}" ${index === 0 ? "open" : ""}>
+      <summary>
+        <span>${pillar.weight}%</span>
+        <strong>${escapeHtml(pillar.title)}</strong>
+      </summary>
+      <div>
+        <p>${escapeHtml(pillar.definition)}</p>
+        <dl>
+          <div>
+            <dt>Implica</dt>
+            <dd>${escapeHtml(pillar.implies)}</dd>
+          </div>
+          <div>
+            <dt>Evidencia</dt>
+            <dd>${escapeHtml(pillar.evidence)}</dd>
+          </div>
+        </dl>
+      </div>
+    </details>
+  `;
 }
 
 function renderMethodOperatingStep(step, index) {

@@ -129,6 +129,10 @@ try {
           definitionCards: document.querySelectorAll(".platform-definition-card").length,
           timelineCards: document.querySelectorAll(".platform-timeline-card").length,
           disciplineCards: document.querySelectorAll(".platform-discipline-card").length,
+          evaluationCta: document.querySelectorAll(".method-model-cta").length,
+          fragmentedNav: [...document.querySelectorAll(".main-nav a")].some((item) =>
+            ["Qué es", "Pilares", "Intake", "Índice", "Ponderación", "Metadata", "Alcance BMC"].includes(item.textContent.trim()),
+          ),
           hero: document.querySelector(".hero h1")?.textContent?.trim(),
         }));
         if (
@@ -138,6 +142,8 @@ try {
           homeReport.definitionCards !== 3 ||
           homeReport.timelineCards !== 3 ||
           homeReport.disciplineCards !== 4 ||
+          homeReport.evaluationCta !== 1 ||
+          homeReport.fragmentedNav ||
           !homeReport.hero?.includes("disciplina interna")
         ) {
           throw new Error(`Inicio no cumple estructura ejecutiva esperada: ${JSON.stringify(homeReport)}`);
@@ -282,13 +288,23 @@ try {
           layers: document.querySelectorAll(".method-layer-card").length,
           channels: document.querySelectorAll(".method-channel-card").length,
           disclosures: document.querySelectorAll(".method-disclosure").length,
+          evaluationModules: document.querySelectorAll("#modelo-evaluacion-datalizacion").length,
+          evaluationPillars: document.querySelectorAll(".method-evaluation-pillar").length,
+          evaluationMetadata: document.querySelectorAll(".method-evaluation-metadata span").length,
+          vmcCopy: document.querySelector("#modelo-evaluacion-datalizacion")?.textContent.includes("VMC"),
+          bmcCopy: document.querySelector("#modelo-evaluacion-datalizacion")?.textContent.includes("BMC"),
         }));
         if (
           methodReport.operatingSteps !== 6 ||
           methodReport.folders !== 12 ||
           methodReport.layers !== 6 ||
           methodReport.channels !== 8 ||
-          methodReport.disclosures < 5
+          methodReport.disclosures < 5 ||
+          methodReport.evaluationModules !== 1 ||
+          methodReport.evaluationPillars !== 5 ||
+          methodReport.evaluationMetadata < 20 ||
+          !methodReport.vmcCopy ||
+          methodReport.bmcCopy
         ) {
           throw new Error(`Metodo de Datalizacion no cumple estructura esperada: ${JSON.stringify(methodReport)}`);
         }

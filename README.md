@@ -7,7 +7,7 @@ Datalización es la práctica de automatizar procesos mediante datos confiables,
 - Portada ejecutiva Datalización Hub / BI Delivery Playbook para posicionar la plataforma como capacidad organizacional.
 - Portadas con imagen industrial de alta calidad vinculada a refinería, ductos y puerto energético.
 - Guía + roadmap BI/Fabric para ordenar el ciclo completo desde proceso y reglas hasta operación.
-- Método de Datalización v0.1 para organizar DEV/PROD, Teams, SharePoint, canales, carpetas, naming, backlog, VMC y gobierno del equipo.
+- Método de Datalización v0.1 para organizar DEV/PROD, Teams, SharePoint, canales, carpetas, naming, backlog, VMC, gobierno y el Marco de Datalización VMC.
 - Design System para consolidar patrones visuales, componentes, reglas de experiencia y criterios de calidad.
 - Datalito, asistente interno de conocimiento con personaje animado, conversación natural, búsqueda local, citas, feedback y brechas.
 - Metodología de mejora continua BI con OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, flujo continuo, SMED, Poka-Yoke y Kata.
@@ -229,6 +229,7 @@ Documentación relacionada:
 Editar `data/datalizationMethod.js`.
 
 - `methodOperatingFlow`: proceso end to end con qué es, por qué, para qué, cómo, definición técnica, funcional y ejemplo.
+- `methodEvaluationModel`: módulo único del Marco de Datalización VMC con definición, cinco pilares, intake, índice, ponderación, metadata mínima y alcance.
 - `methodPlanes`: separación entre DEV Datalización y PROD VMC.
 - `methodFunctionalLayers`: capas Microsoft 365 para comunicación, documentos, co-creación, seguimiento, conocimiento e IA contextual.
 - `methodChannels`: canales Teams con criterio PARA + Johnny.Decimal lite.

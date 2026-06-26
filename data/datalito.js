@@ -1,7 +1,7 @@
 import { designSystemBenefits, designSystemComponents, designSystemPrinciples } from "./designSystem.js";
 import { dictionaryTerms } from "./dictionary.js";
 import { guideSections, prdSpecComparison, readinessChecklist } from "./engineeringGuide.js";
-import { methodOperatingFlow, methodPlanes, methodProjectFolders, methodRoles } from "./datalizationMethod.js";
+import { methodEvaluationModel, methodOperatingFlow, methodPlanes, methodProjectFolders, methodRoles } from "./datalizationMethod.js";
 import { methodologyProcessFlow, methodologyTools, oeeFactors, leanPractices, dmaicStages } from "./methodology.js";
 import { platformBeforeAfter, platformDefinitionCards, platformPillars } from "./platformIntro.js";
 import { roadmapPhases } from "./roadmap.js";
@@ -125,6 +125,8 @@ export const datalitoSuggestedPrompts = {
   ],
   "/metodo-datalizacion": [
     "¿Cómo se organiza el plano DEV?",
+    "¿Qué es el Marco de Datalización VMC?",
+    "¿Cómo se calcula el índice de datalización?",
     "¿Qué evidencia debe tener una carpeta de proyecto?",
     "¿Para qué sirve VMC?",
   ],
@@ -451,6 +453,12 @@ export const datalitoKnowledgeSources = [
     summary: "El método ordena estándares, plano DEV, proyectos, naming, backlog, VMC y sostenimiento.",
     keywords: ["metodo", "teams", "sharepoint", "dev", "prod", "vmc", "naming", "backlog", "roles"],
     content: [
+      `Marco de Datalización VMC: ${methodEvaluationModel.definition}`,
+      `Alcance: ${methodEvaluationModel.scope}`,
+      `Pilares: ${methodEvaluationModel.pillars.map((pillar) => `${pillar.title} ${pillar.weight}%`).join(", ")}.`,
+      `Índice: ${methodEvaluationModel.index.formula}.`,
+      `Ponderación: ${methodEvaluationModel.weighting.formula}.`,
+      `Metadata mínima: ${methodEvaluationModel.metadataFields.join(", ")}.`,
       ...methodOperatingFlow.map(
         (step) =>
           `${step.step}. Qué es: ${step.what}. Por qué: ${step.why}. Para qué: ${step.purpose}. Cómo: ${step.how}. Ejemplo: ${step.example}`,

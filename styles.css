@@ -5990,6 +5990,7 @@ html body .datalito-chat .icon-button:hover {
 }
 
 .method-command,
+.method-evaluation,
 .method-operating-flow,
 .method-planes,
 .method-layers,
@@ -6002,6 +6003,298 @@ html body .datalito-chat .icon-button:hover {
 .method-governance {
   display: grid;
   gap: 18px;
+}
+
+.method-model-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid rgba(53, 201, 189, 0.28);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at var(--spot-x, 78%) var(--spot-y, 18%), rgba(53, 201, 189, 0.16), transparent 16rem),
+    linear-gradient(135deg, rgba(8, 20, 30, 0.96), rgba(13, 31, 44, 0.92));
+  box-shadow: 0 18px 38px rgba(0, 20, 42, 0.2);
+}
+
+.method-model-cta h2,
+.method-model-cta p {
+  margin: 0;
+}
+
+.method-model-cta h2 {
+  color: #ffffff;
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+}
+
+.method-model-cta p {
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.5;
+}
+
+.method-evaluation {
+  padding: clamp(22px, 4vw, 32px);
+  border: 1px solid rgba(53, 201, 189, 0.22);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at 18% 18%, rgba(53, 201, 189, 0.14), transparent 22rem),
+    linear-gradient(180deg, rgba(248, 251, 253, 0.98), rgba(238, 245, 248, 0.98));
+  box-shadow: 0 22px 54px rgba(0, 26, 52, 0.12);
+}
+
+.method-evaluation .method-section-head h2 {
+  color: #102033;
+}
+
+.method-evaluation .flow-chip {
+  border-color: rgba(0, 124, 122, 0.26);
+  background: rgba(0, 124, 122, 0.08);
+  color: #006b69;
+}
+
+.method-evaluation-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(170px, 0.36fr) minmax(260px, 0.64fr);
+  gap: 12px;
+}
+
+.method-evaluation-definition,
+.method-evaluation-score,
+.method-evaluation-scope,
+.method-evaluation-card,
+.method-evaluation-pillar {
+  border: 1px solid rgba(15, 45, 68, 0.12);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 14px 30px rgba(0, 26, 52, 0.08);
+}
+
+.method-evaluation-definition,
+.method-evaluation-score,
+.method-evaluation-scope,
+.method-evaluation-card {
+  padding: 16px;
+}
+
+.method-evaluation-definition span,
+.method-evaluation-score span,
+.method-evaluation-scope span,
+.method-evaluation-card h3,
+.method-evaluation-pillar summary span {
+  color: #007c7a;
+  font-size: 0.76rem;
+  font-weight: 950;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.method-evaluation-definition p,
+.method-evaluation-scope p,
+.method-evaluation-card p,
+.method-evaluation-pillar p,
+.method-evaluation-pillar dd,
+.method-evaluation-detail li {
+  margin: 0;
+  color: #4e5e70;
+  line-height: 1.55;
+}
+
+.method-evaluation-definition p {
+  margin-top: 10px;
+  color: #102033;
+  font-size: 1.04rem;
+  font-weight: 820;
+}
+
+.method-evaluation-definition strong {
+  display: block;
+  margin-top: 12px;
+  color: #425264;
+  font-weight: 760;
+  line-height: 1.55;
+}
+
+.method-evaluation-score {
+  display: grid;
+  align-content: center;
+  text-align: center;
+}
+
+.method-evaluation-score strong {
+  color: #102033;
+  font-size: clamp(2.8rem, 5vw, 4.1rem);
+  line-height: 0.9;
+}
+
+.method-evaluation-score p {
+  margin: 8px 0 0;
+  color: #5d6b79;
+}
+
+.method-evaluation-scope h3 {
+  margin: 8px 0 10px;
+  color: #102033;
+  font-size: 1.25rem;
+}
+
+.method-evaluation-panel {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.62fr) minmax(0, 1fr);
+  gap: 14px;
+}
+
+.method-evaluation-rail,
+.method-evaluation-lab {
+  display: grid;
+  gap: 10px;
+}
+
+.method-evaluation-pillar {
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--method-accent), transparent 68%);
+}
+
+.method-evaluation-pillar summary {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.method-evaluation-pillar summary::-webkit-details-marker,
+.method-evaluation-detail summary::-webkit-details-marker {
+  display: none;
+}
+
+.method-evaluation-pillar summary span {
+  display: grid;
+  place-items: center;
+  min-height: 38px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--method-accent), transparent 82%);
+}
+
+.method-evaluation-pillar summary strong {
+  color: #102033;
+}
+
+.method-evaluation-pillar > div {
+  display: grid;
+  gap: 12px;
+  padding: 0 12px 14px;
+}
+
+.method-evaluation-pillar dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.method-evaluation-pillar dl div {
+  padding: 10px;
+  border-radius: 8px;
+  background: #f4f8fa;
+}
+
+.method-evaluation-pillar dt {
+  color: #007c7a;
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.method-evaluation-pillar dd {
+  margin: 4px 0 0;
+}
+
+.method-evaluation-lab {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.method-evaluation-card {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.method-evaluation-card > div:first-child {
+  display: grid;
+  gap: 8px;
+}
+
+.method-evaluation-card > div:first-child > span {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 8px;
+  background: rgba(53, 201, 189, 0.12);
+  color: #007c7a;
+}
+
+.method-evaluation-card h3 {
+  margin: 0;
+  color: #102033;
+  font-size: 1.08rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.method-evaluation-chip-grid,
+.method-evaluation-levels,
+.method-evaluation-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.method-evaluation-chip-grid small,
+.method-evaluation-levels small,
+.method-evaluation-metadata span {
+  padding: 6px 9px;
+  border: 1px solid rgba(15, 45, 68, 0.12);
+  border-radius: 999px;
+  background: #f5f8fb;
+  color: #263b50;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.method-evaluation-formula {
+  padding: 12px;
+  border: 1px solid rgba(0, 124, 122, 0.2);
+  border-radius: 8px;
+  background: rgba(53, 201, 189, 0.08);
+  color: #153145;
+  font-size: 0.9rem;
+  font-weight: 820;
+  line-height: 1.5;
+}
+
+.method-evaluation-detail {
+  border-top: 1px solid rgba(15, 45, 68, 0.1);
+  padding-top: 10px;
+}
+
+.method-evaluation-detail summary {
+  color: #102033;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.method-evaluation-detail ul {
+  margin: 10px 0 0;
+  padding-left: 18px;
+}
+
+.method-evaluation-detail p {
+  margin-top: 10px;
 }
 
 .method-flow-track {
@@ -7973,6 +8266,43 @@ kbd {
 
   .visual-summary {
     padding: 18px;
+  }
+}
+
+@media (max-width: 980px) {
+  .method-model-cta,
+  .method-evaluation-grid,
+  .method-evaluation-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .method-model-cta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .method-evaluation-lab {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .method-evaluation {
+    padding: 18px;
+  }
+
+  .method-evaluation-score {
+    text-align: left;
+  }
+
+  .method-evaluation-pillar summary {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .method-evaluation-metadata {
+    max-height: 230px;
+    overflow: auto;
+    padding-right: 4px;
   }
 }
 
