@@ -1,0 +1,13 @@
+{
+  "source": "data/datalito.js",
+  "field": "datalitoEvaluationQuestions",
+  "count": 170,
+  "purpose": "Benchmark completo de preguntas funcionales, técnicas, ejecutivas y adversariales para Datalito.",
+  "sample": [
+    "¿Qué es la plataforma de Datalización?",
+    "¿Cuál es la diferencia entre PRD y Spec?",
+    "¿Cómo se prueba RLS antes de publicar?",
+    "¿Qué es el Design System de la plataforma?",
+    "Mostrame las fuentes que usaste."
+  ]
+}

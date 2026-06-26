@@ -13,6 +13,7 @@ const routes = [
   { path: "/metodo-datalizacion", selector: ".method-page", name: "Metodo de Datalizacion" },
   { path: "/metodologia", selector: ".methodology-process", name: "Metodologia" },
   { path: "/design-system", selector: ".design-system-page", name: "Design System" },
+  { path: "/datalito", selector: ".datalito-page", name: "Datalito" },
   { path: "/diccionario", selector: ".dictionary-layout", name: "Diccionario" },
   { path: "/roadmap", selector: ".guide-journey", name: "Roadmap" },
   { path: "/proyecto-power-bi", selector: ".project-studio", name: "Proyecto Power BI" },
@@ -132,7 +133,7 @@ try {
         }));
         if (
           homeReport.metrics !== 3 ||
-          homeReport.hubNavCards !== 8 ||
+          homeReport.hubNavCards !== 9 ||
           homeReport.pillars !== 3 ||
           homeReport.definitionCards !== 3 ||
           homeReport.timelineCards !== 3 ||
@@ -161,6 +162,44 @@ try {
           !designSystemReport.finalText?.includes("Ordena cómo construimos")
         ) {
           throw new Error(`Design System no cumple estructura esperada: ${JSON.stringify(designSystemReport)}`);
+        }
+      }
+
+      if (route.path === "/datalito") {
+        const datalitoReport = await page.evaluate(() => ({
+          heroMetrics: document.querySelectorAll(".datalito-hero-metrics article").length,
+          principles: document.querySelectorAll(".datalito-intro .datalito-card").length,
+          architecture: document.querySelectorAll(".datalito-architecture .datalito-card").length,
+          kpis: document.querySelectorAll(".datalito-kpi-card").length,
+          launcher: Boolean(document.querySelector(".datalito-launcher")),
+        }));
+        if (
+          datalitoReport.heroMetrics !== 3 ||
+          datalitoReport.principles !== 3 ||
+          datalitoReport.architecture !== 4 ||
+          datalitoReport.kpis < 6 ||
+          !datalitoReport.launcher
+        ) {
+          throw new Error(`Datalito no cumple estructura esperada: ${JSON.stringify(datalitoReport)}`);
+        }
+
+        await page.locator("#datalitoInput-page").fill("¿Cuál es la diferencia entre PRD y Spec?");
+        await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
+        await page.waitForFunction(() => document.querySelectorAll(".datalito-source-card").length > 0);
+
+        await page.locator("#datalitoInput-page").fill("¿Cuál es el color del tanque 782 del puerto Alpha?");
+        await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
+        await page.waitForFunction(() => [...document.querySelectorAll(".datalito-message")].some((item) => item.textContent.includes("No encuentro una definición aprobada suficiente")));
+
+        const datalitoChatReport = await page.evaluate(() => ({
+          assistantMessages: document.querySelectorAll(".datalito-message.assistant").length,
+          citations: document.querySelectorAll(".datalito-source-card").length,
+          unresolved: [...document.querySelectorAll(".datalito-message")].some((item) =>
+            item.textContent.includes("No encuentro una definición aprobada suficiente"),
+          ),
+        }));
+        if (datalitoChatReport.assistantMessages < 3 || datalitoChatReport.citations < 1 || !datalitoChatReport.unresolved) {
+          throw new Error(`Datalito no responde con citas y no-answer: ${JSON.stringify(datalitoChatReport)}`);
         }
       }
 

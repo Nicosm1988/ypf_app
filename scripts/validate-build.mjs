@@ -1,5 +1,16 @@
 import { access, cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import {
+  datalitoAnswerModes,
+  datalitoEvaluationQuestions,
+  datalitoGovernanceControls,
+  datalitoKnowledgeSources,
+  datalitoKpis,
+  datalitoNoAnswerCases,
+  datalitoProductPrinciples,
+  datalitoSecurityCases,
+  datalitoSourceSchema,
+} from "../data/datalito.js";
+import {
   designSystemBenefits,
   designSystemComparison,
   designSystemComponents,
@@ -61,6 +72,8 @@ assert(appJs.includes("renderDictionaryPage"), "app.js debe renderizar el diccio
 assert(appJs.includes("renderMethodologyPage"), "app.js debe renderizar la metodología.");
 assert(appJs.includes("renderDatalizationMethodPage"), "app.js debe renderizar el Método de Datalización.");
 assert(appJs.includes("renderDesignSystemPage"), "app.js debe renderizar el Design System.");
+assert(appJs.includes("renderDatalitoPage"), "app.js debe renderizar Datalito.");
+assert(appJs.includes("renderDatalitoGlobalShell"), "app.js debe montar el launcher global de Datalito.");
 assert(appJs.includes("renderMethodologyProcessFlow"), "app.js debe renderizar el proceso metodológico end to end.");
 assert(appJs.includes("renderExecutiveBrief"), "app.js debe renderizar la síntesis ejecutiva.");
 assert(appJs.includes("renderPlatformExecutiveSection"), "app.js debe renderizar la sección ejecutiva inicial.");
@@ -160,6 +173,31 @@ assert(appJs.includes("Design System"), "La UI debe exponer el módulo Design Sy
 assert(appJs.includes("ypf-industrial-hero"), "Las portadas deben usar el asset industrial de alta calidad.");
 assert(!appJs.includes("/assets/energy-chain.png"), "La portada principal no debe usar el asset viejo.");
 
+assert(datalitoKnowledgeSources.length >= 90, "Datalito debe indexar fuentes locales aprobadas de la plataforma.");
+assert(
+  datalitoKnowledgeSources.every((source) =>
+    ["id", "title", "section", "summary", "content_type", "status", "version", "owner", "canonical_url", "content"].every(
+      (field) => source[field],
+    ),
+  ),
+  "Cada fuente de Datalito debe incluir metadata y contenido.",
+);
+assert(
+  datalitoKnowledgeSources.every((source) => source.status === "approved" && source.confidentiality === "internal"),
+  "La V1 de Datalito debe exponer solo fuentes internas aprobadas.",
+);
+assert(datalitoSourceSchema.length >= 14, "Datalito debe documentar el schema mínimo de fuente.");
+assert(datalitoAnswerModes.length === 5, "Datalito debe incluir cinco modos de respuesta.");
+assert(datalitoProductPrinciples.length === 3, "Datalito debe declarar tres principios de producto.");
+assert(datalitoGovernanceControls.length >= 6, "Datalito debe listar controles de gobierno.");
+assert(datalitoKpis.length >= 6, "Datalito debe listar KPIs de producto.");
+assert(datalitoEvaluationQuestions.length === 170, "Datalito debe cargar el banco de 170 preguntas de evaluación.");
+assert(datalitoNoAnswerCases.length >= 5, "Datalito debe incluir casos sin evidencia.");
+assert(datalitoSecurityCases.length >= 5, "Datalito debe incluir casos adversariales.");
+assert(appJs.includes("recordDatalitoFeedback"), "Datalito debe registrar feedback.");
+assert(appJs.includes("recordDatalitoGap"), "Datalito debe registrar brechas de conocimiento.");
+assert(appJs.includes("No encuentro una definición aprobada suficiente"), "Datalito debe manejar falta de evidencia sin inventar.");
+
 assert(platformHeroMetrics.length === 3, "La portada ejecutiva debe mostrar tres capacidades principales.");
 assert(platformPillars.length === 3, "La sección ejecutiva debe explicar tres ganancias del área.");
 assert(platformDefinitionCards.length === 3, "La definición de datalización debe tener tres dimensiones.");
@@ -216,6 +254,15 @@ await access("assets/docs/modelos/spec-datalizacion.docx");
 await access("assets/ypf-industrial-hero-1280.webp");
 await access("assets/ypf-industrial-hero-1280.avif");
 await access("assets/ypf-industrial-hero.png");
+await access("docs/datalito-architecture.md");
+await access("docs/datalito-content-governance.md");
+await access("docs/datalito-runbook.md");
+await access("docs/datalito-threat-model.md");
+await access("docs/datalito-evaluation.md");
+await access("evals/datalito/golden-questions.json");
+await access("evals/datalito/no-answer-cases.json");
+await access("evals/datalito/security-cases.json");
+await access(".env.example");
 assert(powerBiShortcuts.length >= 7, "Los atajos deben estar agrupados en categorías útiles.");
 assert(
   powerBiShortcuts.every((category) => category.category && category.intro && Array.isArray(category.items) && category.items.length),
@@ -231,6 +278,7 @@ assert(rewriteSources.has("/guia-power-bi"), "Vercel debe reescribir /guia-power
 assert(rewriteSources.has("/metodo-datalizacion"), "Vercel debe reescribir /metodo-datalizacion a index.html.");
 assert(rewriteSources.has("/metodologia"), "Vercel debe reescribir /metodologia a index.html.");
 assert(rewriteSources.has("/design-system"), "Vercel debe reescribir /design-system a index.html.");
+assert(rewriteSources.has("/datalito"), "Vercel debe reescribir /datalito a index.html.");
 assert(rewriteSources.has("/diccionario"), "Vercel debe reescribir /diccionario a index.html.");
 assert(rewriteSources.has("/roadmap"), "Vercel debe reescribir /roadmap a index.html.");
 assert(rewriteSources.has("/proyecto-power-bi"), "Vercel debe reescribir /proyecto-power-bi a index.html.");
@@ -250,6 +298,7 @@ await mkdir("dist/guia-power-bi", { recursive: true });
 await mkdir("dist/metodo-datalizacion", { recursive: true });
 await mkdir("dist/metodologia", { recursive: true });
 await mkdir("dist/design-system", { recursive: true });
+await mkdir("dist/datalito", { recursive: true });
 await mkdir("dist/diccionario", { recursive: true });
 await mkdir("dist/roadmap", { recursive: true });
 await mkdir("dist/proyecto-power-bi", { recursive: true });
@@ -268,6 +317,7 @@ await writeFile("dist/guia-power-bi/index.html", indexHtml);
 await writeFile("dist/metodo-datalizacion/index.html", indexHtml);
 await writeFile("dist/metodologia/index.html", indexHtml);
 await writeFile("dist/design-system/index.html", indexHtml);
+await writeFile("dist/datalito/index.html", indexHtml);
 await writeFile("dist/diccionario/index.html", indexHtml);
 await writeFile("dist/roadmap/index.html", indexHtml);
 await writeFile("dist/proyecto-power-bi/index.html", indexHtml);
@@ -281,6 +331,7 @@ console.log(`- ${dmaicStages.length} etapas DMAIC y ${oeeFactors.length} factore
 console.log(`- ${roadmapPhases.length} gates de roadmap`);
 console.log(`- ${toolingGroups.length} familias de librerías/agentes`);
 console.log(`- ${powerBiShortcuts.length} categorías de atajos`);
+console.log(`- ${datalitoKnowledgeSources.length} fuentes Datalito y ${datalitoEvaluationQuestions.length} preguntas de evaluación`);
 console.log("- dist generado para Vercel");
 
 function normalizeForCheck(value) {

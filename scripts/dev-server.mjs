@@ -31,6 +31,7 @@ function toSafePath(urlPathname) {
     "/metodo-datalizacion",
     "/metodologia",
     "/design-system",
+    "/datalito",
     "/diccionario",
     "/roadmap",
     "/proyecto-power-bi",

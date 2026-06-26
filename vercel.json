@@ -21,6 +21,10 @@
       "destination": "/index.html"
     },
     {
+      "source": "/datalito",
+      "destination": "/index.html"
+    },
+    {
       "source": "/diccionario",
       "destination": "/index.html"
     },

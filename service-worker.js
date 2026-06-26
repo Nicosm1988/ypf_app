@@ -1,10 +1,11 @@
-const CACHE_NAME = "datalizacion-ypf-v18";
+const CACHE_NAME = "datalizacion-ypf-v19";
 const PRECACHE_URLS = [
   "/",
   "/guia-power-bi",
   "/metodo-datalizacion",
   "/metodologia",
   "/design-system",
+  "/datalito",
   "/roadmap",
   "/proyecto-power-bi",
   "/atajos",
@@ -14,6 +15,7 @@ const PRECACHE_URLS = [
   "/styles.css",
   "/app.js",
   "/data/dictionary.js",
+  "/data/datalito.js",
   "/data/designSystem.js",
   "/data/engineeringGuide.js",
   "/data/methodology.js",
@@ -24,6 +26,11 @@ const PRECACHE_URLS = [
   "/data/powerbiShortcuts.js",
   "/data/toolingLibrary.js",
   "/docs/librerias-agentes-mcp.md",
+  "/docs/datalito-architecture.md",
+  "/docs/datalito-content-governance.md",
+  "/docs/datalito-evaluation.md",
+  "/docs/datalito-runbook.md",
+  "/docs/datalito-threat-model.md",
   "/docs/modelos/prd-datalizacion.md",
   "/docs/modelos/spec-datalizacion.md",
   "/manifest.webmanifest",

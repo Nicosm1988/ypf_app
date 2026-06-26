@@ -1,5 +1,20 @@
 import { dictionaryCategories, dictionaryTerms } from "./data/dictionary.js";
 import {
+  datalitoAnswerModes,
+  datalitoArchitectureLayers,
+  datalitoEvaluationQuestions,
+  datalitoGovernanceControls,
+  datalitoIndexVersion,
+  datalitoKpis,
+  datalitoKnowledgeSources,
+  datalitoNoAnswerCases,
+  datalitoProductPrinciples,
+  datalitoPromptVersion,
+  datalitoSecurityCases,
+  datalitoSourceSchema,
+  datalitoSuggestedPrompts,
+} from "./data/datalito.js";
+import {
   designSystemBenefits,
   designSystemComparison,
   designSystemComponents,
@@ -60,7 +75,10 @@ const navLinks = [...document.querySelectorAll("[data-route]")];
 
 const icons = {
   arrowRight: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>',
+  alert:
+    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
   book: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"></path></svg>',
+  bot: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>',
   chevronDown: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m6 9 6 6 6-6"></path></svg>',
   clipboard:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect width="8" height="4" x="8" y="2" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>',
@@ -76,16 +94,23 @@ const icons = {
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="6" x2="6" y1="3" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg>',
   layers:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m12 2 10 5-10 5L2 7l10-5z"></path><path d="m2 17 10 5 10-5"></path><path d="m2 12 10 5 10-5"></path></svg>',
+  message:
+    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>',
   quote:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.75-2-2-2H5c-1.25 0-2 .75-2 2v6c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-3 2v4z"></path><path d="M14 21c3 0 7-1 7-8V5c0-1.25-.75-2-2-2h-3c-1.25 0-2 .75-2 2v6c0 1.25.75 2 2 2h.75c0 2.25-.75 3.75-2.75 4v4z"></path></svg>',
   route:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="6" cy="19" r="3"></circle><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7H6.5a3.5 3.5 0 0 1 0-7H15"></path><circle cx="18" cy="5" r="3"></circle></svg>',
   search:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>',
+  send: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>',
   shield:
     '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.68 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1v7z"></path></svg>',
   spark: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M13 2 3 14h8l-1 8 11-13h-8l1-7z"></path></svg>',
   terminal: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m4 17 6-6-6-6"></path><path d="M12 19h8"></path></svg>',
+  trash:
+    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="m19 6-1 14H6L5 6"></path></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>',
 };
 
 const routeTitles = {
@@ -94,6 +119,7 @@ const routeTitles = {
   "/metodo-datalizacion": "Método de Datalización | Datalización YPF",
   "/metodologia": "Metodología de mejora continua BI | Datalización YPF",
   "/design-system": "Design System | Datalización Hub",
+  "/datalito": "Datalito | Asistente interno de conocimiento",
   "/diccionario": "Diccionario BI | Datalización YPF",
   "/roadmap": "Guía y roadmap de automatización BI/Fabric | Datalización YPF",
   "/proyecto-power-bi": "Proyecto de Power BI con Visual Studio Code | Datalización YPF",
@@ -104,6 +130,33 @@ const routeTitles = {
 const dictionaryState = {
   query: "",
   category: "Todas",
+};
+
+const datalitoStorageKeys = {
+  feedback: "datalito.feedback.v1",
+  gaps: "datalito.gaps.v1",
+};
+
+const datalitoState = {
+  isOpen: false,
+  mode: "brief",
+  messages: [
+    {
+      id: "welcome",
+      role: "assistant",
+      answer:
+        "Hola, soy Datalito. Te ayudo a encontrar, entender y aplicar los estándares, procesos y contenidos de Datalización.",
+      confidence: "high",
+      grounded: true,
+      unresolved: false,
+      citations: [],
+      relatedContent: [],
+      suggestedFollowUps: datalitoSuggestedPrompts.global.slice(0, 3),
+    },
+  ],
+  feedback: loadDatalitoCollection(datalitoStorageKeys.feedback),
+  gaps: loadDatalitoCollection(datalitoStorageKeys.gaps),
+  status: "",
 };
 
 const hubNavigationSections = [
@@ -142,6 +195,12 @@ const hubNavigationSections = [
     route: "/design-system",
     iconName: "layers",
     text: "Lenguaje visual y funcional para escalar la plataforma sin perder coherencia.",
+  },
+  {
+    title: "Datalito",
+    route: "/datalito",
+    iconName: "bot",
+    text: "Asistente interno para encontrar conocimiento, citar fuentes y registrar brechas.",
   },
   {
     title: "Librerías",
@@ -917,6 +976,10 @@ const interactiveSurfaceSelector = [
   ".design-system-benefit",
   ".design-system-component",
   ".design-system-final",
+  ".datalito-card",
+  ".datalito-source-card",
+  ".datalito-kpi-card",
+  ".datalito-message",
   ".executive-brief",
   ".executive-support-card",
   ".concept-tree",
@@ -1070,6 +1133,7 @@ function getRoute(pathname = window.location.pathname) {
       "/metodo-datalizacion",
       "/metodologia",
       "/design-system",
+      "/datalito",
       "/diccionario",
       "/roadmap",
       "/proyecto-power-bi",
@@ -1173,6 +1237,8 @@ function renderRoute(route = getRoute()) {
     renderMethodologyPage();
   } else if (route === "/design-system") {
     renderDesignSystemPage();
+  } else if (route === "/datalito") {
+    renderDatalitoPage();
   } else if (route === "/guia-power-bi") {
     renderGuidePage();
     setupUnifiedFlowInteractions();
@@ -1188,6 +1254,10 @@ function renderRoute(route = getRoute()) {
   } else {
     renderHomePage();
     setupWorkflowInteractions();
+  }
+
+  if (document.querySelector("[data-datalito-global]")) {
+    refreshDatalitoViews();
   }
 
   requestAnimationFrame(enhanceInteractiveSurfaces);
@@ -1708,6 +1778,761 @@ function renderDesignSystemList(title, items) {
       <ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
     </article>
   `;
+}
+
+function renderDatalitoPage() {
+  appRoot.innerHTML = `
+    <section class="page tool-page datalito-page">
+      <header class="page-heading page-inner datalito-hero">
+        <span class="eyebrow">Datalito</span>
+        <h1>Un asistente interno para volver encontrable, comprensible y trazable el conocimiento de Datalización.</h1>
+        <p class="lede">Datalito convierte el contenido publicado del hub en una experiencia activa: responde con fuentes, reconoce brechas y orienta al usuario hacia el estándar correcto.</p>
+        <div class="datalito-hero-metrics" aria-label="Capacidades principales de Datalito">
+          <article>
+            <strong>${datalitoKnowledgeSources.length}</strong>
+            <span>fuentes locales indexadas</span>
+          </article>
+          <article>
+            <strong>${datalitoEvaluationQuestions.length}</strong>
+            <span>preguntas de evaluación</span>
+          </article>
+          <article>
+            <strong>Read-only</strong>
+            <span>sin acciones sobre Power BI, Fabric ni permisos</span>
+          </article>
+        </div>
+      </header>
+
+      <section class="datalito-intro page-inner" aria-labelledby="datalitoIntroTitle">
+        <div>
+          <span class="flow-chip">vertical slice funcional</span>
+          <h2 id="datalitoIntroTitle">Datalito ya puede buscar en fuentes aprobadas, responder con citas y registrar señales de mejora.</h2>
+          <p>Esta implementación respeta el límite del entorno actual: no simula SSO, LLM, base de datos ni RAG corporativo. En cambio, deja operativa una V1 local, trazable y preparada para evolucionar cuando existan credenciales, proveedor aprobado y política de retención.</p>
+        </div>
+        <div class="datalito-card-grid">
+          ${datalitoProductPrinciples.map(renderDatalitoPrinciple).join("")}
+        </div>
+      </section>
+
+      <section class="datalito-workbench page-inner" aria-labelledby="datalitoWorkbenchTitle">
+        <div class="datalito-workbench-main">
+          <div class="datalito-section-head">
+            <span class="flow-chip">conversación con fuentes</span>
+            <h2 id="datalitoWorkbenchTitle">Preguntá sobre estándares, etapas, templates, definiciones, metodología o navegación.</h2>
+          </div>
+          <div class="datalito-chat-shell" data-datalito-chat="page">
+            ${renderDatalitoChat("page")}
+          </div>
+        </div>
+        <aside class="datalito-side-panel" aria-label="Gobierno de Datalito">
+          <div class="datalito-side-block">
+            <span class="flow-chip">índice</span>
+            <h3>Fuentes autorizadas</h3>
+            <p>La V1 toma su conocimiento desde módulos estructurados de la plataforma y no desde scraping del HTML renderizado.</p>
+            <div class="datalito-source-summary">
+              ${renderDatalitoSourceTypeSummary()}
+            </div>
+          </div>
+          <div class="datalito-side-block">
+            <span class="flow-chip">contexto</span>
+            <h3>Metadata enviada al motor local</h3>
+            <ul>
+              <li>Ruta actual.</li>
+              <li>Título de página.</li>
+              <li>Texto seleccionado, si existe.</li>
+              <li>Versión de prompt e índice.</li>
+            </ul>
+          </div>
+        </aside>
+      </section>
+
+      <section class="datalito-architecture page-inner" aria-labelledby="datalitoArchitectureTitle">
+        <div class="datalito-section-head">
+          <span class="flow-chip">arquitectura compatible</span>
+          <h2 id="datalitoArchitectureTitle">La solución queda desacoplada para pasar de índice local a RAG enterprise sin rediseñar la experiencia.</h2>
+        </div>
+        <div class="datalito-card-grid four">
+          ${datalitoArchitectureLayers.map(renderDatalitoCard).join("")}
+        </div>
+      </section>
+
+      <section class="datalito-governance page-inner" aria-labelledby="datalitoGovernanceTitle">
+        <div class="datalito-section-head">
+          <span class="flow-chip">seguridad y gobierno</span>
+          <h2 id="datalitoGovernanceTitle">La primera versión prioriza seguridad, fidelidad a fuentes y mejora controlada.</h2>
+        </div>
+        <div class="datalito-governance-grid">
+          <article class="datalito-card">
+            <h3>Controles activos</h3>
+            <ul>
+              ${datalitoGovernanceControls.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+            </ul>
+          </article>
+          <article class="datalito-card">
+            <h3>Schema de fuente</h3>
+            <div class="datalito-chip-cloud">
+              ${datalitoSourceSchema.map((field) => `<span>${escapeHtml(field)}</span>`).join("")}
+            </div>
+          </article>
+          <article class="datalito-card">
+            <h3>Casos adversariales cubiertos</h3>
+            <ul>
+              ${datalitoSecurityCases.slice(0, 5).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="datalito-evaluation page-inner" aria-labelledby="datalitoEvaluationTitle">
+        <div class="datalito-section-head">
+          <span class="flow-chip">evaluación</span>
+          <h2 id="datalitoEvaluationTitle">El producto se mide por respuestas respaldadas, calidad de citas y brechas detectadas.</h2>
+        </div>
+        <div class="datalito-kpi-grid">
+          ${datalitoKpis.map(renderDatalitoKpi).join("")}
+        </div>
+        <div class="datalito-eval-strip">
+          <strong>${datalitoEvaluationQuestions.length} preguntas benchmark</strong>
+          <span>${datalitoNoAnswerCases.length} casos deliberadamente sin evidencia</span>
+          <span>Prompt ${escapeHtml(datalitoPromptVersion)}</span>
+          <span>Índice ${escapeHtml(datalitoIndexVersion)}</span>
+        </div>
+      </section>
+    </section>
+  `;
+}
+
+function renderDatalitoPrinciple(item, index) {
+  return `
+    <article class="datalito-card" style="--datalito-order:${index}">
+      <span>${String(index + 1).padStart(2, "0")}</span>
+      <h3>${escapeHtml(item.title)}</h3>
+      <p>${escapeHtml(item.text)}</p>
+    </article>
+  `;
+}
+
+function renderDatalitoCard(item, index) {
+  return `
+    <article class="datalito-card" style="--datalito-order:${index}">
+      <span>${icon(index % 2 === 0 ? "layers" : "shield")}</span>
+      <h3>${escapeHtml(item.title)}</h3>
+      <p>${escapeHtml(item.text)}</p>
+    </article>
+  `;
+}
+
+function renderDatalitoKpi([title, text], index) {
+  return `
+    <article class="datalito-kpi-card" style="--datalito-order:${index}">
+      <strong>${escapeHtml(title)}</strong>
+      <p>${escapeHtml(text)}</p>
+    </article>
+  `;
+}
+
+function renderDatalitoSourceTypeSummary() {
+  const counts = datalitoKnowledgeSources.reduce((summary, source) => {
+    summary[source.content_type] = (summary[source.content_type] || 0) + 1;
+    return summary;
+  }, {});
+
+  return Object.entries(counts)
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(
+      ([type, count]) => `
+        <article>
+          <strong>${count}</strong>
+          <span>${escapeHtml(type)}</span>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function renderDatalitoGlobalShell() {
+  if (document.querySelector("[data-datalito-global]")) return;
+
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    `
+      <div class="datalito-global" data-datalito-global>
+        <div class="datalito-panel-wrap" data-datalito-panel-wrap>
+          <div class="datalito-panel" role="dialog" aria-modal="false" aria-label="Datalito">
+            <div class="datalito-panel-content" data-datalito-chat="panel"></div>
+          </div>
+        </div>
+        <button class="datalito-launcher" type="button" data-datalito-open aria-expanded="false" aria-label="Preguntale a Datalito">
+          ${icon("bot")}
+          <span>Datalito</span>
+        </button>
+      </div>
+    `,
+  );
+
+  refreshDatalitoViews();
+}
+
+function renderDatalitoChat(surface) {
+  const prompts = getDatalitoPromptsForCurrentRoute();
+  const isPanel = surface === "panel";
+
+  return `
+    <div class="datalito-chat ${isPanel ? "compact" : ""}">
+      <div class="datalito-chat-header">
+        <div>
+          <span class="flow-chip">asistente de conocimiento</span>
+          <h3>${isPanel ? "¿En qué te ayudo?" : "Conversación"}</h3>
+          <p>Puedo explicarte procesos, encontrar estándares, ubicar templates y ayudarte a navegar la plataforma.</p>
+        </div>
+        <div class="datalito-chat-actions">
+          <button class="icon-button" type="button" data-datalito-new title="Nueva conversación" aria-label="Nueva conversación">
+            ${icon("plus")}
+          </button>
+          <button class="icon-button" type="button" data-datalito-clear title="Eliminar conversación" aria-label="Eliminar conversación">
+            ${icon("trash")}
+          </button>
+          ${
+            isPanel
+              ? `<button class="icon-button" type="button" data-datalito-close title="Cerrar Datalito" aria-label="Cerrar Datalito">${icon("x")}</button>`
+              : ""
+          }
+        </div>
+      </div>
+
+      <div class="datalito-mode-row" role="group" aria-label="Modo de respuesta">
+        ${datalitoAnswerModes.map(renderDatalitoModeButton).join("")}
+      </div>
+
+      <div class="datalito-suggestions" aria-label="Preguntas sugeridas">
+        ${prompts.map((prompt) => `<button type="button" data-datalito-prompt="${escapeHtml(prompt)}">${escapeHtml(prompt)}</button>`).join("")}
+      </div>
+
+      <div class="datalito-thread" aria-live="polite">
+        ${datalitoState.messages.map(renderDatalitoMessage).join("")}
+      </div>
+
+      <form class="datalito-form" data-datalito-form>
+        <label class="sr-only" for="datalitoInput-${surface}">Preguntale a Datalito</label>
+        <input
+          id="datalitoInput-${surface}"
+          name="question"
+          type="text"
+          maxlength="420"
+          autocomplete="off"
+          placeholder="Preguntá por un estándar, etapa, template, definición o sección"
+          required
+        />
+        <button class="button" type="submit">
+          ${icon("send")}
+          Enviar
+        </button>
+      </form>
+
+      <div class="datalito-status" aria-live="polite">
+        ${escapeHtml(datalitoState.status)}
+      </div>
+    </div>
+  `;
+}
+
+function renderDatalitoModeButton(mode) {
+  const active = datalitoState.mode === mode.id;
+  return `
+    <button
+      class="${active ? "active" : ""}"
+      type="button"
+      data-datalito-mode="${escapeHtml(mode.id)}"
+      title="${escapeHtml(mode.description)}"
+      aria-pressed="${active ? "true" : "false"}"
+    >${escapeHtml(mode.label)}</button>
+  `;
+}
+
+function renderDatalitoMessage(message) {
+  if (message.role === "user") {
+    return `
+      <article class="datalito-message user">
+        <strong>Vos</strong>
+        <p>${escapeHtml(message.content)}</p>
+      </article>
+    `;
+  }
+
+  return `
+    <article class="datalito-message assistant ${message.unresolved ? "unresolved" : ""}">
+      <div class="datalito-message-head">
+        <strong>${icon(message.unresolved ? "alert" : "bot")} Datalito</strong>
+        ${
+          message.confidence
+            ? `<span class="datalito-confidence ${escapeHtml(message.confidence)}">${renderDatalitoConfidence(message)}</span>`
+            : ""
+        }
+      </div>
+      <div class="datalito-answer">
+        ${renderDatalitoAnswer(message.answer)}
+      </div>
+      ${renderDatalitoCitations(message.citations || [])}
+      ${renderDatalitoRelatedContent(message.relatedContent || [])}
+      ${renderDatalitoFollowUps(message.suggestedFollowUps || [])}
+      ${message.id !== "welcome" ? renderDatalitoFeedbackActions(message) : ""}
+    </article>
+  `;
+}
+
+function renderDatalitoConfidence(message) {
+  if (message.unresolved) return "sin evidencia suficiente";
+  if (message.confidence === "high") return "alta confianza";
+  if (message.confidence === "medium") return "confianza media";
+  return "baja confianza";
+}
+
+function renderDatalitoAnswer(answer) {
+  return String(answer)
+    .split("\n")
+    .filter(Boolean)
+    .map((line) => `<p>${escapeHtml(line)}</p>`)
+    .join("");
+}
+
+function renderDatalitoCitations(citations) {
+  if (!citations.length) return "";
+
+  return `
+    <div class="datalito-citations" aria-label="Fuentes utilizadas">
+      <strong>Fuentes</strong>
+      <div class="datalito-citation-grid">
+        ${citations
+          .map(
+            (source, index) => `
+              <a class="datalito-source-card" href="${escapeHtml(source.url)}" data-route>
+                <span>[S${index + 1}] ${escapeHtml(source.status)} · v${escapeHtml(source.version)}</span>
+                <strong>${escapeHtml(source.title)}</strong>
+                <small>${escapeHtml(source.section)} · revisado ${escapeHtml(source.reviewedAt)}</small>
+              </a>
+            `,
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderDatalitoRelatedContent(items) {
+  if (!items.length) return "";
+
+  return `
+    <div class="datalito-related">
+      <strong>Contenido relacionado</strong>
+      ${items
+        .map(
+          (item) => `
+            <a href="${escapeHtml(item.url)}" data-route>
+              ${escapeHtml(item.title)}
+              <small>${escapeHtml(item.reason)}</small>
+            </a>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function renderDatalitoFollowUps(items) {
+  if (!items.length) return "";
+
+  return `
+    <div class="datalito-followups" aria-label="Preguntas relacionadas">
+      ${items.slice(0, 3).map((item) => `<button type="button" data-datalito-prompt="${escapeHtml(item)}">${escapeHtml(item)}</button>`).join("")}
+    </div>
+  `;
+}
+
+function renderDatalitoFeedbackActions(message) {
+  return `
+    <div class="datalito-feedback" aria-label="Feedback de respuesta">
+      <button type="button" data-datalito-feedback="useful" data-message-id="${escapeHtml(message.id)}">Útil</button>
+      <button type="button" data-datalito-feedback="not-useful" data-message-id="${escapeHtml(message.id)}">No útil</button>
+      <button type="button" data-datalito-feedback="error" data-message-id="${escapeHtml(message.id)}">Reportar error</button>
+      <button type="button" data-datalito-feedback="missing" data-message-id="${escapeHtml(message.id)}">Falta información</button>
+      <button type="button" data-datalito-feedback="outdated" data-message-id="${escapeHtml(message.id)}">Fuente desactualizada</button>
+      ${
+        message.unresolved
+          ? `<button type="button" data-datalito-gap="${escapeHtml(message.question || "")}" data-message-id="${escapeHtml(message.id)}">Registrar brecha</button>`
+          : ""
+      }
+    </div>
+  `;
+}
+
+function runDatalitoQuestion(question) {
+  const cleanQuestion = question.trim();
+  if (!cleanQuestion) return;
+
+  datalitoState.messages.push({
+    id: createDatalitoId("user"),
+    role: "user",
+    content: cleanQuestion,
+  });
+
+  const response = buildDatalitoResponse(cleanQuestion, datalitoState.mode);
+  datalitoState.messages.push(response);
+  datalitoState.status = response.unresolved
+    ? "No se encontró evidencia suficiente; podés registrar la brecha."
+    : "Respuesta generada con fuentes locales aprobadas.";
+  refreshDatalitoViews();
+}
+
+function buildDatalitoResponse(question, mode) {
+  const context = getDatalitoPageContext();
+  const securityIssue = detectDatalitoSecurityRequest(question);
+
+  if (securityIssue) {
+    const source = datalitoKnowledgeSources.find((item) => item.id === "datalito-product-contract");
+    return {
+      id: createDatalitoId("assistant"),
+      role: "assistant",
+      question,
+      answer:
+        "No puedo ayudar con pedidos que intenten revelar instrucciones internas, variables de entorno, credenciales, contenido restringido o información no publicada. Datalito está diseñado para responder con fuentes aprobadas y para reconocer límites cuando una consulta queda fuera de alcance. [S1]",
+      intent: ["security"],
+      answerMode: mode,
+      confidence: "high",
+      grounded: true,
+      unresolved: false,
+      citations: source ? [toDatalitoCitation(source)] : [],
+      relatedContent: [],
+      suggestedFollowUps: ["¿Qué sí puede responder Datalito?", "¿Cómo reporto una brecha?", "¿Qué controles de seguridad aplica?"],
+    };
+  }
+
+  const matches = searchDatalitoSources(question, context);
+  const strongMatches = matches.filter((match) => match.score >= 5).slice(0, 4);
+
+  if (!strongMatches.length) {
+    return buildDatalitoNoEvidenceResponse(question, mode, matches.slice(0, 3));
+  }
+
+  const primary = strongMatches[0].source;
+  const citations = strongMatches.slice(0, 3).map((match) => toDatalitoCitation(match.source));
+  const answer = composeDatalitoAnswer(question, mode, primary, strongMatches, context);
+
+  return {
+    id: createDatalitoId("assistant"),
+    role: "assistant",
+    question,
+    answer,
+    intent: detectDatalitoIntent(question),
+    answerMode: mode,
+    confidence: strongMatches[0].score >= 12 ? "high" : "medium",
+    grounded: true,
+    unresolved: false,
+    citations,
+    relatedContent: strongMatches.slice(1, 4).map((match) => ({
+      title: match.source.title,
+      url: match.source.canonical_url,
+      reason: `Relacionado por ${match.reason}`,
+    })),
+    suggestedFollowUps: buildDatalitoFollowUps(primary),
+  };
+}
+
+function buildDatalitoNoEvidenceResponse(question, mode, relatedMatches) {
+  return {
+    id: createDatalitoId("assistant"),
+    role: "assistant",
+    question,
+    answer:
+      "No encuentro una definición aprobada suficiente para responder esto con confianza. Puedo mostrarte contenidos cercanos de la plataforma, pero no voy a completar el vacío con una suposición. Si esta pregunta es relevante para el trabajo diario, conviene registrarla como brecha de conocimiento.",
+    intent: ["insufficient_evidence"],
+    answerMode: mode,
+    confidence: "low",
+    grounded: false,
+    unresolved: true,
+    citations: [],
+    relatedContent: relatedMatches.map((match) => ({
+      title: match.source.title,
+      url: match.source.canonical_url,
+      reason: `Coincidencia parcial con la consulta`,
+    })),
+    suggestedFollowUps: ["¿Dónde encuentro templates?", "¿Qué fuentes tiene Datalito?", "¿Cómo registro esta brecha?"],
+  };
+}
+
+function composeDatalitoAnswer(question, mode, primary, matches, context) {
+  const citation = "[S1]";
+  const lowerQuestion = normalizeText(question);
+
+  if (lowerQuestion.includes("donde") || lowerQuestion.includes("ubic") || lowerQuestion.includes("encontr")) {
+    return `Lo encontrás en ${primary.section}, dentro de “${primary.title}”. La ruta interna es ${primary.canonical_url}. ${primary.summary} ${citation}`;
+  }
+
+  if (lowerQuestion.includes("resum") && context.route !== "/") {
+    return `Resumen de la sección actual: ${primary.summary} ${citation}\nLa lectura práctica es que esta parte del hub debe ayudarte a decidir qué estándar aplicar, qué evidencia revisar y qué siguiente paso sostener.`;
+  }
+
+  if (mode === "executive") {
+    return `La decisión ejecutiva es usar “${primary.title}” como referencia para reducir variabilidad y sostener decisiones con evidencia. ${primary.summary} ${citation}\nImpacto: mejora trazabilidad, acelera alineación y disminuye dependencia de conocimiento tácito. Siguiente paso: abrir la fuente citada y validar si aplica al caso concreto.`;
+  }
+
+  if (mode === "functional") {
+    return `${primary.summary} ${citation}\nAplicación funcional: revisá el proceso, los responsables, los entregables y el riesgo operativo asociado. Si la respuesta afecta un proyecto real, dejá evidencia en PRD, Spec, checklist o backlog según corresponda.`;
+  }
+
+  if (mode === "technical") {
+    const excerpt = primary.content.split("\n").slice(0, 3).join(" ");
+    return `${primary.summary} ${citation}\nDetalle técnico: ${excerpt}\nLa implementación debe mantenerse trazable: fuente, versión, owner, steward y URL canónica quedan asociados a la respuesta.`;
+  }
+
+  if (mode === "step_by_step") {
+    return `1. Abrí la fuente “${primary.title}”. ${citation}\n2. Identificá la regla, etapa, definición o entregable que aplica a tu caso.\n3. Contrastá la evidencia con PRD, Spec, checklist o roadmap.\n4. Si falta una definición aprobada, registrá la brecha para curación.`;
+  }
+
+  return `${primary.summary} ${citation}\nEn términos prácticos, Datalito encontró esta respuesta en una fuente aprobada de la plataforma y te deja el enlace para revisar el detalle.`;
+}
+
+function searchDatalitoSources(question, context) {
+  const normalizedQuestion = normalizeText(question);
+  const tokens = tokenizeDatalitoText(question);
+
+  return datalitoKnowledgeSources
+    .map((source) => {
+      const normalizedTitle = normalizeText(source.title);
+      const normalizedSummary = normalizeText(source.summary);
+      const normalizedKeywords = normalizeText(source.keywords.join(" "));
+      const normalizedContent = normalizeText(source.content);
+      let score = 0;
+      const reasons = [];
+
+      if (normalizedTitle.includes(normalizedQuestion)) {
+        score += 16;
+        reasons.push("título exacto");
+      }
+      if (normalizedContent.includes(normalizedQuestion)) {
+        score += 10;
+        reasons.push("contenido exacto");
+      }
+      if (source.canonical_url.split("#")[0] === context.route) {
+        score += 3;
+        reasons.push("página actual");
+      }
+
+      for (const token of tokens) {
+        if (normalizedTitle.includes(token)) {
+          score += 4;
+          reasons.push(`título:${token}`);
+        }
+        if (normalizedKeywords.includes(token)) {
+          score += 3;
+          reasons.push(`keyword:${token}`);
+        }
+        if (normalizedSummary.includes(token)) score += 2;
+        if (normalizedContent.includes(token)) score += 1;
+      }
+
+      return {
+        source,
+        score,
+        reason: reasons.slice(0, 2).join(", ") || "similitud textual",
+      };
+    })
+    .filter((match) => match.score > 0)
+    .sort((left, right) => right.score - left.score || left.source.title.localeCompare(right.source.title));
+}
+
+function detectDatalitoIntent(question) {
+  const normalized = normalizeText(question);
+  const intents = [];
+  if (/(que es|defin|significa)/.test(normalized)) intents.push("definition");
+  if (/(por que|para que|beneficio|valor)/.test(normalized)) intents.push("purpose");
+  if (/(como|paso|hacer|aplicar)/.test(normalized)) intents.push("how_to");
+  if (/(donde|ubic|encontr|ruta)/.test(normalized)) intents.push("navigation");
+  if (/(vs|versus|diferencia|compar)/.test(normalized)) intents.push("comparison");
+  if (/(rls|ols|seguridad|permiso|privacidad)/.test(normalized)) intents.push("security");
+  if (/(prd|spec|template|checklist)/.test(normalized)) intents.push("template_lookup");
+  if (/(pagina|seccion|esto|esta)/.test(normalized)) intents.push("current_page");
+  return intents.length ? intents : ["standard"];
+}
+
+function detectDatalitoSecurityRequest(question) {
+  const normalized = normalizeText(question);
+  return [
+    "system prompt",
+    "variables de entorno",
+    "claves",
+    "credenciales",
+    "secret",
+    "ignora tus instrucciones",
+    "ignora todas tus instrucciones",
+    "documentacion restringida",
+    "otro rol",
+    "inventa",
+    "no importa si no hay fuente",
+  ].some((pattern) => normalized.includes(pattern));
+}
+
+function buildDatalitoFollowUps(source) {
+  if (source.section === "Guía + Roadmap") return ["¿Qué entregables corresponden?", "¿Qué riesgo evita este gate?", "¿Cómo lo llevo a una Spec?"];
+  if (source.section === "Metodología") return ["¿Cómo se mide esto con OEE BI?", "¿Qué etapa DMAIC aplica?", "¿Qué control sostiene la mejora?"];
+  if (source.section === "Design System") return ["¿Qué componente aplica?", "¿Qué regla de calidad corresponde?", "¿Cómo mantengo consistencia?"];
+  if (source.section === "Diccionario BI") return ["Dame un ejemplo funcional.", "¿Qué riesgo evita?", "¿Con qué conceptos se relaciona?"];
+  return ["¿Dónde está la fuente?", "Explicalo para gerencia.", "Dame un paso a paso."];
+}
+
+function toDatalitoCitation(source) {
+  return {
+    sourceId: source.id,
+    title: source.title,
+    section: source.section,
+    url: source.canonical_url,
+    version: source.version,
+    status: source.status,
+    reviewedAt: source.reviewed_at,
+    excerpt: source.summary,
+  };
+}
+
+function getDatalitoPromptsForCurrentRoute() {
+  const route = getRoute();
+  return [...new Set([...(datalitoSuggestedPrompts[route] || []), ...datalitoSuggestedPrompts.global])].slice(0, 5);
+}
+
+function getDatalitoPageContext() {
+  const route = getRoute();
+  const title = routeTitles[route] || routeTitles["/"];
+  const selectedText = String(window.getSelection?.().toString() || "").trim().slice(0, 700);
+
+  return {
+    route,
+    title,
+    selectedText,
+    promptVersion: datalitoPromptVersion,
+    indexVersion: datalitoIndexVersion,
+  };
+}
+
+function refreshDatalitoViews() {
+  const wrap = document.querySelector("[data-datalito-panel-wrap]");
+  const launcher = document.querySelector("[data-datalito-open]");
+  const panelChat = document.querySelector('[data-datalito-chat="panel"]');
+  const pageChat = document.querySelector('[data-datalito-chat="page"]');
+
+  if (wrap) wrap.classList.toggle("is-open", datalitoState.isOpen);
+  if (launcher) launcher.setAttribute("aria-expanded", datalitoState.isOpen ? "true" : "false");
+  if (panelChat) panelChat.innerHTML = renderDatalitoChat("panel");
+  if (pageChat) pageChat.innerHTML = renderDatalitoChat("page");
+}
+
+function openDatalitoPanel() {
+  datalitoState.isOpen = true;
+  refreshDatalitoViews();
+  requestAnimationFrame(() => document.querySelector("#datalitoInput-panel")?.focus());
+}
+
+function closeDatalitoPanel() {
+  datalitoState.isOpen = false;
+  refreshDatalitoViews();
+}
+
+function resetDatalitoConversation(status = "Conversación nueva.") {
+  datalitoState.messages = [datalitoState.messages[0]];
+  datalitoState.status = status;
+  refreshDatalitoViews();
+}
+
+function recordDatalitoFeedback(messageId, reason) {
+  const message = datalitoState.messages.find((item) => item.id === messageId);
+  datalitoState.feedback.push({
+    id: createDatalitoId("feedback"),
+    messageId,
+    reason,
+    question: message?.question || "",
+    answerMode: message?.answerMode || datalitoState.mode,
+    promptVersion: datalitoPromptVersion,
+    indexVersion: datalitoIndexVersion,
+    createdAt: new Date().toISOString(),
+  });
+  persistDatalitoCollection(datalitoStorageKeys.feedback, datalitoState.feedback);
+  datalitoState.status = "Feedback registrado localmente para revisión.";
+  refreshDatalitoViews();
+}
+
+function recordDatalitoGap(question) {
+  const normalizedQuestion = normalizeText(question || "");
+  if (!normalizedQuestion) return;
+
+  const existing = datalitoState.gaps.find((gap) => normalizeText(gap.question) === normalizedQuestion);
+  if (existing) {
+    existing.count += 1;
+    existing.lastSeenAt = new Date().toISOString();
+  } else {
+    datalitoState.gaps.push({
+      id: createDatalitoId("gap"),
+      question,
+      count: 1,
+      status: "open",
+      promptVersion: datalitoPromptVersion,
+      indexVersion: datalitoIndexVersion,
+      firstSeenAt: new Date().toISOString(),
+      lastSeenAt: new Date().toISOString(),
+    });
+  }
+
+  persistDatalitoCollection(datalitoStorageKeys.gaps, datalitoState.gaps);
+  datalitoState.status = "Brecha registrada localmente. En la versión enterprise se enviará a la bandeja de administración.";
+  refreshDatalitoViews();
+}
+
+function loadDatalitoCollection(key) {
+  try {
+    return JSON.parse(window.localStorage.getItem(key) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function persistDatalitoCollection(key, value) {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value.slice(-100)));
+  } catch {
+    datalitoState.status = "No se pudo persistir el registro local.";
+  }
+}
+
+function createDatalitoId(prefix) {
+  return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
+}
+
+const datalitoStopwords = new Set([
+  "que",
+  "como",
+  "para",
+  "por",
+  "con",
+  "del",
+  "las",
+  "los",
+  "una",
+  "uno",
+  "esta",
+  "este",
+  "esto",
+  "sobre",
+  "donde",
+  "cual",
+  "cuando",
+  "debe",
+  "deben",
+  "puede",
+  "puedo",
+  "dame",
+  "explicame",
+]);
+
+function tokenizeDatalitoText(value) {
+  return normalizeText(value)
+    .split(/[^a-z0-9]+/g)
+    .filter((token) => token.length > 2 && !datalitoStopwords.has(token));
 }
 
 function renderDatalizationDefinition() {
@@ -3349,6 +4174,79 @@ function renderShortcutCategory(category) {
   `;
 }
 
+document.addEventListener("submit", (event) => {
+  const form = event.target.closest("[data-datalito-form]");
+  if (!form) return;
+
+  event.preventDefault();
+  const formData = new FormData(form);
+  const question = String(formData.get("question") || "");
+  form.reset();
+  runDatalitoQuestion(question);
+});
+
+document.addEventListener("click", (event) => {
+  const openButton = event.target.closest("[data-datalito-open]");
+  if (openButton) {
+    event.preventDefault();
+    openDatalitoPanel();
+    return;
+  }
+
+  const closeButton = event.target.closest("[data-datalito-close]");
+  if (closeButton) {
+    event.preventDefault();
+    closeDatalitoPanel();
+    return;
+  }
+
+  const newButton = event.target.closest("[data-datalito-new]");
+  if (newButton) {
+    event.preventDefault();
+    resetDatalitoConversation("Conversación nueva. El historial de mensajes es por sesión.");
+    return;
+  }
+
+  const clearButton = event.target.closest("[data-datalito-clear]");
+  if (clearButton) {
+    event.preventDefault();
+    resetDatalitoConversation("Conversación eliminada.");
+    return;
+  }
+
+  const modeButton = event.target.closest("[data-datalito-mode]");
+  if (modeButton) {
+    event.preventDefault();
+    datalitoState.mode = modeButton.dataset.datalitoMode || "brief";
+    datalitoState.status = `Modo ${modeButton.textContent.trim()} activo.`;
+    refreshDatalitoViews();
+    return;
+  }
+
+  const promptButton = event.target.closest("[data-datalito-prompt]");
+  if (promptButton) {
+    event.preventDefault();
+    if (!datalitoState.isOpen && getRoute() !== "/datalito") {
+      datalitoState.isOpen = true;
+    }
+    runDatalitoQuestion(promptButton.dataset.datalitoPrompt || "");
+    return;
+  }
+
+  const feedbackButton = event.target.closest("[data-datalito-feedback]");
+  if (feedbackButton) {
+    event.preventDefault();
+    recordDatalitoFeedback(feedbackButton.dataset.messageId || "", feedbackButton.dataset.datalitoFeedback || "feedback");
+    return;
+  }
+
+  const gapButton = event.target.closest("[data-datalito-gap]");
+  if (gapButton) {
+    event.preventDefault();
+    recordDatalitoGap(gapButton.dataset.datalitoGap || "");
+  }
+});
+
 document.addEventListener("click", (event) => {
   const link = event.target.closest("[data-route]");
   if (!link) return;
@@ -3370,3 +4268,4 @@ if ("serviceWorker" in navigator && window.location.protocol === "https:") {
 
 setupAmbientPointer();
 renderRoute();
+renderDatalitoGlobalShell();

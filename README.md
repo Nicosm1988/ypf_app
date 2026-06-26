@@ -9,6 +9,7 @@ Datalización es la práctica de automatizar procesos mediante datos confiables,
 - Guía + roadmap BI/Fabric para ordenar el ciclo completo desde proceso y reglas hasta operación.
 - Método de Datalización v0.1 para organizar DEV/PROD, Teams, SharePoint, canales, carpetas, naming, backlog, VMC y gobierno del equipo.
 - Design System para consolidar patrones visuales, componentes, reglas de experiencia y criterios de calidad.
+- Datalito, asistente interno de conocimiento con launcher global, página dedicada, búsqueda local, citas, feedback y brechas.
 - Metodología de mejora continua BI con OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, flujo continuo, SMED, Poka-Yoke y Kata.
 - Narrativa ejecutiva en cada página para presentar primero la conclusión, luego los argumentos y finalmente la evidencia operativa.
 - Diccionario BI para alinear conceptos de automatización, datos, Power BI, Fabric, performance, gobierno y adopción.
@@ -24,8 +25,9 @@ La app es estatica, sin credenciales, sin datos sensibles y compatible con Verce
 
 - HTML, CSS y JavaScript vanilla.
 - Modulos ES para separar datos de UI.
-- Contenido local editable en `data/platformIntro.js`, `data/designSystem.js`, `data/dictionary.js`, `data/engineeringGuide.js`, `data/datalizationMethod.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
-- Documentación técnica en `docs/librerias-agentes-mcp.md`.
+- Contenido local editable en `data/platformIntro.js`, `data/datalito.js`, `data/designSystem.js`, `data/dictionary.js`, `data/engineeringGuide.js`, `data/datalizationMethod.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
+- Documentación técnica en `docs/librerias-agentes-mcp.md` y documentación operativa de Datalito en `docs/datalito-*.md`.
+- Casos de evaluación de Datalito en `evals/datalito`.
 - Skills repo-locales en `.codex/skills`.
 - Agentes operativos en `.codex/agents`.
 - Registry MCP gobernado en `.mcp/registry.json`.
@@ -52,6 +54,7 @@ http://127.0.0.1:8001/guia-power-bi
 http://127.0.0.1:8001/metodo-datalizacion
 http://127.0.0.1:8001/metodologia
 http://127.0.0.1:8001/design-system
+http://127.0.0.1:8001/datalito
 http://127.0.0.1:8001/diccionario
 http://127.0.0.1:8001/roadmap
 http://127.0.0.1:8001/proyecto-power-bi
@@ -67,9 +70,9 @@ npm run build
 
 El build valida que:
 
-- Exista Home, Guía Power BI/Fabric, Método de Datalización, Metodología, Diccionario BI, Roadmap BI, Proyecto Power BI, Librerías y Atajos.
+- Exista Home, Guía Power BI/Fabric, Método de Datalización, Metodología, Design System, Datalito, Diccionario BI, Roadmap BI, Proyecto Power BI, Librerías y Atajos.
 - La Home tenga portada ejecutiva Datalización Hub, narrativa Antes/Ahora/Después y transición de tableros a disciplina.
-- La Home tenga botonera para las secciones principales y el Design System tenga estructura ejecutiva completa.
+- La Home tenga botonera para las secciones principales, el Design System tenga estructura ejecutiva completa y Datalito tenga vertical slice funcional.
 - El diccionario tenga al menos 65 términos.
 - El roadmap tenga los 9 gates obligatorios y arranque con PRD/Spec.
 - La guía tenga capítulos, comparacion PRD vs Spec y checklist de salida a producción.
@@ -77,10 +80,11 @@ El build valida que:
 - El Método de Datalización tenga proceso end to end, separación DEV/PROD, 8 canales base, 12 subcarpetas estándar y naming gobernado.
 - Cada página principal tenga narrativa ejecutiva con tesis, tres soportes y acción.
 - El sitio incluya un árbol de decantación conceptual con niveles y ramas claras.
+- Datalito tenga fuentes locales aprobadas, cinco modos de respuesta, controles de gobierno, KPIs, feedback, brechas y 170 preguntas benchmark.
 - El catálogo técnico tenga documentación Markdown y familias de herramientas.
 - Los atajos tengan categorías e items navegables.
 - Los datos tengan los campos requeridos.
-- Vercel tenga rewrites para `/guia-power-bi`, `/metodo-datalizacion`, `/metodologia`, `/design-system`, `/diccionario`, `/roadmap`, `/proyecto-power-bi`, `/librerias` y `/atajos`.
+- Vercel tenga rewrites para `/guia-power-bi`, `/metodo-datalizacion`, `/metodologia`, `/design-system`, `/datalito`, `/diccionario`, `/roadmap`, `/proyecto-power-bi`, `/librerias` y `/atajos`.
 - Se genere `dist/` con las rutas estaticas listas para Vercel.
 
 ## Validar calidad completa
@@ -191,6 +195,28 @@ Editar `data/designSystem.js`.
 - `designSystemScope`: alcance inicial.
 - `designSystemComponents`: componentes esperados.
 - `designSystemDeliverables` y `designSystemQualityRules`: entregables y reglas.
+
+## Editar Datalito
+
+Editar `data/datalito.js`.
+
+- `datalitoKnowledgeSources`: índice local de fuentes aprobadas con metadata, contenido, URL canónica y checksum.
+- `datalitoAnswerModes`: modos breve, ejecutivo, funcional, técnico y paso a paso.
+- `datalitoSuggestedPrompts`: preguntas sugeridas por ruta.
+- `datalitoProductPrinciples`, `datalitoGovernanceControls` y `datalitoKpis`: contrato de producto, gobierno y medición.
+- `datalitoEvaluationQuestions`: banco de 170 preguntas benchmark.
+- `datalitoSecurityCases` y `datalitoNoAnswerCases`: pruebas adversariales y de falta de evidencia.
+
+La V1 es read-only y local: no usa proveedor externo de IA, no tiene SSO real y no persiste conversaciones en backend. Feedback y brechas se guardan en `localStorage` para demostrar el flujo sin inventar infraestructura corporativa.
+
+Documentación relacionada:
+
+- `docs/datalito-architecture.md`
+- `docs/datalito-content-governance.md`
+- `docs/datalito-runbook.md`
+- `docs/datalito-threat-model.md`
+- `docs/datalito-evaluation.md`
+- `.env.example`
 
 ## Editar Método de Datalización
 
