@@ -1858,22 +1858,25 @@ body .datalito-chat.compact {
 }
 
 .datalito-launcher {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  min-height: 48px;
-  padding: 0 16px;
-  border: 1px solid rgba(53, 201, 189, 0.44);
-  border-radius: 999px;
-  background: linear-gradient(135deg, rgba(10, 95, 179, 0.96), rgba(20, 151, 151, 0.92));
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
   color: #ffffff;
-  font-weight: 950;
   pointer-events: auto;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.36);
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.38));
+  transition:
+    filter 180ms ease,
+    transform 180ms ease;
 }
 
 .datalito-launcher:hover {
-  transform: translateY(-1px);
+  transform: translateY(-3px) scale(1.03);
 }
 
 .datalito-panel-wrap {
@@ -1940,8 +1943,15 @@ body .datalito-panel {
 }
 
 .datalito-avatar.launcher {
-  width: 34px;
-  height: 34px;
+  position: relative;
+  z-index: 2;
+  width: 76px;
+  height: 76px;
+  border: 3px solid rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 16px 34px rgba(3, 8, 14, 0.26),
+    0 0 0 8px rgba(53, 201, 189, 0.13);
+  animation: datalitoMascotFloat 4.4s ease-in-out infinite;
 }
 
 .datalito-hero-avatar {
@@ -2001,6 +2011,11 @@ html body .datalito-chat-header {
   grid-template-columns: auto minmax(0, 1fr);
   gap: 12px;
   align-items: center;
+}
+
+.datalito-chat-identity .datalito-avatar,
+.datalito-message-speaker .datalito-avatar {
+  animation: datalitoAvatarBreathe 5.6s ease-in-out infinite;
 }
 
 html body .datalito-chat-header h3,
@@ -2191,11 +2206,63 @@ html body .datalito-chat .icon-button:hover {
   color: #084d91;
 }
 
-body .datalito-launcher {
-  min-height: 54px;
-  padding: 7px 14px 7px 8px;
-  border-color: rgba(255, 255, 255, 0.3);
-  background: linear-gradient(135deg, #0a5fb3, #149797);
+.datalito-mascot-aura {
+  position: absolute;
+  inset: 6px;
+  z-index: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 230, 80, 0.34), transparent 34%),
+    radial-gradient(circle at 70% 28%, rgba(53, 201, 189, 0.72), transparent 38%),
+    linear-gradient(135deg, rgba(10, 95, 179, 0.8), rgba(20, 151, 151, 0.66));
+  filter: blur(2px);
+  animation: datalitoMascotAura 3.6s ease-in-out infinite;
+}
+
+.datalito-mascot-bubble {
+  position: absolute;
+  right: 70px;
+  bottom: 58px;
+  z-index: 3;
+  min-width: max-content;
+  padding: 8px 11px;
+  border: 1px solid rgba(53, 201, 189, 0.35);
+  border-radius: 999px 999px 8px;
+  background: rgba(246, 249, 252, 0.96);
+  color: #102033;
+  font-size: 0.78rem;
+  font-weight: 950;
+  box-shadow: 0 12px 28px rgba(3, 8, 14, 0.22);
+  animation: datalitoMascotBubble 5.8s ease-in-out infinite;
+}
+
+.datalito-launcher[aria-expanded="true"] .datalito-mascot-bubble {
+  display: none;
+}
+
+.datalito-mascot-spark {
+  position: absolute;
+  z-index: 1;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ypf-yellow);
+  box-shadow: 0 0 16px rgba(255, 230, 80, 0.9);
+  animation: datalitoMascotSpark 4.8s ease-in-out infinite;
+}
+
+.datalito-mascot-spark.one {
+  top: 14px;
+  right: 7px;
+}
+
+.datalito-mascot-spark.two {
+  right: 20px;
+  bottom: 5px;
+  width: 7px;
+  height: 7px;
+  background: #35c9bd;
+  animation-delay: 1.4s;
 }
 
 .sr-only {
@@ -4303,6 +4370,83 @@ body .datalito-launcher {
 
   100% {
     transform: translate3d(1.5%, 1%, 0) scale(1.03);
+  }
+}
+
+@keyframes datalitoMascotFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(1.4deg);
+  }
+}
+
+@keyframes datalitoMascotNod {
+  0%,
+  72%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  78% {
+    transform: rotate(-5deg) scale(1.03);
+  }
+
+  84% {
+    transform: rotate(4deg) scale(1.02);
+  }
+}
+
+@keyframes datalitoMascotAura {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(0.94);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes datalitoMascotBubble {
+  0%,
+  100% {
+    opacity: 0.88;
+    transform: translateY(0);
+  }
+
+  45% {
+    opacity: 1;
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes datalitoMascotSpark {
+  0%,
+  100% {
+    opacity: 0.24;
+    transform: translate3d(0, 0, 0) scale(0.72);
+  }
+
+  45% {
+    opacity: 1;
+    transform: translate3d(-5px, -8px, 0) scale(1.08);
+  }
+}
+
+@keyframes datalitoAvatarBreathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.035);
   }
 }
 
@@ -7476,8 +7620,18 @@ kbd {
   }
 
   .datalito-launcher {
-    width: 100%;
-    justify-content: center;
+    width: 82px;
+    height: 82px;
+    justify-self: end;
+  }
+
+  .datalito-avatar.launcher {
+    width: 68px;
+    height: 68px;
+  }
+
+  .datalito-mascot-bubble {
+    display: none;
   }
 
   .datalito-panel-wrap {

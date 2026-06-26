@@ -76,6 +76,8 @@ assert(appJs.includes("renderDatalitoPage"), "app.js debe renderizar Datalito.")
 assert(appJs.includes("renderDatalitoGlobalShell"), "app.js debe montar el launcher global de Datalito.");
 assert(appJs.includes("renderDatalitoAvatar"), "Datalito debe usar un avatar propio.");
 assert(appJs.includes("buildDatalitoConversationalResponse"), "Datalito debe manejar conversación natural antes del retrieval.");
+assert(appJs.includes("buildDatalitoWorkflowResponse"), "Datalito debe responder flujos BI end-to-end con criterio propio.");
+assert(appJs.includes("datalito-mascot-aura"), "Datalito debe mostrarse como personaje dinamico, no como boton estatico.");
 assert(appJs.includes("renderMethodologyProcessFlow"), "app.js debe renderizar el proceso metodológico end to end.");
 assert(appJs.includes("renderExecutiveBrief"), "app.js debe renderizar la síntesis ejecutiva.");
 assert(appJs.includes("renderPlatformExecutiveSection"), "app.js debe renderizar la sección ejecutiva inicial.");

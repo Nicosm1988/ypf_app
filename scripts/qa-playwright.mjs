@@ -193,6 +193,18 @@ try {
         await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
         await page.waitForFunction(() => document.querySelectorAll(".datalito-source-card").length > 0);
 
+        await page.locator("#datalitoInput-page").fill("cómo armo un flujo de trabajo completo en bi?");
+        await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
+        await page.waitForFunction(() =>
+          [...document.querySelectorAll(".datalito-message")].some((item) => item.textContent.includes("Roadmap y gates BI end-to-end")),
+        );
+
+        await page.locator("#datalitoInput-page").fill("Dame un ejemplo funcional.");
+        await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
+        await page.waitForFunction(() =>
+          [...document.querySelectorAll(".datalito-message")].some((item) => item.textContent.includes("ejemplo funcional")),
+        );
+
         await page.locator("#datalitoInput-page").fill("¿Cuál es el color del tanque 782 del puerto Alpha?");
         await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
         await page.waitForFunction(() => [...document.querySelectorAll(".datalito-message")].some((item) => item.textContent.includes("No lo tengo en la base aprobada todavía")));
@@ -200,16 +212,24 @@ try {
         const datalitoChatReport = await page.evaluate(() => ({
           assistantMessages: document.querySelectorAll(".datalito-message.assistant").length,
           greeting: [...document.querySelectorAll(".datalito-message")].some((item) => item.textContent.includes("Qué bueno verte por acá")),
+          workflow: [...document.querySelectorAll(".datalito-message")].some((item) => item.textContent.includes("Roadmap y gates BI end-to-end")),
+          followUp: [...document.querySelectorAll(".datalito-message")].some((item) => item.textContent.includes("ejemplo funcional")),
           citations: document.querySelectorAll(".datalito-source-card").length,
           unresolved: [...document.querySelectorAll(".datalito-message")].some((item) =>
             item.textContent.includes("No lo tengo en la base aprobada todavía"),
           ),
+          mascot: Boolean(document.querySelector(".datalito-mascot-aura")),
+          altNoise: document.body.innerText.includes("Datalito, asistente de conocimiento"),
         }));
         if (
-          datalitoChatReport.assistantMessages < 4 ||
+          datalitoChatReport.assistantMessages < 6 ||
           !datalitoChatReport.greeting ||
+          !datalitoChatReport.workflow ||
+          !datalitoChatReport.followUp ||
           datalitoChatReport.citations < 1 ||
-          !datalitoChatReport.unresolved
+          !datalitoChatReport.unresolved ||
+          !datalitoChatReport.mascot ||
+          datalitoChatReport.altNoise
         ) {
           throw new Error(`Datalito no responde con citas y no-answer: ${JSON.stringify(datalitoChatReport)}`);
         }

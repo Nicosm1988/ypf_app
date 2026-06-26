@@ -1961,12 +1961,13 @@ function renderDatalitoSourceTypeSummary() {
 
 function renderDatalitoAvatar(size = "medium") {
   const priority = ["hero", "page", "chat"].includes(size) ? "high" : "auto";
+  const decorative = size !== "hero";
 
   return `
-    <picture class="datalito-avatar ${escapeHtml(size)}">
+    <picture class="datalito-avatar ${escapeHtml(size)}" ${decorative ? 'aria-hidden="true"' : ""}>
       <source srcset="${datalitoAvatar.webp256}" type="image/webp" media="(max-width: 720px)" />
       <source srcset="${datalitoAvatar.webp512}" type="image/webp" />
-      <img src="${datalitoAvatar.png}" alt="Datalito, asistente de conocimiento" width="512" height="512" loading="eager" decoding="async" fetchpriority="${priority}" />
+      <img src="${datalitoAvatar.png}" alt="${decorative ? "" : "Datalito, asistente de conocimiento"}" width="512" height="512" loading="eager" decoding="async" fetchpriority="${priority}" />
     </picture>
   `;
 }
@@ -1983,9 +1984,12 @@ function renderDatalitoGlobalShell() {
             <div class="datalito-panel-content" data-datalito-chat="panel"></div>
           </div>
         </div>
-        <button class="datalito-launcher" type="button" data-datalito-open aria-expanded="false" aria-label="Preguntale a Datalito">
+        <button class="datalito-launcher" type="button" data-datalito-open aria-expanded="false" aria-label="Abrir conversación con Datalito">
+          <span class="datalito-mascot-aura" aria-hidden="true"></span>
           ${renderDatalitoAvatar("launcher")}
-          <span>Datalito</span>
+          <span class="datalito-mascot-spark one" aria-hidden="true"></span>
+          <span class="datalito-mascot-spark two" aria-hidden="true"></span>
+          <span class="datalito-mascot-bubble" aria-hidden="true">Hablame</span>
         </button>
       </div>
     `,
@@ -2132,16 +2136,16 @@ function renderDatalitoCitations(citations) {
   if (!citations.length) return "";
 
   return `
-    <div class="datalito-citations" aria-label="Fuentes utilizadas">
-      <strong>Fuentes</strong>
+    <div class="datalito-citations" aria-label="Ubicación de la respuesta en la plataforma">
+      <strong>Dónde está en la plataforma</strong>
       <div class="datalito-citation-grid">
         ${citations
           .map(
             (source, index) => `
               <a class="datalito-source-card" href="${escapeHtml(source.url)}" data-route>
-                <span>[S${index + 1}] ${escapeHtml(source.status)} · v${escapeHtml(source.version)}</span>
+                <span>S${index + 1} · ${escapeHtml(source.section)}</span>
                 <strong>${escapeHtml(source.title)}</strong>
-                <small>${escapeHtml(source.section)} · revisado ${escapeHtml(source.reviewedAt)}</small>
+                <small>Fuente aprobada · revisada ${escapeHtml(source.reviewedAt)}</small>
               </a>
             `,
           )
@@ -2240,6 +2244,9 @@ function buildDatalitoResponse(question, mode) {
 
   const conversationalResponse = buildDatalitoConversationalResponse(question, mode);
   if (conversationalResponse) return conversationalResponse;
+
+  const workflowResponse = buildDatalitoWorkflowResponse(question, mode);
+  if (workflowResponse) return workflowResponse;
 
   const matches = searchDatalitoSources(question, context);
   const strongMatches = matches.filter((match) => match.score >= 5).slice(0, 4);
@@ -2371,12 +2378,18 @@ function buildDatalitoConversationalResponse(question, mode) {
     });
   }
 
-  if (lastSource && /(segui|seguí|profundiza|profundizá|amplia|ampliá|mas detalle|más detalle|explicame mejor|y eso|por que|por qué)/.test(normalized)) {
+  if (
+    lastSource &&
+    /(segui|seguí|profundiza|profundizá|amplia|ampliá|mas detalle|más detalle|explicame mejor|y eso|por que|por qué|ejemplo|funcional|riesgo|evita|relacion|paso|checklist|gerencia|presenta|aplica|caso)/.test(
+      normalized,
+    )
+  ) {
+    const answer = composeDatalitoContinuationAnswer(question, lastSource);
+
     return createDatalitoConversationMessage({
       question,
       mode,
-      answer:
-        `Sí, te lo desarrollo un poco más. Veníamos hablando de “${lastSource.title}”. La idea central es esta: ${lastSource.summary} Si lo llevamos al trabajo diario, lo importante es identificar qué decisión habilita, qué evidencia deja y qué riesgo evita. Si querés, después lo bajo a pasos concretos o lo resumo para una presentación.`,
+      answer,
       citations: [toDatalitoCitation(lastSource)],
       grounded: true,
       followUps: ["Bajalo a pasos", "Resumilo para gerencia", "Dame un ejemplo"],
@@ -2384,6 +2397,44 @@ function buildDatalitoConversationalResponse(question, mode) {
   }
 
   return null;
+}
+
+function composeDatalitoContinuationAnswer(question, source) {
+  const normalized = normalizeText(question);
+  const example = extractDatalitoContentField(source, "Ejemplo");
+  const risk = extractDatalitoContentField(source, "Riesgo");
+  const why = extractDatalitoContentField(source, "Por qué importa");
+
+  if (/(ejemplo|funcional|caso)/.test(normalized)) {
+    const exampleText =
+      example ||
+      "tomar una señal operativa, convertirla en una decisión visible y dejar evidencia de quién actúa, con qué dato y bajo qué criterio.";
+    return `Sí. Si lo bajamos a un ejemplo funcional, lo pensaría así: ${exampleText} La clave no es mostrar más información, sino cerrar el circuito entre dato, decisión y acción. En la plataforma lo podés revisar en “${source.title}”, dentro de ${source.section}. [S1]`;
+  }
+
+  if (/(riesgo|evita|control)/.test(normalized)) {
+    const riskText = risk || "evita que el equipo tome decisiones con criterios distintos, sin evidencia o con trabajo manual difícil de sostener.";
+    return `El riesgo principal que evita es este: ${riskText} En términos de gestión, sirve para que el producto BI no dependa de memoria individual, correos o validaciones informales. La referencia está en “${source.title}”, dentro de ${source.section}. [S1]`;
+  }
+
+  if (/(paso|checklist|como|cómo|aplica)/.test(normalized)) {
+    return `Lo bajaría a tres pasos: primero, identificá qué decisión tiene que habilitar “${source.title}”; después, definí qué evidencia mínima prueba que esa decisión es confiable; por último, dejá el control operativo en PRD, Spec, checklist o backlog. Esa es la forma de llevarlo de concepto a práctica diaria. [S1]`;
+  }
+
+  if (/(gerencia|presenta|resumi)/.test(normalized)) {
+    return `Para gerencia, yo lo diría así: “${source.title}” ayuda a convertir conocimiento disperso en una forma común de decidir, ejecutar y controlar. ${source.summary} La ganancia es trazabilidad: queda claro qué se decidió, con qué evidencia y dónde se sostiene en la plataforma. [S1]`;
+  }
+
+  const whyText = why ? ` Además, ${why.charAt(0).toLowerCase()}${why.slice(1)}` : "";
+  return `Sí, sigo desde ahí. Veníamos hablando de “${source.title}”: ${source.summary}${whyText} En el trabajo diario, la pregunta útil es qué decisión habilita, qué evidencia deja y qué riesgo evita. La sección correcta para revisarlo es ${source.section}. [S1]`;
+}
+
+function extractDatalitoContentField(source, fieldName) {
+  const normalizedField = normalizeText(fieldName);
+  const line = source.content
+    .split("\n")
+    .find((item) => normalizeText(item).startsWith(`${normalizedField}:`));
+  return line ? line.slice(line.indexOf(":") + 1).trim() : "";
 }
 
 function createDatalitoConversationMessage({ question, mode, answer, followUps, citations = [], grounded = false }) {
@@ -2404,36 +2455,80 @@ function createDatalitoConversationMessage({ question, mode, answer, followUps, 
   };
 }
 
+function buildDatalitoWorkflowResponse(question, mode) {
+  if (!isDatalitoWorkflowQuestion(question)) return null;
+
+  const sources = ["roadmap-gates", "method-operating-model", "prd-vs-spec", "readiness-checklist"]
+    .map((sourceId) => datalitoKnowledgeSources.find((source) => source.id === sourceId))
+    .filter(Boolean);
+
+  return {
+    id: createDatalitoId("assistant"),
+    role: "assistant",
+    question,
+    answer:
+      "Sí. Para armar un flujo de trabajo completo en BI, yo no empezaría por el tablero; empezaría por el recorrido end-to-end de decisión. El flujo sano es: definir el problema y el usuario en un PRD, traducirlo a una Spec técnica y funcional, preparar datos y modelo, construir DAX y UX, validar seguridad, calidad y performance, publicar con responsables claros y sostenerlo con SLA, runbook y mejora continua. [S1][S2][S3]\nLa sección principal para verlo es Roadmap y gates BI end-to-end: ahí están las fases, entregables, gates, riesgos y responsables. Para operarlo en el día a día, lo complementás con el Método operativo de Datalización; y para documentarlo bien, usás PRD vs Spec como contrato entre necesidad, solución y evidencia. [S1][S2][S3]",
+    intent: ["workflow", "how_to"],
+    answerMode: mode,
+    confidence: "high",
+    grounded: true,
+    unresolved: false,
+    citations: sources.slice(0, 3).map(toDatalitoCitation),
+    relatedContent: sources.slice(3).map((source) => ({
+      title: source.title,
+      url: source.canonical_url,
+      reason: "Control de salida antes de publicar",
+    })),
+    suggestedFollowUps: ["Bajalo a checklist", "Qué entregables salen de cada etapa", "Cómo lo presento a gerencia"],
+    statusText: "Te respondí con el flujo end-to-end y te dejé la sección correcta.",
+  };
+}
+
+function isDatalitoWorkflowQuestion(question) {
+  const normalized = normalizeText(question);
+  const asksHow = /(como|cómo|arm|hacer|diseñ|crear|organizar|estructurar|flujo|workflow|proceso|end to end|punta a punta|completo)/.test(
+    normalized,
+  );
+  const isBi = /(bi|power bi|datalizacion|datalización|tablero|dashboard|reporte|datos|inteligencia)/.test(normalized);
+  const asksWorkflow = /(flujo|workflow|proceso|end to end|punta a punta|completo|roadmap|trabajo)/.test(normalized);
+  return asksHow && isBi && asksWorkflow;
+}
+
 function composeDatalitoAnswer(question, mode, primary, matches, context) {
   const citation = "[S1]";
   const lowerQuestion = normalizeText(question);
+  const relatedSections = matches
+    .slice(1, 3)
+    .map((match, index) => `${match.source.title} [S${index + 2}]`)
+    .join(" y ");
 
   if (lowerQuestion.includes("donde") || lowerQuestion.includes("ubic") || lowerQuestion.includes("encontr")) {
-    return `Lo encontrás en ${primary.section}, dentro de “${primary.title}”. La ruta interna es ${primary.canonical_url}. ${primary.summary} ${citation}`;
+    return `Lo encontrás en ${primary.section}, dentro de “${primary.title}”. La respuesta corta es esta: ${primary.summary} ${citation}\nTe dejo el enlace exacto abajo para que vayas directo a la sección correcta.`;
   }
 
   if (lowerQuestion.includes("resum") && context.route !== "/") {
-    return `Resumen de la sección actual: ${primary.summary} ${citation}\nLa lectura práctica es que esta parte del hub debe ayudarte a decidir qué estándar aplicar, qué evidencia revisar y qué siguiente paso sostener.`;
+    return `La idea central de esta parte es simple: ${primary.summary} ${citation}\nLa lectura práctica es que esta sección debe ayudarte a decidir qué estándar aplicar, qué evidencia revisar y qué siguiente paso sostener.`;
   }
 
   if (mode === "executive") {
-    return `La decisión ejecutiva es usar “${primary.title}” como referencia para reducir variabilidad y sostener decisiones con evidencia. ${primary.summary} ${citation}\nImpacto: mejora trazabilidad, acelera alineación y disminuye dependencia de conocimiento tácito. Siguiente paso: abrir la fuente citada y validar si aplica al caso concreto.`;
+    return `La respuesta ejecutiva es esta: “${primary.title}” sirve para reducir variabilidad y sostener decisiones con evidencia. ${primary.summary} ${citation}\nImpacto: mejora trazabilidad, acelera alineación y baja la dependencia de conocimiento tácito. Siguiente paso: abrir la sección citada y validar si aplica al caso concreto.`;
   }
 
   if (mode === "functional") {
-    return `${primary.summary} ${citation}\nAplicación funcional: revisá el proceso, los responsables, los entregables y el riesgo operativo asociado. Si la respuesta afecta un proyecto real, dejá evidencia en PRD, Spec, checklist o backlog según corresponda.`;
+    return `Te lo bajo funcionalmente: ${primary.summary} ${citation}\nPara usarlo bien, revisá proceso, responsables, entregables y riesgo operativo asociado. Si impacta en un proyecto real, dejá evidencia en PRD, Spec, checklist o backlog según corresponda.`;
   }
 
   if (mode === "technical") {
     const excerpt = primary.content.split("\n").slice(0, 3).join(" ");
-    return `${primary.summary} ${citation}\nDetalle técnico: ${excerpt}\nLa implementación debe mantenerse trazable: fuente, versión, owner, steward y URL canónica quedan asociados a la respuesta.`;
+    return `Técnicamente, la base es esta: ${primary.summary} ${citation}\nDetalle: ${excerpt}\nPara que sea gobernable, la implementación tiene que quedar trazable a fuente, versión, owner, steward y URL canónica.`;
   }
 
   if (mode === "step_by_step") {
-    return `1. Abrí la fuente “${primary.title}”. ${citation}\n2. Identificá la regla, etapa, definición o entregable que aplica a tu caso.\n3. Contrastá la evidencia con PRD, Spec, checklist o roadmap.\n4. Si falta una definición aprobada, registrá la brecha para curación.`;
+    return `1. Abrí “${primary.title}” en ${primary.section}. ${citation}\n2. Identificá qué regla, etapa, definición o entregable aplica a tu caso.\n3. Contrastalo con PRD, Spec, checklist o roadmap.\n4. Si falta una definición aprobada, registrá la brecha para curación.`;
   }
 
-  return `${primary.summary} ${citation}\nEn términos prácticos, Datalito encontró esta respuesta en una fuente aprobada de la plataforma y te deja el enlace para revisar el detalle.`;
+  const relatedText = relatedSections ? ` También puede servirte mirar ${relatedSections}, porque completa el contexto.` : "";
+  return `Te diría esto: ${primary.summary} ${citation}\nLo importante, llevado al trabajo diario, es entender qué decisión habilita y dónde queda la evidencia. La sección correcta para revisar el detalle es “${primary.title}”, dentro de ${primary.section}.${relatedText}`;
 }
 
 function searchDatalitoSources(question, context) {
