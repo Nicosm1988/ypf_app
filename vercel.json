@@ -5,46 +5,6 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/que-es-datalizacion",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/pilares-datalizacion",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/intake-aprobacion",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/indice-datalizacion",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/ponderacion-esfuerzo",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/metadata-documentacion",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/alcance-bmc",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/metodologia-flujo",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/recursos-templates",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/roadmap-futuro",
-      "destination": "/index.html"
-    },
-    {
       "source": "/guia-power-bi",
       "destination": "/index.html"
     },

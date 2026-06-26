@@ -1,14 +1,10 @@
 # Datalización YPF
 
-Portal interno para el área de Datalización de YPF con recursos de consulta, gobierno, scoring y trabajo.
+Portal interno para el área de Datalización de YPF con recursos de consulta, gobierno y trabajo.
 
-Datalizar no es simplemente automatizar. Es transformar un flujo, tablero, indicador, proceso o activo analítico para que dependa de una fuente original confiable, esté centralizado, trazado, automatizado, gobernado y documentado, con capacidad de auditoría y sostenimiento.
+Datalización es la práctica de automatizar procesos mediante datos confiables, reglas explícitas, acciones trazables y operación monitoreada. La web está replanteada con una estructura ejecutiva de síntesis, razones, evidencia, acción y control.
 
-- Nueva arquitectura BMC / VMC basada en definición, pilares, intake, índice, ponderación, metadata, alcance y flujo metodológico.
-- Portada ejecutiva mucho más visual, con cinco pilares, score ring, botonera y flujo de siete etapas.
-- Modelo de cinco pilares: Centralización, Trazabilidad y Linaje, Automatización, Gobernanza, Calidad y Auditoría.
-- Índice de Datalización y Factor de Ponderación para evitar medir todos los activos como si pesaran igual.
-- Metadata mínima para tableros, KPIs, fuentes, modelos, procesos y flujos.
+- Portada ejecutiva Datalización Hub / BI Delivery Playbook para posicionar la plataforma como capacidad organizacional.
 - Portadas con imagen industrial de alta calidad vinculada a refinería, ductos y puerto energético.
 - Guía + roadmap BI/Fabric para ordenar el ciclo completo desde proceso y reglas hasta operación.
 - Método de Datalización v0.1 para organizar DEV/PROD, Teams, SharePoint, canales, carpetas, naming, backlog, VMC y gobierno del equipo.
@@ -29,7 +25,7 @@ La app es estatica, sin credenciales, sin datos sensibles y compatible con Verce
 
 - HTML, CSS y JavaScript vanilla.
 - Modulos ES para separar datos de UI.
-- Contenido local editable en `data/datalizationFramework.js`, `data/platformIntro.js`, `data/datalito.js`, `data/designSystem.js`, `data/dictionary.js`, `data/engineeringGuide.js`, `data/datalizationMethod.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
+- Contenido local editable en `data/platformIntro.js`, `data/datalito.js`, `data/designSystem.js`, `data/dictionary.js`, `data/engineeringGuide.js`, `data/datalizationMethod.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
 - Documentación técnica en `docs/librerias-agentes-mcp.md` y documentación operativa de Datalito en `docs/datalito-*.md`.
 - Casos de evaluación de Datalito en `evals/datalito`.
 - Skills repo-locales en `.codex/skills`.
@@ -54,16 +50,6 @@ http://127.0.0.1:8001/
 El servidor local tambien soporta:
 
 ```text
-http://127.0.0.1:8001/que-es-datalizacion
-http://127.0.0.1:8001/pilares-datalizacion
-http://127.0.0.1:8001/intake-aprobacion
-http://127.0.0.1:8001/indice-datalizacion
-http://127.0.0.1:8001/ponderacion-esfuerzo
-http://127.0.0.1:8001/metadata-documentacion
-http://127.0.0.1:8001/alcance-bmc
-http://127.0.0.1:8001/metodologia-flujo
-http://127.0.0.1:8001/recursos-templates
-http://127.0.0.1:8001/roadmap-futuro
 http://127.0.0.1:8001/guia-power-bi
 http://127.0.0.1:8001/metodo-datalizacion
 http://127.0.0.1:8001/metodologia
@@ -84,9 +70,8 @@ npm run build
 
 El build valida que:
 
-- La arquitectura nueva tenga 12 secciones, cinco pilares que suman 100%, intake, índice, ponderación, metadata, alcance BMC y flujo de siete etapas.
 - Exista Home, Guía Power BI/Fabric, Método de Datalización, Metodología, Design System, Datalito, Diccionario BI, Roadmap BI, Proyecto Power BI, Librerías y Atajos.
-- La Home tenga portada ejecutiva visual, pilares, botonera, score ring, alcance BMC y flujo metodológico.
+- La Home tenga portada ejecutiva Datalización Hub, narrativa Antes/Ahora/Después y transición de tableros a disciplina.
 - La Home tenga botonera para las secciones principales, el Design System tenga estructura ejecutiva completa y Datalito tenga vertical slice funcional.
 - El diccionario tenga al menos 65 términos.
 - El roadmap tenga los 9 gates obligatorios y arranque con PRD/Spec.
@@ -99,7 +84,7 @@ El build valida que:
 - El catálogo técnico tenga documentación Markdown y familias de herramientas.
 - Los atajos tengan categorías e items navegables.
 - Los datos tengan los campos requeridos.
-- Vercel tenga rewrites para las rutas nuevas y para los módulos históricos de soporte.
+- Vercel tenga rewrites para `/guia-power-bi`, `/metodo-datalizacion`, `/metodologia`, `/design-system`, `/datalito`, `/diccionario`, `/roadmap`, `/proyecto-power-bi`, `/librerias` y `/atajos`.
 - Se genere `dist/` con las rutas estaticas listas para Vercel.
 
 ## Validar calidad completa

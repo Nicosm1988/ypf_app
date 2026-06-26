@@ -33,24 +33,6 @@ import {
   toyotaFourP,
 } from "../data/methodology.js";
 import {
-  bmcScopeStages,
-  datalizationDefinition,
-  datalizationIndex,
-  datalizationPillars,
-  eligibilityCriteria,
-  frameworkFlow,
-  frameworkNavigation,
-  futureRoadmap,
-  intakeStates,
-  intakeWorkflow,
-  metadataGroups,
-  metadataSamples,
-  resourceTemplateGroups,
-  weightingComparison,
-  weightingModel,
-  weightingVariables,
-} from "../data/datalizationFramework.js";
-import {
   platformBeforeAfter,
   platformCapabilityShift,
   platformDefinitionCards,
@@ -106,55 +88,6 @@ assert(appJs.includes("renderGuidePage"), "app.js debe renderizar la guía Power
 assert(appJs.includes("renderProjectPage"), "app.js debe renderizar el proyecto Power BI.");
 assert(appJs.includes("renderShortcutsPage"), "app.js debe renderizar los atajos Power BI.");
 assert(appJs.includes("renderToolingPage"), "app.js debe renderizar librerías y agentes.");
-
-assert(datalizationDefinition.includes("Datalizar no es simplemente automatizar"), "La nueva definición estratégica debe estar gobernada.");
-assert(frameworkNavigation.length === 12, "La navegación principal debe tener las 12 secciones del modelo.");
-assert(
-  frameworkNavigation.map((item) => item.route).includes("/pilares-datalizacion") &&
-    frameworkNavigation.map((item) => item.route).includes("/metadata-documentacion"),
-  "La navegación debe incluir pilares y metadata.",
-);
-assert(datalizationPillars.length === 5, "El modelo debe tener exactamente cinco pilares.");
-assert(
-  datalizationPillars.every(
-    (pillar) =>
-      pillar.weight === 20 &&
-      pillar.definition &&
-      pillar.why &&
-      pillar.implies &&
-      pillar.subcriteria.length >= 5 &&
-      pillar.evidence.length >= 3 &&
-      pillar.questions.length >= 3 &&
-      pillar.indicators.length >= 3,
-  ),
-  "Cada pilar debe tener peso, definición, subcriterios, evidencias, preguntas e indicadores.",
-);
-assert(datalizationPillars.reduce((total, pillar) => total + pillar.weight, 0) === 100, "Los pilares deben completar 100%.");
-assert(intakeStates.length === 5, "Intake debe tener cinco estados de aprobación.");
-assert(eligibilityCriteria.length === 8, "Intake debe tener ocho criterios de elegibilidad.");
-assert(intakeWorkflow.length === 4, "Intake debe representarse como workflow de cuatro pasos.");
-assert(datalizationIndex.levels.length === 5, "El Índice de Datalización debe tener cinco niveles de madurez.");
-assert(datalizationIndex.formula.includes("peso del pilar"), "El Índice de Datalización debe explicar su fórmula.");
-assert(weightingVariables.length === 4, "El Índice de Ponderación debe tener cuatro variables.");
-assert(
-  weightingVariables.reduce((total, item) => total + item.weight, 0) === 100,
-  "Las variables de ponderación deben sumar 100%.",
-);
-assert(weightingModel.aggregateFormula.includes("Avance agregado ponderado"), "Debe existir fórmula de avance agregado ponderado.");
-assert(weightingComparison.length === 2, "Debe existir comparación entre tablero complejo y dependencia puntual.");
-assert(metadataGroups.length === 5, "Metadata debe estar organizada en cinco grupos.");
-assert(metadataSamples.length >= 3, "Metadata debe mostrar registros de ejemplo.");
-assert(bmcScopeStages.length === 3, "El alcance BMC debe explicar Hoy, Próximo y Futuro.");
-assert(frameworkFlow.length === 7, "El flujo metodológico debe tener siete etapas de 0 a 6.");
-assert(resourceTemplateGroups.length >= 6, "Recursos debe enlazar templates y módulos operativos.");
-assert(futureRoadmap.length >= 4, "El roadmap futuro debe mostrar evolución incremental.");
-assert(appJs.includes("renderPillarSystem"), "La UI debe renderizar el sistema visual de pilares.");
-assert(appJs.includes("renderScoreRing"), "La UI debe renderizar score ring.");
-assert(appJs.includes("renderIntakeApprovalPage"), "La UI debe renderizar intake y aprobación.");
-assert(appJs.includes("renderWeightingPage"), "La UI debe renderizar ponderación.");
-assert(stylesCss.includes(".pillar-card"), "CSS debe incluir tarjetas de pilares.");
-assert(stylesCss.includes(".score-ring"), "CSS debe incluir score ring.");
-assert(stylesCss.includes(".metadata-sample"), "CSS debe incluir data grid de metadata.");
 
 assert(dictionaryCategories.length >= 15, "El diccionario debe incluir categorías de producto, Fabric, performance y operación.");
 assert(dictionaryTerms.length >= 65, "El diccionario debe incluir al menos 65 términos.");
@@ -358,9 +291,6 @@ assert(rewriteSources.has("/roadmap"), "Vercel debe reescribir /roadmap a index.
 assert(rewriteSources.has("/proyecto-power-bi"), "Vercel debe reescribir /proyecto-power-bi a index.html.");
 assert(rewriteSources.has("/atajos"), "Vercel debe reescribir /atajos a index.html.");
 assert(rewriteSources.has("/librerias"), "Vercel debe reescribir /librerias a index.html.");
-for (const route of frameworkNavigation.map((item) => item.route).filter((route) => route !== "/" && route !== "/diccionario")) {
-  assert(rewriteSources.has(route), `Vercel debe reescribir ${route} a index.html.`);
-}
 assert(vercelJson.outputDirectory === "dist", "Vercel debe publicar la carpeta dist.");
 const dataCacheHeader = (vercelJson.headers || [])
   .find((item) => item.source === "/data/(.*)")
@@ -371,9 +301,6 @@ assert(
 );
 
 await rm("dist", { force: true, recursive: true });
-for (const route of frameworkNavigation.map((item) => item.route).filter((route) => route !== "/")) {
-  await mkdir(`dist${route}`, { recursive: true });
-}
 await mkdir("dist/guia-power-bi", { recursive: true });
 await mkdir("dist/metodo-datalizacion", { recursive: true });
 await mkdir("dist/metodologia", { recursive: true });
@@ -403,9 +330,6 @@ await writeFile("dist/roadmap/index.html", indexHtml);
 await writeFile("dist/proyecto-power-bi/index.html", indexHtml);
 await writeFile("dist/atajos/index.html", indexHtml);
 await writeFile("dist/librerias/index.html", indexHtml);
-for (const route of frameworkNavigation.map((item) => item.route).filter((route) => route !== "/")) {
-  await writeFile(`dist${route}/index.html`, indexHtml);
-}
 
 console.log("Build validation OK");
 console.log(`- ${dictionaryTerms.length} términos BI`);
@@ -414,7 +338,6 @@ console.log(`- ${dmaicStages.length} etapas DMAIC y ${oeeFactors.length} factore
 console.log(`- ${roadmapPhases.length} gates de roadmap`);
 console.log(`- ${toolingGroups.length} familias de librerías/agentes`);
 console.log(`- ${powerBiShortcuts.length} categorías de atajos`);
-console.log(`- ${datalizationPillars.length} pilares de datalización y ${frameworkNavigation.length} secciones nuevas`);
 console.log(`- ${datalitoKnowledgeSources.length} fuentes Datalito y ${datalitoEvaluationQuestions.length} preguntas de evaluación`);
 console.log("- dist generado para Vercel");
 

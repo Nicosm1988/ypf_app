@@ -1,16 +1,6 @@
-const CACHE_NAME = "datalizacion-ypf-v23";
+const CACHE_NAME = "datalizacion-ypf-v22";
 const PRECACHE_URLS = [
   "/",
-  "/que-es-datalizacion",
-  "/pilares-datalizacion",
-  "/intake-aprobacion",
-  "/indice-datalizacion",
-  "/ponderacion-esfuerzo",
-  "/metadata-documentacion",
-  "/alcance-bmc",
-  "/metodologia-flujo",
-  "/recursos-templates",
-  "/roadmap-futuro",
   "/guia-power-bi",
   "/metodo-datalizacion",
   "/metodologia",

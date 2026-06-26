@@ -60,26 +60,6 @@ import {
 import { powerBiShortcuts, shortcutsPdf } from "./data/powerbiShortcuts.js";
 import { conceptDecantation, narrativeFrame, pageNarratives } from "./data/executiveNarrative.js";
 import {
-  bmcScopeStages,
-  datalizationDefinition,
-  datalizationIndex,
-  datalizationPillars,
-  eligibilityCriteria,
-  frameworkFlow,
-  frameworkNavigation,
-  futureRoadmap,
-  intakeStates,
-  intakeWorkflow,
-  metadataGroups,
-  metadataSamples,
-  resourceTemplateGroups,
-  scoreExample,
-  uiComponentModel,
-  weightingComparison,
-  weightingModel,
-  weightingVariables,
-} from "./data/datalizationFramework.js";
-import {
   platformBeforeAfter,
   platformCapabilityShift,
   platformDefinitionCards,
@@ -134,17 +114,7 @@ const icons = {
 };
 
 const routeTitles = {
-  "/": "Datalización BMC | Sistema metodológico",
-  "/que-es-datalizacion": "Qué es Datalización | Datalización YPF",
-  "/pilares-datalizacion": "Pilares de Datalización | Datalización YPF",
-  "/intake-aprobacion": "Intake y Aprobación | Datalización YPF",
-  "/indice-datalizacion": "Índice de Datalización | Datalización YPF",
-  "/ponderacion-esfuerzo": "Ponderación y Esfuerzo | Datalización YPF",
-  "/metadata-documentacion": "Metadata y Documentación | Datalización YPF",
-  "/alcance-bmc": "Alcance BMC | Datalización YPF",
-  "/metodologia-flujo": "Metodología y Flujo | Datalización YPF",
-  "/recursos-templates": "Recursos y Templates | Datalización YPF",
-  "/roadmap-futuro": "Roadmap futuro | Datalización YPF",
+  "/": "Datalización Hub | BI Delivery Playbook",
   "/guia-power-bi": "Guía y roadmap de automatización BI/Fabric | Datalización YPF",
   "/metodo-datalizacion": "Método de Datalización | Datalización YPF",
   "/metodologia": "Metodología de mejora continua BI | Datalización YPF",
@@ -195,7 +165,62 @@ const datalitoState = {
   status: "",
 };
 
-const hubNavigationSections = frameworkNavigation.filter((item) => item.route !== "/");
+const hubNavigationSections = [
+  {
+    title: "Guía + Roadmap",
+    route: "/guia-power-bi",
+    iconName: "route",
+    text: "Proceso end-to-end para construir, validar, publicar y operar productos BI.",
+  },
+  {
+    title: "Método",
+    route: "/metodo-datalizacion",
+    iconName: "folder",
+    text: "Estructura de trabajo, Teams, SharePoint, naming, backlog, VMC y gobierno.",
+  },
+  {
+    title: "Metodología",
+    route: "/metodologia",
+    iconName: "gauge",
+    text: "OEE BI, DMAIC, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata aplicados a BI.",
+  },
+  {
+    title: "Proyecto Power BI",
+    route: "/proyecto-power-bi",
+    iconName: "code",
+    text: "PRD, Spec, PBIP, TMDL, Git, documentación técnica y operación del producto.",
+  },
+  {
+    title: "Diccionario BI",
+    route: "/diccionario",
+    iconName: "book",
+    text: "Lenguaje común para negocio, datos, BI, gobierno, seguridad y adopción.",
+  },
+  {
+    title: "Design System",
+    route: "/design-system",
+    iconName: "layers",
+    text: "Lenguaje visual y funcional para escalar la plataforma sin perder coherencia.",
+  },
+  {
+    title: "Datalito",
+    route: "/datalito",
+    iconName: "bot",
+    text: "Asistente interno para encontrar conocimiento, citar fuentes y registrar brechas.",
+  },
+  {
+    title: "Librerías",
+    route: "/librerias",
+    iconName: "terminal",
+    text: "Catálogo técnico de agentes, MCPs, sandboxes, APIs y librerías evaluables.",
+  },
+  {
+    title: "Atajos",
+    route: "/atajos",
+    iconName: "spark",
+    text: "Acciones frecuentes de Power BI para reducir fricción diaria y errores.",
+  },
+];
 
 let pointerFrame = 0;
 
@@ -953,20 +978,6 @@ const interactiveSurfaceSelector = [
   ".platform-discipline-card",
   ".platform-metric",
   ".hub-nav-card",
-  ".framework-card",
-  ".framework-action",
-  ".pillar-card",
-  ".score-panel",
-  ".score-ring",
-  ".intake-state",
-  ".intake-step",
-  ".weight-card",
-  ".metadata-sample",
-  ".metadata-group",
-  ".scope-stage",
-  ".framework-flow-step",
-  ".resource-tile",
-  ".roadmap-future-card",
   ".design-system-card",
   ".design-system-benefit",
   ".design-system-component",
@@ -1124,16 +1135,6 @@ function getRoute(pathname = window.location.pathname) {
   const cleanPath = pathname.replace(/\/+$/, "") || "/";
   if (
     [
-      "/que-es-datalizacion",
-      "/pilares-datalizacion",
-      "/intake-aprobacion",
-      "/indice-datalizacion",
-      "/ponderacion-esfuerzo",
-      "/metadata-documentacion",
-      "/alcance-bmc",
-      "/metodologia-flujo",
-      "/recursos-templates",
-      "/roadmap-futuro",
       "/guia-power-bi",
       "/metodo-datalizacion",
       "/metodologia",
@@ -1249,18 +1250,7 @@ function enhanceInteractiveSurfaces() {
 }
 
 function setActiveNav(route) {
-  const routeAliases = {
-    "/roadmap": "/roadmap-futuro",
-    "/guia-power-bi": "/recursos-templates",
-    "/metodo-datalizacion": "/metodologia-flujo",
-    "/metodologia": "/metodologia-flujo",
-    "/design-system": "/recursos-templates",
-    "/datalito": "/recursos-templates",
-    "/proyecto-power-bi": "/recursos-templates",
-    "/atajos": "/recursos-templates",
-    "/librerias": "/recursos-templates",
-  };
-  const activeRoute = routeAliases[route] || route;
+  const activeRoute = route === "/roadmap" ? "/guia-power-bi" : route;
   navLinks.forEach((link) => {
     const url = new URL(link.href);
     link.classList.toggle("active", getRoute(url.pathname) === activeRoute);
@@ -1273,26 +1263,6 @@ function renderRoute(route = getRoute()) {
 
   if (route === "/diccionario") {
     renderDictionaryPage();
-  } else if (route === "/que-es-datalizacion") {
-    renderDatalizationWhatPage();
-  } else if (route === "/pilares-datalizacion") {
-    renderDatalizationPillarsPage();
-  } else if (route === "/intake-aprobacion") {
-    renderIntakeApprovalPage();
-  } else if (route === "/indice-datalizacion") {
-    renderDatalizationIndexPage();
-  } else if (route === "/ponderacion-esfuerzo") {
-    renderWeightingPage();
-  } else if (route === "/metadata-documentacion") {
-    renderMetadataDocumentationPage();
-  } else if (route === "/alcance-bmc") {
-    renderBmcScopePage();
-  } else if (route === "/metodologia-flujo") {
-    renderFrameworkFlowPage();
-  } else if (route === "/recursos-templates") {
-    renderResourcesTemplatesPage();
-  } else if (route === "/roadmap-futuro") {
-    renderFutureRoadmapPage();
   } else if (route === "/metodo-datalizacion") {
     renderDatalizationMethodPage();
   } else if (route === "/metodologia") {
@@ -1328,8 +1298,7 @@ function renderRoute(route = getRoute()) {
   });
 }
 
-// eslint-disable-next-line no-unused-vars
-function renderLegacyHomePage() {
+function renderHomePage() {
   appRoot.innerHTML = `
     <section class="page home-page">
       <section class="hero" aria-label="Datalización Hub">
@@ -1524,600 +1493,6 @@ function renderLegacyHomePage() {
           .join("")}
       </section>
     </section>
-  `;
-}
-
-function renderHomePage() {
-  appRoot.innerHTML = `
-    <section class="page datalization-framework datalization-home">
-      ${renderFrameworkHero({
-        eyebrow: "Datalización BMC | Value Management Center",
-        title: "Datalizar no es solo automatizar: es conectar, trazar, gobernar y sostener el dato.",
-        text:
-          "La plataforma ordena el universo inicial BMC con un modelo claro: intake, cinco pilares, índice de madurez, ponderación, metadata y seguimiento.",
-        primary: { label: "Ver pilares", route: "/pilares-datalizacion", iconName: "shield" },
-        secondary: { label: "Ver índice", route: "/indice-datalizacion", iconName: "gauge" },
-      })}
-
-      <section class="framework-strip page-inner" aria-label="Resumen ejecutivo del modelo">
-        ${[
-          ["5", "pilares obligatorios"],
-          ["100%", "madurez objetivo"],
-          ["BMC", "alcance inicial"],
-          ["2", "índices de lectura"],
-        ]
-          .map(
-            ([value, label]) => `
-              <article class="framework-card">
-                <strong>${escapeHtml(value)}</strong>
-                <span>${escapeHtml(label)}</span>
-              </article>
-            `,
-          )
-          .join("")}
-      </section>
-
-      <section class="framework-section page-inner" aria-labelledby="homePillarsTitle">
-        <div class="framework-section-head">
-          <span class="flow-chip">núcleo conceptual</span>
-          <h2 id="homePillarsTitle">Los cinco pilares completan el 100% de la datalización.</h2>
-          <p>Cada pilar pesa 20% como base inicial. El modelo queda preparado para modificar pesos cuando la práctica madure.</p>
-        </div>
-        ${renderPillarSystem()}
-      </section>
-
-      <section class="framework-section page-inner" aria-labelledby="homeAccessTitle">
-        <div class="framework-section-head compact">
-          <span class="flow-chip">botonera ejecutiva</span>
-          <h2 id="homeAccessTitle">Entrá por la decisión que necesitás tomar.</h2>
-        </div>
-        <div class="framework-action-grid">
-          ${hubNavigationSections
-            .slice(0, 8)
-            .map(
-              (item) => `
-                <a class="framework-action" href="${escapeHtml(item.route)}" data-route>
-                  <span>${icon(item.iconName)}</span>
-                  <strong>${escapeHtml(item.title)}</strong>
-                  <small>${escapeHtml(item.text)}</small>
-                </a>
-              `,
-            )
-            .join("")}
-        </div>
-      </section>
-
-      <section class="framework-section framework-score-band page-inner" aria-labelledby="homeScoreTitle">
-        <div class="score-panel">
-          ${renderScoreRing(scoreExample.finalScore, "Índice ejemplo")}
-          <div>
-            <span class="flow-chip">cómo se lee el 100%</span>
-            <h2 id="homeScoreTitle">El score combina madurez por pilar y peso relativo del activo.</h2>
-            <p>${escapeHtml(scoreExample.asset)}: ${escapeHtml(scoreExample.reading)}</p>
-            <div class="formula-card">${escapeHtml(datalizationIndex.formula)}</div>
-          </div>
-        </div>
-        <div class="scope-stage home-scope">
-          <span>Alcance inicial</span>
-          <strong>BMC / Value Management Center</strong>
-          <p>Primero se estabiliza el método en el universo BMC; después se escala con evidencia.</p>
-          <a class="button small secondary" href="/alcance-bmc" data-route>Ver alcance ${icon("arrowRight")}</a>
-        </div>
-      </section>
-
-      <section class="framework-section page-inner" aria-labelledby="homeFlowTitle">
-        <div class="framework-section-head">
-          <span class="flow-chip">metodología replicable</span>
-          <h2 id="homeFlowTitle">El flujo convierte una solicitud en un activo medido, ponderado y gobernado.</h2>
-        </div>
-        ${renderFrameworkFlowTrack()}
-      </section>
-    </section>
-  `;
-}
-
-function renderDatalizationWhatPage() {
-  appRoot.innerHTML = `
-    <section class="page datalization-framework">
-      ${renderFrameworkHero({
-        eyebrow: "Qué es Datalización",
-        title: "Un activo está datalizado cuando el dato puede explicarse, sostenerse y auditarse.",
-        text: datalizationDefinition,
-        primary: { label: "Ver pilares", route: "/pilares-datalizacion", iconName: "shield" },
-        secondary: { label: "Ver intake", route: "/intake-aprobacion", iconName: "filter" },
-      })}
-      <section class="framework-section page-inner">
-        <div class="definition-compare">
-          <article class="framework-card danger">
-            <span>Automatizar</span>
-            <h2>Acelera una tarea.</h2>
-            <p>Puede reducir carga manual, pero no garantiza fuente original, linaje, ownership, calidad ni auditoría.</p>
-          </article>
-          <article class="framework-card success">
-            <span>Datalizar</span>
-            <h2>Instala una capacidad controlada.</h2>
-            <p>Conecta fuente, transformación, modelo, responsable, reglas, evidencia y revisión en un mismo sistema.</p>
-          </article>
-        </div>
-        <div class="framework-check-grid" aria-label="Condiciones de datalización">
-          ${[
-            "Fuente original confiable",
-            "Centralización",
-            "Linaje auditable",
-            "Automatización sostenida",
-            "Responsables explícitos",
-            "Documentación mínima",
-            "Criterios de calidad",
-            "Metodología común",
-          ]
-            .map((item) => `<span>${icon("shield")}${escapeHtml(item)}</span>`)
-            .join("")}
-        </div>
-      </section>
-    </section>
-  `;
-}
-
-function renderDatalizationPillarsPage() {
-  appRoot.innerHTML = `
-    <section class="page datalization-framework">
-      ${renderFrameworkHero({
-        eyebrow: "Pilares de Datalización",
-        title: "Los cinco pilares son obligatorios; ninguno reemplaza al otro.",
-        text: "El cumplimiento total de Centralización, Trazabilidad y Linaje, Automatización, Gobernanza, y Calidad y Auditoría define el 100% de datalización.",
-        primary: { label: "Calcular índice", route: "/indice-datalizacion", iconName: "gauge" },
-        secondary: { label: "Ver metadata", route: "/metadata-documentacion", iconName: "clipboard" },
-      })}
-      <section class="framework-section page-inner">
-        ${renderPillarSystem(true)}
-      </section>
-    </section>
-  `;
-}
-
-function renderIntakeApprovalPage() {
-  appRoot.innerHTML = `
-    <section class="page datalization-framework">
-      ${renderFrameworkHero({
-        eyebrow: "Intake y Aprobación",
-        title: "Antes de medir, el trabajo debe demostrar que es apto para entrar al proceso.",
-        text: "El intake evita sumar pedidos ambiguos al backlog y protege el foco inicial del universo BMC.",
-        primary: { label: "Ver criterios", route: "#criterios-intake", iconName: "filter" },
-        secondary: { label: "Ver flujo", route: "/metodologia-flujo", iconName: "route" },
-      })}
-      <section class="framework-section page-inner">
-        <div class="intake-funnel" aria-label="Workflow de intake">
-          ${intakeWorkflow
-            .map(
-              (item, index) => `
-                <article class="intake-step" style="--step-order:${index}">
-                  <span>${String(index).padStart(2, "0")}</span>
-                  <strong>${escapeHtml(item.step)}</strong>
-                  <p>${escapeHtml(item.text)}</p>
-                  <small>${escapeHtml(item.state)}</small>
-                </article>
-              `,
-            )
-            .join("")}
-        </div>
-        <div class="intake-state-grid" aria-label="Estados de aprobación">
-          ${intakeStates
-            .map(
-              (state) => `
-                <article class="intake-state tone-${escapeHtml(state.tone)}">
-                  <strong>${escapeHtml(state.label)}</strong>
-                  <p>${escapeHtml(state.text)}</p>
-                </article>
-              `,
-            )
-            .join("")}
-        </div>
-      </section>
-      <section class="framework-section page-inner" id="criterios-intake">
-        <div class="framework-section-head compact">
-          <span class="flow-chip">criterios de elegibilidad</span>
-          <h2>Un activo entra cuando tiene alcance, valor, fuente, dueño y evidencia.</h2>
-        </div>
-        <div class="framework-check-grid">
-          ${eligibilityCriteria.map((item) => `<span>${icon("shield")}${escapeHtml(item)}</span>`).join("")}
-        </div>
-      </section>
-    </section>
-  `;
-}
-
-function renderDatalizationIndexPage() {
-  appRoot.innerHTML = `
-    <section class="page datalization-framework">
-      ${renderFrameworkHero({
-        eyebrow: "Índice de Datalización",
-        title: "El índice mide madurez real: peso del pilar por cumplimiento del pilar.",
-        text: `${datalizationIndex.formula}. ${datalizationIndex.baseWeights}`,
-        primary: { label: "Ver ponderación", route: "/ponderacion-esfuerzo", iconName: "route" },
-        secondary: { label: "Ver pilares", route: "/pilares-datalizacion", iconName: "shield" },
-      })}
-      <section class="framework-section framework-score-band page-inner">
-        <div class="score-panel">
-          ${renderScoreRing(scoreExample.finalScore, scoreExample.asset)}
-          <div class="pillar-score-list">
-            ${datalizationPillars.map(renderPillarBar).join("")}
-          </div>
-        </div>
-        <div class="maturity-grid">
-          ${datalizationIndex.levels
-            .map(
-              (level) => `
-                <article class="framework-card tone-${escapeHtml(level.tone)}">
-                  <span>${escapeHtml(level.range)}</span>
-                  <strong>${escapeHtml(level.label)}</strong>
-                </article>
-              `,
-            )
-            .join("")}
-        </div>
-      </section>
-    </section>
-  `;
-}
-
-function renderWeightingPage() {
-  appRoot.innerHTML = `
-    <section class="page datalization-framework">
-      ${renderFrameworkHero({
-        eyebrow: "Ponderación y Esfuerzo",
-        title: "No todos los activos pesan igual; por eso la lectura agregada debe ponderarse.",
-        text: "El factor de ponderación evita comparar un tablero complejo con una dependencia puntual como si tuvieran el mismo impacto.",
-        primary: { label: "Ver metadata", route: "/metadata-documentacion", iconName: "clipboard" },
-        secondary: { label: "Ver alcance", route: "/alcance-bmc", iconName: "folder" },
-      })}
-      <section class="framework-section page-inner">
-        <div class="formula-card strong">${escapeHtml(weightingModel.formula)}</div>
-        <div class="weight-grid">
-          ${weightingVariables.map(renderWeightCard).join("")}
-        </div>
-        <div class="comparison-grid">
-          ${weightingComparison
-            .map(
-              (item) => `
-                <article class="framework-card">
-                  <span>${escapeHtml(item.title)}</span>
-                  <div class="comparison-metrics">
-                    <strong>${item.datalizationScore}%</strong>
-                    <small>índice</small>
-                    <strong>${item.effortFactor}</strong>
-                    <small>factor</small>
-                  </div>
-                  <p>${escapeHtml(item.text)}</p>
-                </article>
-              `,
-            )
-            .join("")}
-        </div>
-        <div class="formula-card">${escapeHtml(weightingModel.aggregateFormula)}</div>
-      </section>
-    </section>
-  `;
-}
-
-function renderMetadataDocumentationPage() {
-  appRoot.innerHTML = `
-    <section class="page datalization-framework">
-      ${renderFrameworkHero({
-        eyebrow: "Metadata y Documentación",
-        title: "La metadata mínima convierte cada activo en algo evaluable, auditable y gobernable.",
-        text: "Sin ficha de metadata, el índice queda sin evidencia y el seguimiento depende de memoria informal.",
-        primary: { label: "Ver ejemplo", route: "#metadata-ejemplo", iconName: "clipboard" },
-        secondary: { label: "Ver recursos", route: "/recursos-templates", iconName: "terminal" },
-      })}
-      <section class="framework-section page-inner">
-        <div class="metadata-group-grid">
-          ${metadataGroups
-            .map(
-              (group) => `
-                <article class="metadata-group">
-                  <h2>${escapeHtml(group.title)}</h2>
-                  <ul>${group.fields.map((field) => `<li>${escapeHtml(field)}</li>`).join("")}</ul>
-                </article>
-              `,
-            )
-            .join("")}
-        </div>
-      </section>
-      <section class="framework-section page-inner" id="metadata-ejemplo">
-        <div class="framework-section-head compact">
-          <span class="flow-chip">data grid de referencia</span>
-          <h2>La vista operativa muestra estado, score, peso y próximo paso.</h2>
-        </div>
-        <div class="metadata-grid" aria-label="Ejemplo de metadata de activos">
-          ${metadataSamples.map(renderMetadataSample).join("")}
-        </div>
-      </section>
-    </section>
-  `;
-}
-
-function renderBmcScopePage() {
-  appRoot.innerHTML = `
-    <section class="page datalization-framework">
-      ${renderFrameworkHero({
-        eyebrow: "Alcance inicial",
-        title: "El primer universo de aplicación es BMC / Value Management Center.",
-        text: "La decisión de alcance permite construir un método serio, probarlo con activos reales y escalarlo recién cuando exista evidencia.",
-        primary: { label: "Ver flujo", route: "/metodologia-flujo", iconName: "route" },
-        secondary: { label: "Ver roadmap", route: "/roadmap-futuro", iconName: "spark" },
-      })}
-      <section class="framework-section page-inner">
-        <div class="scope-grid">
-          ${bmcScopeStages
-            .map(
-              (stage) => `
-                <article class="scope-stage">
-                  <span>${escapeHtml(stage.moment)}</span>
-                  <h2>${escapeHtml(stage.title)}</h2>
-                  <p>${escapeHtml(stage.text)}</p>
-                  <small>${escapeHtml(stage.status)}</small>
-                </article>
-              `,
-            )
-            .join("")}
-        </div>
-      </section>
-    </section>
-  `;
-}
-
-function renderFrameworkFlowPage() {
-  appRoot.innerHTML = `
-    <section class="page datalization-framework">
-      ${renderFrameworkHero({
-        eyebrow: "Metodología / Flujo",
-        title: "El proceso baja de una solicitud a una lectura agregada del universo BMC.",
-        text: "La metodología organiza el trabajo en siete etapas: intake, metadata, evaluación, índice, ponderación, portfolio y mejora.",
-        primary: { label: "Ver intake", route: "/intake-aprobacion", iconName: "filter" },
-        secondary: { label: "Ver índice", route: "/indice-datalizacion", iconName: "gauge" },
-      })}
-      <section class="framework-section page-inner">
-        ${renderFrameworkFlowTrack(true)}
-      </section>
-      <section class="framework-section page-inner">
-        <div class="resource-grid compact">
-          ${[
-            ["Método operativo", "/metodo-datalizacion", "Cómo se organiza el trabajo diario."],
-            ["Metodología Lean BI", "/metodologia", "Cómo se mide pérdida, causa y control."],
-            ["Guía + Roadmap", "/guia-power-bi", "Cómo se construye y publica BI end-to-end."],
-          ]
-            .map(
-              ([title, route, text]) => `
-                <a class="resource-tile" href="${route}" data-route>
-                  <strong>${escapeHtml(title)}</strong>
-                  <p>${escapeHtml(text)}</p>
-                  <small>Ver detalle ${icon("arrowRight")}</small>
-                </a>
-              `,
-            )
-            .join("")}
-        </div>
-      </section>
-    </section>
-  `;
-}
-
-function renderResourcesTemplatesPage() {
-  appRoot.innerHTML = `
-    <section class="page datalization-framework">
-      ${renderFrameworkHero({
-        eyebrow: "Recursos / Templates",
-        title: "Los recursos convierten el método en trabajo diario repetible.",
-        text: "Esta sección reúne guías, modelos, librerías, atajos y Datalito como soporte operativo del estándar.",
-        primary: { label: "Ver PRD y Spec", route: "/guia-power-bi", iconName: "route" },
-        secondary: { label: "Hablar con Datalito", route: "/datalito", iconName: "bot" },
-      })}
-      <section class="framework-section page-inner">
-        <div class="resource-grid">
-          ${resourceTemplateGroups
-            .map(
-              (item) => `
-                <a class="resource-tile" href="${escapeHtml(item.route)}" data-route>
-                  <strong>${escapeHtml(item.title)}</strong>
-                  <p>${escapeHtml(item.text)}</p>
-                  <small>Abrir ${icon("arrowRight")}</small>
-                </a>
-              `,
-            )
-            .join("")}
-        </div>
-      </section>
-    </section>
-  `;
-}
-
-function renderFutureRoadmapPage() {
-  appRoot.innerHTML = `
-    <section class="page datalization-framework">
-      ${renderFrameworkHero({
-        eyebrow: "Roadmap futuro",
-        title: "La madurez se instala por etapas: modelo, piloto, tablero y escala.",
-        text: "El roadmap evita prometer escala antes de tener criterios, evidencia, responsables y medición estable.",
-        primary: { label: "Ver alcance BMC", route: "/alcance-bmc", iconName: "folder" },
-        secondary: { label: "Ver recursos", route: "/recursos-templates", iconName: "terminal" },
-      })}
-      <section class="framework-section page-inner">
-        <div class="future-roadmap">
-          ${futureRoadmap
-            .map(
-              (item, index) => `
-                <article class="roadmap-future-card" style="--step-order:${index}">
-                  <span>${escapeHtml(item.horizon)}</span>
-                  <h2>${escapeHtml(item.title)}</h2>
-                  <p>${escapeHtml(item.text)}</p>
-                </article>
-              `,
-            )
-            .join("")}
-        </div>
-        <div class="framework-check-grid">
-          ${uiComponentModel.map((item) => `<span>${icon("shield")}${escapeHtml(item)}</span>`).join("")}
-        </div>
-      </section>
-    </section>
-  `;
-}
-
-function renderFrameworkHero({ eyebrow, title, text, primary, secondary }) {
-  return `
-    <section class="framework-hero">
-      <picture class="hero-media">
-        <source
-          type="image/avif"
-          srcset="/assets/ypf-industrial-hero-640.avif 640w, /assets/ypf-industrial-hero-960.avif 960w, /assets/ypf-industrial-hero-1280.avif 1280w, /assets/ypf-industrial-hero-1672.avif 1672w"
-          sizes="100vw"
-        />
-        <source
-          type="image/webp"
-          srcset="/assets/ypf-industrial-hero-640.webp 640w, /assets/ypf-industrial-hero-960.webp 960w, /assets/ypf-industrial-hero-1280.webp 1280w, /assets/ypf-industrial-hero-1672.webp 1672w"
-          sizes="100vw"
-        />
-        <img src="/assets/ypf-industrial-hero.png" width="1672" height="941" alt="Complejo industrial energético de YPF" />
-      </picture>
-      <div class="hero-shade" aria-hidden="true"></div>
-      <div class="page-inner framework-hero-inner">
-        <span class="eyebrow">${escapeHtml(eyebrow)}</span>
-        <h1>${escapeHtml(title)}</h1>
-        <p>${escapeHtml(text)}</p>
-        <div class="hero-actions">
-          <a class="button" href="${escapeHtml(primary.route)}" data-route>${icon(primary.iconName)}${escapeHtml(primary.label)}</a>
-          <a class="button secondary" href="${escapeHtml(secondary.route)}" data-route>${icon(secondary.iconName)}${escapeHtml(secondary.label)}</a>
-        </div>
-      </div>
-    </section>
-  `;
-}
-
-function renderPillarSystem(expanded = false) {
-  const total = datalizationPillars.reduce((sum, pillar) => sum + pillar.weight, 0);
-  return `
-    <div class="pillar-system">
-      <div class="pillar-core">
-        <strong>${total}%</strong>
-        <span>Datalizado</span>
-        <small>5 pilares x 20%</small>
-      </div>
-      <div class="pillar-grid">
-        ${datalizationPillars.map((pillar, index) => renderPillarCard(pillar, index, expanded)).join("")}
-      </div>
-    </div>
-  `;
-}
-
-function renderPillarCard(pillar, index, expanded = false) {
-  return `
-    <details class="pillar-card" style="--pillar-color:${escapeHtml(pillar.color)}; --step-order:${index}" ${expanded ? "open" : ""}>
-      <summary>
-        <span>${icon(pillar.iconName)}</span>
-        <div>
-          <small>${pillar.weight}% · ${escapeHtml(pillar.status)}</small>
-          <strong>${escapeHtml(pillar.title)}</strong>
-          <p>${escapeHtml(pillar.definition)}</p>
-        </div>
-      </summary>
-      <div class="pillar-detail">
-        <div>
-          <h2>Por qué importa</h2>
-          <p>${escapeHtml(pillar.why)}</p>
-        </div>
-        <div>
-          <h2>Qué implica</h2>
-          <p>${escapeHtml(pillar.implies)}</p>
-        </div>
-        <div>
-          <h2>Subcriterios</h2>
-          <ul>${pillar.subcriteria.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-        </div>
-        <div>
-          <h2>Evidencias</h2>
-          <ul>${pillar.evidence.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-        </div>
-        <div class="pillar-example good"><strong>Cumple</strong><p>${escapeHtml(pillar.compliantExample)}</p></div>
-        <div class="pillar-example bad"><strong>No cumple</strong><p>${escapeHtml(pillar.nonCompliantExample)}</p></div>
-        <div>
-          <h2>Preguntas de validación</h2>
-          <ul>${pillar.questions.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-        </div>
-        <div>
-          <h2>Indicadores sugeridos</h2>
-          <ul>${pillar.indicators.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-        </div>
-      </div>
-    </details>
-  `;
-}
-
-function renderScoreRing(value, label) {
-  return `
-    <div class="score-ring" style="--score:${value}" role="img" aria-label="${escapeHtml(label)}: ${value}%">
-      <strong>${value}%</strong>
-      <span>${escapeHtml(label)}</span>
-    </div>
-  `;
-}
-
-function renderPillarBar(pillar) {
-  return `
-    <article class="pillar-bar" style="--pillar-color:${escapeHtml(pillar.color)}; --pillar-score:${pillar.score}">
-      <div>
-        <strong>${escapeHtml(pillar.title)}</strong>
-        <span>${pillar.score}%</span>
-      </div>
-      <i aria-hidden="true"></i>
-    </article>
-  `;
-}
-
-function renderWeightCard(item) {
-  return `
-    <article class="weight-card">
-      <span>${item.weight}%</span>
-      <h2>${escapeHtml(item.title)}</h2>
-      <p>${escapeHtml(item.text)}</p>
-      <div class="weight-scale" role="img" aria-label="${escapeHtml(item.title)}: ${item.score} de 5">
-        ${[1, 2, 3, 4, 5].map((value) => `<i class="${value <= item.score ? "active" : ""}"></i>`).join("")}
-      </div>
-    </article>
-  `;
-}
-
-function renderMetadataSample(item) {
-  return `
-    <article class="metadata-sample">
-      <span>${escapeHtml(item.id)}</span>
-      <strong>${escapeHtml(item.name)}</strong>
-      <p>${escapeHtml(item.type)} · BMC: ${escapeHtml(item.bmc)}</p>
-      <p>${escapeHtml(item.owner)}</p>
-      <p>${escapeHtml(item.source)}</p>
-      <div><b>${item.score}%</b><small>Índice</small></div>
-      <div><b>${item.factor}</b><small>Factor</small></div>
-      <em>${escapeHtml(item.state)}</em>
-      <small>${escapeHtml(item.next)}</small>
-    </article>
-  `;
-}
-
-function renderFrameworkFlowTrack(large = false) {
-  return `
-    <div class="framework-flow-track ${large ? "large" : ""}" tabindex="0" role="region" aria-label="Flujo metodológico de Datalización">
-      ${frameworkFlow
-        .map(
-          (step, index) => `
-            <article class="framework-flow-step" style="--step-order:${index}">
-              <span>${escapeHtml(step.stage)}</span>
-              <small>${escapeHtml(step.badge)}</small>
-              <strong>${escapeHtml(step.title)}</strong>
-              <p>${escapeHtml(step.text)}</p>
-            </article>
-          `,
-        )
-        .join("")}
-    </div>
   `;
 }
 
@@ -2658,7 +2033,7 @@ function renderDatalitoChat(surface) {
         <div class="datalito-chat-identity">
           ${renderDatalitoAvatar(isPanel ? "chat" : "page")}
           <div>
-            <strong class="datalito-chat-title">${isPanel ? "Hola, soy Datalito" : "Charlá con Datalito"}</strong>
+            <h3>${isPanel ? "Hola, soy Datalito" : "Charlá con Datalito"}</h3>
             <p>Preguntame natural. Si hace falta precisión, busco fuentes; si querés conversar, seguimos el hilo.</p>
           </div>
         </div>

@@ -27,16 +27,6 @@ function toSafePath(urlPathname) {
   const routePath = decoded.replace(/\/+$/, "") || "/";
   const appRoutes = new Set([
     "/",
-    "/que-es-datalizacion",
-    "/pilares-datalizacion",
-    "/intake-aprobacion",
-    "/indice-datalizacion",
-    "/ponderacion-esfuerzo",
-    "/metadata-documentacion",
-    "/alcance-bmc",
-    "/metodologia-flujo",
-    "/recursos-templates",
-    "/roadmap-futuro",
     "/guia-power-bi",
     "/metodo-datalizacion",
     "/metodologia",
