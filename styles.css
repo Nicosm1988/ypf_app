@@ -5781,6 +5781,495 @@ html body .datalito-chat .icon-button:hover {
   color: var(--ypf-yellow);
 }
 
+.fabric-master-guide {
+  display: grid;
+  gap: 18px;
+  scroll-margin-top: 96px;
+}
+
+.fabric-guide-head {
+  display: grid;
+  gap: 12px;
+  max-width: 1060px;
+}
+
+.fabric-guide-head h2,
+.fabric-pillar-title h3 {
+  margin: 0;
+  color: var(--ypf-blue-3);
+  font-size: clamp(1.7rem, 3vw, 2.7rem);
+  line-height: 1.06;
+}
+
+.fabric-guide-head p,
+.fabric-guide-card p,
+.fabric-onelake p,
+.fabric-consumption-head p,
+.fabric-pillar-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.fabric-guide-board {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(190px, 0.86fr) minmax(250px, 1.08fr) minmax(230px, 0.96fr) minmax(300px, 1.14fr);
+  gap: 14px;
+  padding: clamp(18px, 3vw, 30px);
+  border: 1px solid rgba(103, 232, 220, 0.2);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at 20% 15%, rgba(53, 201, 189, 0.15), transparent 18rem),
+    radial-gradient(circle at 78% 20%, rgba(58, 160, 255, 0.16), transparent 22rem),
+    radial-gradient(circle at 62% 88%, rgba(255, 221, 73, 0.08), transparent 20rem),
+    linear-gradient(135deg, rgba(10, 17, 25, 0.98), rgba(5, 9, 15, 0.98));
+  box-shadow:
+    0 28px 80px rgba(0, 18, 36, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.fabric-guide-board::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(180deg, black, transparent 82%);
+  opacity: 0.42;
+}
+
+.fabric-guide-board::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ypf-yellow), var(--ypf-blue), var(--green), transparent 86%);
+  opacity: 0.88;
+}
+
+.fabric-guide-stage,
+.fabric-consumption,
+.fabric-pillar-band {
+  position: relative;
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at var(--spot-x, 82%) var(--spot-y, 14%), rgba(53, 201, 189, 0.1), transparent 12rem),
+    rgba(255, 255, 255, 0.045);
+  box-shadow:
+    0 18px 44px rgba(0, 12, 24, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.fabric-guide-stage {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-height: 390px;
+  padding: 18px;
+}
+
+.fabric-stage-label,
+.fabric-consumption-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.fabric-stage-label span,
+.fabric-consumption-head > span,
+.fabric-pillar-card > span {
+  display: grid;
+  place-items: center;
+  min-width: 38px;
+  min-height: 38px;
+  border-radius: var(--radius);
+  background: var(--ypf-yellow);
+  color: #061217;
+  font-weight: 950;
+  box-shadow: 0 0 24px rgba(255, 221, 73, 0.22);
+}
+
+.fabric-stage-label strong {
+  color: #ffffff;
+  font-size: 1.08rem;
+  line-height: 1.15;
+}
+
+.fabric-source-stack,
+.fabric-processing-grid,
+.fabric-pillar-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.fabric-guide-card,
+.fabric-pillar-card {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(130deg, rgba(53, 201, 189, 0.1), transparent 62%),
+    rgba(4, 10, 16, 0.42);
+}
+
+.fabric-guide-card::before,
+.fabric-pillar-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ypf-blue), var(--green), transparent 78%);
+  opacity: 0.75;
+}
+
+.fabric-guide-card > span {
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(103, 232, 220, 0.32);
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, transparent 45%, rgba(103, 232, 220, 0.72) 45% 55%, transparent 55%),
+    linear-gradient(rgba(103, 232, 220, 0.72) 45%, transparent 45% 55%, rgba(103, 232, 220, 0.72) 55%),
+    rgba(53, 201, 189, 0.1);
+}
+
+.fabric-guide-card strong,
+.fabric-pillar-card strong {
+  color: #ffffff;
+  font-size: 0.95rem;
+  line-height: 1.22;
+}
+
+.fabric-onelake {
+  justify-items: center;
+  text-align: center;
+}
+
+.fabric-orb {
+  width: 96px;
+  height: 96px;
+  margin: 4px auto 2px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.9), transparent 15%),
+    conic-gradient(from 210deg, var(--ypf-blue), var(--green), #91e7ff, var(--ypf-blue));
+  box-shadow:
+    0 0 38px rgba(53, 201, 189, 0.36),
+    inset -12px -18px 26px rgba(0, 21, 42, 0.38);
+  animation: fabricOrbPulse 5.8s ease-in-out infinite;
+}
+
+.fabric-stage-kicker {
+  color: var(--ypf-yellow);
+  font-size: 0.76rem;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.fabric-onelake h3,
+.fabric-consumption h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(1.25rem, 2vw, 1.7rem);
+  line-height: 1.08;
+}
+
+.fabric-platform-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.fabric-platform-row span {
+  min-height: 58px;
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  border: 1px solid rgba(103, 232, 220, 0.2);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(53, 201, 189, 0.12), rgba(58, 160, 255, 0.06)),
+    rgba(255, 255, 255, 0.045);
+  color: var(--ypf-blue-3);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.fabric-arrow {
+  position: absolute;
+  top: 210px;
+  z-index: 1;
+  display: none;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(103, 232, 220, 0.86), var(--ypf-yellow));
+  box-shadow: 0 0 18px rgba(53, 201, 189, 0.42);
+  animation: fabricFlowLine 2.2s linear infinite;
+  pointer-events: none;
+}
+
+.fabric-arrow::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  transform: translateY(-50%) rotate(45deg);
+  border-top: 3px solid var(--ypf-yellow);
+  border-right: 3px solid var(--ypf-yellow);
+}
+
+.fabric-arrow-one {
+  right: calc(75% - 46px);
+  left: calc(25% - 46px);
+}
+
+.fabric-arrow-two {
+  right: calc(50% - 46px);
+  left: calc(50% - 46px);
+}
+
+.fabric-processing-grid {
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
+.fabric-processing .fabric-guide-card:nth-child(1) {
+  --spot-x: 20%;
+  --spot-y: 20%;
+}
+
+.fabric-processing .fabric-guide-card:nth-child(2) {
+  --spot-x: 82%;
+  --spot-y: 20%;
+}
+
+.fabric-processing .fabric-guide-card:nth-child(3) {
+  --spot-x: 50%;
+  --spot-y: 80%;
+}
+
+.fabric-consumption {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  min-height: 390px;
+  padding: 18px;
+  border-color: rgba(103, 232, 220, 0.24);
+  background:
+    radial-gradient(circle at 72% 16%, rgba(255, 221, 73, 0.11), transparent 11rem),
+    radial-gradient(circle at 20% 18%, rgba(53, 201, 189, 0.15), transparent 14rem),
+    rgba(255, 255, 255, 0.05);
+}
+
+.fabric-duo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.fabric-duo strong {
+  min-height: 62px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(103, 232, 220, 0.2);
+  border-radius: var(--radius);
+  background: rgba(4, 10, 16, 0.35);
+  color: #ffffff;
+  text-align: center;
+}
+
+.fabric-duo i {
+  position: relative;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--green), var(--ypf-yellow));
+}
+
+.fabric-duo i::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  transform: translateY(-50%) rotate(45deg);
+  border-top: 2px solid var(--ypf-yellow);
+  border-right: 2px solid var(--ypf-yellow);
+}
+
+.fabric-mode-table {
+  display: grid;
+  gap: 6px;
+}
+
+.fabric-mode-table > div {
+  display: grid;
+  grid-template-columns: 0.84fr 1fr 1fr;
+  gap: 6px;
+  min-width: 0;
+}
+
+.fabric-mode-table > div:first-child strong {
+  padding: 9px;
+  border-radius: 8px;
+  background: rgba(0, 84, 166, 0.42);
+  color: #ffffff;
+  font-size: 0.76rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.fabric-mode-card span {
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.fabric-pillar-band {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(220px, 0.42fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+  padding: 18px;
+}
+
+.fabric-pillar-title {
+  display: grid;
+  align-content: center;
+  gap: 12px;
+}
+
+.fabric-pillar-title h3 {
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
+}
+
+.fabric-pillar-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.fabric-pillar-card {
+  min-height: 176px;
+}
+
+.fabric-pillar-card > span {
+  justify-self: start;
+  min-width: 34px;
+  min-height: 34px;
+  background: var(--green);
+}
+
+@keyframes fabricOrbPulse {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-4px) rotate(8deg);
+  }
+}
+
+@keyframes fabricFlowLine {
+  0% {
+    filter: hue-rotate(0deg);
+    opacity: 0.55;
+  }
+
+  50% {
+    filter: hue-rotate(16deg);
+    opacity: 1;
+  }
+
+  100% {
+    filter: hue-rotate(0deg);
+    opacity: 0.55;
+  }
+}
+
+@media (max-width: 1180px) {
+  .fabric-guide-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fabric-arrow {
+    display: none;
+  }
+
+  .fabric-guide-stage,
+  .fabric-consumption {
+    min-height: 0;
+  }
+
+  .fabric-pillar-band {
+    grid-template-columns: 1fr;
+  }
+
+  .fabric-pillar-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .fabric-guide-board {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .fabric-guide-stage,
+  .fabric-consumption,
+  .fabric-pillar-band {
+    padding: 15px;
+  }
+
+  .fabric-platform-row,
+  .fabric-pillar-grid,
+  .fabric-duo {
+    grid-template-columns: 1fr;
+  }
+
+  .fabric-duo i {
+    justify-self: center;
+    width: 4px;
+    height: 34px;
+  }
+
+  .fabric-duo i::after {
+    top: auto;
+    right: 50%;
+    bottom: 0;
+    transform: translateX(50%) rotate(135deg);
+  }
+}
+
 .methodology-intro-copy h2,
 .methodology-section-head h2,
 .methodology-close h2 {

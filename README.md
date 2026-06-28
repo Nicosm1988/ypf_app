@@ -7,6 +7,7 @@ Datalización es la práctica de automatizar procesos mediante datos confiables,
 - Portada ejecutiva Datalización Hub / BI Delivery Playbook para posicionar la plataforma como capacidad organizacional.
 - Portadas con imagen industrial de alta calidad vinculada a refinería, ductos y puerto energético.
 - Road y Metodología BI/Fabric para ordenar en una sola sección el ciclo completo, los gates, OEE BI, DMAIC y mejora continua.
+- Guía maestra Fabric end-to-end dentro de Road y Metodología, con arquitectura OneLake, procesamiento, Direct Lake y pilares de adopción.
 - Método de Datalización v0.1 para organizar DEV/PROD, Teams, SharePoint, canales, carpetas, naming, backlog, VMC, gobierno y el Marco de Datalización VMC.
 - Design System para consolidar patrones visuales, componentes, reglas de experiencia y criterios de calidad.
 - Datalito, asistente interno de conocimiento con personaje animado, conversación natural, búsqueda local, citas, feedback y brechas.
@@ -64,6 +65,7 @@ Las subsecciones principales también tienen URL propia para que el menú, el fo
 
 ```text
 http://127.0.0.1:8001/road-y-metodologia/oee-bi
+http://127.0.0.1:8001/road-y-metodologia/fabric-end-to-end
 http://127.0.0.1:8001/metodo-datalizacion/backlog
 http://127.0.0.1:8001/design-system/componentes
 http://127.0.0.1:8001/datalito/arquitectura

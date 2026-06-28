@@ -160,6 +160,7 @@ const subsectionRoutes = {
   "/inicio/workflow": { route: "/", hash: "#inicio-workflow" },
   "/road-y-metodologia/tesis": { route: "/road-y-metodologia", hash: "#road-tesis" },
   "/road-y-metodologia/proceso": { route: "/road-y-metodologia", hash: "#road-proceso" },
+  "/road-y-metodologia/fabric-end-to-end": { route: "/road-y-metodologia", hash: "#road-fabric-master-guide" },
   "/road-y-metodologia/flujo-bi": { route: "/road-y-metodologia", hash: "#road-flujo-bi" },
   "/road-y-metodologia/prd-spec": { route: "/road-y-metodologia", hash: "#modelos-prd-spec" },
   "/road-y-metodologia/gates": { route: "/road-y-metodologia", hash: "#road-gates" },
@@ -326,6 +327,73 @@ const roadMethodologyThesis = [
     label: "Criterio de validación",
     title: "Cada etapa debe dejar una evidencia auditable.",
     text: "Si una etapa no deja entregable, owner, riesgo y control, el proceso todavía no está listo para escalar.",
+  },
+];
+
+const fabricMasterSources = [
+  {
+    title: "Bases estructuradas",
+    text: "Tablas transaccionales, maestros, vistas y repositorios con reglas de negocio explícitas.",
+  },
+  {
+    title: "Archivos no estructurados",
+    text: "Excel, CSV, documentos operativos y evidencia que debe quedar gobernada antes de usarse.",
+  },
+  {
+    title: "Eventos y streams",
+    text: "Señales de operación, refresh, alertas, logs y datos que requieren lectura casi inmediata.",
+  },
+];
+
+const fabricProcessingNodes = [
+  {
+    title: "Dataflow Gen2",
+    text: "Limpia, tipifica y estandariza datos con pasos trazables y reutilizables.",
+  },
+  {
+    title: "Notebooks Spark",
+    text: "Resuelve transformaciones complejas, enriquecimiento y preparación avanzada.",
+  },
+  {
+    title: "Modelos de IA",
+    text: "Clasifican, predicen o asisten decisiones cuando existe evidencia y control.",
+  },
+];
+
+const fabricStorageModes = [
+  {
+    mode: "Import",
+    speed: "Máxima en memoria",
+    freshness: "Basada en programación",
+  },
+  {
+    mode: "DirectQuery",
+    speed: "Variable según fuente",
+    freshness: "Tiempo real",
+  },
+  {
+    mode: "Direct Lake",
+    speed: "Máxima sobre OneLake",
+    freshness: "Tiempo real sin refresh tradicional",
+  },
+];
+
+const fabricAdoptionPillars = [
+  {
+    title: "Modelo estrella",
+    text: "Hechos, dimensiones, calendario y granularidad permiten cálculos rápidos, legibles y auditables.",
+  },
+  {
+    title: "Optimización crítica",
+    text: "Menos visuales, DAX con variables, medidas ordenadas y pruebas evitan lentitud acumulada.",
+  },
+  {
+    title: "Centro de excelencia",
+    text: "El equipo define estándares, mentorea, revisa y convierte buenas prácticas en disciplina compartida.",
+  },
+  {
+    title: "Gateway y capacidad",
+    text: "CPU, RAM, credenciales, refresh y monitoreo sostienen el rendimiento cuando la solución escala.",
   },
 ];
 
@@ -1090,6 +1158,11 @@ const interactiveSurfaceSelector = [
   ".home-research-note",
   ".road-thesis-card",
   ".road-methodology-thesis",
+  ".fabric-guide-stage",
+  ".fabric-guide-card",
+  ".fabric-consumption",
+  ".fabric-mode-card",
+  ".fabric-pillar-card",
   ".design-system-card",
   ".design-system-benefit",
   ".design-system-component",
@@ -3273,6 +3346,8 @@ function renderRoadMethodologyPage() {
 
       ${renderMethodologyProcessFlow()}
 
+      ${renderFabricMasterGuide()}
+
       ${renderUnifiedAutomationFlow()}
 
       ${renderPrdSpecModelSection()}
@@ -3432,6 +3507,129 @@ function renderMethodologyProcessFlow() {
       </div>
       <div class="methodology-process-list">
         ${methodologyProcessFlow.map(renderMethodologyProcessStep).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderFabricMasterGuide() {
+  return `
+    <section class="fabric-master-guide page-inner" id="road-fabric-master-guide" aria-labelledby="fabricMasterGuideTitle">
+      <div class="fabric-guide-head">
+        <span class="flow-chip">guía maestra fabric</span>
+        <h2 id="fabricMasterGuideTitle">Analítica end-to-end con Microsoft Fabric, integrada al método de Datalización.</h2>
+        <p>Esta lámina operativa traduce el flujo de trabajo completo: fuentes, ingesta, almacenamiento en OneLake, procesamiento, modelo semántico, consumo en Power BI y adopción gobernada. No está pensada como póster decorativo; funciona como mapa para decidir arquitectura, evidencia y controles antes de construir.</p>
+      </div>
+
+      <div class="fabric-guide-board" aria-label="Mapa end-to-end de analítica con Microsoft Fabric">
+        <div class="fabric-guide-stage fabric-sources">
+          <div class="fabric-stage-label">
+            <span>01</span>
+            <strong>Fuentes operativas</strong>
+          </div>
+          <div class="fabric-source-stack">
+            ${fabricMasterSources
+              .map(
+                (source) => `
+                  <article class="fabric-guide-card">
+                    <span></span>
+                    <strong>${escapeHtml(source.title)}</strong>
+                    <p>${escapeHtml(source.text)}</p>
+                  </article>
+                `,
+              )
+              .join("")}
+          </div>
+        </div>
+
+        <div class="fabric-arrow fabric-arrow-one" aria-hidden="true"></div>
+
+        <div class="fabric-guide-stage fabric-onelake">
+          <div class="fabric-orb" aria-hidden="true"></div>
+          <span class="fabric-stage-kicker">Ingesta y almacenamiento unificado</span>
+          <h3>OneLake como base común</h3>
+          <p>Centraliza datos estructurados y no estructurados usando Lakehouses, Warehouses o Mirroring, con linaje, ownership y criterios de calidad desde el inicio.</p>
+          <div class="fabric-platform-row">
+            <span>Lakehouse</span>
+            <span>Warehouse</span>
+            <span>Mirroring</span>
+          </div>
+        </div>
+
+        <div class="fabric-arrow fabric-arrow-two" aria-hidden="true"></div>
+
+        <div class="fabric-guide-stage fabric-processing">
+          <div class="fabric-stage-label">
+            <span>02</span>
+            <strong>Procesamiento y enriquecimiento</strong>
+          </div>
+          <div class="fabric-processing-grid">
+            ${fabricProcessingNodes
+              .map(
+                (node, index) => `
+                  <article class="fabric-guide-card" style="--fabric-order:${index}">
+                    <span></span>
+                    <strong>${escapeHtml(node.title)}</strong>
+                    <p>${escapeHtml(node.text)}</p>
+                  </article>
+                `,
+              )
+              .join("")}
+          </div>
+        </div>
+
+        <div class="fabric-consumption">
+          <div class="fabric-consumption-head">
+            <span>03</span>
+            <div>
+              <h3>Consumo de alto rendimiento con Direct Lake</h3>
+              <p>Power BI puede consultar archivos Parquet en OneLake y reducir la necesidad de refresh masivos cuando el diseño, el gobierno y el modo de almacenamiento lo justifican.</p>
+            </div>
+          </div>
+          <div class="fabric-duo">
+            <strong>OneLake</strong>
+            <i aria-hidden="true"></i>
+            <strong>Power BI</strong>
+          </div>
+          <div class="fabric-mode-table" role="table" aria-label="Comparativa de modos de almacenamiento">
+            <div role="row">
+              <strong role="columnheader">Modo</strong>
+              <strong role="columnheader">Velocidad</strong>
+              <strong role="columnheader">Frescura</strong>
+            </div>
+            ${fabricStorageModes
+              .map(
+                (mode) => `
+                  <div class="fabric-mode-card" role="row">
+                    <span role="cell">${escapeHtml(mode.mode)}</span>
+                    <span role="cell">${escapeHtml(mode.speed)}</span>
+                    <span role="cell">${escapeHtml(mode.freshness)}</span>
+                  </div>
+                `,
+              )
+              .join("")}
+          </div>
+        </div>
+
+        <div class="fabric-pillar-band">
+          <div class="fabric-pillar-title">
+            <span class="flow-chip">rendimiento y adopción</span>
+            <h3>Pilares que convierten arquitectura en capacidad organizacional.</h3>
+          </div>
+          <div class="fabric-pillar-grid">
+            ${fabricAdoptionPillars
+              .map(
+                (pillar, index) => `
+                  <article class="fabric-pillar-card" style="--fabric-order:${index}">
+                    <span>${String(index + 1).padStart(2, "0")}</span>
+                    <strong>${escapeHtml(pillar.title)}</strong>
+                    <p>${escapeHtml(pillar.text)}</p>
+                  </article>
+                `,
+              )
+              .join("")}
+          </div>
+        </div>
       </div>
     </section>
   `;

@@ -86,10 +86,14 @@ assert(appJs.includes("buildDatalitoConversationalResponse"), "Datalito debe man
 assert(appJs.includes("buildDatalitoWorkflowResponse"), "Datalito debe responder flujos BI end-to-end con criterio propio.");
 assert(appJs.includes("scrollToRouteHash"), "Los enlaces de Datalito deben navegar a la seccion exacta de la plataforma.");
 assert(appJs.includes("renderMethodologyProcessFlow"), "app.js debe renderizar el proceso metodológico end to end.");
+assert(appJs.includes("renderFabricMasterGuide"), "app.js debe renderizar la guía maestra Fabric end-to-end.");
+assert(appJs.includes('id="road-fabric-master-guide"'), "La guía maestra Fabric debe tener ancla propia.");
+assert(!appJs.toLowerCase().includes("notebooklm"), "La guía maestra Fabric no debe incluir marca NotebookLM.");
 assert(indexHtml.includes("/road-y-metodologia"), "La navegación principal debe exponer Road y Metodología.");
 assert(!indexHtml.includes("Guía + Roadmap") && !indexHtml.includes('href="/metodologia"'), "La navegación principal no debe separar guía y metodología.");
 assert(indexHtml.includes("nav-dropdown"), "El menú principal debe incluir dropdowns por sección.");
 assert(indexHtml.includes("/road-y-metodologia/oee-bi"), "El menú debe exponer subsecciones como rutas navegables.");
+assert(indexHtml.includes("/road-y-metodologia/fabric-end-to-end"), "El menú debe exponer la guía maestra Fabric como subsección.");
 assert(indexHtml.includes("footer-map"), "El footer debe incluir un mapa de secciones.");
 assert(appJs.includes("renderExecutiveBrief"), "app.js debe renderizar la síntesis ejecutiva.");
 assert(appJs.includes("renderPlatformExecutiveSection"), "app.js debe renderizar la sección ejecutiva inicial.");
@@ -375,6 +379,7 @@ const staticRoutes = [
   "inicio/workflow",
   "road-y-metodologia/tesis",
   "road-y-metodologia/proceso",
+  "road-y-metodologia/fabric-end-to-end",
   "road-y-metodologia/flujo-bi",
   "road-y-metodologia/prd-spec",
   "road-y-metodologia/gates",
@@ -415,6 +420,7 @@ for (const route of staticRoutes) {
 }
 
 await access("dist/road-y-metodologia/oee-bi/index.html");
+await access("dist/road-y-metodologia/fabric-end-to-end/index.html");
 await access("dist/metodo-datalizacion/backlog/index.html");
 await access("dist/design-system/componentes/index.html");
 

@@ -10,6 +10,7 @@ const baseUrl = `http://127.0.0.1:${port}`;
 const routes = [
   { path: "/", selector: ".hero", name: "Inicio" },
   { path: "/road-y-metodologia", selector: ".road-methodology-page", name: "Road y Metodologia" },
+  { path: "/road-y-metodologia/fabric-end-to-end", selector: "#road-fabric-master-guide", name: "Road subseccion Fabric end-to-end" },
   { path: "/road-y-metodologia/oee-bi", selector: "#road-oee-bi", name: "Road subseccion OEE BI" },
   { path: "/guia-power-bi", selector: ".road-methodology-page", name: "Guia + Roadmap compat" },
   { path: "/metodo-datalizacion", selector: ".method-page", name: "Metodo de Datalizacion" },
