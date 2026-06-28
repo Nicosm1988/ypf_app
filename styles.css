@@ -6409,6 +6409,340 @@ html body .datalito-chat .icon-button:hover {
   min-height: 176px;
 }
 
+.fabric-architecture-layer {
+  display: grid;
+  gap: 16px;
+  padding-top: 28px;
+  scroll-margin-top: 104px;
+}
+
+.fabric-architecture-head {
+  display: grid;
+  gap: 10px;
+  max-width: 1120px;
+  padding-top: 4px;
+}
+
+.fabric-architecture-head h3 {
+  margin: 0;
+  color: var(--ypf-blue-3);
+  font-size: clamp(1.55rem, 2.7vw, 2.45rem);
+  line-height: 1.06;
+}
+
+.fabric-architecture-head p,
+.fabric-architecture-frame p,
+.fabric-onelake-spine p,
+.fabric-causality-panel p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.52;
+}
+
+.fabric-architecture-board {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: 18px;
+  padding: clamp(18px, 3vw, 30px);
+  border: 1px solid rgba(103, 232, 220, 0.22);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at 18% 18%, rgba(103, 232, 220, 0.15), transparent 18rem),
+    radial-gradient(circle at 86% 25%, rgba(58, 160, 255, 0.14), transparent 19rem),
+    linear-gradient(135deg, rgba(9, 16, 24, 0.98), rgba(4, 9, 15, 0.98));
+  box-shadow:
+    0 28px 80px rgba(0, 18, 36, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.fabric-architecture-board::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+  mask-image: linear-gradient(180deg, black, transparent 88%);
+  opacity: 0.55;
+}
+
+.fabric-architecture-board::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ypf-blue), var(--green), var(--ypf-yellow), transparent 88%);
+  opacity: 0.9;
+}
+
+.fabric-architecture-flow {
+  position: absolute;
+  top: clamp(210px, 22vw, 270px);
+  right: clamp(28px, 4vw, 54px);
+  left: clamp(28px, 4vw, 54px);
+  z-index: 0;
+  display: grid;
+  grid-template-columns: 1fr 74px 1fr 74px 1fr 74px 1fr;
+  align-items: center;
+  pointer-events: none;
+}
+
+.fabric-architecture-flow span {
+  height: 16px;
+  border: 1px solid rgba(103, 232, 220, 0.22);
+  border-radius: 999px;
+  background:
+    repeating-linear-gradient(90deg, rgba(103, 232, 220, 0.12) 0 8px, rgba(103, 232, 220, 0.32) 8px 18px),
+    linear-gradient(90deg, rgba(58, 160, 255, 0.28), rgba(53, 201, 189, 0.28));
+  box-shadow: 0 0 26px rgba(53, 201, 189, 0.2);
+  animation: fabricDuctFlow 2.4s linear infinite;
+}
+
+.fabric-architecture-flow i {
+  position: relative;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--green), var(--ypf-yellow));
+  box-shadow: 0 0 18px rgba(103, 232, 220, 0.26);
+}
+
+.fabric-architecture-flow i::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  transform: translateY(-50%) rotate(45deg);
+  border-top: 3px solid var(--ypf-yellow);
+  border-right: 3px solid var(--ypf-yellow);
+}
+
+.fabric-architecture-cards {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.fabric-architecture-card {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid rgba(103, 232, 220, 0.22);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(140deg, rgba(53, 201, 189, 0.11), transparent 64%),
+    rgba(4, 10, 16, 0.62);
+  box-shadow:
+    0 16px 40px rgba(0, 12, 24, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: visible;
+}
+
+.fabric-architecture-card::after {
+  content: "";
+  position: absolute;
+  right: 50%;
+  bottom: -31px;
+  z-index: 2;
+  width: 2px;
+  height: 31px;
+  transform: translateX(50%);
+  background: linear-gradient(180deg, rgba(103, 232, 220, 0.8), rgba(255, 221, 73, 0.5));
+  box-shadow: 0 0 16px rgba(103, 232, 220, 0.22);
+}
+
+.fabric-architecture-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ypf-blue), var(--green), transparent 76%);
+  opacity: 0.82;
+}
+
+.fabric-architecture-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.fabric-architecture-card-head span {
+  display: grid;
+  place-items: center;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: var(--radius);
+  background: var(--ypf-yellow);
+  color: #061217;
+  font-weight: 950;
+  box-shadow: 0 0 22px rgba(255, 221, 73, 0.2);
+}
+
+.fabric-architecture-card-head strong {
+  color: #ffffff;
+  font-size: 1.02rem;
+  line-height: 1.1;
+  text-align: right;
+}
+
+.fabric-architecture-frame {
+  display: grid;
+  gap: 8px;
+  min-height: 246px;
+  padding: 14px;
+  border: 1px solid rgba(103, 232, 220, 0.2);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(103, 232, 220, 0.16), transparent 9rem),
+    rgba(4, 10, 16, 0.78);
+}
+
+.fabric-architecture-frame .fabric-illustration {
+  justify-self: center;
+  width: 76px;
+  height: 76px;
+}
+
+.fabric-architecture-frame h4 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 0.98rem;
+  line-height: 1.18;
+}
+
+.fabric-architecture-card small {
+  display: block;
+  padding: 10px;
+  border: 1px solid rgba(255, 221, 73, 0.18);
+  border-radius: var(--radius);
+  background: rgba(255, 221, 73, 0.07);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.38;
+}
+
+.fabric-onelake-spine {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(180px, 0.28fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid rgba(103, 232, 220, 0.24);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(90deg, rgba(58, 160, 255, 0.08), rgba(53, 201, 189, 0.13), rgba(255, 221, 73, 0.07)),
+    rgba(4, 10, 16, 0.48);
+  overflow: hidden;
+}
+
+.fabric-spine-rail {
+  position: relative;
+  min-height: 58px;
+  border: 1px solid rgba(103, 232, 220, 0.24);
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, rgba(4, 10, 16, 0.9), rgba(53, 201, 189, 0.16), rgba(4, 10, 16, 0.9)),
+    repeating-linear-gradient(90deg, rgba(103, 232, 220, 0.12) 0 10px, rgba(255, 221, 73, 0.18) 10px 20px);
+  box-shadow:
+    inset 0 0 20px rgba(103, 232, 220, 0.14),
+    0 0 24px rgba(53, 201, 189, 0.14);
+  overflow: hidden;
+}
+
+.fabric-spine-rail span {
+  position: absolute;
+  top: 50%;
+  width: 64px;
+  height: 4px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, var(--ypf-yellow), var(--green));
+  animation: fabricSpinePulse 2.8s linear infinite;
+}
+
+.fabric-spine-rail span:nth-child(1) {
+  left: 5%;
+}
+
+.fabric-spine-rail span:nth-child(2) {
+  left: 42%;
+  animation-delay: 0.7s;
+}
+
+.fabric-spine-rail span:nth-child(3) {
+  right: 5%;
+  animation-delay: 1.4s;
+}
+
+.fabric-onelake-spine strong {
+  position: absolute;
+  top: 50%;
+  left: clamp(84px, 13vw, 150px);
+  transform: translateY(-50%);
+  padding: 7px 18px;
+  border: 1px solid rgba(103, 232, 220, 0.36);
+  border-radius: 999px;
+  background: rgba(4, 10, 16, 0.9);
+  color: #ffffff;
+  font-size: 1.05rem;
+  box-shadow: 0 0 22px rgba(53, 201, 189, 0.22);
+}
+
+.fabric-onelake-spine p {
+  grid-column: 2;
+}
+
+.fabric-causality-panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid rgba(255, 221, 73, 0.18);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(255, 221, 73, 0.08), transparent 72%),
+    rgba(255, 255, 255, 0.045);
+}
+
+@keyframes fabricDuctFlow {
+  to {
+    background-position: 36px 0, 0 0;
+  }
+}
+
+@keyframes fabricSpinePulse {
+  0% {
+    opacity: 0;
+    transform: translate(-40px, -50%);
+  }
+
+  18%,
+  72% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(72px, -50%);
+  }
+}
+
 .fabric-pillar-card > span {
   justify-self: start;
   min-width: 34px;
@@ -6495,6 +6829,10 @@ html body .datalito-chat .icon-button:hover {
 .fabric-mode-card span,
 .fabric-pillar-band,
 .fabric-pillar-card,
+.fabric-architecture-board,
+.fabric-architecture-card,
+.fabric-onelake-spine,
+.fabric-causality-panel,
 .guide-journey-step .guide-step-body,
 .guide-readiness-panel,
 .guide-readiness-flow li,
@@ -6549,6 +6887,10 @@ html body .datalito-chat .icon-button:hover {
 .fabric-mode-card:hover span,
 .fabric-pillar-band:hover,
 .fabric-pillar-card:hover,
+.fabric-architecture-board:hover,
+.fabric-architecture-card:hover,
+.fabric-onelake-spine:hover,
+.fabric-causality-panel:hover,
 .guide-journey-step:hover .guide-step-body,
 .guide-readiness-panel:hover,
 .guide-readiness-flow li:hover,
@@ -6622,6 +6964,10 @@ html body .datalito-chat .icon-button:hover {
   .fabric-mode-card:hover span,
   .fabric-pillar-band:hover,
   .fabric-pillar-card:hover,
+  .fabric-architecture-board:hover,
+  .fabric-architecture-card:hover,
+  .fabric-onelake-spine:hover,
+  .fabric-causality-panel:hover,
   .guide-journey-step:hover .guide-step-body,
   .guide-readiness-panel:hover,
   .guide-readiness-flow li:hover,
@@ -6655,6 +7001,14 @@ html body .datalito-chat .icon-button:hover {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .fabric-architecture-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fabric-architecture-flow {
+    display: none;
+  }
+
   .fabric-arrow,
   .fabric-route-layer,
   .fabric-route-callout {
@@ -6683,13 +7037,37 @@ html body .datalito-chat .icon-button:hover {
 
   .fabric-guide-stage,
   .fabric-consumption,
-  .fabric-pillar-band {
+  .fabric-pillar-band,
+  .fabric-architecture-board {
     padding: 15px;
   }
 
   .fabric-platform-row,
   .fabric-pillar-grid,
+  .fabric-architecture-cards,
   .fabric-duo {
+    grid-template-columns: 1fr;
+  }
+
+  .fabric-architecture-frame {
+    min-height: 0;
+  }
+
+  .fabric-onelake-spine {
+    grid-template-columns: 1fr;
+  }
+
+  .fabric-onelake-spine strong {
+    position: static;
+    justify-self: start;
+    transform: none;
+  }
+
+  .fabric-onelake-spine p {
+    grid-column: auto;
+  }
+
+  .fabric-causality-panel {
     grid-template-columns: 1fr;
   }
 

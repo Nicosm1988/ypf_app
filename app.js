@@ -163,6 +163,7 @@ const subsectionRoutes = {
   "/road-y-metodologia/enfoque": { route: "/road-y-metodologia", hash: "#road-tesis" },
   "/road-y-metodologia/proceso": { route: "/road-y-metodologia", hash: "#road-proceso" },
   "/road-y-metodologia/fabric-end-to-end": { route: "/road-y-metodologia", hash: "#road-fabric-master-guide" },
+  "/road-y-metodologia/arquitectura-fabric": { route: "/road-y-metodologia", hash: "#road-fabric-architecture-layer" },
   "/road-y-metodologia/flujo-bi": { route: "/road-y-metodologia", hash: "#road-flujo-bi" },
   "/road-y-metodologia/prd-spec": { route: "/road-y-metodologia", hash: "#modelos-prd-spec" },
   "/road-y-metodologia/gates": { route: "/road-y-metodologia", hash: "#road-gates" },
@@ -406,6 +407,37 @@ const fabricAdoptionPillars = [
     iconName: "hardware",
     title: "Gateway y capacidad",
     text: "CPU, RAM, credenciales, refresh y monitoreo sostienen el rendimiento cuando la solución escala.",
+  },
+];
+
+const fabricArchitectureStages = [
+  {
+    label: "Ingesta",
+    iconName: "stream",
+    claim: "El recorrido empieza cuando la fuente ingresa con reglas claras.",
+    why: "Data Factory, Eventstreams y Mirroring evitan copiar datos sin gobierno o reconstruir integraciones caso por caso.",
+    evidence: "Fuente, frecuencia, owner, latencia y criterio de aceptación quedan definidos antes de cargar.",
+  },
+  {
+    label: "Almacenamiento",
+    iconName: "oneLake",
+    claim: "OneLake convierte fuentes dispersas en una base común.",
+    why: "Lakehouses, Warehouses y arquitectura medallion ordenan el dato para que pueda ser reutilizado, auditado y escalado.",
+    evidence: "Bronze, Silver, Gold, linaje, permisos y particiones quedan explícitos como contrato técnico.",
+  },
+  {
+    label: "Procesamiento",
+    iconName: "sparkNotebook",
+    claim: "El procesamiento transforma datos disponibles en información confiable.",
+    why: "Spark, T-SQL y Dataflow Gen2 separan limpieza, enriquecimiento y agregación para no esconder lógica crítica en el reporte.",
+    evidence: "Reglas de transformación, pruebas, reconciliación y salida semántica quedan documentadas.",
+  },
+  {
+    label: "Consumo",
+    iconName: "powerBi",
+    claim: "El consumo entrega decisión, no solo visualización.",
+    why: "SQL, Direct Lake, Power BI y asistentes interactivos consumen el mismo activo gobernado, con menor duplicación y mejor trazabilidad.",
+    evidence: "Modelo semántico, RLS, permisos, refresh o Direct Lake, UX y monitoreo quedan controlados.",
   },
 ];
 
@@ -1175,6 +1207,10 @@ const interactiveSurfaceSelector = [
   ".fabric-consumption",
   ".fabric-mode-card",
   ".fabric-pillar-card",
+  ".fabric-architecture-board",
+  ".fabric-architecture-card",
+  ".fabric-onelake-spine",
+  ".fabric-causality-panel",
   ".design-system-card",
   ".design-system-benefit",
   ".design-system-component",
@@ -1459,6 +1495,9 @@ function setupScrollReveal() {
     ".home-research-note",
     ".road-thesis-card",
     ".road-methodology-thesis",
+    ".fabric-architecture-card",
+    ".fabric-onelake-spine",
+    ".fabric-causality-panel",
     ".methodology-process-step",
     ".guide-journey-step",
     ".guide-model-card",
@@ -3912,6 +3951,67 @@ function renderFabricMasterGuide() {
               )
               .join("")}
           </div>
+        </div>
+      </div>
+      ${renderFabricArchitectureLayer()}
+    </section>
+  `;
+}
+
+function renderFabricArchitectureLayer() {
+  return `
+    <section class="fabric-architecture-layer" id="road-fabric-architecture-layer" aria-labelledby="fabricArchitectureLayerTitle">
+      <div class="fabric-architecture-head">
+        <span class="flow-chip">capa 2 · arquitectura</span>
+        <h3 id="fabricArchitectureLayerTitle">La arquitectura end-to-end en Fabric conecta cada decisión técnica con una consecuencia operativa.</h3>
+        <p>La causalidad es deliberada: si la ingesta entra gobernada, OneLake puede funcionar como base común; si la base común está bien organizada, el procesamiento se vuelve reutilizable; si el procesamiento queda probado, el consumo en Power BI, SQL o asistentes puede sostener decisiones confiables.</p>
+      </div>
+
+      <div class="fabric-architecture-board" aria-label="Capa 2 de arquitectura end-to-end en Microsoft Fabric">
+        <div class="fabric-architecture-flow" aria-hidden="true">
+          <span></span>
+          <i></i>
+          <span></span>
+          <i></i>
+          <span></span>
+          <i></i>
+          <span></span>
+        </div>
+
+        <div class="fabric-architecture-cards">
+          ${fabricArchitectureStages
+            .map(
+              (stage, index) => `
+                <article class="fabric-architecture-card" style="--architecture-order:${index}">
+                  <div class="fabric-architecture-card-head">
+                    <span>${String(index + 1).padStart(2, "0")}</span>
+                    <strong>${escapeHtml(stage.label)}</strong>
+                  </div>
+                  <div class="fabric-architecture-frame">
+                    ${renderFabricIllustration(stage.iconName)}
+                    <h4>${escapeHtml(stage.claim)}</h4>
+                    <p>${escapeHtml(stage.why)}</p>
+                  </div>
+                  <small>${escapeHtml(stage.evidence)}</small>
+                </article>
+              `,
+            )
+            .join("")}
+        </div>
+
+        <div class="fabric-onelake-spine" aria-label="OneLake como columna vertebral de la arquitectura">
+          <div class="fabric-spine-rail" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <strong>OneLake</strong>
+          <p>La columna vertebral no es un repositorio pasivo: concentra acceso, linaje, seguridad, estructuras medallion y activos reutilizables para que el dato no vuelva a fragmentarse.</p>
+        </div>
+
+        <div class="fabric-causality-panel">
+          <span class="flow-chip">lectura causal</span>
+          <p>El diseño se valida de izquierda a derecha: cada bloque debe dejar evidencia suficiente para que el siguiente pueda operar sin rehacer definiciones, duplicar lógica ni perder trazabilidad.</p>
         </div>
       </div>
     </section>
