@@ -159,6 +159,7 @@ const subsectionRoutes = {
   "/inicio/decantacion": { route: "/", hash: "#inicio-decantacion" },
   "/inicio/workflow": { route: "/", hash: "#inicio-workflow" },
   "/road-y-metodologia/tesis": { route: "/road-y-metodologia", hash: "#road-tesis" },
+  "/road-y-metodologia/enfoque": { route: "/road-y-metodologia", hash: "#road-tesis" },
   "/road-y-metodologia/proceso": { route: "/road-y-metodologia", hash: "#road-proceso" },
   "/road-y-metodologia/fabric-end-to-end": { route: "/road-y-metodologia", hash: "#road-fabric-master-guide" },
   "/road-y-metodologia/flujo-bi": { route: "/road-y-metodologia", hash: "#road-flujo-bi" },
@@ -286,27 +287,27 @@ const hubNavigationSections = [
 
 const homeResearchFrame = [
   {
-    label: "Objeto de estudio",
+    label: "Punto de partida",
     title: "Delivery BI como sistema de decisión.",
     text: "La unidad de análisis no es el tablero aislado, sino el ciclo completo que conecta necesidad operativa, fuente, regla, modelo, experiencia, gobierno y operación.",
   },
   {
-    label: "Problema",
+    label: "Tensión operativa",
     title: "La variabilidad metodológica reduce trazabilidad.",
     text: "Cuando cada iniciativa documenta, valida y publica con criterios distintos, el área depende más de memoria individual que de evidencia reutilizable.",
   },
   {
-    label: "Tesis",
+    label: "Decisión de gestión",
     title: "Datalización Hub convierte experiencia dispersa en disciplina interna.",
     text: "El portal ordena una práctica común para iniciar, construir, medir, publicar y sostener inteligencia de datos con responsabilidad explícita.",
   },
   {
-    label: "Método",
+    label: "Forma de trabajo",
     title: "El avance se decide por gates, evidencia y control.",
     text: "PRD, Spec, roadmap, metodología de mejora, seguridad, calidad y operación se leen como una secuencia verificable, no como documentos independientes.",
   },
   {
-    label: "Contribución",
+    label: "Resultado esperado",
     title: "El área gana una base gobernada para escalar.",
     text: "La plataforma deja criterios, plantillas, definiciones, cadencias y controles para que el conocimiento pueda crecer sin perder coherencia.",
   },
@@ -319,7 +320,7 @@ const roadMethodologyThesis = [
     text: "La sección responde cómo pasar de una necesidad operativa a un producto BI publicado, medido y mejorado con trazabilidad.",
   },
   {
-    label: "Hipótesis de trabajo",
+    label: "Criterio de avance",
     title: "El roadmap reduce riesgo cuando se integra con metodología.",
     text: "Los gates ordenan la decisión; OEE BI, DMAIC, VSM, FMEA y Kaizen explican la pérdida, la causa y el control.",
   },
@@ -332,14 +333,17 @@ const roadMethodologyThesis = [
 
 const fabricMasterSources = [
   {
+    iconName: "database",
     title: "Bases estructuradas",
     text: "Tablas transaccionales, maestros, vistas y repositorios con reglas de negocio explícitas.",
   },
   {
+    iconName: "document",
     title: "Archivos no estructurados",
     text: "Excel, CSV, documentos operativos y evidencia que debe quedar gobernada antes de usarse.",
   },
   {
+    iconName: "stream",
     title: "Eventos y streams",
     text: "Señales de operación, refresh, alertas, logs y datos que requieren lectura casi inmediata.",
   },
@@ -347,14 +351,17 @@ const fabricMasterSources = [
 
 const fabricProcessingNodes = [
   {
+    iconName: "dataflow",
     title: "Dataflow Gen2",
     text: "Limpia, tipifica y estandariza datos con pasos trazables y reutilizables.",
   },
   {
+    iconName: "sparkNotebook",
     title: "Notebooks Spark",
     text: "Resuelve transformaciones complejas, enriquecimiento y preparación avanzada.",
   },
   {
+    iconName: "aiModel",
     title: "Modelos de IA",
     text: "Clasifican, predicen o asisten decisiones cuando existe evidencia y control.",
   },
@@ -380,18 +387,22 @@ const fabricStorageModes = [
 
 const fabricAdoptionPillars = [
   {
+    iconName: "starSchema",
     title: "Modelo estrella",
     text: "Hechos, dimensiones, calendario y granularidad permiten cálculos rápidos, legibles y auditables.",
   },
   {
+    iconName: "optimization",
     title: "Optimización crítica",
     text: "Menos visuales, DAX con variables, medidas ordenadas y pruebas evitan lentitud acumulada.",
   },
   {
+    iconName: "coe",
     title: "Centro de excelencia",
     text: "El equipo define estándares, mentorea, revisa y convierte buenas prácticas en disciplina compartida.",
   },
   {
+    iconName: "hardware",
     title: "Gateway y capacidad",
     text: "CPU, RAM, credenciales, refresh y monitoreo sostienen el rendimiento cuando la solución escala.",
   },
@@ -1592,25 +1603,10 @@ function renderHomePage() {
             <h1>De tableros aislados a una disciplina interna de inteligencia de datos.</h1>
             <p class="hero-kicker">Esta plataforma nace para ordenar, estandarizar y escalar la forma en que el área construye inteligencia de datos.</p>
             <p class="hero-text">Lo que estamos construyendo no es solo una web. Es una capacidad organizacional: una guía viva, clara y gobernada para estructurar proyectos BI end-to-end con estándar técnico, metodológico y operativo.</p>
-            <div class="hero-actions">
-              <a class="button" href="/road-y-metodologia" data-route>
-                ${icon("route")}
-                Ver Road y Metodología
-              </a>
-              <a class="button secondary" href="/metodo-datalizacion" data-route>
-                ${icon("folder")}
-                Ver método
-              </a>
-            </div>
             <div class="platform-metric-row" aria-label="Capacidades principales de la plataforma">
               ${platformHeroMetrics.map(renderPlatformMetric).join("")}
             </div>
           </div>
-        </div>
-        <div class="hero-tabs" aria-hidden="true">
-          <span class="active"></span>
-          <span></span>
-          <span></span>
         </div>
       </section>
 
@@ -1754,11 +1750,11 @@ function renderHomeResearchFrame() {
   return `
     <section class="home-research page-inner" id="inicio-estudio" aria-labelledby="homeResearchTitle">
       <div class="home-research-copy">
-        <span class="flow-chip">resumen ejecutivo de estudio</span>
-        <h2 id="homeResearchTitle">La plataforma se fundamenta como una monografía operativa sobre cómo escalar inteligencia de datos gobernada.</h2>
-        <p>La pregunta que ordena la página es académica y práctica a la vez: qué condiciones debe cumplir un área de Datalización para transformar pedidos, reportes y conocimiento tácito en una disciplina interna con método, evidencia y control.</p>
+        <span class="flow-chip">lectura ejecutiva inicial</span>
+        <h2 id="homeResearchTitle">La plataforma ordena cómo escalar inteligencia de datos gobernada.</h2>
+        <p>La conversación que ordena esta página es concreta: qué necesita el área para transformar pedidos, reportes y conocimiento disperso en una forma común de trabajo, con evidencia, responsables, gobierno y continuidad operativa.</p>
       </div>
-      <div class="home-research-grid" aria-label="Estructura académica de Inicio">
+      <div class="home-research-grid" aria-label="Estructura ejecutiva de Inicio">
         ${homeResearchFrame
           .map(
             (item, index) => `
@@ -1773,7 +1769,7 @@ function renderHomeResearchFrame() {
       </div>
       <aside class="home-research-note" aria-label="Criterio de lectura">
         <strong>Lectura sugerida</strong>
-        <p>Primero se entiende la tesis, luego se recorre el Road y la Metodología, después se aplica el Método de Datalización y finalmente se gobierna el conocimiento con Datalito, diccionario, design system y documentación.</p>
+        <p>Primero se entiende el punto de partida, luego se recorre Road y Metodología, después se aplica el Método de Datalización y finalmente se gobierna el conocimiento con Datalito, diccionario, design system y documentación.</p>
       </aside>
     </section>
   `;
@@ -3326,7 +3322,7 @@ function renderRoadMethodologyPage() {
       <header class="page-heading page-inner road-methodology-hero">
         <span class="eyebrow">Road y Metodología</span>
         <h1>Del caso operativo a la mejora controlada.</h1>
-        <p class="lede">Esta sección unifica la guía, el roadmap y la metodología en una sola tesis de trabajo: cada iniciativa BI debe avanzar por evidencia, explicar la pérdida que resuelve y dejar un control sostenible en producción.</p>
+        <p class="lede">Esta sección unifica la guía, el roadmap y la metodología en una forma de trabajo común: cada iniciativa BI debe avanzar por evidencia, explicar la pérdida que resuelve y dejar un control sostenible en producción.</p>
       </header>
 
       ${renderExecutiveBrief(pageNarratives.roadMethodology)}
@@ -3476,9 +3472,9 @@ function renderRoadMethodologyThesis() {
   return `
     <section class="road-methodology-thesis page-inner" id="road-tesis" aria-labelledby="roadMethodologyThesisTitle">
       <div class="road-thesis-copy">
-        <span class="flow-chip">tesis metodológica</span>
+        <span class="flow-chip">enfoque de trabajo</span>
         <h2 id="roadMethodologyThesisTitle">El Road define cuándo avanzar; la metodología explica por qué intervenir y cómo sostener la mejora.</h2>
-        <p>La sección funciona como un paper aplicado al delivery BI: formula una pregunta, declara una hipótesis, define criterios de validación y convierte cada concepto técnico en evidencia operativa.</p>
+        <p>La sección ordena el delivery BI con una lógica práctica: parte de una necesidad operativa, fija criterios de avance, pide evidencias concretas y convierte cada concepto técnico en una decisión revisable.</p>
       </div>
       <div class="road-thesis-grid">
         ${roadMethodologyThesis
@@ -3512,6 +3508,122 @@ function renderMethodologyProcessFlow() {
   `;
 }
 
+function renderFabricIllustration(type) {
+  const drawings = {
+    database: `
+      <svg class="fabric-illustration database" viewBox="0 0 84 84" aria-hidden="true">
+        <ellipse cx="42" cy="19" rx="24" ry="10"></ellipse>
+        <path d="M18 19v39c0 5.5 10.7 10 24 10s24-4.5 24-10V19"></path>
+        <path d="M18 32c0 5.5 10.7 10 24 10s24-4.5 24-10"></path>
+        <path d="M18 45c0 5.5 10.7 10 24 10s24-4.5 24-10"></path>
+      </svg>
+    `,
+    document: `
+      <svg class="fabric-illustration document" viewBox="0 0 84 84" aria-hidden="true">
+        <path d="M23 12h27l12 13v47H23z"></path>
+        <path d="M50 12v15h12"></path>
+        <path d="M32 39h22"></path>
+        <path d="M32 50h18"></path>
+        <path d="M32 61h24"></path>
+      </svg>
+    `,
+    stream: `
+      <svg class="fabric-illustration stream" viewBox="0 0 84 84" aria-hidden="true">
+        <path d="M15 24h22"></path><path d="M15 42h32"></path><path d="M15 60h20"></path>
+        <circle cx="45" cy="24" r="7"></circle><circle cx="55" cy="42" r="7"></circle><circle cx="43" cy="60" r="7"></circle>
+        <path d="M62 42h13"></path><path d="m70 35 7 7-7 7"></path>
+      </svg>
+    `,
+    dataflow: `
+      <svg class="fabric-illustration dataflow" viewBox="0 0 84 84" aria-hidden="true">
+        <rect x="16" y="14" width="22" height="22" rx="6"></rect>
+        <rect x="46" y="14" width="22" height="22" rx="6"></rect>
+        <rect x="31" y="48" width="22" height="22" rx="6"></rect>
+        <path d="M38 25h8"></path><path d="M29 36l9 12"></path><path d="M55 36l-8 12"></path>
+      </svg>
+    `,
+    sparkNotebook: `
+      <svg class="fabric-illustration spark-notebook" viewBox="0 0 84 84" aria-hidden="true">
+        <rect x="18" y="14" width="42" height="56" rx="7"></rect>
+        <path d="M29 31h18"></path><path d="M29 42h12"></path><path d="M29 53h17"></path>
+        <path d="m59 37 4 9 9 4-9 4-4 9-4-9-9-4 9-4z"></path>
+      </svg>
+    `,
+    aiModel: `
+      <svg class="fabric-illustration ai-model" viewBox="0 0 84 84" aria-hidden="true">
+        <path d="M34 20c-9 0-16 7-16 16 0 5 2 9 6 12v12c0 5 4 9 9 9h14c5 0 9-4 9-9V48c4-3 6-7 6-12 0-9-7-16-16-16-3 0-6 1-8 3-1-2-2-3-4-3z"></path>
+        <path d="M32 39h20"></path><path d="M34 50h16"></path><path d="M40 25v41"></path>
+      </svg>
+    `,
+    lakehouse: `
+      <svg class="fabric-illustration mini" viewBox="0 0 84 84" aria-hidden="true">
+        <path d="M18 46 42 23l24 23"></path><path d="M25 43v23h34V43"></path><path d="M34 66V52h16v14"></path>
+        <path d="M17 72c8-5 15-5 25 0 10 5 17 5 25 0"></path>
+      </svg>
+    `,
+    warehouse: `
+      <svg class="fabric-illustration mini" viewBox="0 0 84 84" aria-hidden="true">
+        <path d="M15 32 42 17l27 15"></path><path d="M21 32h42v35H21z"></path>
+        <path d="M29 40v20"></path><path d="M42 40v20"></path><path d="M55 40v20"></path>
+      </svg>
+    `,
+    mirroring: `
+      <svg class="fabric-illustration mini" viewBox="0 0 84 84" aria-hidden="true">
+        <rect x="18" y="20" width="32" height="28" rx="5"></rect><rect x="34" y="36" width="32" height="28" rx="5"></rect>
+        <path d="M27 58h10"></path><path d="m34 53 6 6-6 6"></path>
+      </svg>
+    `,
+    oneLake: `
+      <svg class="fabric-illustration product" viewBox="0 0 84 84" aria-hidden="true">
+        <circle cx="42" cy="42" r="25"></circle>
+        <path d="M18 44c18-3 24-17 48-13"></path>
+        <path d="M23 55c18 8 31 5 45-9"></path>
+      </svg>
+    `,
+    powerBi: `
+      <svg class="fabric-illustration product" viewBox="0 0 84 84" aria-hidden="true">
+        <rect x="19" y="45" width="12" height="22" rx="4"></rect>
+        <rect x="36" y="31" width="12" height="36" rx="4"></rect>
+        <rect x="53" y="19" width="12" height="48" rx="4"></rect>
+      </svg>
+    `,
+    starSchema: `
+      <svg class="fabric-illustration pillar" viewBox="0 0 116 84" aria-hidden="true">
+        <rect x="44" y="29" width="28" height="26" rx="4"></rect>
+        <rect x="7" y="8" width="25" height="20" rx="4"></rect><rect x="84" y="8" width="25" height="20" rx="4"></rect>
+        <rect x="7" y="56" width="25" height="20" rx="4"></rect><rect x="84" y="56" width="25" height="20" rx="4"></rect>
+        <path d="M32 18h20v11"></path><path d="M84 18H64v11"></path><path d="M32 66h20V55"></path><path d="M84 66H64V55"></path>
+      </svg>
+    `,
+    optimization: `
+      <svg class="fabric-illustration pillar" viewBox="0 0 116 84" aria-hidden="true">
+        <rect x="10" y="10" width="43" height="27" rx="5"></rect>
+        <path d="M17 30c7-9 12-5 17-10 5-4 8 2 13-3"></path>
+        <rect x="60" y="10" width="46" height="64" rx="6"></rect>
+        <path d="M69 29h27"></path><path d="M69 42h19"></path><path d="M69 55h25"></path>
+      </svg>
+    `,
+    coe: `
+      <svg class="fabric-illustration pillar" viewBox="0 0 116 84" aria-hidden="true">
+        <circle cx="58" cy="28" r="13"></circle><path d="M50 28h16"></path><path d="M58 20v16"></path>
+        <circle cx="28" cy="48" r="9"></circle><circle cx="88" cy="48" r="9"></circle><circle cx="58" cy="58" r="9"></circle>
+        <path d="M12 74c3-10 29-10 32 0"></path><path d="M72 74c3-10 29-10 32 0"></path><path d="M42 80c3-10 29-10 32 0"></path>
+      </svg>
+    `,
+    hardware: `
+      <svg class="fabric-illustration pillar" viewBox="0 0 116 84" aria-hidden="true">
+        <rect x="14" y="15" width="34" height="34" rx="5"></rect>
+        <rect x="23" y="24" width="16" height="16" rx="3"></rect>
+        <path d="M20 9v8M31 9v8M42 9v8M20 47v8M31 47v8M42 47v8M8 21h8M8 32h8M8 43h8M46 21h8M46 32h8M46 43h8"></path>
+        <rect x="64" y="24" width="38" height="25" rx="5"></rect>
+        <path d="M70 32h26M70 41h26M74 49v8M92 49v8"></path>
+      </svg>
+    `,
+  };
+
+  return drawings[type] || drawings.database;
+}
+
 function renderFabricMasterGuide() {
   return `
     <section class="fabric-master-guide page-inner" id="road-fabric-master-guide" aria-labelledby="fabricMasterGuideTitle">
@@ -3532,7 +3644,7 @@ function renderFabricMasterGuide() {
               .map(
                 (source) => `
                   <article class="fabric-guide-card">
-                    <span></span>
+                    ${renderFabricIllustration(source.iconName)}
                     <strong>${escapeHtml(source.title)}</strong>
                     <p>${escapeHtml(source.text)}</p>
                   </article>
@@ -3550,9 +3662,9 @@ function renderFabricMasterGuide() {
           <h3>OneLake como base común</h3>
           <p>Centraliza datos estructurados y no estructurados usando Lakehouses, Warehouses o Mirroring, con linaje, ownership y criterios de calidad desde el inicio.</p>
           <div class="fabric-platform-row">
-            <span>Lakehouse</span>
-            <span>Warehouse</span>
-            <span>Mirroring</span>
+            <span>${renderFabricIllustration("lakehouse")}Lakehouse</span>
+            <span>${renderFabricIllustration("warehouse")}Warehouse</span>
+            <span>${renderFabricIllustration("mirroring")}Mirroring</span>
           </div>
         </div>
 
@@ -3568,7 +3680,7 @@ function renderFabricMasterGuide() {
               .map(
                 (node, index) => `
                   <article class="fabric-guide-card" style="--fabric-order:${index}">
-                    <span></span>
+                    ${renderFabricIllustration(node.iconName)}
                     <strong>${escapeHtml(node.title)}</strong>
                     <p>${escapeHtml(node.text)}</p>
                   </article>
@@ -3587,9 +3699,9 @@ function renderFabricMasterGuide() {
             </div>
           </div>
           <div class="fabric-duo">
-            <strong>OneLake</strong>
+            <strong>${renderFabricIllustration("oneLake")}OneLake</strong>
             <i aria-hidden="true"></i>
-            <strong>Power BI</strong>
+            <strong>${renderFabricIllustration("powerBi")}Power BI</strong>
           </div>
           <div class="fabric-mode-table" role="table" aria-label="Comparativa de modos de almacenamiento">
             <div role="row">
@@ -3622,6 +3734,7 @@ function renderFabricMasterGuide() {
                 (pillar, index) => `
                   <article class="fabric-pillar-card" style="--fabric-order:${index}">
                     <span>${String(index + 1).padStart(2, "0")}</span>
+                    ${renderFabricIllustration(pillar.iconName)}
                     <strong>${escapeHtml(pillar.title)}</strong>
                     <p>${escapeHtml(pillar.text)}</p>
                   </article>
@@ -4533,7 +4646,7 @@ function renderGuideDocumentTemplate(template) {
         <p>${escapeHtml(template.purpose)}</p>
       </div>
       <div class="guide-model-preview" aria-label="Vista previa de ${escapeHtml(template.title)}">
-        <div class="guide-model-paper">
+        <div class="guide-model-sheet">
           <span>YPF | Equipo de Datalización</span>
           <h4>${escapeHtml(template.title)}</h4>
           <p>${escapeHtml(template.format)}</p>

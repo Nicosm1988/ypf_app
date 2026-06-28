@@ -1035,6 +1035,20 @@ p {
   text-transform: uppercase;
 }
 
+.platform-thesis > span {
+  width: 100%;
+  min-height: 0;
+  justify-content: flex-start;
+  padding: 0 0 12px;
+  border-bottom: 1px solid rgba(103, 232, 220, 0.28);
+  border-radius: 0;
+  background: transparent;
+  color: #ffffff;
+  font-size: clamp(1.05rem, 1.6vw, 1.38rem);
+  line-height: 1.15;
+  text-transform: none;
+}
+
 .platform-thesis h3,
 .platform-pillar h3,
 .platform-definition-card h4,
@@ -2199,7 +2213,7 @@ body .datalito-panel {
 }
 
 html body .datalito-chat {
-  --datalito-paper: #f6f9fc;
+  --datalito-panel-bg: #f6f9fc;
   --datalito-card: #ffffff;
   --datalito-ink: #102033;
   --datalito-soft-ink: #405066;
@@ -2208,7 +2222,7 @@ html body .datalito-chat {
   gap: 12px;
   padding: 16px;
   border-color: rgba(255, 255, 255, 0.5);
-  background: var(--datalito-paper);
+  background: var(--datalito-panel-bg);
   color: var(--datalito-ink);
   box-shadow: 0 24px 70px rgba(3, 8, 14, 0.26);
 }
@@ -2223,7 +2237,7 @@ html body .datalito-chat.compact {
 html body .datalito-panel {
   border: 1px solid rgba(255, 255, 255, 0.72);
   border-radius: 14px;
-  background: var(--datalito-paper, #f6f9fc);
+  background: var(--datalito-panel-bg, #f6f9fc);
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.48);
 }
 
@@ -3167,7 +3181,7 @@ html body .datalito-chat .icon-button:hover {
 .section-title h2 {
   margin: 0;
   color: var(--ypf-blue-3);
-  font-size: clamp(1.6rem, 2.8vw, 2.35rem);
+  font-size: clamp(1.9rem, 3.4vw, 3rem);
   line-height: 1.08;
 }
 
@@ -3683,13 +3697,13 @@ html body .datalito-chat .icon-button:hover {
   width: fit-content;
   display: inline-flex;
   align-items: center;
-  min-height: 28px;
-  padding: 0 10px;
+  min-height: 32px;
+  padding: 0 12px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.07);
   color: #c7fff7;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 900;
   text-transform: uppercase;
 }
@@ -4385,7 +4399,7 @@ html body .datalito-chat .icon-button:hover {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent), rgba(8, 12, 18, 0.36);
 }
 
-.guide-model-paper {
+.guide-model-sheet {
   min-height: 270px;
   display: grid;
   align-content: start;
@@ -4400,21 +4414,21 @@ html body .datalito-chat .icon-button:hover {
     inset 0 4px 0 #ffd200;
 }
 
-.guide-model-paper > span {
+.guide-model-sheet > span {
   color: #0054a6;
   font-size: 0.72rem;
   font-weight: 950;
   text-transform: uppercase;
 }
 
-.guide-model-paper h4 {
+.guide-model-sheet h4 {
   margin: 0;
   color: #102334;
   font-size: 1.25rem;
   line-height: 1.12;
 }
 
-.guide-model-paper p {
+.guide-model-sheet p {
   margin: 0;
   color: #476174;
   font-weight: 850;
@@ -5937,15 +5951,51 @@ html body .datalito-chat .icon-button:hover {
   opacity: 0.75;
 }
 
-.fabric-guide-card > span {
-  width: 30px;
-  height: 30px;
-  border: 1px solid rgba(103, 232, 220, 0.32);
-  border-radius: 8px;
-  background:
-    linear-gradient(90deg, transparent 45%, rgba(103, 232, 220, 0.72) 45% 55%, transparent 55%),
-    linear-gradient(rgba(103, 232, 220, 0.72) 45%, transparent 45% 55%, rgba(103, 232, 220, 0.72) 55%),
-    rgba(53, 201, 189, 0.1);
+.fabric-illustration {
+  width: 62px;
+  height: 62px;
+  color: var(--green);
+  fill: rgba(53, 201, 189, 0.2);
+  stroke: currentcolor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 12px rgba(53, 201, 189, 0.22));
+}
+
+.fabric-illustration.document {
+  color: #f3a1c4;
+  fill: rgba(243, 161, 196, 0.16);
+}
+
+.fabric-illustration.stream,
+.fabric-illustration.dataflow,
+.fabric-illustration.product {
+  color: var(--ypf-blue-2);
+  fill: rgba(58, 160, 255, 0.16);
+}
+
+.fabric-illustration.spark-notebook {
+  color: var(--orange);
+  fill: rgba(255, 107, 59, 0.16);
+}
+
+.fabric-illustration.ai-model {
+  color: #c995ff;
+  fill: rgba(201, 149, 255, 0.15);
+}
+
+.fabric-illustration.mini {
+  width: 42px;
+  height: 42px;
+}
+
+.fabric-illustration.pillar {
+  width: 100%;
+  max-width: 128px;
+  height: 78px;
+  color: var(--ypf-blue-2);
+  fill: rgba(58, 160, 255, 0.13);
 }
 
 .fabric-guide-card strong,
@@ -6001,6 +6051,7 @@ html body .datalito-chat .icon-button:hover {
 .fabric-platform-row span {
   min-height: 58px;
   display: grid;
+  gap: 6px;
   place-items: center;
   padding: 8px;
   border: 1px solid rgba(103, 232, 220, 0.2);
@@ -6012,6 +6063,10 @@ html body .datalito-chat .icon-button:hover {
   font-size: 0.78rem;
   font-weight: 900;
   text-align: center;
+}
+
+.fabric-platform-row .fabric-illustration {
+  filter: drop-shadow(0 0 10px rgba(53, 201, 189, 0.18));
 }
 
 .fabric-arrow {
@@ -6091,12 +6146,18 @@ html body .datalito-chat .icon-button:hover {
 .fabric-duo strong {
   min-height: 62px;
   display: grid;
+  gap: 6px;
   place-items: center;
   border: 1px solid rgba(103, 232, 220, 0.2);
   border-radius: var(--radius);
   background: rgba(4, 10, 16, 0.35);
   color: #ffffff;
   text-align: center;
+}
+
+.fabric-duo .fabric-illustration {
+  width: 54px;
+  height: 54px;
 }
 
 .fabric-duo i {
@@ -6212,6 +6273,193 @@ html body .datalito-chat .icon-button:hover {
   100% {
     filter: hue-rotate(0deg);
     opacity: 0.55;
+  }
+}
+
+@property --neon-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.platform-card,
+.platform-definition-card,
+.platform-timeline-card,
+.platform-discipline-card,
+.platform-metric,
+.hub-nav-card,
+.home-research,
+.home-research-card,
+.home-research-note,
+.road-methodology-thesis,
+.road-thesis-card,
+.executive-brief,
+.executive-support-card,
+.concept-tree,
+.concept-tree-level,
+.concept-branch,
+.method-model-cta,
+.methodology-process,
+.methodology-process-step,
+.fabric-guide-board,
+.fabric-guide-stage,
+.fabric-guide-card,
+.fabric-consumption,
+.fabric-mode-card span,
+.fabric-pillar-band,
+.fabric-pillar-card,
+.guide-journey-step .guide-step-body,
+.guide-readiness-panel,
+.guide-readiness-flow li,
+.oee-factor,
+.dmaic-stage,
+.methodology-tool-card,
+.toyota-layer,
+.lean-practice,
+.cadence-item,
+.feature-card,
+.mini-step,
+.method-evaluation,
+.method-evaluation-card,
+.method-evaluation-pillar,
+.method-flow-step,
+.method-command-card,
+.method-plane-card,
+.method-layer-card,
+.method-channel-card,
+.method-folder-detail,
+.method-naming-lab,
+.method-signal-card,
+.method-metric-row,
+.footer-card {
+  --neon-angle: 0deg;
+  border-color: rgba(103, 232, 220, 0.2);
+}
+
+.platform-card:hover,
+.platform-definition-card:hover,
+.platform-timeline-card:hover,
+.platform-discipline-card:hover,
+.platform-metric:hover,
+.hub-nav-card:hover,
+.home-research:hover,
+.home-research-card:hover,
+.home-research-note:hover,
+.road-methodology-thesis:hover,
+.road-thesis-card:hover,
+.executive-brief:hover,
+.executive-support-card:hover,
+.concept-tree:hover,
+.concept-tree-level:hover,
+.concept-branch:hover,
+.method-model-cta:hover,
+.methodology-process:hover,
+.methodology-process-step:hover,
+.fabric-guide-board:hover,
+.fabric-guide-stage:hover,
+.fabric-guide-card:hover,
+.fabric-consumption:hover,
+.fabric-mode-card:hover span,
+.fabric-pillar-band:hover,
+.fabric-pillar-card:hover,
+.guide-journey-step:hover .guide-step-body,
+.guide-readiness-panel:hover,
+.guide-readiness-flow li:hover,
+.oee-factor:hover,
+.dmaic-stage:hover,
+.methodology-tool-card:hover,
+.toyota-layer:hover,
+.lean-practice:hover,
+.cadence-item:hover,
+.feature-card:hover,
+.mini-step:hover,
+.method-evaluation:hover,
+.method-evaluation-card:hover,
+.method-evaluation-pillar:hover,
+.method-flow-step:hover,
+.method-command-card:hover,
+.method-plane-card:hover,
+.method-layer-card:hover,
+.method-channel-card:hover,
+.method-folder-detail:hover,
+.method-naming-lab:hover,
+.method-signal-card:hover,
+.method-metric-row:hover,
+.footer-card:hover {
+  animation: neonBorderTravel 1.9s linear infinite;
+  border-image: conic-gradient(
+      from var(--neon-angle),
+      rgba(103, 232, 220, 0.1),
+      rgba(103, 232, 220, 0.95),
+      rgba(255, 221, 73, 0.98),
+      rgba(58, 160, 255, 0.92),
+      rgba(103, 232, 220, 0.1)
+    )
+    1;
+  box-shadow:
+    0 0 0 1px rgba(103, 232, 220, 0.18),
+    0 0 28px rgba(53, 201, 189, 0.16),
+    0 18px 42px rgba(0, 18, 36, 0.24);
+}
+
+@keyframes neonBorderTravel {
+  to {
+    --neon-angle: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .platform-card:hover,
+  .platform-definition-card:hover,
+  .platform-timeline-card:hover,
+  .platform-discipline-card:hover,
+  .platform-metric:hover,
+  .hub-nav-card:hover,
+  .home-research:hover,
+  .home-research-card:hover,
+  .home-research-note:hover,
+  .road-methodology-thesis:hover,
+  .road-thesis-card:hover,
+  .executive-brief:hover,
+  .executive-support-card:hover,
+  .concept-tree:hover,
+  .concept-tree-level:hover,
+  .concept-branch:hover,
+  .method-model-cta:hover,
+  .methodology-process:hover,
+  .methodology-process-step:hover,
+  .fabric-guide-board:hover,
+  .fabric-guide-stage:hover,
+  .fabric-guide-card:hover,
+  .fabric-consumption:hover,
+  .fabric-mode-card:hover span,
+  .fabric-pillar-band:hover,
+  .fabric-pillar-card:hover,
+  .guide-journey-step:hover .guide-step-body,
+  .guide-readiness-panel:hover,
+  .guide-readiness-flow li:hover,
+  .oee-factor:hover,
+  .dmaic-stage:hover,
+  .methodology-tool-card:hover,
+  .toyota-layer:hover,
+  .lean-practice:hover,
+  .cadence-item:hover,
+  .feature-card:hover,
+  .mini-step:hover,
+  .method-evaluation:hover,
+  .method-evaluation-card:hover,
+  .method-evaluation-pillar:hover,
+  .method-flow-step:hover,
+  .method-command-card:hover,
+  .method-plane-card:hover,
+  .method-layer-card:hover,
+  .method-channel-card:hover,
+  .method-folder-detail:hover,
+  .method-naming-lab:hover,
+  .method-signal-card:hover,
+  .method-metric-row:hover,
+  .footer-card:hover {
+    animation: none;
   }
 }
 
@@ -6877,7 +7125,7 @@ html body .datalito-chat .icon-button:hover {
 .road-thesis-card span,
 .home-research-note strong {
   color: var(--ypf-yellow-2);
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 950;
   letter-spacing: 0.03em;
   text-transform: uppercase;

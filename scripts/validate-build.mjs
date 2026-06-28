@@ -377,6 +377,7 @@ const staticRoutes = [
   "inicio/secciones",
   "inicio/decantacion",
   "inicio/workflow",
+  "road-y-metodologia/enfoque",
   "road-y-metodologia/tesis",
   "road-y-metodologia/proceso",
   "road-y-metodologia/fabric-end-to-end",

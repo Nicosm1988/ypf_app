@@ -48,7 +48,7 @@ export const pageNarratives = {
     action: "Avanzar de gate únicamente cuando la evidencia anterior permita decidir sin improvisación.",
   },
   roadMethodology: {
-    eyebrow: "tesis de trabajo",
+    eyebrow: "criterio de trabajo",
     title: "Road y Metodología: avance con evidencia, mejora con control.",
     summary:
       "La sección unificada sostiene una idea central: el roadmap define cuándo avanzar y la metodología explica qué pérdida se reduce, qué causa se interviene y qué control queda instalado.",
