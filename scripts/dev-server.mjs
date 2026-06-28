@@ -27,6 +27,7 @@ function toSafePath(urlPathname) {
   const routePath = decoded.replace(/\/+$/, "") || "/";
   const appRoutes = new Set([
     "/",
+    "/road-y-metodologia",
     "/guia-power-bi",
     "/metodo-datalizacion",
     "/metodologia",

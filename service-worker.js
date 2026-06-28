@@ -1,6 +1,7 @@
-const CACHE_NAME = "datalizacion-ypf-v25";
+const CACHE_NAME = "datalizacion-ypf-v26";
 const PRECACHE_URLS = [
   "/",
+  "/road-y-metodologia",
   "/guia-power-bi",
   "/metodo-datalizacion",
   "/metodologia",

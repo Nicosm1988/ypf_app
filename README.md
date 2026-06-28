@@ -6,14 +6,13 @@ Datalización es la práctica de automatizar procesos mediante datos confiables,
 
 - Portada ejecutiva Datalización Hub / BI Delivery Playbook para posicionar la plataforma como capacidad organizacional.
 - Portadas con imagen industrial de alta calidad vinculada a refinería, ductos y puerto energético.
-- Guía + roadmap BI/Fabric para ordenar el ciclo completo desde proceso y reglas hasta operación.
+- Road y Metodología BI/Fabric para ordenar en una sola sección el ciclo completo, los gates, OEE BI, DMAIC y mejora continua.
 - Método de Datalización v0.1 para organizar DEV/PROD, Teams, SharePoint, canales, carpetas, naming, backlog, VMC, gobierno y el Marco de Datalización VMC.
 - Design System para consolidar patrones visuales, componentes, reglas de experiencia y criterios de calidad.
 - Datalito, asistente interno de conocimiento con personaje animado, conversación natural, búsqueda local, citas, feedback y brechas.
-- Metodología de mejora continua BI con OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, flujo continuo, SMED, Poka-Yoke y Kata.
 - Narrativa ejecutiva en cada página para presentar primero la conclusión, luego los argumentos y finalmente la evidencia operativa.
 - Diccionario BI para alinear conceptos de automatización, datos, Power BI, Fabric, performance, gobierno y adopción.
-- Roadmap BI integrado en la guía, estructurado en 9 gates de ingeniería: PRD/Spec, datos/Power Query, modelado, DAX, seguridad/gobierno, UX/acción, versionado/aprobación, publicación y operación/mejora.
+- Roadmap BI integrado en Road y Metodología, estructurado en 9 gates de ingeniería: PRD/Spec, datos/Power Query, modelado, DAX, seguridad/gobierno, UX/acción, versionado/aprobación, publicación y operación/mejora.
 - Proyecto de Power BI con Visual Studio para trabajar procesos, Spec, PBIP, TMDL, Git y documentación con criterio.
 - Catálogo de librerías, agentes, MCPs y sandboxes guardado en documentación local.
 - Sistema repo-local de skills, agentes, MCP registry y QA automatizada para evolucionar la web con criterio productivo.
@@ -50,13 +49,11 @@ http://127.0.0.1:8001/
 El servidor local tambien soporta:
 
 ```text
-http://127.0.0.1:8001/guia-power-bi
+http://127.0.0.1:8001/road-y-metodologia
 http://127.0.0.1:8001/metodo-datalizacion
-http://127.0.0.1:8001/metodologia
 http://127.0.0.1:8001/design-system
 http://127.0.0.1:8001/datalito
 http://127.0.0.1:8001/diccionario
-http://127.0.0.1:8001/roadmap
 http://127.0.0.1:8001/proyecto-power-bi
 http://127.0.0.1:8001/librerias
 http://127.0.0.1:8001/atajos
@@ -70,13 +67,12 @@ npm run build
 
 El build valida que:
 
-- Exista Home, Guía Power BI/Fabric, Método de Datalización, Metodología, Design System, Datalito, Diccionario BI, Roadmap BI, Proyecto Power BI, Librerías y Atajos.
+- Exista Home, Road y Metodología, Método de Datalización, Design System, Datalito, Diccionario BI, Proyecto Power BI, Librerías y Atajos.
 - La Home tenga portada ejecutiva Datalización Hub, narrativa Antes/Ahora/Después y transición de tableros a disciplina.
+- La Home tenga una primera lectura con estructura de estudio, tesis y contribución operativa.
 - La Home tenga botonera para las secciones principales, el Design System tenga estructura ejecutiva completa y Datalito tenga vertical slice funcional.
 - El diccionario tenga al menos 65 términos.
-- El roadmap tenga los 9 gates obligatorios y arranque con PRD/Spec.
-- La guía tenga capítulos, comparacion PRD vs Spec y checklist de salida a producción.
-- La metodología tenga OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, SMED, Poka-Yoke, Kata y cadencias de operación.
+- Road y Metodología tenga los 9 gates obligatorios, PRD/Spec, checklist de salida, OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, SMED, Poka-Yoke, Kata y cadencias de operación.
 - El Método de Datalización tenga proceso end to end, separación DEV/PROD, 8 canales base, 12 subcarpetas estándar y naming gobernado.
 - Cada página principal tenga narrativa ejecutiva con tesis, tres soportes y acción.
 - El sitio incluya un árbol de decantación conceptual con niveles y ramas claras.
@@ -84,7 +80,7 @@ El build valida que:
 - El catálogo técnico tenga documentación Markdown y familias de herramientas.
 - Los atajos tengan categorías e items navegables.
 - Los datos tengan los campos requeridos.
-- Vercel tenga rewrites para `/guia-power-bi`, `/metodo-datalizacion`, `/metodologia`, `/design-system`, `/datalito`, `/diccionario`, `/roadmap`, `/proyecto-power-bi`, `/librerias` y `/atajos`.
+- Vercel tenga rewrites para `/road-y-metodologia`, `/metodo-datalizacion`, `/design-system`, `/datalito`, `/diccionario`, `/proyecto-power-bi`, `/librerias` y `/atajos`, manteniendo compatibilidad con `/guia-power-bi`, `/metodologia` y `/roadmap`.
 - Se genere `dist/` con las rutas estaticas listas para Vercel.
 
 ## Validar calidad completa
@@ -163,15 +159,17 @@ Cada gate debe mantener esta estructura:
 
 El roadmap debe comenzar con PRD y Spec. La publicación productiva es un gate propio y ocurre después de versionado, pruebas y aprobación.
 
-## Editar guía + roadmap Power BI/Fabric
+## Editar Road y Metodología BI/Fabric
 
-Editar `data/engineeringGuide.js`.
+Editar `data/engineeringGuide.js`, `data/roadmap.js` y `data/methodology.js`.
 
 - `prdSpecComparison`: tabla de comparacion entre PRD y Spec.
 - `guideSections`: capítulos de la guía.
 - `readinessChecklist`: checklist previo a producción.
+- `roadmapPhases`: gates del roadmap.
+- `oeeFactors`, `dmaicStages`, `methodologyTools`, `toyotaFourP`, `leanPractices` y `methodologyCadence`: marco metodológico de mejora continua BI.
 
-El flujo interactivo combina esos capítulos con los 9 gates de `data/roadmap.js`.
+La sección navegable vive en `/road-y-metodologia`; las rutas antiguas `/guia-power-bi`, `/metodologia` y `/roadmap` quedan como compatibilidad.
 
 ## Editar portada ejecutiva
 

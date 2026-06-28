@@ -151,7 +151,7 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 28px;
+  gap: 20px;
   min-height: 76px;
   padding: 14px clamp(20px, 5.4vw, 70px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -246,10 +246,10 @@ p {
   min-height: 42px;
   display: inline-flex;
   align-items: center;
-  padding: 0 13px;
+  padding: 0 10px;
   border-radius: 4px;
   color: rgba(255, 255, 255, 0.74);
-  font-size: 0.94rem;
+  font-size: 0.88rem;
   font-weight: 800;
   text-decoration: none;
 }
@@ -6035,6 +6035,174 @@ html body .datalito-chat .icon-button:hover {
   line-height: 1.5;
 }
 
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(28px) scale(0.985);
+  filter: blur(7px);
+  transition:
+    opacity 0.62s ease,
+    transform 0.62s cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 0.62s ease;
+  transition-delay: calc(var(--reveal-order, 0) * 45ms);
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+.home-research,
+.road-methodology-thesis {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: 18px;
+  padding: clamp(22px, 4vw, 32px);
+  border: 1px solid rgba(53, 201, 189, 0.24);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at var(--spot-x, 16%) var(--spot-y, 14%), rgba(53, 201, 189, 0.14), transparent 22rem),
+    radial-gradient(circle at 84% 24%, rgba(58, 160, 255, 0.12), transparent 22rem),
+    linear-gradient(155deg, rgba(17, 23, 32, 0.96), rgba(7, 12, 18, 0.98));
+  box-shadow:
+    0 24px 58px rgba(0, 18, 38, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.home-research::before,
+.road-methodology-thesis::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.032) 1px, transparent 1px);
+  background-size: 34px 34px;
+  mask-image: linear-gradient(180deg, black, transparent 76%);
+  opacity: 0.42;
+}
+
+.home-research::after,
+.road-methodology-thesis::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ypf-yellow), var(--ypf-blue), transparent 72%);
+  opacity: 0.86;
+}
+
+.home-research-copy,
+.road-thesis-copy {
+  max-width: 980px;
+}
+
+.home-research-copy h2,
+.road-thesis-copy h2 {
+  margin: 10px 0;
+  color: #ffffff;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.05;
+}
+
+.home-research-copy p,
+.road-thesis-copy p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 1.03rem;
+  line-height: 1.62;
+}
+
+.home-research-grid,
+.road-thesis-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.home-research-card,
+.road-thesis-card,
+.home-research-note {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at var(--spot-x, 80%) var(--spot-y, 14%), rgba(53, 201, 189, 0.12), transparent 10rem),
+    rgba(255, 255, 255, 0.048);
+  box-shadow:
+    0 16px 34px rgba(0, 12, 24, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+.home-research-card::before,
+.road-thesis-card::before,
+.home-research-note::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ypf-yellow), transparent 70%);
+  opacity: 0.7;
+}
+
+.home-research-card span,
+.road-thesis-card span,
+.home-research-note strong {
+  color: var(--ypf-yellow-2);
+  font-size: 0.75rem;
+  font-weight: 950;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.home-research-card h3,
+.road-thesis-card h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.02rem;
+  line-height: 1.22;
+}
+
+.home-research-card p,
+.road-thesis-card p,
+.home-research-note p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.54;
+}
+
+.home-research-note {
+  grid-template-columns: minmax(150px, 0.3fr) minmax(0, 1fr);
+  align-items: center;
+  background:
+    linear-gradient(90deg, rgba(53, 201, 189, 0.12), rgba(58, 160, 255, 0.06)),
+    rgba(4, 10, 16, 0.4);
+}
+
+.road-methodology-page .executive-brief,
+.road-methodology-page .bi-flow-showcase,
+.road-methodology-page .methodology-process {
+  position: relative;
+}
+
+.road-methodology-page .bi-flow-showcase::after,
+.road-methodology-page .methodology-process::after {
+  content: "";
+  position: absolute;
+  inset: auto 18px -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(53, 201, 189, 0.4), transparent);
+}
+
 .method-evaluation {
   position: relative;
   isolation: isolate;
@@ -8468,6 +8636,15 @@ kbd {
     flex-direction: column;
   }
 
+  .home-research-grid,
+  .road-thesis-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-research-note {
+    grid-template-columns: 1fr;
+  }
+
   .method-evaluation-lab {
     grid-template-columns: 1fr;
   }
@@ -8476,6 +8653,16 @@ kbd {
 @media (max-width: 720px) {
   .method-evaluation {
     padding: 18px;
+  }
+
+  .home-research,
+  .road-methodology-thesis {
+    padding: 18px;
+  }
+
+  .home-research-grid,
+  .road-thesis-grid {
+    grid-template-columns: 1fr;
   }
 
   .method-evaluation-score {
@@ -8496,6 +8683,13 @@ kbd {
 @media (hover: none) {
   .interactive-surface:hover {
     transform: none;
+  }
+
+  .scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
   }
 }
 

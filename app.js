@@ -73,6 +73,7 @@ import { toolingDocs, toolingGroups } from "./data/toolingLibrary.js";
 const appRoot = document.querySelector("#appRoot");
 const contentTarget = document.querySelector("#content");
 const navLinks = [...document.querySelectorAll("[data-route]")];
+let scrollRevealObserver;
 
 const icons = {
   arrowRight: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>',
@@ -116,16 +117,23 @@ const icons = {
 
 const routeTitles = {
   "/": "Datalización Hub | BI Delivery Playbook",
-  "/guia-power-bi": "Guía y roadmap de automatización BI/Fabric | Datalización YPF",
+  "/road-y-metodologia": "Road y Metodología BI/Fabric | Datalización YPF",
+  "/guia-power-bi": "Road y Metodología BI/Fabric | Datalización YPF",
   "/metodo-datalizacion": "Método de Datalización | Datalización YPF",
-  "/metodologia": "Metodología de mejora continua BI | Datalización YPF",
+  "/metodologia": "Road y Metodología BI/Fabric | Datalización YPF",
   "/design-system": "Design System | Datalización Hub",
   "/datalito": "Datalito | Asistente interno de conocimiento",
   "/diccionario": "Diccionario BI | Datalización YPF",
-  "/roadmap": "Guía y roadmap de automatización BI/Fabric | Datalización YPF",
+  "/roadmap": "Road y Metodología BI/Fabric | Datalización YPF",
   "/proyecto-power-bi": "Proyecto de Power BI con Visual Studio Code | Datalización YPF",
   "/atajos": "Atajos Power BI | Datalización YPF",
   "/librerias": "Librerías y agentes | Datalización YPF",
+};
+
+const routeAliases = {
+  "/guia-power-bi": "/road-y-metodologia",
+  "/metodologia": "/road-y-metodologia",
+  "/roadmap": "/road-y-metodologia",
 };
 
 const dictionaryState = {
@@ -168,22 +176,16 @@ const datalitoState = {
 
 const hubNavigationSections = [
   {
-    title: "Guía + Roadmap",
-    route: "/guia-power-bi",
+    title: "Road y Metodología",
+    route: "/road-y-metodologia",
     iconName: "route",
-    text: "Proceso end-to-end para construir, validar, publicar y operar productos BI.",
+    text: "Roadmap, gates, OEE BI, DMAIC y mejora continua en una única secuencia de trabajo.",
   },
   {
     title: "Método",
     route: "/metodo-datalizacion",
     iconName: "folder",
     text: "Estructura de trabajo, Teams, SharePoint, naming, backlog, VMC y gobierno.",
-  },
-  {
-    title: "Metodología",
-    route: "/metodologia",
-    iconName: "gauge",
-    text: "OEE BI, DMAIC, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata aplicados a BI.",
   },
   {
     title: "Proyecto Power BI",
@@ -220,6 +222,52 @@ const hubNavigationSections = [
     route: "/atajos",
     iconName: "spark",
     text: "Acciones frecuentes de Power BI para reducir fricción diaria y errores.",
+  },
+];
+
+const homeResearchFrame = [
+  {
+    label: "Objeto de estudio",
+    title: "Delivery BI como sistema de decisión.",
+    text: "La unidad de análisis no es el tablero aislado, sino el ciclo completo que conecta necesidad operativa, fuente, regla, modelo, experiencia, gobierno y operación.",
+  },
+  {
+    label: "Problema",
+    title: "La variabilidad metodológica reduce trazabilidad.",
+    text: "Cuando cada iniciativa documenta, valida y publica con criterios distintos, el área depende más de memoria individual que de evidencia reutilizable.",
+  },
+  {
+    label: "Tesis",
+    title: "Datalización Hub convierte experiencia dispersa en disciplina interna.",
+    text: "El portal ordena una práctica común para iniciar, construir, medir, publicar y sostener inteligencia de datos con responsabilidad explícita.",
+  },
+  {
+    label: "Método",
+    title: "El avance se decide por gates, evidencia y control.",
+    text: "PRD, Spec, roadmap, metodología de mejora, seguridad, calidad y operación se leen como una secuencia verificable, no como documentos independientes.",
+  },
+  {
+    label: "Contribución",
+    title: "El área gana una base gobernada para escalar.",
+    text: "La plataforma deja criterios, plantillas, definiciones, cadencias y controles para que el conocimiento pueda crecer sin perder coherencia.",
+  },
+];
+
+const roadMethodologyThesis = [
+  {
+    label: "Pregunta central",
+    title: "¿Qué evidencia permite avanzar sin improvisar?",
+    text: "La sección responde cómo pasar de una necesidad operativa a un producto BI publicado, medido y mejorado con trazabilidad.",
+  },
+  {
+    label: "Hipótesis de trabajo",
+    title: "El roadmap reduce riesgo cuando se integra con metodología.",
+    text: "Los gates ordenan la decisión; OEE BI, DMAIC, VSM, FMEA y Kaizen explican la pérdida, la causa y el control.",
+  },
+  {
+    label: "Criterio de validación",
+    title: "Cada etapa debe dejar una evidencia auditable.",
+    text: "Si una etapa no deja entregable, owner, riesgo y control, el proceso todavía no está listo para escalar.",
   },
 ];
 
@@ -979,6 +1027,10 @@ const interactiveSurfaceSelector = [
   ".platform-discipline-card",
   ".platform-metric",
   ".hub-nav-card",
+  ".home-research-card",
+  ".home-research-note",
+  ".road-thesis-card",
+  ".road-methodology-thesis",
   ".design-system-card",
   ".design-system-benefit",
   ".design-system-component",
@@ -1141,8 +1193,10 @@ function renderGuideStepGlossary(section) {
 
 function getRoute(pathname = window.location.pathname) {
   const cleanPath = pathname.replace(/\/+$/, "") || "/";
+  if (routeAliases[cleanPath]) return routeAliases[cleanPath];
   if (
     [
+      "/road-y-metodologia",
       "/guia-power-bi",
       "/metodo-datalizacion",
       "/metodologia",
@@ -1257,8 +1311,64 @@ function enhanceInteractiveSurfaces() {
   });
 }
 
+function setupScrollReveal() {
+  const revealSelector = [
+    ".home-research-card",
+    ".home-research-note",
+    ".road-thesis-card",
+    ".road-methodology-thesis",
+    ".methodology-process-step",
+    ".guide-journey-step",
+    ".guide-model-card",
+    ".guide-contract-row",
+    ".oee-factor",
+    ".dmaic-stage",
+    ".methodology-tool-card",
+    ".toyota-layer",
+    ".lean-practice",
+    ".cadence-item",
+    ".feature-card",
+    ".hub-nav-card",
+    ".platform-card",
+    ".platform-definition-card",
+    ".platform-timeline-card",
+    ".platform-discipline-card",
+    ".mini-step",
+  ].join(",");
+  const targets = [...appRoot.querySelectorAll(revealSelector)];
+
+  if (scrollRevealObserver) {
+    scrollRevealObserver.disconnect();
+    scrollRevealObserver = undefined;
+  }
+
+  targets.forEach((target, index) => {
+    target.classList.add("scroll-reveal");
+    target.style.setProperty("--reveal-order", String(index % 8));
+  });
+
+  const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  if (!("IntersectionObserver" in window) || reduceMotion) {
+    targets.forEach((target) => target.classList.add("is-visible"));
+    return;
+  }
+
+  scrollRevealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        scrollRevealObserver.unobserve(entry.target);
+      });
+    },
+    { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+  );
+
+  targets.forEach((target) => scrollRevealObserver.observe(target));
+}
+
 function setActiveNav(route) {
-  const activeRoute = route === "/roadmap" ? "/guia-power-bi" : route;
+  const activeRoute = routeAliases[route] || route;
   navLinks.forEach((link) => {
     const url = new URL(link.href);
     link.classList.toggle("active", getRoute(url.pathname) === activeRoute);
@@ -1273,14 +1383,12 @@ function renderRoute(route = getRoute()) {
     renderDictionaryPage();
   } else if (route === "/metodo-datalizacion") {
     renderDatalizationMethodPage();
-  } else if (route === "/metodologia") {
-    renderMethodologyPage();
   } else if (route === "/design-system") {
     renderDesignSystemPage();
   } else if (route === "/datalito") {
     renderDatalitoPage();
-  } else if (route === "/guia-power-bi") {
-    renderGuidePage();
+  } else if (route === "/road-y-metodologia") {
+    renderRoadMethodologyPage();
     setupUnifiedFlowInteractions();
   } else if (route === "/roadmap") {
     renderRoadmapPage();
@@ -1302,6 +1410,7 @@ function renderRoute(route = getRoute()) {
 
   requestAnimationFrame(() => {
     enhanceInteractiveSurfaces();
+    setupScrollReveal();
     if (window.location.hash) scrollToRouteHash(window.location.hash);
   });
 }
@@ -1348,17 +1457,13 @@ function renderHomePage() {
             <p class="hero-kicker">Esta plataforma nace para ordenar, estandarizar y escalar la forma en que el área construye inteligencia de datos.</p>
             <p class="hero-text">Lo que estamos construyendo no es solo una web. Es una capacidad organizacional: una guía viva, clara y gobernada para estructurar proyectos BI end-to-end con estándar técnico, metodológico y operativo.</p>
             <div class="hero-actions">
-              <a class="button" href="/guia-power-bi" data-route>
+              <a class="button" href="/road-y-metodologia" data-route>
                 ${icon("route")}
-                Ver playbook
+                Ver Road y Metodología
               </a>
               <a class="button secondary" href="/metodo-datalizacion" data-route>
                 ${icon("folder")}
                 Ver método
-              </a>
-              <a class="button secondary" href="/metodologia" data-route>
-                ${icon("gauge")}
-                Ver metodología
               </a>
             </div>
             <div class="platform-metric-row" aria-label="Capacidades principales de la plataforma">
@@ -1377,6 +1482,8 @@ function renderHomePage() {
         ${icon("quote")}
         <strong>Esta gestión busca marcar un punto de inflexión: pasar de construir tableros a construir una disciplina interna de inteligencia de datos.</strong>
       </section>
+
+      ${renderHomeResearchFrame()}
 
       <section class="method-model-cta page-inner" aria-label="Nuevo marco de evaluación de datalización">
         <div>
@@ -1421,19 +1528,10 @@ function renderHomePage() {
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("layers")}</span>
-          <h3>La guía ordena la decisión</h3>
-          <p>Convierte PRD, datos, modelo, DAX, seguridad, UX, aprobación y operación en gates con evidencia verificable.</p>
-          <a class="button small secondary" href="/guia-power-bi" data-route>
-            Ver flujo
-            ${icon("arrowRight")}
-          </a>
-        </article>
-        <article class="feature-card">
-          <span class="feature-icon">${icon("gauge")}</span>
-          <h3>La metodología explica la pérdida</h3>
-          <p>OEE BI, DMAIC, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata se usan para medir, mejorar y controlar.</p>
-          <a class="button small secondary" href="/metodologia" data-route>
-            Ver metodología
+          <h3>Road y Metodología ordena avance y mejora</h3>
+          <p>Convierte PRD, datos, modelo, DAX, seguridad, OEE BI, DMAIC, VSM, FMEA y control en una secuencia verificable.</p>
+          <a class="button small secondary" href="/road-y-metodologia" data-route>
+            Ver Road y Metodología
             ${icon("arrowRight")}
           </a>
         </article>
@@ -1450,7 +1548,7 @@ function renderHomePage() {
           <span class="feature-icon">${icon("route")}</span>
           <h3>Los modelos fijan contrato</h3>
           <p>PRD y Spec separan la pregunta ejecutiva de la implementación técnica para reducir ambigüedad.</p>
-          <a class="button small secondary" href="/guia-power-bi" data-route>
+          <a class="button small secondary" href="/road-y-metodologia#modelos-prd-spec" data-route>
             Ver modelos
             ${icon("arrowRight")}
           </a>
@@ -1512,6 +1610,35 @@ function renderHomePage() {
           })
           .join("")}
       </section>
+    </section>
+  `;
+}
+
+function renderHomeResearchFrame() {
+  return `
+    <section class="home-research page-inner" aria-labelledby="homeResearchTitle">
+      <div class="home-research-copy">
+        <span class="flow-chip">resumen ejecutivo de estudio</span>
+        <h2 id="homeResearchTitle">La plataforma se fundamenta como una monografía operativa sobre cómo escalar inteligencia de datos gobernada.</h2>
+        <p>La pregunta que ordena la página es académica y práctica a la vez: qué condiciones debe cumplir un área de Datalización para transformar pedidos, reportes y conocimiento tácito en una disciplina interna con método, evidencia y control.</p>
+      </div>
+      <div class="home-research-grid" aria-label="Estructura académica de Inicio">
+        ${homeResearchFrame
+          .map(
+            (item, index) => `
+              <article class="home-research-card" style="--research-order:${index}">
+                <span>${escapeHtml(item.label)}</span>
+                <h3>${escapeHtml(item.title)}</h3>
+                <p>${escapeHtml(item.text)}</p>
+              </article>
+            `,
+          )
+          .join("")}
+      </div>
+      <aside class="home-research-note" aria-label="Criterio de lectura">
+        <strong>Lectura sugerida</strong>
+        <p>Primero se entiende la tesis, luego se recorre el Road y la Metodología, después se aplica el Método de Datalización y finalmente se gobierna el conocimiento con Datalito, diccionario, design system y documentación.</p>
+      </aside>
     </section>
   `;
 }
@@ -2657,8 +2784,9 @@ function detectDatalitoSecurityRequest(question) {
 }
 
 function buildDatalitoFollowUps(source) {
-  if (source.section === "Guía + Roadmap") return ["¿Qué entregables corresponden?", "¿Qué riesgo evita este gate?", "¿Cómo lo llevo a una Spec?"];
-  if (source.section === "Metodología") return ["¿Cómo se mide esto con OEE BI?", "¿Qué etapa DMAIC aplica?", "¿Qué control sostiene la mejora?"];
+  if (source.section === "Road y Metodología") {
+    return ["¿Qué entregables corresponden?", "¿Qué riesgo evita este gate?", "¿Qué control sostiene la mejora?"];
+  }
   if (source.section === "Design System") return ["¿Qué componente aplica?", "¿Qué regla de calidad corresponde?", "¿Cómo mantengo consistencia?"];
   if (source.section === "Diccionario BI") return ["Dame un ejemplo funcional.", "¿Qué riesgo evita?", "¿Con qué conceptos se relaciona?"];
   return ["¿Dónde está la fuente?", "Explicalo para gerencia.", "Dame un paso a paso."];
@@ -3056,20 +3184,18 @@ function setupWorkflowInteractions() {
   });
 }
 
-function renderMethodologyPage() {
+function renderRoadMethodologyPage() {
   appRoot.innerHTML = `
-    <section class="page tool-page methodology-page">
-      <header class="page-heading page-inner methodology-hero">
-        <span class="eyebrow">Metodología operativa</span>
-        <h1>Pérdida, causa y control.</h1>
-        <p class="lede">La metodología se presenta como una cadena de razonamiento: primero se mide la pérdida, después se identifica la causa y, finalmente, se instala un control que el equipo pueda sostener.</p>
+    <section class="page tool-page road-methodology-page">
+      <header class="page-heading page-inner road-methodology-hero">
+        <span class="eyebrow">Road y Metodología</span>
+        <h1>Del caso operativo a la mejora controlada.</h1>
+        <p class="lede">Esta sección unifica la guía, el roadmap y la metodología en una sola tesis de trabajo: cada iniciativa BI debe avanzar por evidencia, explicar la pérdida que resuelve y dejar un control sostenible en producción.</p>
       </header>
 
-      ${renderMethodologyProcessFlow()}
+      ${renderExecutiveBrief(pageNarratives.roadMethodology)}
 
-      ${renderExecutiveBrief(pageNarratives.methodology)}
-
-      ${renderConceptDecantation()}
+      ${renderRoadMethodologyThesis()}
 
       <section class="methodology-intro page-inner" aria-labelledby="methodologyIntroTitle">
         <div class="methodology-intro-copy">
@@ -3081,6 +3207,43 @@ function renderMethodologyPage() {
           ${methodologyPrinciples.map(renderMethodologyPrinciple).join("")}
         </div>
       </section>
+
+      ${renderMethodologyProcessFlow()}
+
+      ${renderUnifiedAutomationFlow()}
+
+      ${renderPrdSpecModelSection()}
+
+      <section class="guide-journey page-inner" aria-labelledby="guideJourneyTitle">
+        <div class="guide-section-title">
+          <span class="flow-chip">historia completa</span>
+          <h2 id="guideJourneyTitle">Del caso operativo a la producción monitoreada.</h2>
+          <p>La secuencia se lee como una investigación aplicada: cada etapa declara una decisión, exige evidencia y prepara el control siguiente.</p>
+        </div>
+        ${guideSections.map(renderGuideJourneyStep).join("")}
+      </section>
+
+      <section class="guide-readiness-panel page-inner" aria-labelledby="guideReadinessTitle">
+        <div class="guide-readiness-copy">
+          <span class="flow-chip">control de salida</span>
+          <h2 id="guideReadinessTitle">La salida a producción exige evidencia completa, no confianza informal.</h2>
+          <p>Antes de producción, el equipo debe demostrar que el proceso está entendido, las reglas están versionadas, los datos tienen calidad, la seguridad fue probada y la operación sabe cómo responder ante incidentes.</p>
+        </div>
+        <ol class="guide-readiness-flow">
+          ${readinessChecklist
+            .map(
+              (item, index) => `
+                <li style="--guide-color:${guideStoryPalette[index % guideStoryPalette.length]}; --guide-order:${index}">
+                  <span>${index + 1}</span>
+                  <p>${escapeHtml(item)}</p>
+                </li>
+              `,
+            )
+            .join("")}
+        </ol>
+      </section>
+
+      ${renderConceptDecantation()}
 
       <section class="oee-section page-inner" aria-labelledby="oeeTitle">
         <div class="methodology-section-head">
@@ -3162,11 +3325,36 @@ function renderMethodologyPage() {
           <h2>La metodología se aplica por problema, no por moda.</h2>
           <p>OEE BI muestra dónde se pierde efectividad. DMAIC ordena cómo intervenir. VSM, FMEA, Kaizen, SMED, Poka-Yoke, Kata y 4P Toyota se eligen según la pérdida detectada y el momento del proyecto.</p>
         </div>
-        <a class="button secondary" href="/guia-power-bi" data-route>
+        <a class="button secondary" href="/road-y-metodologia#methodologyProcessTitle" data-route>
           ${icon("route")}
-          Conectar con guía + roadmap
+          Volver al proceso end-to-end
         </a>
       </section>
+    </section>
+  `;
+}
+
+function renderRoadMethodologyThesis() {
+  return `
+    <section class="road-methodology-thesis page-inner" aria-labelledby="roadMethodologyThesisTitle">
+      <div class="road-thesis-copy">
+        <span class="flow-chip">tesis metodológica</span>
+        <h2 id="roadMethodologyThesisTitle">El Road define cuándo avanzar; la metodología explica por qué intervenir y cómo sostener la mejora.</h2>
+        <p>La sección funciona como un paper aplicado al delivery BI: formula una pregunta, declara una hipótesis, define criterios de validación y convierte cada concepto técnico en evidencia operativa.</p>
+      </div>
+      <div class="road-thesis-grid">
+        ${roadMethodologyThesis
+          .map(
+            (item, index) => `
+              <article class="road-thesis-card" style="--road-order:${index}">
+                <span>${escapeHtml(item.label)}</span>
+                <h3>${escapeHtml(item.title)}</h3>
+                <p>${escapeHtml(item.text)}</p>
+              </article>
+            `,
+          )
+          .join("")}
+      </div>
     </section>
   `;
 }
@@ -3874,75 +4062,6 @@ function renderDictionaryPage() {
   renderDictionaryResults();
 }
 
-function renderGuidePage() {
-  appRoot.innerHTML = `
-    <section class="page tool-page guide-story-page">
-      <header class="page-heading page-inner guide-story-hero">
-        <span class="eyebrow">Guía y roadmap de automatización BI/Fabric</span>
-        <h1>Evidencia de control BI.</h1>
-        <p class="lede">La guía presenta la respuesta antes del detalle: cada gate existe para demostrar que el proceso puede avanzar con evidencia, responsabilidad y control operativo.</p>
-      </header>
-
-      ${renderExecutiveBrief(pageNarratives.guide)}
-
-      <section class="guide-story-intro page-inner" aria-labelledby="guideStoryTitle">
-        <div class="guide-story-copy">
-          <span class="flow-chip">tesis de la guía</span>
-          <h2 id="guideStoryTitle">El proceso manda; la tecnología demuestra que puede sostenerlo.</h2>
-          <p>El punto de partida es una tarea repetible que consume tiempo, depende de interpretación manual o pierde trazabilidad; la guía la convierte en un flujo con datos confiables, reglas explícitas, ejecución controlada, salida accionable y operación continua.</p>
-        </div>
-        <div class="guide-story-proof" aria-label="Transformación esperada">
-          <div>
-            <span>Antes</span>
-            <strong>Tareas manuales, criterios dispersos y decisiones difíciles de auditar.</strong>
-          </div>
-          <div>
-            <span>Durante</span>
-            <strong>Proceso, reglas, datos, modelo, seguridad y UX se ordenan como una misma cadena.</strong>
-          </div>
-          <div>
-            <span>Después</span>
-            <strong>La operación recibe señales, acciones y evidencia sin reconstruir el caso desde cero.</strong>
-          </div>
-        </div>
-      </section>
-
-      ${renderUnifiedAutomationFlow()}
-
-      ${renderPrdSpecModelSection()}
-
-      <section class="guide-journey page-inner" aria-labelledby="guideJourneyTitle">
-        <div class="guide-section-title">
-          <span class="flow-chip">historia completa</span>
-          <h2 id="guideJourneyTitle">Del caso operativo a la producción monitoreada.</h2>
-          <p>La secuencia debe leerse de arriba hacia abajo: cada etapa resume una respuesta, aporta evidencia y prepara el siguiente control.</p>
-        </div>
-        ${guideSections.map(renderGuideJourneyStep).join("")}
-      </section>
-
-      <section class="guide-readiness-panel page-inner" aria-labelledby="guideReadinessTitle">
-        <div class="guide-readiness-copy">
-          <span class="flow-chip">control de salida</span>
-          <h2 id="guideReadinessTitle">La salida a producción exige evidencia completa, no confianza informal.</h2>
-          <p>Antes de producción, el equipo debe demostrar que el proceso está entendido, las reglas están versionadas, los datos tienen calidad, la seguridad fue probada y la operación sabe cómo responder ante incidentes.</p>
-        </div>
-        <ol class="guide-readiness-flow">
-          ${readinessChecklist
-            .map(
-              (item, index) => `
-                <li style="--guide-color:${guideStoryPalette[index % guideStoryPalette.length]}; --guide-order:${index}">
-                  <span>${index + 1}</span>
-                  <p>${escapeHtml(item)}</p>
-                </li>
-              `,
-            )
-            .join("")}
-        </ol>
-      </section>
-    </section>
-  `;
-}
-
 function getUnifiedFlowItems() {
   const positions = [
     { x: 6, y: 56 },
@@ -4413,7 +4532,7 @@ function renderDictionaryResults() {
 }
 
 function renderRoadmapPage() {
-  renderGuidePage();
+  renderRoadMethodologyPage();
 }
 
 function renderProjectPage() {

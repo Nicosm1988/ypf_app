@@ -4,6 +4,7 @@ import path from "node:path";
 const root = process.cwd();
 const appRoutes = new Set([
   "/",
+  "/road-y-metodologia",
   "/guia-power-bi",
   "/metodo-datalizacion",
   "/metodologia",

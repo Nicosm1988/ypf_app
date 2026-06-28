@@ -47,6 +47,27 @@ export const pageNarratives = {
     ],
     action: "Avanzar de gate únicamente cuando la evidencia anterior permita decidir sin improvisación.",
   },
+  roadMethodology: {
+    eyebrow: "tesis de trabajo",
+    title: "Road y Metodología: avance con evidencia, mejora con control.",
+    summary:
+      "La sección unificada sostiene una idea central: el roadmap define cuándo avanzar y la metodología explica qué pérdida se reduce, qué causa se interviene y qué control queda instalado.",
+    support: [
+      {
+        title: "El avance se gobierna",
+        text: "Cada gate exige decisión, evidencia, owner, riesgo y entregable para evitar que una iniciativa BI pase de etapa por intuición o urgencia.",
+      },
+      {
+        title: "La mejora se explica",
+        text: "OEE BI, DMAIC, VSM, FMEA, Kaizen y Kata se usan para entender pérdida, causa, flujo, error potencial y rutina de aprendizaje.",
+      },
+      {
+        title: "La operación se sostiene",
+        text: "Publicación, monitoreo, runbook, backlog, incidentes y cadencias convierten la entrega en un activo gobernado, no en una salida puntual.",
+      },
+    ],
+    action: "Usar esta sección como marco único para relevar, priorizar, construir, publicar y mejorar productos BI/Fabric.",
+  },
   method: {
     eyebrow: "método operativo",
     title: "Orden común, ejecución delegable.",

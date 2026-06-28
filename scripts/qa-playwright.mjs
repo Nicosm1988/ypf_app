@@ -9,13 +9,14 @@ const port = Number(process.env.QA_PORT || 8123);
 const baseUrl = `http://127.0.0.1:${port}`;
 const routes = [
   { path: "/", selector: ".hero", name: "Inicio" },
-  { path: "/guia-power-bi", selector: ".guide-journey", name: "Guia + Roadmap" },
+  { path: "/road-y-metodologia", selector: ".road-methodology-page", name: "Road y Metodologia" },
+  { path: "/guia-power-bi", selector: ".road-methodology-page", name: "Guia + Roadmap compat" },
   { path: "/metodo-datalizacion", selector: ".method-page", name: "Metodo de Datalizacion" },
-  { path: "/metodologia", selector: ".methodology-process", name: "Metodologia" },
+  { path: "/metodologia", selector: ".road-methodology-page", name: "Metodologia compat" },
   { path: "/design-system", selector: ".design-system-page", name: "Design System" },
   { path: "/datalito", selector: ".datalito-page", name: "Datalito" },
   { path: "/diccionario", selector: ".dictionary-layout", name: "Diccionario" },
-  { path: "/roadmap", selector: ".guide-journey", name: "Roadmap" },
+  { path: "/roadmap", selector: ".road-methodology-page", name: "Roadmap compat" },
   { path: "/proyecto-power-bi", selector: ".project-studio", name: "Proyecto Power BI" },
   { path: "/librerias", selector: ".tooling-grid", name: "Librerias" },
   { path: "/atajos", selector: ".shortcut-grid", name: "Atajos" },
@@ -125,6 +126,7 @@ try {
         const homeReport = await page.evaluate(() => ({
           metrics: document.querySelectorAll(".platform-metric").length,
           hubNavCards: document.querySelectorAll(".hub-nav-card").length,
+          researchCards: document.querySelectorAll(".home-research-card").length,
           pillars: document.querySelectorAll(".platform-pillar").length,
           definitionCards: document.querySelectorAll(".platform-definition-card").length,
           timelineCards: document.querySelectorAll(".platform-timeline-card").length,
@@ -137,7 +139,8 @@ try {
         }));
         if (
           homeReport.metrics !== 3 ||
-          homeReport.hubNavCards !== 9 ||
+          homeReport.hubNavCards !== 8 ||
+          homeReport.researchCards !== 5 ||
           homeReport.pillars !== 3 ||
           homeReport.definitionCards !== 3 ||
           homeReport.timelineCards !== 3 ||
@@ -266,18 +269,28 @@ try {
         if (!anchored) throw new Error("El link de fuente de Datalito no navega al ancla #flujo-continuo.");
       }
 
-      if (route.path === "/metodologia") {
+      if (route.path === "/road-y-metodologia") {
         const methodologyReport = await page.evaluate(() => ({
+          thesisCards: document.querySelectorAll(".road-thesis-card").length,
           processSteps: document.querySelectorAll(".methodology-process-step").length,
           processBlocks: document.querySelectorAll(".process-block").length,
+          guideSteps: document.querySelectorAll(".guide-journey-step").length,
+          flowPanels: document.querySelectorAll(".unified-flow-panel").length,
+          oeeFactors: document.querySelectorAll(".oee-factor").length,
+          dmaicStages: document.querySelectorAll(".dmaic-stage").length,
           conceptConnector: getComputedStyle(document.querySelector(".concept-tree-grid"), "::before").content,
         }));
         if (
+          methodologyReport.thesisCards !== 3 ||
           methodologyReport.processSteps !== 9 ||
           methodologyReport.processBlocks !== 54 ||
+          methodologyReport.guideSteps !== 9 ||
+          methodologyReport.flowPanels !== 9 ||
+          methodologyReport.oeeFactors !== 3 ||
+          methodologyReport.dmaicStages !== 5 ||
           methodologyReport.conceptConnector !== "none"
         ) {
-          throw new Error(`Metodologia no cumple estructura esperada: ${JSON.stringify(methodologyReport)}`);
+          throw new Error(`Road y Metodologia no cumple estructura esperada: ${JSON.stringify(methodologyReport)}`);
         }
       }
 

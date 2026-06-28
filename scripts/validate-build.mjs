@@ -76,7 +76,7 @@ const vercelJson = JSON.parse(await readFile("vercel.json", "utf8"));
 assert(indexHtml.includes("Datalización YPF"), "index.html debe exponer el nombre del producto.");
 assert(indexHtml.includes('type="module" src="/app.js"'), "index.html debe cargar app.js como modulo.");
 assert(appJs.includes("renderDictionaryPage"), "app.js debe renderizar el diccionario.");
-assert(appJs.includes("renderMethodologyPage"), "app.js debe renderizar la metodología.");
+assert(appJs.includes("renderRoadMethodologyPage"), "app.js debe renderizar Road y Metodología como sección unificada.");
 assert(appJs.includes("renderDatalizationMethodPage"), "app.js debe renderizar el Método de Datalización.");
 assert(appJs.includes("renderDesignSystemPage"), "app.js debe renderizar el Design System.");
 assert(appJs.includes("renderDatalitoPage"), "app.js debe renderizar Datalito.");
@@ -86,12 +86,14 @@ assert(appJs.includes("buildDatalitoConversationalResponse"), "Datalito debe man
 assert(appJs.includes("buildDatalitoWorkflowResponse"), "Datalito debe responder flujos BI end-to-end con criterio propio.");
 assert(appJs.includes("scrollToRouteHash"), "Los enlaces de Datalito deben navegar a la seccion exacta de la plataforma.");
 assert(appJs.includes("renderMethodologyProcessFlow"), "app.js debe renderizar el proceso metodológico end to end.");
+assert(indexHtml.includes("/road-y-metodologia"), "La navegación principal debe exponer Road y Metodología.");
+assert(!indexHtml.includes("Guía + Roadmap") && !indexHtml.includes('href="/metodologia"'), "La navegación principal no debe separar guía y metodología.");
 assert(appJs.includes("renderExecutiveBrief"), "app.js debe renderizar la síntesis ejecutiva.");
 assert(appJs.includes("renderPlatformExecutiveSection"), "app.js debe renderizar la sección ejecutiva inicial.");
 assert(appJs.includes("renderHubSectionLauncher"), "app.js debe renderizar la botonera de secciones.");
 assert(appJs.includes("renderConceptDecantation"), "app.js debe renderizar el árbol de decantación conceptual.");
-assert(appJs.includes("renderRoadmapPage"), "app.js debe renderizar el roadmap.");
-assert(appJs.includes("renderGuidePage"), "app.js debe renderizar la guía Power BI/Fabric.");
+assert(appJs.includes("renderRoadmapPage"), "app.js debe mantener compatibilidad con /roadmap.");
+assert(appJs.includes("renderRoadMethodologyPage"), "app.js debe renderizar la guía, roadmap y metodología como una sección unificada.");
 assert(appJs.includes("renderProjectPage"), "app.js debe renderizar el proyecto Power BI.");
 assert(appJs.includes("renderShortcutsPage"), "app.js debe renderizar los atajos Power BI.");
 assert(appJs.includes("renderToolingPage"), "app.js debe renderizar librerías y agentes.");
@@ -260,7 +262,7 @@ assert(
   "La sección debe incluir la definición estratégica de datalización.",
 );
 
-const requiredNarratives = ["home", "guide", "method", "methodology", "project", "dictionary", "tooling", "shortcuts"];
+const requiredNarratives = ["home", "roadMethodology", "guide", "method", "methodology", "project", "dictionary", "tooling", "shortcuts"];
 assert(
   requiredNarratives.every((key) => pageNarratives[key]),
   "Todas las páginas principales deben tener narrativa ejecutiva.",
@@ -316,6 +318,7 @@ assert(
 );
 
 const rewriteSources = new Set((vercelJson.rewrites || []).map((rewrite) => rewrite.source));
+assert(rewriteSources.has("/road-y-metodologia"), "Vercel debe reescribir /road-y-metodologia a index.html.");
 assert(rewriteSources.has("/guia-power-bi"), "Vercel debe reescribir /guia-power-bi a index.html.");
 assert(rewriteSources.has("/metodo-datalizacion"), "Vercel debe reescribir /metodo-datalizacion a index.html.");
 assert(rewriteSources.has("/metodologia"), "Vercel debe reescribir /metodologia a index.html.");
@@ -336,6 +339,7 @@ assert(
 );
 
 await rm("dist", { force: true, recursive: true });
+await mkdir("dist/road-y-metodologia", { recursive: true });
 await mkdir("dist/guia-power-bi", { recursive: true });
 await mkdir("dist/metodo-datalizacion", { recursive: true });
 await mkdir("dist/metodologia", { recursive: true });
@@ -356,6 +360,7 @@ for (const file of rootFiles) {
 }
 
 await writeFile("dist/guia-power-bi/index.html", indexHtml);
+await writeFile("dist/road-y-metodologia/index.html", indexHtml);
 await writeFile("dist/metodo-datalizacion/index.html", indexHtml);
 await writeFile("dist/metodologia/index.html", indexHtml);
 await writeFile("dist/design-system/index.html", indexHtml);
