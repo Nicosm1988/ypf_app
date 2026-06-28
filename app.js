@@ -3634,6 +3634,54 @@ function renderFabricMasterGuide() {
       </div>
 
       <div class="fabric-guide-board" aria-label="Mapa end-to-end de analítica con Microsoft Fabric">
+        <svg class="fabric-route-layer" viewBox="0 0 1440 610" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="fabricRouteBlue" x1="0%" x2="100%" y1="0%" y2="0%">
+              <stop offset="0%" stop-color="#35c9bd" stop-opacity="0.2"></stop>
+              <stop offset="42%" stop-color="#35c9bd"></stop>
+              <stop offset="100%" stop-color="#ffdd49"></stop>
+            </linearGradient>
+            <linearGradient id="fabricRouteOrange" x1="0%" x2="100%" y1="0%" y2="0%">
+              <stop offset="0%" stop-color="#ff6b3b" stop-opacity="0.2"></stop>
+              <stop offset="55%" stop-color="#ff6b3b"></stop>
+              <stop offset="100%" stop-color="#35c9bd"></stop>
+            </linearGradient>
+            <filter id="fabricRouteGlow" x="-30%" y="-80%" width="160%" height="260%">
+              <feGaussianBlur stdDeviation="4" result="blur"></feGaussianBlur>
+              <feMerge>
+                <feMergeNode in="blur"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+              </feMerge>
+            </filter>
+            <marker id="fabricArrowHead" markerHeight="8" markerWidth="8" orient="auto" refX="7" refY="4">
+              <path d="M0,0 L8,4 L0,8 z" fill="#ffdd49"></path>
+            </marker>
+          </defs>
+          <path class="fabric-route fabric-route-a" d="M235 130 C300 130 300 195 365 195 C410 195 430 210 470 235"></path>
+          <path class="fabric-route fabric-route-b" d="M235 255 C300 255 330 260 470 300"></path>
+          <path class="fabric-route fabric-route-c" d="M235 415 C315 415 350 350 470 350"></path>
+          <path class="fabric-route fabric-route-main" d="M660 292 C735 292 745 220 820 210 C865 204 910 216 950 238"></path>
+          <path class="fabric-route fabric-route-consume" d="M1045 280 C1100 280 1132 278 1185 278"></path>
+          <circle class="fabric-route-pulse pulse-a" r="6">
+            <animateMotion dur="4.8s" repeatCount="indefinite" path="M235 130 C300 130 300 195 365 195 C410 195 430 210 470 235"></animateMotion>
+          </circle>
+          <circle class="fabric-route-pulse pulse-b" r="6">
+            <animateMotion dur="5.1s" begin="0.8s" repeatCount="indefinite" path="M235 255 C300 255 330 260 470 300"></animateMotion>
+          </circle>
+          <circle class="fabric-route-pulse pulse-c" r="6">
+            <animateMotion dur="5.4s" begin="1.2s" repeatCount="indefinite" path="M235 415 C315 415 350 350 470 350"></animateMotion>
+          </circle>
+          <circle class="fabric-route-pulse pulse-main" r="7">
+            <animateMotion dur="5s" begin="0.4s" repeatCount="indefinite" path="M660 292 C735 292 745 220 820 210 C865 204 910 216 950 238"></animateMotion>
+          </circle>
+          <circle class="fabric-route-pulse pulse-consume" r="7">
+            <animateMotion dur="3.4s" repeatCount="indefinite" path="M1045 280 C1100 280 1132 278 1185 278"></animateMotion>
+          </circle>
+        </svg>
+        <div class="fabric-route-callout route-ingesta">Ingesta</div>
+        <div class="fabric-route-callout route-transformacion">Transformación</div>
+        <div class="fabric-route-callout route-consumo">Direct Lake</div>
+
         <div class="fabric-guide-stage fabric-sources">
           <div class="fabric-stage-label">
             <span>01</span>

@@ -43,6 +43,7 @@ const PRECACHE_URLS = [
   "/assets/docs/modelos/prd-datalizacion.docx",
   "/assets/docs/modelos/spec-datalizacion.docx",
   "/assets/favicon.svg",
+  "/assets/ypf-logo.svg",
   "/assets/datalito-robot-v22.png",
   "/assets/datalito-robot-v22-256.webp",
   "/assets/datalito-robot-v22-512.webp",
