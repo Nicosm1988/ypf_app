@@ -74,6 +74,7 @@ const appRoot = document.querySelector("#appRoot");
 const contentTarget = document.querySelector("#content");
 const navLinks = [...document.querySelectorAll("[data-route]")];
 let scrollRevealObserver;
+let fabricRouteFrame;
 
 const icons = {
   arrowRight: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>',
@@ -1508,6 +1509,101 @@ function setupScrollReveal() {
   targets.forEach((target) => scrollRevealObserver.observe(target));
 }
 
+function scheduleFabricRouteSync() {
+  if (fabricRouteFrame) cancelAnimationFrame(fabricRouteFrame);
+  fabricRouteFrame = requestAnimationFrame(() => {
+    fabricRouteFrame = undefined;
+    syncFabricRoutes();
+  });
+}
+
+function syncFabricRoutes() {
+  const board = appRoot.querySelector(".fabric-guide-board");
+  const svg = board?.querySelector(".fabric-route-layer");
+
+  if (!board || !svg || svg.getBoundingClientRect().width < 20) return;
+
+  const viewBox = svg.viewBox.baseVal;
+  const svgRect = svg.getBoundingClientRect();
+
+  const toSvgPoint = (clientX, clientY) => ({
+    x: ((clientX - svgRect.left) / Math.max(svgRect.width, 1)) * viewBox.width,
+    y: ((clientY - svgRect.top) / Math.max(svgRect.height, 1)) * viewBox.height,
+  });
+
+  const anchor = (selector, side = "center", yRatio = 0.5, xRatio = 0.5) => {
+    const node = board.querySelector(selector);
+    if (!node) return undefined;
+
+    const rect = node.getBoundingClientRect();
+    const clientX =
+      side === "left"
+        ? rect.left
+        : side === "right"
+          ? rect.right
+          : side === "ratio"
+            ? rect.left + rect.width * xRatio
+            : rect.left + rect.width * 0.5;
+    const clientY = rect.top + rect.height * yRatio;
+    return toSvgPoint(clientX, clientY);
+  };
+
+  const curvePath = (start, end, bendRatio = 0.44) => {
+    if (!start || !end) return "";
+    const deltaX = end.x - start.x;
+    const direction = deltaX >= 0 ? 1 : -1;
+    const distance = Math.abs(deltaX) < 120 ? Math.abs(deltaX) * 0.48 : Math.abs(deltaX) * bendRatio;
+    const controlStartX = start.x + direction * distance;
+    const controlEndX = end.x - direction * distance;
+    return `M ${start.x.toFixed(1)} ${start.y.toFixed(1)} C ${controlStartX.toFixed(1)} ${start.y.toFixed(1)}, ${controlEndX.toFixed(1)} ${end.y.toFixed(1)}, ${end.x.toFixed(1)} ${end.y.toFixed(1)}`;
+  };
+
+  const routes = {
+    "source-0-onelake": curvePath(
+      anchor('[data-fabric-source="0"]', "right", 0.5),
+      anchor('[data-fabric-node="onelake"]', "left", 0.34),
+    ),
+    "source-1-onelake": curvePath(
+      anchor('[data-fabric-source="1"]', "right", 0.5),
+      anchor('[data-fabric-node="onelake"]', "left", 0.5),
+    ),
+    "source-2-onelake": curvePath(
+      anchor('[data-fabric-source="2"]', "right", 0.5),
+      anchor('[data-fabric-node="onelake"]', "left", 0.66),
+    ),
+    "onelake-process-0": curvePath(
+      anchor('[data-fabric-node="onelake"]', "right", 0.38),
+      anchor('[data-fabric-process="0"]', "left", 0.5),
+      0.52,
+    ),
+    "onelake-process-1": curvePath(
+      anchor('[data-fabric-node="onelake"]', "right", 0.5),
+      anchor('[data-fabric-process="1"]', "left", 0.5),
+      0.52,
+    ),
+    "onelake-process-2": curvePath(
+      anchor('[data-fabric-node="onelake"]', "right", 0.62),
+      anchor('[data-fabric-process="2"]', "left", 0.5),
+      0.52,
+    ),
+    "process-consumption": curvePath(
+      anchor(".fabric-processing", "right", 0.5),
+      anchor('[data-fabric-node="consumer-onelake"]', "left", 0.5),
+      0.55,
+    ),
+  };
+
+  Object.entries(routes).forEach(([name, path]) => {
+    if (!path) return;
+    const route = svg.querySelector(`[data-fabric-path="${name}"]`);
+    const motion = svg.querySelector(`[data-fabric-pulse="${name}"] animateMotion`);
+
+    route?.setAttribute("d", path);
+    motion?.setAttribute("path", path);
+    motion?.beginElement?.();
+  });
+}
+
 function setActiveNav(route) {
   const activeRoute = routeAliases[route] || route;
   const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
@@ -1557,6 +1653,7 @@ function renderRoute(route = getRoute()) {
   requestAnimationFrame(() => {
     enhanceInteractiveSurfaces();
     setupScrollReveal();
+    scheduleFabricRouteSync();
     const routeHash = window.location.hash || getSubsectionHash(window.location.pathname);
     if (routeHash) scrollToRouteHash(routeHash);
   });
@@ -3636,15 +3733,25 @@ function renderFabricMasterGuide() {
       <div class="fabric-guide-board" aria-label="Mapa end-to-end de analítica con Microsoft Fabric">
         <svg class="fabric-route-layer" viewBox="0 0 1440 610" preserveAspectRatio="none" aria-hidden="true">
           <defs>
-            <linearGradient id="fabricRouteBlue" x1="0%" x2="100%" y1="0%" y2="0%">
-              <stop offset="0%" stop-color="#35c9bd" stop-opacity="0.2"></stop>
-              <stop offset="42%" stop-color="#35c9bd"></stop>
+            <linearGradient id="fabricRouteStructured" x1="0%" x2="100%" y1="0%" y2="0%">
+              <stop offset="0%" stop-color="#3aa0ff" stop-opacity="0.18"></stop>
+              <stop offset="48%" stop-color="#3aa0ff"></stop>
+              <stop offset="100%" stop-color="#67e8dc"></stop>
+            </linearGradient>
+            <linearGradient id="fabricRouteDocument" x1="0%" x2="100%" y1="0%" y2="0%">
+              <stop offset="0%" stop-color="#f3a1c4" stop-opacity="0.2"></stop>
+              <stop offset="52%" stop-color="#f3a1c4"></stop>
               <stop offset="100%" stop-color="#ffdd49"></stop>
             </linearGradient>
-            <linearGradient id="fabricRouteOrange" x1="0%" x2="100%" y1="0%" y2="0%">
+            <linearGradient id="fabricRouteStream" x1="0%" x2="100%" y1="0%" y2="0%">
               <stop offset="0%" stop-color="#ff6b3b" stop-opacity="0.2"></stop>
               <stop offset="55%" stop-color="#ff6b3b"></stop>
               <stop offset="100%" stop-color="#35c9bd"></stop>
+            </linearGradient>
+            <linearGradient id="fabricRouteProcess" x1="0%" x2="100%" y1="0%" y2="0%">
+              <stop offset="0%" stop-color="#67e8dc" stop-opacity="0.22"></stop>
+              <stop offset="48%" stop-color="#35c9bd"></stop>
+              <stop offset="100%" stop-color="#ffdd49"></stop>
             </linearGradient>
             <filter id="fabricRouteGlow" x="-30%" y="-80%" width="160%" height="260%">
               <feGaussianBlur stdDeviation="4" result="blur"></feGaussianBlur>
@@ -3653,29 +3760,37 @@ function renderFabricMasterGuide() {
                 <feMergeNode in="SourceGraphic"></feMergeNode>
               </feMerge>
             </filter>
-            <marker id="fabricArrowHead" markerHeight="8" markerWidth="8" orient="auto" refX="7" refY="4">
-              <path d="M0,0 L8,4 L0,8 z" fill="#ffdd49"></path>
+            <marker id="fabricArrowHead" markerHeight="12" markerUnits="userSpaceOnUse" markerWidth="12" orient="auto" refX="10" refY="6" viewBox="0 0 12 12">
+              <path d="M1 1 L11 6 L1 11 Z" fill="#67e8dc"></path>
             </marker>
           </defs>
-          <path class="fabric-route fabric-route-a" d="M235 130 C300 130 300 195 365 195 C410 195 430 210 470 235"></path>
-          <path class="fabric-route fabric-route-b" d="M235 255 C300 255 330 260 470 300"></path>
-          <path class="fabric-route fabric-route-c" d="M235 415 C315 415 350 350 470 350"></path>
-          <path class="fabric-route fabric-route-main" d="M660 292 C735 292 745 220 820 210 C865 204 910 216 950 238"></path>
-          <path class="fabric-route fabric-route-consume" d="M1045 280 C1100 280 1132 278 1185 278"></path>
-          <circle class="fabric-route-pulse pulse-a" r="6">
-            <animateMotion dur="4.8s" repeatCount="indefinite" path="M235 130 C300 130 300 195 365 195 C410 195 430 210 470 235"></animateMotion>
+          <path class="fabric-route fabric-route-source fabric-route-structured" data-fabric-path="source-0-onelake" marker-end="url(#fabricArrowHead)" d="M245 135 C340 135 350 190 430 205"></path>
+          <path class="fabric-route fabric-route-source fabric-route-document" data-fabric-path="source-1-onelake" marker-end="url(#fabricArrowHead)" d="M245 300 C335 300 350 275 430 275"></path>
+          <path class="fabric-route fabric-route-source fabric-route-stream" data-fabric-path="source-2-onelake" marker-end="url(#fabricArrowHead)" d="M245 465 C340 465 350 360 430 345"></path>
+          <path class="fabric-route fabric-route-processing" data-fabric-path="onelake-process-0" marker-end="url(#fabricArrowHead)" d="M665 220 C755 220 790 145 875 145"></path>
+          <path class="fabric-route fabric-route-processing" data-fabric-path="onelake-process-1" marker-end="url(#fabricArrowHead)" d="M665 285 C755 285 790 285 875 285"></path>
+          <path class="fabric-route fabric-route-processing" data-fabric-path="onelake-process-2" marker-end="url(#fabricArrowHead)" d="M665 350 C755 350 790 430 875 430"></path>
+          <path class="fabric-route fabric-route-consume" data-fabric-path="process-consumption" marker-end="url(#fabricArrowHead)" d="M1110 285 C1165 285 1195 270 1240 270"></path>
+          <circle class="fabric-route-pulse pulse-a" data-fabric-pulse="source-0-onelake" r="6">
+            <animateMotion dur="4.8s" repeatCount="indefinite" path="M245 135 C340 135 350 190 430 205"></animateMotion>
           </circle>
-          <circle class="fabric-route-pulse pulse-b" r="6">
-            <animateMotion dur="5.1s" begin="0.8s" repeatCount="indefinite" path="M235 255 C300 255 330 260 470 300"></animateMotion>
+          <circle class="fabric-route-pulse pulse-b" data-fabric-pulse="source-1-onelake" r="6">
+            <animateMotion dur="5.1s" begin="0.8s" repeatCount="indefinite" path="M245 300 C335 300 350 275 430 275"></animateMotion>
           </circle>
-          <circle class="fabric-route-pulse pulse-c" r="6">
-            <animateMotion dur="5.4s" begin="1.2s" repeatCount="indefinite" path="M235 415 C315 415 350 350 470 350"></animateMotion>
+          <circle class="fabric-route-pulse pulse-c" data-fabric-pulse="source-2-onelake" r="6">
+            <animateMotion dur="5.4s" begin="1.2s" repeatCount="indefinite" path="M245 465 C340 465 350 360 430 345"></animateMotion>
           </circle>
-          <circle class="fabric-route-pulse pulse-main" r="7">
-            <animateMotion dur="5s" begin="0.4s" repeatCount="indefinite" path="M660 292 C735 292 745 220 820 210 C865 204 910 216 950 238"></animateMotion>
+          <circle class="fabric-route-pulse pulse-process" data-fabric-pulse="onelake-process-0" r="6">
+            <animateMotion dur="4.7s" begin="0.2s" repeatCount="indefinite" path="M665 220 C755 220 790 145 875 145"></animateMotion>
           </circle>
-          <circle class="fabric-route-pulse pulse-consume" r="7">
-            <animateMotion dur="3.4s" repeatCount="indefinite" path="M1045 280 C1100 280 1132 278 1185 278"></animateMotion>
+          <circle class="fabric-route-pulse pulse-process" data-fabric-pulse="onelake-process-1" r="6">
+            <animateMotion dur="4.2s" begin="0.6s" repeatCount="indefinite" path="M665 285 C755 285 790 285 875 285"></animateMotion>
+          </circle>
+          <circle class="fabric-route-pulse pulse-process" data-fabric-pulse="onelake-process-2" r="6">
+            <animateMotion dur="5.2s" begin="1s" repeatCount="indefinite" path="M665 350 C755 350 790 430 875 430"></animateMotion>
+          </circle>
+          <circle class="fabric-route-pulse pulse-consume" data-fabric-pulse="process-consumption" r="7">
+            <animateMotion dur="3.4s" repeatCount="indefinite" path="M1110 285 C1165 285 1195 270 1240 270"></animateMotion>
           </circle>
         </svg>
         <div class="fabric-route-callout route-ingesta">Ingesta</div>
@@ -3690,8 +3805,8 @@ function renderFabricMasterGuide() {
           <div class="fabric-source-stack">
             ${fabricMasterSources
               .map(
-                (source) => `
-                  <article class="fabric-guide-card">
+                (source, index) => `
+                  <article class="fabric-guide-card fabric-source-card" data-fabric-source="${index}">
                     ${renderFabricIllustration(source.iconName)}
                     <strong>${escapeHtml(source.title)}</strong>
                     <p>${escapeHtml(source.text)}</p>
@@ -3704,7 +3819,7 @@ function renderFabricMasterGuide() {
 
         <div class="fabric-arrow fabric-arrow-one" aria-hidden="true"></div>
 
-        <div class="fabric-guide-stage fabric-onelake">
+        <div class="fabric-guide-stage fabric-onelake" data-fabric-node="onelake">
           <div class="fabric-orb" aria-hidden="true"></div>
           <span class="fabric-stage-kicker">Ingesta y almacenamiento unificado</span>
           <h3>OneLake como base común</h3>
@@ -3727,7 +3842,7 @@ function renderFabricMasterGuide() {
             ${fabricProcessingNodes
               .map(
                 (node, index) => `
-                  <article class="fabric-guide-card" style="--fabric-order:${index}">
+                  <article class="fabric-guide-card fabric-processing-card" data-fabric-process="${index}" style="--fabric-order:${index}">
                     ${renderFabricIllustration(node.iconName)}
                     <strong>${escapeHtml(node.title)}</strong>
                     <p>${escapeHtml(node.text)}</p>
@@ -3738,7 +3853,7 @@ function renderFabricMasterGuide() {
           </div>
         </div>
 
-        <div class="fabric-consumption">
+        <div class="fabric-consumption" data-fabric-node="consumption">
           <div class="fabric-consumption-head">
             <span>03</span>
             <div>
@@ -3747,27 +3862,34 @@ function renderFabricMasterGuide() {
             </div>
           </div>
           <div class="fabric-duo">
-            <strong>${renderFabricIllustration("oneLake")}OneLake</strong>
+            <strong data-fabric-node="consumer-onelake">${renderFabricIllustration("oneLake")}OneLake</strong>
             <i aria-hidden="true"></i>
-            <strong>${renderFabricIllustration("powerBi")}Power BI</strong>
+            <strong data-fabric-node="consumer-powerbi">${renderFabricIllustration("powerBi")}Power BI</strong>
           </div>
-          <div class="fabric-mode-table" role="table" aria-label="Comparativa de modos de almacenamiento">
-            <div role="row">
-              <strong role="columnheader">Modo</strong>
-              <strong role="columnheader">Velocidad</strong>
-              <strong role="columnheader">Frescura</strong>
+          <div class="fabric-mode-panel">
+            <div class="fabric-mode-caption">
+              <strong>Comparativa de modos de almacenamiento</strong>
+              <span>Cada modo define la velocidad de consulta y la frescura del dato que recibe el usuario.</span>
             </div>
-            ${fabricStorageModes
-              .map(
-                (mode) => `
-                  <div class="fabric-mode-card" role="row">
-                    <span role="cell">${escapeHtml(mode.mode)}</span>
-                    <span role="cell">${escapeHtml(mode.speed)}</span>
-                    <span role="cell">${escapeHtml(mode.freshness)}</span>
-                  </div>
-                `,
-              )
-              .join("")}
+            <div class="fabric-mode-table" role="table" aria-label="Comparativa de modos de almacenamiento">
+              <div role="row">
+                <strong role="columnheader">Modo elegido</strong>
+                <strong role="columnheader">Velocidad de consulta</strong>
+                <strong role="columnheader">Frescura del dato</strong>
+              </div>
+              ${fabricStorageModes
+                .map(
+                  (mode) => `
+                    <div class="fabric-mode-card" role="row">
+                      <span role="cell">${escapeHtml(mode.mode)}</span>
+                      <span role="cell">${escapeHtml(mode.speed)}</span>
+                      <span role="cell">${escapeHtml(mode.freshness)}</span>
+                    </div>
+                  `,
+                )
+                .join("")}
+            </div>
+            <p class="fabric-mode-reading">Lectura: se elige un modo y, a partir de esa decisión, quedan definidas la performance esperada y la actualización disponible.</p>
           </div>
         </div>
 
@@ -5231,6 +5353,11 @@ document.addEventListener("click", (event) => {
 });
 
 window.addEventListener("popstate", () => renderRoute());
+window.addEventListener("resize", scheduleFabricRouteSync, { passive: true });
+
+if (document.fonts?.ready) {
+  document.fonts.ready.then(scheduleFabricRouteSync).catch(() => {});
+}
 
 if ("serviceWorker" in navigator && window.location.protocol === "https:") {
   window.addEventListener("load", () => {

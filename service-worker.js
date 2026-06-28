@@ -1,4 +1,4 @@
-const CACHE_NAME = "datalizacion-ypf-v29";
+const CACHE_NAME = "datalizacion-ypf-v30";
 const PRECACHE_URLS = [
   "/",
   "/road-y-metodologia",

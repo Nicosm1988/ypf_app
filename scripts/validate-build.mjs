@@ -89,6 +89,8 @@ assert(appJs.includes("renderMethodologyProcessFlow"), "app.js debe renderizar e
 assert(appJs.includes("renderFabricMasterGuide"), "app.js debe renderizar la guía maestra Fabric end-to-end.");
 assert(appJs.includes('id="road-fabric-master-guide"'), "La guía maestra Fabric debe tener ancla propia.");
 assert(appJs.includes("fabric-route-layer"), "La guía Fabric debe incluir caminos dinámicos de recorrido.");
+assert(appJs.includes("syncFabricRoutes"), "La guía Fabric debe recalcular caminos según los anclajes reales.");
+assert(appJs.includes("Cada modo define la velocidad de consulta"), "La comparativa Fabric debe explicar la relación modo, velocidad y frescura.");
 assert(!appJs.toLowerCase().includes("notebooklm"), "La guía maestra Fabric no debe incluir marca NotebookLM.");
 assert(indexHtml.includes("/road-y-metodologia"), "La navegación principal debe exponer Road y Metodología.");
 assert(!indexHtml.includes("Guía + Roadmap") && !indexHtml.includes('href="/metodologia"'), "La navegación principal no debe separar guía y metodología.");
