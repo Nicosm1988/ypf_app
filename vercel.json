@@ -9,11 +9,23 @@
       "destination": "/index.html"
     },
     {
+      "source": "/road-y-metodologia/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/inicio/:path*",
+      "destination": "/index.html"
+    },
+    {
       "source": "/guia-power-bi",
       "destination": "/index.html"
     },
     {
       "source": "/metodo-datalizacion",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/metodo-datalizacion/:path*",
       "destination": "/index.html"
     },
     {
@@ -25,11 +37,23 @@
       "destination": "/index.html"
     },
     {
+      "source": "/design-system/:path*",
+      "destination": "/index.html"
+    },
+    {
       "source": "/datalito",
       "destination": "/index.html"
     },
     {
+      "source": "/datalito/:path*",
+      "destination": "/index.html"
+    },
+    {
       "source": "/diccionario",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/diccionario/:path*",
       "destination": "/index.html"
     },
     {
@@ -41,11 +65,23 @@
       "destination": "/index.html"
     },
     {
+      "source": "/proyecto-power-bi/:path*",
+      "destination": "/index.html"
+    },
+    {
       "source": "/atajos",
       "destination": "/index.html"
     },
     {
+      "source": "/atajos/:path*",
+      "destination": "/index.html"
+    },
+    {
       "source": "/librerias",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/librerias/:path*",
       "destination": "/index.html"
     }
   ],

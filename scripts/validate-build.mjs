@@ -88,6 +88,9 @@ assert(appJs.includes("scrollToRouteHash"), "Los enlaces de Datalito deben naveg
 assert(appJs.includes("renderMethodologyProcessFlow"), "app.js debe renderizar el proceso metodológico end to end.");
 assert(indexHtml.includes("/road-y-metodologia"), "La navegación principal debe exponer Road y Metodología.");
 assert(!indexHtml.includes("Guía + Roadmap") && !indexHtml.includes('href="/metodologia"'), "La navegación principal no debe separar guía y metodología.");
+assert(indexHtml.includes("nav-dropdown"), "El menú principal debe incluir dropdowns por sección.");
+assert(indexHtml.includes("/road-y-metodologia/oee-bi"), "El menú debe exponer subsecciones como rutas navegables.");
+assert(indexHtml.includes("footer-map"), "El footer debe incluir un mapa de secciones.");
 assert(appJs.includes("renderExecutiveBrief"), "app.js debe renderizar la síntesis ejecutiva.");
 assert(appJs.includes("renderPlatformExecutiveSection"), "app.js debe renderizar la sección ejecutiva inicial.");
 assert(appJs.includes("renderHubSectionLauncher"), "app.js debe renderizar la botonera de secciones.");
@@ -319,6 +322,9 @@ assert(
 
 const rewriteSources = new Set((vercelJson.rewrites || []).map((rewrite) => rewrite.source));
 assert(rewriteSources.has("/road-y-metodologia"), "Vercel debe reescribir /road-y-metodologia a index.html.");
+assert(rewriteSources.has("/road-y-metodologia/:path*"), "Vercel debe reescribir subsecciones de /road-y-metodologia a index.html.");
+assert(rewriteSources.has("/metodo-datalizacion/:path*"), "Vercel debe reescribir subsecciones de /metodo-datalizacion a index.html.");
+assert(rewriteSources.has("/inicio/:path*"), "Vercel debe reescribir subsecciones de /inicio a index.html.");
 assert(rewriteSources.has("/guia-power-bi"), "Vercel debe reescribir /guia-power-bi a index.html.");
 assert(rewriteSources.has("/metodo-datalizacion"), "Vercel debe reescribir /metodo-datalizacion a index.html.");
 assert(rewriteSources.has("/metodologia"), "Vercel debe reescribir /metodologia a index.html.");

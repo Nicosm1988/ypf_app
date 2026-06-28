@@ -27,25 +27,85 @@
     <a class="skip-link" href="#content">Saltar al contenido</a>
     <div class="site-shell">
       <header class="site-header">
-        <a class="brand" href="/" data-route aria-label="Ir al inicio">
-          <span class="brand-mark" aria-hidden="true"><span>YPF</span></span>
-          <span>
-            <strong>Datalización YPF</strong>
-            <small>Automatización de procesos</small>
-          </span>
-        </a>
+        <div class="site-nav-frame">
+          <a class="brand" href="/" data-route aria-label="Ir al inicio">
+            <span class="brand-mark" aria-hidden="true"><span>YPF</span></span>
+            <span>
+              <strong>Datalización YPF</strong>
+              <small>Automatización de procesos</small>
+            </span>
+          </a>
 
-        <nav class="main-nav" aria-label="Navegación principal">
-          <a href="/" data-route>Inicio</a>
-          <a href="/road-y-metodologia" data-route>Road y Metodología</a>
-          <a href="/metodo-datalizacion" data-route>Método</a>
-          <a href="/design-system" data-route>Design System</a>
-          <a href="/datalito" data-route>Datalito</a>
-          <a href="/proyecto-power-bi" data-route>Proyecto Power BI</a>
-          <a href="/diccionario" data-route>Diccionario BI</a>
-          <a href="/librerias" data-route>Librerías</a>
-          <a href="/atajos" data-route>Atajos</a>
-        </nav>
+          <nav class="main-nav" aria-label="Navegación principal">
+            <div class="nav-menu-item">
+              <a class="nav-menu-link" href="/" data-route>Inicio</a>
+              <div class="nav-dropdown">
+                <a href="/inicio/proposito" data-route><strong>Propósito</strong><span>Por qué existe la plataforma</span></a>
+                <a href="/inicio/estudio" data-route><strong>Estudio ejecutivo</strong><span>Tesis, problema, método y contribución</span></a>
+                <a href="/inicio/capacidad" data-route><strong>Capacidad organizacional</strong><span>De tableros a disciplina interna</span></a>
+                <a href="/inicio/secciones" data-route><strong>Mapa del hub</strong><span>Secciones principales y criterio de uso</span></a>
+              </div>
+            </div>
+
+            <div class="nav-menu-item">
+              <a class="nav-menu-link" href="/road-y-metodologia" data-route>Road y Metodología</a>
+              <div class="nav-dropdown wide">
+                <a href="/road-y-metodologia/tesis" data-route><strong>Tesis</strong><span>Avance con evidencia, mejora con control</span></a>
+                <a href="/road-y-metodologia/proceso" data-route><strong>Proceso end-to-end</strong><span>Qué metodología aplica en cada etapa</span></a>
+                <a href="/road-y-metodologia/flujo-bi" data-route><strong>Flujo BI/Fabric</strong><span>Canvas interactivo de gates</span></a>
+                <a href="/road-y-metodologia/prd-spec" data-route><strong>PRD y Spec</strong><span>Contrato funcional y técnico</span></a>
+                <a href="/road-y-metodologia/oee-bi" data-route><strong>OEE BI</strong><span>Disponibilidad, eficiencia y calidad</span></a>
+                <a href="/road-y-metodologia/dmaic" data-route><strong>DMAIC</strong><span>Definir, medir, analizar, mejorar y controlar</span></a>
+                <a href="/road-y-metodologia/lean" data-route><strong>Lean aplicado</strong><span>VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata</span></a>
+                <a href="/road-y-metodologia/cadencia" data-route><strong>Cadencia</strong><span>Rutina de sostenimiento operativo</span></a>
+              </div>
+            </div>
+
+            <div class="nav-menu-item">
+              <a class="nav-menu-link" href="/metodo-datalizacion" data-route>Método</a>
+              <div class="nav-dropdown wide">
+                <a href="/metodo-datalizacion/marco-vmc" data-route><strong>Marco VMC</strong><span>Modelo de evaluación de datalización</span></a>
+                <a href="/metodo-datalizacion/proceso" data-route><strong>Proceso operativo</strong><span>Rutina de entrega y sostenimiento</span></a>
+                <a href="/metodo-datalizacion/dev-prod" data-route><strong>DEV / PROD</strong><span>Separación de trabajo y publicación</span></a>
+                <a href="/metodo-datalizacion/microsoft-365" data-route><strong>Microsoft 365</strong><span>Teams, SharePoint, Loop, Lists y OneNote</span></a>
+                <a href="/metodo-datalizacion/canales" data-route><strong>Canales</strong><span>PARA + Johnny.Decimal lite</span></a>
+                <a href="/metodo-datalizacion/proyecto" data-route><strong>Proyecto</strong><span>Plantilla intra-proyecto</span></a>
+                <a href="/metodo-datalizacion/backlog" data-route><strong>Backlog</strong><span>Flujo real y señales objetivas</span></a>
+                <a href="/metodo-datalizacion/gobernanza" data-route><strong>Gobernanza</strong><span>Roles, decisiones y evolución</span></a>
+              </div>
+            </div>
+
+            <div class="nav-menu-item">
+              <a class="nav-menu-link" href="/design-system" data-route>Design System</a>
+              <div class="nav-dropdown">
+                <a href="/design-system/fundamentos" data-route><strong>Fundamentos</strong><span>Tokens, criterios y consistencia</span></a>
+                <a href="/design-system/componentes" data-route><strong>Componentes</strong><span>Patrones reutilizables</span></a>
+                <a href="/design-system/alcance" data-route><strong>Alcance</strong><span>Qué cubre la primera versión</span></a>
+                <a href="/design-system/entrega" data-route><strong>Entrega</strong><span>Gobierno y reglas de calidad</span></a>
+              </div>
+            </div>
+
+            <div class="nav-menu-item">
+              <a class="nav-menu-link" href="/datalito" data-route>Datalito</a>
+              <div class="nav-dropdown">
+                <a href="/datalito/conversacion" data-route><strong>Conversación</strong><span>Asistente y experiencia de uso</span></a>
+                <a href="/datalito/arquitectura" data-route><strong>Arquitectura</strong><span>Índice local y capas de respuesta</span></a>
+                <a href="/datalito/gobierno" data-route><strong>Gobierno</strong><span>Fuentes, límites y controles</span></a>
+                <a href="/datalito/evaluacion" data-route><strong>Evaluación</strong><span>KPIs, preguntas y casos de prueba</span></a>
+              </div>
+            </div>
+
+            <div class="nav-menu-item">
+              <a class="nav-menu-link" href="/diccionario" data-route>Recursos</a>
+              <div class="nav-dropdown">
+                <a href="/proyecto-power-bi/estudio" data-route><strong>Proyecto Power BI</strong><span>PRD, Spec, PBIP, TMDL y Git</span></a>
+                <a href="/diccionario/busqueda" data-route><strong>Diccionario BI</strong><span>Lenguaje común y búsqueda</span></a>
+                <a href="/librerias/catalogo" data-route><strong>Librerías</strong><span>Agentes, MCPs y herramientas</span></a>
+                <a href="/atajos/power-bi" data-route><strong>Atajos</strong><span>Productividad diaria en Power BI</span></a>
+              </div>
+            </div>
+          </nav>
+        </div>
       </header>
 
       <main id="content" class="page-shell" tabindex="-1">
@@ -53,19 +113,62 @@
       </main>
 
       <footer class="site-footer">
-        <div class="footer-inner">
-          <div class="footer-brand">
-            <span class="brand-mark footer-mark" aria-hidden="true"><span>YPF</span></span>
-            <div>
-              <strong>Datalización YPF</strong>
-              <small>Portal interno de automatización de procesos</small>
+        <div class="footer-card">
+          <div class="footer-top">
+            <div class="footer-brand">
+              <span class="brand-mark footer-mark" aria-hidden="true"><span>YPF</span></span>
+              <div>
+                <strong>Datalización YPF</strong>
+                <small>Sistema operativo metodológico del área</small>
+              </div>
             </div>
+            <p>Automatizar sin perder gobierno: estándares, trazabilidad, método, evidencia y operación para productos BI/Fabric.</p>
           </div>
-          <address>
-            Torre YPF, Macacha Güemes 515, Puerto Madero, C1106BKK, Ciudad Autónoma de Buenos Aires, Argentina. Piso 16, Equipo de
-            Datalización.
-          </address>
-          <p>Uso interno. Contenido de referencia para diseñar, versionar, publicar y operar soluciones BI/Fabric con trazabilidad.</p>
+
+          <nav class="footer-map" aria-label="Mapa de secciones">
+            <div>
+              <h2>Inicio</h2>
+              <a href="/inicio/proposito" data-route>Propósito</a>
+              <a href="/inicio/estudio" data-route>Estudio ejecutivo</a>
+              <a href="/inicio/capacidad" data-route>Capacidad organizacional</a>
+              <a href="/inicio/secciones" data-route>Mapa del hub</a>
+            </div>
+            <div>
+              <h2>Road y Metodología</h2>
+              <a href="/road-y-metodologia/proceso" data-route>Proceso end-to-end</a>
+              <a href="/road-y-metodologia/flujo-bi" data-route>Flujo BI/Fabric</a>
+              <a href="/road-y-metodologia/prd-spec" data-route>PRD y Spec</a>
+              <a href="/road-y-metodologia/oee-bi" data-route>OEE BI</a>
+              <a href="/road-y-metodologia/dmaic" data-route>DMAIC</a>
+              <a href="/road-y-metodologia/lean" data-route>Lean aplicado</a>
+            </div>
+            <div>
+              <h2>Método</h2>
+              <a href="/metodo-datalizacion/marco-vmc" data-route>Marco VMC</a>
+              <a href="/metodo-datalizacion/proceso" data-route>Proceso operativo</a>
+              <a href="/metodo-datalizacion/dev-prod" data-route>DEV / PROD</a>
+              <a href="/metodo-datalizacion/backlog" data-route>Backlog</a>
+              <a href="/metodo-datalizacion/vmc-fabric" data-route>VMC / Fabric</a>
+              <a href="/metodo-datalizacion/gobernanza" data-route>Gobernanza</a>
+            </div>
+            <div>
+              <h2>Plataforma</h2>
+              <a href="/design-system/fundamentos" data-route>Design System</a>
+              <a href="/datalito/conversacion" data-route>Datalito</a>
+              <a href="/proyecto-power-bi/estudio" data-route>Proyecto Power BI</a>
+              <a href="/diccionario/busqueda" data-route>Diccionario BI</a>
+              <a href="/librerias/catalogo" data-route>Librerías</a>
+              <a href="/atajos/power-bi" data-route>Atajos</a>
+            </div>
+          </nav>
+
+          <div class="footer-bottom">
+            <address>
+              Torre YPF, Macacha Güemes 515, Puerto Madero, C1106BKK, Ciudad Autónoma de Buenos Aires, Argentina. Piso 16, Equipo de
+              Datalización.
+            </address>
+            <p>Uso interno · Versión estática gobernada · © 2026 Datalización YPF</p>
+          </div>
         </div>
       </footer>
     </div>

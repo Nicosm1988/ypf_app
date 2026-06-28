@@ -11,6 +11,7 @@ Datalización es la práctica de automatizar procesos mediante datos confiables,
 - Design System para consolidar patrones visuales, componentes, reglas de experiencia y criterios de calidad.
 - Datalito, asistente interno de conocimiento con personaje animado, conversación natural, búsqueda local, citas, feedback y brechas.
 - Narrativa ejecutiva en cada página para presentar primero la conclusión, luego los argumentos y finalmente la evidencia operativa.
+- Mega menú y footer tipo mapa de plataforma, con secciones y subsecciones navegables como páginas internas.
 - Diccionario BI para alinear conceptos de automatización, datos, Power BI, Fabric, performance, gobierno y adopción.
 - Roadmap BI integrado en Road y Metodología, estructurado en 9 gates de ingeniería: PRD/Spec, datos/Power Query, modelado, DAX, seguridad/gobierno, UX/acción, versionado/aprobación, publicación y operación/mejora.
 - Proyecto de Power BI con Visual Studio para trabajar procesos, Spec, PBIP, TMDL, Git y documentación con criterio.
@@ -59,6 +60,15 @@ http://127.0.0.1:8001/librerias
 http://127.0.0.1:8001/atajos
 ```
 
+Las subsecciones principales también tienen URL propia para que el menú, el footer y los links internos puedan llevar directo al bloque correcto:
+
+```text
+http://127.0.0.1:8001/road-y-metodologia/oee-bi
+http://127.0.0.1:8001/metodo-datalizacion/backlog
+http://127.0.0.1:8001/design-system/componentes
+http://127.0.0.1:8001/datalito/arquitectura
+```
+
 ## Validar build
 
 ```bash
@@ -68,6 +78,7 @@ npm run build
 El build valida que:
 
 - Exista Home, Road y Metodología, Método de Datalización, Design System, Datalito, Diccionario BI, Proyecto Power BI, Librerías y Atajos.
+- Exista mega menú con grupos, dropdowns y subsecciones; el footer funcione como mapa completo de navegación.
 - La Home tenga portada ejecutiva Datalización Hub, narrativa Antes/Ahora/Después y transición de tableros a disciplina.
 - La Home tenga una primera lectura con estructura de estudio, tesis y contribución operativa.
 - La Home tenga botonera para las secciones principales, el Design System tenga estructura ejecutiva completa y Datalito tenga vertical slice funcional.
@@ -80,7 +91,7 @@ El build valida que:
 - El catálogo técnico tenga documentación Markdown y familias de herramientas.
 - Los atajos tengan categorías e items navegables.
 - Los datos tengan los campos requeridos.
-- Vercel tenga rewrites para `/road-y-metodologia`, `/metodo-datalizacion`, `/design-system`, `/datalito`, `/diccionario`, `/proyecto-power-bi`, `/librerias` y `/atajos`, manteniendo compatibilidad con `/guia-power-bi`, `/metodologia` y `/roadmap`.
+- Vercel tenga rewrites para páginas principales y subsecciones como `/road-y-metodologia/oee-bi`, manteniendo compatibilidad con `/guia-power-bi`, `/metodologia` y `/roadmap`.
 - Se genere `dist/` con las rutas estaticas listas para Vercel.
 
 ## Validar calidad completa
@@ -169,7 +180,7 @@ Editar `data/engineeringGuide.js`, `data/roadmap.js` y `data/methodology.js`.
 - `roadmapPhases`: gates del roadmap.
 - `oeeFactors`, `dmaicStages`, `methodologyTools`, `toyotaFourP`, `leanPractices` y `methodologyCadence`: marco metodológico de mejora continua BI.
 
-La sección navegable vive en `/road-y-metodologia`; las rutas antiguas `/guia-power-bi`, `/metodologia` y `/roadmap` quedan como compatibilidad.
+La sección navegable vive en `/road-y-metodologia`; las subsecciones se exponen como rutas internas, por ejemplo `/road-y-metodologia/oee-bi` y `/road-y-metodologia/dmaic`. Las rutas antiguas `/guia-power-bi`, `/metodologia` y `/roadmap` quedan como compatibilidad.
 
 ## Editar portada ejecutiva
 

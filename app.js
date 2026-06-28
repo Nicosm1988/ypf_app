@@ -136,6 +136,64 @@ const routeAliases = {
   "/roadmap": "/road-y-metodologia",
 };
 
+const baseRoutes = new Set([
+  "/",
+  "/road-y-metodologia",
+  "/guia-power-bi",
+  "/metodo-datalizacion",
+  "/metodologia",
+  "/design-system",
+  "/datalito",
+  "/diccionario",
+  "/roadmap",
+  "/proyecto-power-bi",
+  "/atajos",
+  "/librerias",
+]);
+
+const subsectionRoutes = {
+  "/inicio/proposito": { route: "/", hash: "#inicio-proposito" },
+  "/inicio/estudio": { route: "/", hash: "#inicio-estudio" },
+  "/inicio/capacidad": { route: "/", hash: "#inicio-capacidad" },
+  "/inicio/secciones": { route: "/", hash: "#inicio-secciones" },
+  "/inicio/decantacion": { route: "/", hash: "#inicio-decantacion" },
+  "/inicio/workflow": { route: "/", hash: "#inicio-workflow" },
+  "/road-y-metodologia/tesis": { route: "/road-y-metodologia", hash: "#road-tesis" },
+  "/road-y-metodologia/proceso": { route: "/road-y-metodologia", hash: "#road-proceso" },
+  "/road-y-metodologia/flujo-bi": { route: "/road-y-metodologia", hash: "#road-flujo-bi" },
+  "/road-y-metodologia/prd-spec": { route: "/road-y-metodologia", hash: "#modelos-prd-spec" },
+  "/road-y-metodologia/gates": { route: "/road-y-metodologia", hash: "#road-gates" },
+  "/road-y-metodologia/checklist": { route: "/road-y-metodologia", hash: "#road-checklist" },
+  "/road-y-metodologia/oee-bi": { route: "/road-y-metodologia", hash: "#road-oee-bi" },
+  "/road-y-metodologia/dmaic": { route: "/road-y-metodologia", hash: "#road-dmaic" },
+  "/road-y-metodologia/lean": { route: "/road-y-metodologia", hash: "#road-lean" },
+  "/road-y-metodologia/cadencia": { route: "/road-y-metodologia", hash: "#road-cadencia" },
+  "/metodo-datalizacion/marco-vmc": { route: "/metodo-datalizacion", hash: "#modelo-evaluacion-datalizacion" },
+  "/metodo-datalizacion/proceso": { route: "/metodo-datalizacion", hash: "#metodo-proceso" },
+  "/metodo-datalizacion/dev-prod": { route: "/metodo-datalizacion", hash: "#metodo-dev-prod" },
+  "/metodo-datalizacion/microsoft-365": { route: "/metodo-datalizacion", hash: "#metodo-microsoft-365" },
+  "/metodo-datalizacion/canales": { route: "/metodo-datalizacion", hash: "#metodo-canales" },
+  "/metodo-datalizacion/proyecto": { route: "/metodo-datalizacion", hash: "#metodo-proyecto" },
+  "/metodo-datalizacion/naming": { route: "/metodo-datalizacion", hash: "#metodo-naming" },
+  "/metodo-datalizacion/backlog": { route: "/metodo-datalizacion", hash: "#metodo-backlog" },
+  "/metodo-datalizacion/vmc-fabric": { route: "/metodo-datalizacion", hash: "#metodo-vmc-fabric" },
+  "/metodo-datalizacion/gobernanza": { route: "/metodo-datalizacion", hash: "#metodo-gobernanza" },
+  "/design-system/fundamentos": { route: "/design-system", hash: "#design-fundamentos" },
+  "/design-system/componentes": { route: "/design-system", hash: "#design-componentes" },
+  "/design-system/alcance": { route: "/design-system", hash: "#design-alcance" },
+  "/design-system/entrega": { route: "/design-system", hash: "#design-entrega" },
+  "/datalito/conversacion": { route: "/datalito", hash: "#datalito-conversacion" },
+  "/datalito/arquitectura": { route: "/datalito", hash: "#datalito-arquitectura" },
+  "/datalito/gobierno": { route: "/datalito", hash: "#datalito-gobierno" },
+  "/datalito/evaluacion": { route: "/datalito", hash: "#datalito-evaluacion" },
+  "/proyecto-power-bi/estudio": { route: "/proyecto-power-bi", hash: "#proyecto-estudio" },
+  "/proyecto-power-bi/metodo": { route: "/proyecto-power-bi", hash: "#proyecto-metodo" },
+  "/proyecto-power-bi/herramientas": { route: "/proyecto-power-bi", hash: "#proyecto-herramientas" },
+  "/diccionario/busqueda": { route: "/diccionario", hash: "#diccionario-busqueda" },
+  "/librerias/catalogo": { route: "/librerias", hash: "#librerias-catalogo" },
+  "/atajos/power-bi": { route: "/atajos", hash: "#atajos-power-bi" },
+};
+
 const dictionaryState = {
   query: "",
   category: "Todas",
@@ -1027,6 +1085,7 @@ const interactiveSurfaceSelector = [
   ".platform-discipline-card",
   ".platform-metric",
   ".hub-nav-card",
+  ".footer-card",
   ".home-research-card",
   ".home-research-note",
   ".road-thesis-card",
@@ -1193,31 +1252,29 @@ function renderGuideStepGlossary(section) {
 
 function getRoute(pathname = window.location.pathname) {
   const cleanPath = pathname.replace(/\/+$/, "") || "/";
+  if (subsectionRoutes[cleanPath]) return subsectionRoutes[cleanPath].route;
   if (routeAliases[cleanPath]) return routeAliases[cleanPath];
-  if (
-    [
-      "/road-y-metodologia",
-      "/guia-power-bi",
-      "/metodo-datalizacion",
-      "/metodologia",
-      "/design-system",
-      "/datalito",
-      "/diccionario",
-      "/roadmap",
-      "/proyecto-power-bi",
-      "/atajos",
-      "/librerias",
-    ].includes(cleanPath)
-  )
-    return cleanPath;
+  if (baseRoutes.has(cleanPath)) return cleanPath;
   return "/";
+}
+
+function getSubsectionHash(pathname = window.location.pathname) {
+  const cleanPath = pathname.replace(/\/+$/, "") || "/";
+  return subsectionRoutes[cleanPath]?.hash || "";
+}
+
+function isKnownRoutePath(pathname) {
+  const cleanPath = pathname.replace(/\/+$/, "") || "/";
+  return baseRoutes.has(cleanPath) || Boolean(routeAliases[cleanPath]) || Boolean(subsectionRoutes[cleanPath]);
 }
 
 function navigate(path) {
   const UrlCtor = window.URL;
   const targetUrl = new UrlCtor(path, window.location.origin);
   const route = getRoute(targetUrl.pathname);
-  const targetPath = `${route}${targetUrl.hash}`;
+  const cleanTargetPath = targetUrl.pathname.replace(/\/+$/, "") || "/";
+  const targetHash = targetUrl.hash || getSubsectionHash(targetUrl.pathname);
+  const targetPath = isKnownRoutePath(targetUrl.pathname) ? `${cleanTargetPath}${targetUrl.hash}` : `${route}${targetUrl.hash}`;
 
   if (`${window.location.pathname}${window.location.hash}` !== targetPath) {
     window.history.pushState({}, "", targetPath);
@@ -1226,8 +1283,8 @@ function navigate(path) {
   renderRoute(route);
   contentTarget.focus({ preventScroll: true });
 
-  if (targetUrl.hash) {
-    scrollToRouteHash(targetUrl.hash);
+  if (targetHash) {
+    scrollToRouteHash(targetHash);
   } else {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -1369,9 +1426,14 @@ function setupScrollReveal() {
 
 function setActiveNav(route) {
   const activeRoute = routeAliases[route] || route;
+  const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
   navLinks.forEach((link) => {
     const url = new URL(link.href);
-    link.classList.toggle("active", getRoute(url.pathname) === activeRoute);
+    const linkPath = url.pathname.replace(/\/+$/, "") || "/";
+    const linkRoute = getRoute(url.pathname);
+    const isTopLevel = link.classList.contains("nav-menu-link") || link.closest(".brand");
+    const isActive = isTopLevel ? linkRoute === activeRoute : linkPath === currentPath || (!subsectionRoutes[currentPath] && linkRoute === activeRoute);
+    link.classList.toggle("active", isActive);
   });
 }
 
@@ -1411,14 +1473,15 @@ function renderRoute(route = getRoute()) {
   requestAnimationFrame(() => {
     enhanceInteractiveSurfaces();
     setupScrollReveal();
-    if (window.location.hash) scrollToRouteHash(window.location.hash);
+    const routeHash = window.location.hash || getSubsectionHash(window.location.pathname);
+    if (routeHash) scrollToRouteHash(routeHash);
   });
 }
 
 function renderHomePage() {
   appRoot.innerHTML = `
     <section class="page home-page">
-      <section class="hero" aria-label="Datalización Hub">
+      <section class="hero" id="inicio-proposito" aria-label="Datalización Hub">
         <picture class="hero-media">
           <source
             type="image/avif"
@@ -1478,14 +1541,14 @@ function renderHomePage() {
         </div>
       </section>
 
-      <section class="quote-band page-inner">
+      <section class="quote-band page-inner" id="inicio-punto-inflexion">
         ${icon("quote")}
         <strong>Esta gestión busca marcar un punto de inflexión: pasar de construir tableros a construir una disciplina interna de inteligencia de datos.</strong>
       </section>
 
       ${renderHomeResearchFrame()}
 
-      <section class="method-model-cta page-inner" aria-label="Nuevo marco de evaluación de datalización">
+      <section class="method-model-cta page-inner" id="inicio-marco-vmc" aria-label="Nuevo marco de evaluación de datalización">
         <div>
           <span class="flow-chip">nuevo módulo metodológico</span>
           <h2>Marco de Datalización VMC</h2>
@@ -1509,7 +1572,7 @@ function renderHomePage() {
 
       ${renderWorkflowLab()}
 
-      <div class="section-title page-inner">
+      <div class="section-title page-inner" id="inicio-recursos">
         <div>
           <h2>Recursos principales</h2>
           <p>Cada sección responde una decisión del sistema: qué mejorar, cómo medirlo, cómo construirlo, cómo gobernarlo y cómo sostenerlo.</p>
@@ -1616,7 +1679,7 @@ function renderHomePage() {
 
 function renderHomeResearchFrame() {
   return `
-    <section class="home-research page-inner" aria-labelledby="homeResearchTitle">
+    <section class="home-research page-inner" id="inicio-estudio" aria-labelledby="homeResearchTitle">
       <div class="home-research-copy">
         <span class="flow-chip">resumen ejecutivo de estudio</span>
         <h2 id="homeResearchTitle">La plataforma se fundamenta como una monografía operativa sobre cómo escalar inteligencia de datos gobernada.</h2>
@@ -1654,7 +1717,7 @@ function renderPlatformMetric(item) {
 
 function renderPlatformExecutiveSection() {
   return `
-    <section class="platform-executive page-inner" aria-labelledby="platformExecutiveTitle">
+    <section class="platform-executive page-inner" id="inicio-capacidad" aria-labelledby="platformExecutiveTitle">
       <div class="platform-executive-head">
         <span class="flow-chip">plataforma interna de estándares, gobierno y delivery</span>
         <h2 id="platformExecutiveTitle">Datalización Hub convierte una necesidad de orden en una capacidad permanente del área.</h2>
@@ -1711,7 +1774,7 @@ function renderPlatformExecutiveSection() {
 
 function renderHubSectionLauncher() {
   return `
-    <section class="hub-nav page-inner" aria-labelledby="hubNavTitle">
+    <section class="hub-nav page-inner" id="inicio-secciones" aria-labelledby="hubNavTitle">
       <div class="hub-nav-head">
         <span class="flow-chip">mapa de navegación</span>
         <h2 id="hubNavTitle">Cada sección del hub responde una decisión del sistema de Datalización.</h2>
@@ -1790,7 +1853,7 @@ function renderDesignSystemPage() {
         </div>
       </header>
 
-      <section class="design-system-intro page-inner" aria-labelledby="designSystemIntroTitle">
+      <section class="design-system-intro page-inner" id="design-intro" aria-labelledby="designSystemIntroTitle">
         <div>
           <span class="flow-chip">mensaje central</span>
           <h2 id="designSystemIntroTitle">El Design System nos permite pasar de soluciones visuales aisladas a una experiencia digital consistente, gobernada y escalable.</h2>
@@ -1801,7 +1864,7 @@ function renderDesignSystemPage() {
         </div>
       </section>
 
-      <section class="design-system-why page-inner" aria-labelledby="designSystemWhyTitle">
+      <section class="design-system-why page-inner" id="design-por-que" aria-labelledby="designSystemWhyTitle">
         <div class="design-system-section-head">
           <span class="flow-chip">por qué lo necesitamos</span>
           <h2 id="designSystemWhyTitle">La plataforma crece; la experiencia debe crecer con coherencia.</h2>
@@ -1813,7 +1876,7 @@ function renderDesignSystemPage() {
         </div>
       </section>
 
-      <section class="design-system-benefits page-inner" aria-labelledby="designSystemBenefitsTitle">
+      <section class="design-system-benefits page-inner" id="design-beneficios" aria-labelledby="designSystemBenefitsTitle">
         <div class="design-system-section-head">
           <span class="flow-chip">beneficios esperados</span>
           <h2 id="designSystemBenefitsTitle">El sistema mejora velocidad, calidad, adopción y mantenimiento.</h2>
@@ -1824,7 +1887,7 @@ function renderDesignSystemPage() {
         </div>
       </section>
 
-      <section class="design-system-foundations page-inner" aria-labelledby="designSystemFoundationsTitle">
+      <section class="design-system-foundations page-inner" id="design-fundamentos" aria-labelledby="designSystemFoundationsTitle">
         <div class="design-system-section-head">
           <span class="flow-chip">fundamentos</span>
           <h2 id="designSystemFoundationsTitle">Cada decisión de diseño debe tener una función dentro del sistema.</h2>
@@ -1834,7 +1897,7 @@ function renderDesignSystemPage() {
         </div>
       </section>
 
-      <section class="design-system-principles page-inner" aria-labelledby="designSystemPrinciplesTitle">
+      <section class="design-system-principles page-inner" id="design-principios" aria-labelledby="designSystemPrinciplesTitle">
         <div class="design-system-section-head">
           <span class="flow-chip">principios de diseño</span>
           <h2 id="designSystemPrinciplesTitle">La interfaz debe ayudar a comprender, decidir y sostener.</h2>
@@ -1844,7 +1907,7 @@ function renderDesignSystemPage() {
         </div>
       </section>
 
-      <section class="design-system-scope page-inner" aria-labelledby="designSystemScopeTitle">
+      <section class="design-system-scope page-inner" id="design-alcance" aria-labelledby="designSystemScopeTitle">
         <div class="design-system-section-head">
           <span class="flow-chip">alcance inicial</span>
           <h2 id="designSystemScopeTitle">El primer alcance cubre los patrones que más se repiten en la plataforma.</h2>
@@ -1854,7 +1917,7 @@ function renderDesignSystemPage() {
         </div>
       </section>
 
-      <section class="design-system-components page-inner" aria-labelledby="designSystemComponentsTitle">
+      <section class="design-system-components page-inner" id="design-componentes" aria-labelledby="designSystemComponentsTitle">
         <div class="design-system-section-head">
           <span class="flow-chip">componentes esperados</span>
           <h2 id="designSystemComponentsTitle">La visión del sistema se materializa en componentes reutilizables.</h2>
@@ -1865,7 +1928,7 @@ function renderDesignSystemPage() {
         </div>
       </section>
 
-      <section class="design-system-delivery page-inner" aria-labelledby="designSystemDeliveryTitle">
+      <section class="design-system-delivery page-inner" id="design-entrega" aria-labelledby="designSystemDeliveryTitle">
         <div class="design-system-section-head">
           <span class="flow-chip">entregables y reglas</span>
           <h2 id="designSystemDeliveryTitle">El sistema se gobierna con entregables claros y reglas de calidad.</h2>
@@ -1988,7 +2051,7 @@ function renderDatalitoPage() {
         </div>
       </header>
 
-      <section class="datalito-intro page-inner" aria-labelledby="datalitoIntroTitle">
+      <section class="datalito-intro page-inner" id="datalito-intro" aria-labelledby="datalitoIntroTitle">
         <div>
           <span class="flow-chip">conversación viva</span>
           <h2 id="datalitoIntroTitle">La experiencia empieza como una charla simple y, cuando hace falta precisión, baja a fuentes y evidencia.</h2>
@@ -1999,7 +2062,7 @@ function renderDatalitoPage() {
         </div>
       </section>
 
-      <section class="datalito-workbench page-inner" aria-labelledby="datalitoWorkbenchTitle">
+      <section class="datalito-workbench page-inner" id="datalito-conversacion" aria-labelledby="datalitoWorkbenchTitle">
         <div class="datalito-workbench-main">
           <div class="datalito-section-head">
             <span class="flow-chip">probalo ahora</span>
@@ -2031,7 +2094,7 @@ function renderDatalitoPage() {
         </aside>
       </section>
 
-      <section class="datalito-architecture page-inner" aria-labelledby="datalitoArchitectureTitle">
+      <section class="datalito-architecture page-inner" id="datalito-arquitectura" aria-labelledby="datalitoArchitectureTitle">
         <div class="datalito-section-head">
           <span class="flow-chip">arquitectura compatible</span>
           <h2 id="datalitoArchitectureTitle">La solución queda desacoplada para pasar de índice local a RAG enterprise sin rediseñar la experiencia.</h2>
@@ -2041,7 +2104,7 @@ function renderDatalitoPage() {
         </div>
       </section>
 
-      <section class="datalito-governance page-inner" aria-labelledby="datalitoGovernanceTitle">
+      <section class="datalito-governance page-inner" id="datalito-gobierno" aria-labelledby="datalitoGovernanceTitle">
         <div class="datalito-section-head">
           <span class="flow-chip">seguridad y gobierno</span>
           <h2 id="datalitoGovernanceTitle">La primera versión prioriza seguridad, fidelidad a fuentes y mejora controlada.</h2>
@@ -2068,7 +2131,7 @@ function renderDatalitoPage() {
         </div>
       </section>
 
-      <section class="datalito-evaluation page-inner" aria-labelledby="datalitoEvaluationTitle">
+      <section class="datalito-evaluation page-inner" id="datalito-evaluacion" aria-labelledby="datalitoEvaluationTitle">
         <div class="datalito-section-head">
           <span class="flow-chip">evaluación</span>
           <h2 id="datalitoEvaluationTitle">El producto se mide por respuestas respaldadas, calidad de citas y brechas detectadas.</h2>
@@ -3036,7 +3099,7 @@ function renderExecutiveBrief(narrative, variant = "") {
 
 function renderConceptDecantation() {
   return `
-    <section class="concept-tree page-inner" aria-labelledby="conceptTreeTitle">
+    <section class="concept-tree page-inner" id="inicio-decantacion" aria-labelledby="conceptTreeTitle">
       <div class="concept-tree-head">
         <span class="flow-chip">árbol de decantación conceptual</span>
         <h2 id="conceptTreeTitle">La idea baja de decisión gerencial a ejecución cotidiana.</h2>
@@ -3077,7 +3140,7 @@ function renderConceptDecantation() {
 
 function renderWorkflowLab() {
   return `
-    <section class="workflow-lab page-inner" aria-label="Flujo operativo de datalización">
+    <section class="workflow-lab page-inner" id="inicio-workflow" aria-label="Flujo operativo de datalización">
       <div class="workflow-board" aria-label="Canvas del flujo de datalización">
         <div class="workflow-board-head">
           <div>
@@ -3197,7 +3260,7 @@ function renderRoadMethodologyPage() {
 
       ${renderRoadMethodologyThesis()}
 
-      <section class="methodology-intro page-inner" aria-labelledby="methodologyIntroTitle">
+      <section class="methodology-intro page-inner" id="road-encuadre" aria-labelledby="methodologyIntroTitle">
         <div class="methodology-intro-copy">
           <span class="flow-chip">encuadre</span>
           <h2 id="methodologyIntroTitle">La metodología sirve si convierte pérdida en decisión y decisión en control.</h2>
@@ -3214,7 +3277,7 @@ function renderRoadMethodologyPage() {
 
       ${renderPrdSpecModelSection()}
 
-      <section class="guide-journey page-inner" aria-labelledby="guideJourneyTitle">
+      <section class="guide-journey page-inner" id="road-gates" aria-labelledby="guideJourneyTitle">
         <div class="guide-section-title">
           <span class="flow-chip">historia completa</span>
           <h2 id="guideJourneyTitle">Del caso operativo a la producción monitoreada.</h2>
@@ -3223,7 +3286,7 @@ function renderRoadMethodologyPage() {
         ${guideSections.map(renderGuideJourneyStep).join("")}
       </section>
 
-      <section class="guide-readiness-panel page-inner" aria-labelledby="guideReadinessTitle">
+      <section class="guide-readiness-panel page-inner" id="road-checklist" aria-labelledby="guideReadinessTitle">
         <div class="guide-readiness-copy">
           <span class="flow-chip">control de salida</span>
           <h2 id="guideReadinessTitle">La salida a producción exige evidencia completa, no confianza informal.</h2>
@@ -3245,7 +3308,7 @@ function renderRoadMethodologyPage() {
 
       ${renderConceptDecantation()}
 
-      <section class="oee-section page-inner" aria-labelledby="oeeTitle">
+      <section class="oee-section page-inner" id="road-oee-bi" aria-labelledby="oeeTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">OEE BI</span>
           <h2 id="oeeTitle">OEE BI muestra dónde se pierde efectividad analítica.</h2>
@@ -3264,7 +3327,7 @@ function renderRoadMethodologyPage() {
         </div>
       </section>
 
-      <section class="dmaic-section page-inner" aria-labelledby="dmaicTitle">
+      <section class="dmaic-section page-inner" id="road-dmaic" aria-labelledby="dmaicTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">DMAIC</span>
           <h2 id="dmaicTitle">DMAIC evita saltar del síntoma a la solución.</h2>
@@ -3275,7 +3338,7 @@ function renderRoadMethodologyPage() {
         </div>
       </section>
 
-      <section class="methodology-toolchain page-inner" aria-labelledby="toolchainTitle">
+      <section class="methodology-toolchain page-inner" id="road-herramientas" aria-labelledby="toolchainTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">herramientas ubicadas</span>
           <h2 id="toolchainTitle">Cada herramienta se justifica por la pregunta que responde.</h2>
@@ -3286,7 +3349,7 @@ function renderRoadMethodologyPage() {
         </div>
       </section>
 
-      <section class="toyota-section page-inner" aria-labelledby="toyotaTitle">
+      <section class="toyota-section page-inner" id="road-toyota" aria-labelledby="toyotaTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">4P Toyota</span>
           <h2 id="toyotaTitle">Las 4P evitan que la conversación quede atrapada en la herramienta.</h2>
@@ -3297,7 +3360,7 @@ function renderRoadMethodologyPage() {
         </div>
       </section>
 
-      <section class="lean-practices-section page-inner" aria-labelledby="leanPracticesTitle">
+      <section class="lean-practices-section page-inner" id="road-lean" aria-labelledby="leanPracticesTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">patrones de mejora</span>
           <h2 id="leanPracticesTitle">Las prácticas Lean se vuelven útiles cuando cambian el diseño BI.</h2>
@@ -3308,7 +3371,7 @@ function renderRoadMethodologyPage() {
         </div>
       </section>
 
-      <section class="methodology-cadence page-inner" aria-labelledby="cadenceTitle">
+      <section class="methodology-cadence page-inner" id="road-cadencia" aria-labelledby="cadenceTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">operación diaria</span>
           <h2 id="cadenceTitle">La metodología se sostiene cuando entra en la agenda del equipo.</h2>
@@ -3336,7 +3399,7 @@ function renderRoadMethodologyPage() {
 
 function renderRoadMethodologyThesis() {
   return `
-    <section class="road-methodology-thesis page-inner" aria-labelledby="roadMethodologyThesisTitle">
+    <section class="road-methodology-thesis page-inner" id="road-tesis" aria-labelledby="roadMethodologyThesisTitle">
       <div class="road-thesis-copy">
         <span class="flow-chip">tesis metodológica</span>
         <h2 id="roadMethodologyThesisTitle">El Road define cuándo avanzar; la metodología explica por qué intervenir y cómo sostener la mejora.</h2>
@@ -3361,7 +3424,7 @@ function renderRoadMethodologyThesis() {
 
 function renderMethodologyProcessFlow() {
   return `
-    <section class="methodology-process page-inner" aria-labelledby="methodologyProcessTitle">
+    <section class="methodology-process page-inner" id="road-proceso" aria-labelledby="methodologyProcessTitle">
       <div class="methodology-process-head">
         <span class="flow-chip">proceso end to end</span>
         <h2 id="methodologyProcessTitle">La guía y el roadmap se convierten en una secuencia de trabajo verificable.</h2>
@@ -3524,7 +3587,7 @@ function renderDatalizationMethodPage() {
 
       ${renderMethodEvaluationModel()}
 
-      <section class="method-operating-flow page-inner" aria-labelledby="methodOperatingFlowTitle">
+      <section class="method-operating-flow page-inner" id="metodo-proceso" aria-labelledby="methodOperatingFlowTitle">
         <div class="method-section-head">
           <span class="flow-chip">proceso end to end</span>
           <h2 id="methodOperatingFlowTitle">El método baja de una decisión de orden a una rutina concreta de entrega.</h2>
@@ -3535,7 +3598,7 @@ function renderDatalizationMethodPage() {
         </div>
       </section>
 
-      <section class="method-command page-inner" aria-labelledby="methodCommandTitle">
+      <section class="method-command page-inner" id="metodo-comando" aria-labelledby="methodCommandTitle">
         <div class="method-section-head">
           <span class="flow-chip">respuesta ejecutiva</span>
           <h2 id="methodCommandTitle">La reconstrucción del área necesita una forma común de trabajar antes de escalar.</h2>
@@ -3556,7 +3619,7 @@ function renderDatalizationMethodPage() {
         </div>
       </section>
 
-      <section class="method-planes page-inner" aria-labelledby="methodPlanesTitle">
+      <section class="method-planes page-inner" id="metodo-dev-prod" aria-labelledby="methodPlanesTitle">
         <div class="method-section-head">
           <span class="flow-chip">arquitectura base</span>
           <h2 id="methodPlanesTitle">DEV y PROD se separan para que el trabajo interno no contamine lo que consume el negocio.</h2>
@@ -3567,7 +3630,7 @@ function renderDatalizationMethodPage() {
         </div>
       </section>
 
-      <section class="method-layers page-inner" aria-labelledby="methodLayersTitle">
+      <section class="method-layers page-inner" id="metodo-microsoft-365" aria-labelledby="methodLayersTitle">
         <div class="method-section-head">
           <span class="flow-chip">Microsoft 365 como base</span>
           <h2 id="methodLayersTitle">Cada herramienta cumple una función del método, no una preferencia personal.</h2>
@@ -3578,7 +3641,7 @@ function renderDatalizationMethodPage() {
         </div>
       </section>
 
-      <section class="method-channels page-inner" aria-labelledby="methodChannelsTitle">
+      <section class="method-channels page-inner" id="metodo-canales" aria-labelledby="methodChannelsTitle">
         <div class="method-section-head">
           <span class="flow-chip">PARA + Johnny.Decimal lite</span>
           <h2 id="methodChannelsTitle">Los canales separan proyecto, producto, área, recurso y archivo sin duplicar información.</h2>
@@ -3589,7 +3652,7 @@ function renderDatalizationMethodPage() {
         </div>
       </section>
 
-      <section class="method-project-system page-inner" aria-labelledby="methodProjectTitle">
+      <section class="method-project-system page-inner" id="metodo-proyecto" aria-labelledby="methodProjectTitle">
         <div class="method-section-head">
           <span class="flow-chip">plantilla intra-proyecto</span>
           <h2 id="methodProjectTitle">Cada proyecto deja el mismo mapa, aunque cambien el área, el producto o el desarrollador.</h2>
@@ -3618,7 +3681,7 @@ function renderDatalizationMethodPage() {
         </div>
       </section>
 
-      <section class="method-naming page-inner" aria-labelledby="methodNamingTitle">
+      <section class="method-naming page-inner" id="metodo-naming" aria-labelledby="methodNamingTitle">
         <div class="method-section-head">
           <span class="flow-chip">convención de nombres</span>
           <h2 id="methodNamingTitle">El nombre del archivo debe explicar qué es, de quién es, cuándo nació y qué versión representa.</h2>
@@ -3655,7 +3718,7 @@ function renderDatalizationMethodPage() {
         </details>
       </section>
 
-      <section class="method-backlog page-inner" aria-labelledby="methodBacklogTitle">
+      <section class="method-backlog page-inner" id="metodo-backlog" aria-labelledby="methodBacklogTitle">
         <div class="method-section-head">
           <span class="flow-chip">Backlog Datalización v0</span>
           <h2 id="methodBacklogTitle">El seguimiento mide flujo real, no esfuerzo declarado.</h2>
@@ -3674,7 +3737,7 @@ function renderDatalizationMethodPage() {
         </div>
       </section>
 
-      <section class="method-vmc page-inner" aria-labelledby="methodVmcTitle">
+      <section class="method-vmc page-inner" id="metodo-vmc-fabric" aria-labelledby="methodVmcTitle">
         <div class="method-section-head">
           <span class="flow-chip">VMC / Fabric</span>
           <h2 id="methodVmcTitle">La publicación productiva necesita workspaces, Lakehouse y permisos como arquitectura, no como costumbre.</h2>
@@ -3704,7 +3767,7 @@ function renderDatalizationMethodPage() {
         </details>
       </section>
 
-      <section class="method-roadmap page-inner" aria-labelledby="methodRoadmapTitle">
+      <section class="method-roadmap page-inner" id="metodo-implementacion" aria-labelledby="methodRoadmapTitle">
         <div class="method-section-head">
           <span class="flow-chip">implementación</span>
           <h2 id="methodRoadmapTitle">El método se instala con piloto, tablero, adopción y gobierno interno.</h2>
@@ -3715,7 +3778,7 @@ function renderDatalizationMethodPage() {
         </div>
       </section>
 
-      <section class="method-governance page-inner" aria-labelledby="methodGovernanceTitle">
+      <section class="method-governance page-inner" id="metodo-gobernanza" aria-labelledby="methodGovernanceTitle">
         <div class="method-section-head">
           <span class="flow-chip">gobernanza</span>
           <h2 id="methodGovernanceTitle">El método necesita dueños explícitos para no depender del entusiasmo inicial.</h2>
@@ -4008,7 +4071,7 @@ function renderDictionaryPage() {
 
       ${renderExecutiveBrief(pageNarratives.dictionary)}
 
-      <section class="control-panel page-inner" aria-label="Filtros del diccionario">
+      <section class="control-panel page-inner" id="diccionario-busqueda" aria-label="Filtros del diccionario">
         <div class="search-row">
           <label class="search-input">
             ${icon("search")}
@@ -4100,7 +4163,7 @@ function renderUnifiedAutomationFlow() {
   });
 
   return `
-    <section class="bi-flow-showcase unified-flow-showcase page-inner" aria-labelledby="unifiedFlowTitle">
+    <section class="bi-flow-showcase unified-flow-showcase page-inner" id="road-flujo-bi" aria-labelledby="unifiedFlowTitle">
       <div class="flow-canvas unified-flow-canvas" aria-label="Canvas unificado de guía y roadmap">
         <div class="flow-canvas-copy">
           <span class="flow-chip">flujo Power BI/Fabric</span>
@@ -4375,7 +4438,7 @@ function renderToolingPage() {
 
       ${renderExecutiveBrief(pageNarratives.tooling)}
 
-      <section class="shortcut-hero page-inner">
+      <section class="shortcut-hero page-inner" id="librerias-catalogo">
         <div>
           <span class="flow-chip">inventario del repo</span>
           <h2>El inventario sirve para decidir, no para instalar todo.</h2>
@@ -4387,7 +4450,7 @@ function renderToolingPage() {
         </a>
       </section>
 
-      <section class="tooling-grid page-inner" aria-label="Catálogo de librerías y agentes">
+      <section class="tooling-grid page-inner" id="librerias-herramientas" aria-label="Catálogo de librerías y agentes">
         ${toolingGroups.map(renderToolingGroup).join("")}
       </section>
     </section>
@@ -4546,7 +4609,7 @@ function renderProjectPage() {
 
       ${renderExecutiveBrief(pageNarratives.project)}
 
-      <section class="project-studio page-inner">
+      <section class="project-studio page-inner" id="proyecto-estudio">
         <div class="project-copy">
           <span class="flow-chip">filosofía de trabajo</span>
           <h2>La documentación vale cuando alinea la decisión, no cuando acumula archivos.</h2>
@@ -4587,7 +4650,7 @@ function renderProjectPage() {
         </div>
       </section>
 
-      <section class="project-method page-inner" aria-labelledby="projectMethodTitle">
+      <section class="project-method page-inner" id="proyecto-metodo" aria-labelledby="projectMethodTitle">
         <div class="project-method-head">
           <span class="flow-chip">método de trabajo</span>
           <h2 id="projectMethodTitle">Power BI construye la solución y Git conserva la responsabilidad.</h2>
@@ -4598,7 +4661,7 @@ function renderProjectPage() {
         </div>
       </section>
 
-      <section class="project-tools page-inner" aria-labelledby="projectToolsTitle">
+      <section class="project-tools page-inner" id="proyecto-herramientas" aria-labelledby="projectToolsTitle">
         <div class="project-method-head">
           <span class="flow-chip">herramientas necesarias</span>
           <h2 id="projectToolsTitle">Cada herramienta entra cuando agrega trazabilidad, calidad o control.</h2>
@@ -4681,7 +4744,7 @@ function renderShortcutsPage() {
 
       ${renderExecutiveBrief(pageNarratives.shortcuts)}
 
-      <section class="shortcut-hero page-inner">
+      <section class="shortcut-hero page-inner" id="atajos-power-bi">
         <div>
           <span class="flow-chip">recurso local</span>
           <h2>El PDF queda como evidencia y la página como guía de adopción.</h2>
@@ -4693,7 +4756,7 @@ function renderShortcutsPage() {
         </a>
       </section>
 
-      <section class="shortcut-grid page-inner" aria-label="Atajos de Power BI" tabindex="0">
+      <section class="shortcut-grid page-inner" id="atajos-listado" aria-label="Atajos de Power BI" tabindex="0">
         ${powerBiShortcuts.map(renderShortcutCategory).join("")}
       </section>
     </section>

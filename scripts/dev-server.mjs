@@ -39,7 +39,18 @@ function toSafePath(urlPathname) {
     "/atajos",
     "/librerias",
   ]);
-  if (appRoutes.has(routePath)) {
+  const appRoutePrefixes = [
+    "/inicio/",
+    "/road-y-metodologia/",
+    "/metodo-datalizacion/",
+    "/design-system/",
+    "/datalito/",
+    "/proyecto-power-bi/",
+    "/diccionario/",
+    "/librerias/",
+    "/atajos/",
+  ];
+  if (appRoutes.has(routePath) || appRoutePrefixes.some((prefix) => routePath.startsWith(prefix))) {
     return path.join(root, "index.html");
   }
 

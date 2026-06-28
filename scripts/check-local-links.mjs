@@ -16,6 +16,17 @@ const appRoutes = new Set([
   "/atajos",
   "/librerias",
 ]);
+const appRoutePrefixes = [
+  "/inicio/",
+  "/road-y-metodologia/",
+  "/metodo-datalizacion/",
+  "/design-system/",
+  "/datalito/",
+  "/proyecto-power-bi/",
+  "/diccionario/",
+  "/librerias/",
+  "/atajos/",
+];
 const sourceFiles = ["index.html", "app.js", "styles.css", "manifest.webmanifest", "service-worker.js"];
 const problems = [];
 let checked = 0;
@@ -27,7 +38,7 @@ for (const file of sourceFiles) {
     if (shouldSkip(link)) continue;
     checked += 1;
     const normalized = normalizeLocalLink(link);
-    if (appRoutes.has(normalized)) continue;
+    if (appRoutes.has(normalized) || appRoutePrefixes.some((prefix) => normalized.startsWith(prefix))) continue;
     const filePath = toFilePath(file, normalized);
     try {
       await access(filePath);

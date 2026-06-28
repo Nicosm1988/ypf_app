@@ -10,11 +10,15 @@ const baseUrl = `http://127.0.0.1:${port}`;
 const routes = [
   { path: "/", selector: ".hero", name: "Inicio" },
   { path: "/road-y-metodologia", selector: ".road-methodology-page", name: "Road y Metodologia" },
+  { path: "/road-y-metodologia/oee-bi", selector: "#road-oee-bi", name: "Road subseccion OEE BI" },
   { path: "/guia-power-bi", selector: ".road-methodology-page", name: "Guia + Roadmap compat" },
   { path: "/metodo-datalizacion", selector: ".method-page", name: "Metodo de Datalizacion" },
+  { path: "/metodo-datalizacion/backlog", selector: "#metodo-backlog", name: "Metodo subseccion Backlog" },
   { path: "/metodologia", selector: ".road-methodology-page", name: "Metodologia compat" },
   { path: "/design-system", selector: ".design-system-page", name: "Design System" },
+  { path: "/design-system/componentes", selector: "#design-componentes", name: "Design System subseccion Componentes" },
   { path: "/datalito", selector: ".datalito-page", name: "Datalito" },
+  { path: "/datalito/arquitectura", selector: "#datalito-arquitectura", name: "Datalito subseccion Arquitectura" },
   { path: "/diccionario", selector: ".dictionary-layout", name: "Diccionario" },
   { path: "/roadmap", selector: ".road-methodology-page", name: "Roadmap compat" },
   { path: "/proyecto-power-bi", selector: ".project-studio", name: "Proyecto Power BI" },
@@ -124,6 +128,10 @@ try {
 
       if (route.path === "/") {
         const homeReport = await page.evaluate(() => ({
+          navRows: new Set([...document.querySelectorAll(".nav-menu-link")].map((item) => Math.round(item.getBoundingClientRect().top))).size,
+          dropdowns: document.querySelectorAll(".nav-dropdown").length,
+          dropdownLinks: document.querySelectorAll(".nav-dropdown a").length,
+          footerColumns: document.querySelectorAll(".footer-map > div").length,
           metrics: document.querySelectorAll(".platform-metric").length,
           hubNavCards: document.querySelectorAll(".hub-nav-card").length,
           researchCards: document.querySelectorAll(".home-research-card").length,
@@ -138,6 +146,10 @@ try {
           hero: document.querySelector(".hero h1")?.textContent?.trim(),
         }));
         if (
+          homeReport.navRows !== 1 ||
+          homeReport.dropdowns < 6 ||
+          homeReport.dropdownLinks < 30 ||
+          homeReport.footerColumns !== 4 ||
           homeReport.metrics !== 3 ||
           homeReport.hubNavCards !== 8 ||
           homeReport.researchCards !== 5 ||
