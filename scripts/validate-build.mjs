@@ -345,17 +345,7 @@ assert(
 );
 
 await rm("dist", { force: true, recursive: true });
-await mkdir("dist/road-y-metodologia", { recursive: true });
-await mkdir("dist/guia-power-bi", { recursive: true });
-await mkdir("dist/metodo-datalizacion", { recursive: true });
-await mkdir("dist/metodologia", { recursive: true });
-await mkdir("dist/design-system", { recursive: true });
-await mkdir("dist/datalito", { recursive: true });
-await mkdir("dist/diccionario", { recursive: true });
-await mkdir("dist/roadmap", { recursive: true });
-await mkdir("dist/proyecto-power-bi", { recursive: true });
-await mkdir("dist/atajos", { recursive: true });
-await mkdir("dist/librerias", { recursive: true });
+await mkdir("dist", { recursive: true });
 await cp("assets", "dist/assets", { recursive: true });
 await cp("data", "dist/data", { recursive: true });
 await cp("docs", "dist/docs", { recursive: true });
@@ -365,17 +355,68 @@ for (const file of rootFiles) {
   await cp(file, `dist/${file}`);
 }
 
-await writeFile("dist/guia-power-bi/index.html", indexHtml);
-await writeFile("dist/road-y-metodologia/index.html", indexHtml);
-await writeFile("dist/metodo-datalizacion/index.html", indexHtml);
-await writeFile("dist/metodologia/index.html", indexHtml);
-await writeFile("dist/design-system/index.html", indexHtml);
-await writeFile("dist/datalito/index.html", indexHtml);
-await writeFile("dist/diccionario/index.html", indexHtml);
-await writeFile("dist/roadmap/index.html", indexHtml);
-await writeFile("dist/proyecto-power-bi/index.html", indexHtml);
-await writeFile("dist/atajos/index.html", indexHtml);
-await writeFile("dist/librerias/index.html", indexHtml);
+const staticRoutes = [
+  "guia-power-bi",
+  "road-y-metodologia",
+  "metodo-datalizacion",
+  "metodologia",
+  "design-system",
+  "datalito",
+  "diccionario",
+  "roadmap",
+  "proyecto-power-bi",
+  "atajos",
+  "librerias",
+  "inicio/proposito",
+  "inicio/estudio",
+  "inicio/capacidad",
+  "inicio/secciones",
+  "inicio/decantacion",
+  "inicio/workflow",
+  "road-y-metodologia/tesis",
+  "road-y-metodologia/proceso",
+  "road-y-metodologia/flujo-bi",
+  "road-y-metodologia/prd-spec",
+  "road-y-metodologia/gates",
+  "road-y-metodologia/checklist",
+  "road-y-metodologia/oee-bi",
+  "road-y-metodologia/dmaic",
+  "road-y-metodologia/lean",
+  "road-y-metodologia/cadencia",
+  "metodo-datalizacion/marco-vmc",
+  "metodo-datalizacion/proceso",
+  "metodo-datalizacion/dev-prod",
+  "metodo-datalizacion/microsoft-365",
+  "metodo-datalizacion/canales",
+  "metodo-datalizacion/proyecto",
+  "metodo-datalizacion/naming",
+  "metodo-datalizacion/backlog",
+  "metodo-datalizacion/vmc-fabric",
+  "metodo-datalizacion/gobernanza",
+  "design-system/fundamentos",
+  "design-system/componentes",
+  "design-system/alcance",
+  "design-system/entrega",
+  "datalito/conversacion",
+  "datalito/arquitectura",
+  "datalito/gobierno",
+  "datalito/evaluacion",
+  "proyecto-power-bi/estudio",
+  "proyecto-power-bi/metodo",
+  "proyecto-power-bi/herramientas",
+  "diccionario/busqueda",
+  "librerias/catalogo",
+  "atajos/power-bi",
+];
+
+for (const route of staticRoutes) {
+  await mkdir(`dist/${route}`, { recursive: true });
+  await writeFile(`dist/${route}/index.html`, indexHtml);
+}
+
+await access("dist/road-y-metodologia/oee-bi/index.html");
+await access("dist/metodo-datalizacion/backlog/index.html");
+await access("dist/design-system/componentes/index.html");
 
 console.log("Build validation OK");
 console.log(`- ${dictionaryTerms.length} términos BI`);
