@@ -5936,16 +5936,16 @@ html body .datalito-chat .icon-button:hover {
   animation-delay: var(--arrival-delay, 0s);
 }
 
+.flow-arrival-sources {
+  --arrival-delay: 0.2s;
+}
+
 .flow-arrival-onelake {
   --arrival-delay: 2.2s;
 }
 
-.flow-arrival-direct-lake {
-  --arrival-delay: 1s;
-}
-
-.flow-arrival-power-bi {
-  --arrival-delay: 2.1s;
+.flow-arrival-processing {
+  --arrival-delay: 4.2s;
 }
 
 .fabric-route-callout {
@@ -6491,65 +6491,63 @@ html body .datalito-chat .icon-button:hover {
   opacity: 0.9;
 }
 
-.fabric-architecture-flow {
-  position: absolute;
-  top: clamp(210px, 22vw, 270px);
-  right: clamp(28px, 4vw, 54px);
-  left: clamp(28px, 4vw, 54px);
-  z-index: 0;
-  display: grid;
-  grid-template-columns: 1fr 74px 1fr 74px 1fr 74px 1fr;
-  align-items: center;
-  pointer-events: none;
-}
-
-.fabric-architecture-flow span {
-  height: 16px;
-  border: 1px solid rgba(103, 232, 220, 0.22);
-  border-radius: 999px;
-  background:
-    repeating-linear-gradient(90deg, rgba(103, 232, 220, 0.12) 0 8px, rgba(103, 232, 220, 0.32) 8px 18px),
-    linear-gradient(90deg, rgba(58, 160, 255, 0.28), rgba(53, 201, 189, 0.28));
-  box-shadow: 0 0 26px rgba(53, 201, 189, 0.2);
-  animation: fabricDuctFlow 2.4s linear infinite;
-}
-
-.fabric-architecture-flow i {
-  position: relative;
-  height: 4px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--green), var(--ypf-yellow));
-  box-shadow: 0 0 18px rgba(103, 232, 220, 0.26);
-}
-
-.fabric-architecture-flow i::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 0;
-  width: 12px;
-  height: 12px;
-  transform: translateY(-50%) rotate(45deg);
-  border-top: 3px solid var(--ypf-yellow);
-  border-right: 3px solid var(--ypf-yellow);
-}
-
-.fabric-architecture-flow .fabric-flow-break {
-  height: 1px;
-  background: transparent;
-  box-shadow: none;
-}
-
-.fabric-architecture-flow .fabric-flow-break::after {
-  display: none;
-}
-
 .fabric-architecture-cards {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) 58px minmax(0, 1fr) 58px minmax(0, 1fr) 58px minmax(0, 1fr);
+  column-gap: 0;
+  row-gap: 16px;
+  align-items: stretch;
+}
+
+.fabric-architecture-connector {
+  position: relative;
+  align-self: center;
+  height: 6px;
+  margin-inline: -1px;
+  border-radius: 999px;
+  background: rgba(103, 232, 220, 0.14);
+  box-shadow: 0 0 16px rgba(53, 201, 189, 0.12);
+  overflow: hidden;
+}
+
+.fabric-architecture-connector::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--green), var(--ypf-yellow));
+  box-shadow: 0 0 18px rgba(103, 232, 220, 0.4);
+  animation: architectureConnectorPass 7.2s ease-in-out infinite;
+  animation-delay: calc(var(--connector-order, 0) * 1.6s);
+}
+
+.fabric-architecture-connector::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1px;
+  width: 10px;
+  height: 10px;
+  transform: translateY(-50%) rotate(45deg);
+  border-top: 2px solid rgba(255, 221, 73, 0.86);
+  border-right: 2px solid rgba(255, 221, 73, 0.86);
+  opacity: 0;
+  animation: architectureConnectorArrow 7.2s ease-in-out infinite;
+  animation-delay: calc(var(--connector-order, 0) * 1.6s);
+}
+
+.fabric-architecture-gap {
+  height: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.fabric-architecture-gap::before,
+.fabric-architecture-gap::after {
+  display: none;
 }
 
 .fabric-architecture-card {
@@ -6774,6 +6772,44 @@ html body .datalito-chat .icon-button:hover {
 @keyframes fabricDuctFlow {
   to {
     background-position: 36px 0, 0 0;
+  }
+}
+
+@keyframes architectureConnectorPass {
+  0%,
+  12%,
+  100% {
+    width: 0%;
+    opacity: 0;
+  }
+
+  24% {
+    width: 100%;
+    opacity: 1;
+  }
+
+  42% {
+    width: 100%;
+    opacity: 0.88;
+  }
+
+  52% {
+    width: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes architectureConnectorArrow {
+  0%,
+  18%,
+  52%,
+  100% {
+    opacity: 0;
+  }
+
+  24%,
+  42% {
+    opacity: 1;
   }
 }
 
@@ -7025,6 +7061,11 @@ html body .datalito-chat .icon-button:hover {
     animation: none;
   }
 
+  .fabric-architecture-connector::before,
+  .fabric-architecture-connector::after {
+    animation: none;
+  }
+
   .platform-card:hover,
   .platform-definition-card:hover,
   .platform-timeline-card:hover,
@@ -7097,7 +7138,7 @@ html body .datalito-chat .icon-button:hover {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .fabric-architecture-flow {
+  .fabric-architecture-connector {
     display: none;
   }
 

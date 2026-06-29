@@ -92,12 +92,15 @@ assert(appJs.includes("fabric-route-layer"), "La guía Fabric debe incluir camin
 assert(appJs.includes("syncFabricRoutes"), "La guía Fabric debe recalcular caminos según los anclajes reales.");
 assert(!appJs.includes("process-consumption"), "La guía Fabric no debe dibujar flujo directo desde procesamiento hacia consumo.");
 assert(appJs.includes("flow-arrival"), "Los bloques Fabric deben iluminarse cuando llega el flujo.");
+assert(!appJs.includes("fabric-processing-card flow-arrival"), "Las tarjetas chicas de procesamiento no deben iluminarse con la llegada del flujo.");
+assert(!appJs.includes("flow-arrival-direct-lake") && !appJs.includes("flow-arrival-power-bi"), "El consumo Direct Lake no debe formar parte de la iluminación automática del flujo principal.");
 assert(appJs.includes("Cada modo define la velocidad de consulta"), "La comparativa Fabric debe explicar la relación modo, velocidad y frescura.");
 assert(appJs.includes("renderFabricArchitectureLayer"), "La guía Fabric debe incluir la Capa 2 de arquitectura end-to-end.");
 assert(appJs.includes("road-fabric-architecture-layer"), "La Capa 2 de arquitectura Fabric debe tener ancla propia.");
 assert(appJs.includes("La causalidad es deliberada"), "La Capa 2 debe explicar la causalidad de la arquitectura.");
 assert(appJs.includes("architectureIngestion") && appJs.includes("architectureConsumption"), "La arquitectura Fabric debe usar iconos compuestos alineados al esquema original.");
-assert(appJs.includes("fabric-flow-break"), "La arquitectura Fabric debe cortar el flujo visual entre almacenamiento y procesamiento.");
+assert(appJs.includes("fabric-architecture-gap"), "La arquitectura Fabric debe cortar el flujo visual entre almacenamiento y procesamiento.");
+assert(appJs.includes("renderFabricArchitectureConnector"), "La arquitectura Fabric debe usar conectores entre limites de bloque.");
 assert(!appJs.toLowerCase().includes("notebooklm"), "La guía maestra Fabric no debe incluir marca NotebookLM.");
 assert(indexHtml.includes("/road-y-metodologia"), "La navegación principal debe exponer Road y Metodología.");
 assert(!indexHtml.includes("Guía + Roadmap") && !indexHtml.includes('href="/metodologia"'), "La navegación principal no debe separar guía y metodología.");

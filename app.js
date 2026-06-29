@@ -1500,9 +1500,6 @@ function setupScrollReveal() {
     ".home-research-note",
     ".road-thesis-card",
     ".road-methodology-thesis",
-    ".fabric-architecture-card",
-    ".fabric-onelake-spine",
-    ".fabric-causality-panel",
     ".methodology-process-step",
     ".guide-journey-step",
     ".guide-model-card",
@@ -3877,7 +3874,7 @@ function renderFabricMasterGuide() {
         <div class="fabric-route-callout route-ingesta">Ingesta</div>
         <div class="fabric-route-callout route-transformacion">Transformación</div>
 
-        <div class="fabric-guide-stage fabric-sources">
+        <div class="fabric-guide-stage fabric-sources flow-arrival flow-arrival-sources">
           <div class="fabric-stage-label">
             <span>01</span>
             <strong>Fuentes operativas</strong>
@@ -3913,7 +3910,7 @@ function renderFabricMasterGuide() {
 
         <div class="fabric-arrow fabric-arrow-two" aria-hidden="true"></div>
 
-        <div class="fabric-guide-stage fabric-processing">
+        <div class="fabric-guide-stage fabric-processing flow-arrival flow-arrival-processing">
           <div class="fabric-stage-label">
             <span>02</span>
             <strong>Procesamiento y enriquecimiento</strong>
@@ -3922,7 +3919,7 @@ function renderFabricMasterGuide() {
             ${fabricProcessingNodes
               .map(
                 (node, index) => `
-                  <article class="fabric-guide-card fabric-processing-card flow-arrival" data-fabric-process="${index}" style="--fabric-order:${index}; --arrival-delay:${(3.2 + index * 0.7).toFixed(1)}s">
+                  <article class="fabric-guide-card fabric-processing-card" data-fabric-process="${index}" style="--fabric-order:${index}">
                     ${renderFabricIllustration(node.iconName)}
                     <strong>${escapeHtml(node.title)}</strong>
                     <p>${escapeHtml(node.text)}</p>
@@ -3942,9 +3939,9 @@ function renderFabricMasterGuide() {
             </div>
           </div>
           <div class="fabric-duo">
-            <strong class="flow-arrival flow-arrival-direct-lake" data-fabric-node="consumer-onelake">${renderFabricIllustration("oneLake")}OneLake</strong>
+            <strong data-fabric-node="consumer-onelake">${renderFabricIllustration("oneLake")}OneLake</strong>
             <i aria-hidden="true"></i>
-            <strong class="flow-arrival flow-arrival-power-bi" data-fabric-node="consumer-powerbi">${renderFabricIllustration("powerBi")}Power BI</strong>
+            <strong data-fabric-node="consumer-powerbi">${renderFabricIllustration("powerBi")}Power BI</strong>
           </div>
           <div class="fabric-mode-panel">
             <div class="fabric-mode-caption">
@@ -4008,35 +4005,14 @@ function renderFabricArchitectureLayer() {
       </div>
 
       <div class="fabric-architecture-board" aria-label="Arquitectura end-to-end en Microsoft Fabric">
-        <div class="fabric-architecture-flow" aria-hidden="true">
-          <span class="fabric-flow-segment"></span>
-          <i class="fabric-flow-arrow"></i>
-          <span class="fabric-flow-segment"></span>
-          <i class="fabric-flow-break"></i>
-          <span class="fabric-flow-segment"></span>
-          <i class="fabric-flow-arrow"></i>
-          <span class="fabric-flow-segment"></span>
-        </div>
-
-        <div class="fabric-architecture-cards">
-          ${fabricArchitectureStages
-            .map(
-              (stage, index) => `
-                <article class="fabric-architecture-card" style="--architecture-order:${index}; --arrival-delay:${(index * 1.05).toFixed(2)}s">
-                  <div class="fabric-architecture-card-head">
-                    <span>${String(index + 1).padStart(2, "0")}</span>
-                    <strong>${escapeHtml(stage.label)}</strong>
-                  </div>
-                  <div class="fabric-architecture-frame">
-                    ${renderFabricIllustration(stage.iconName)}
-                    <h4>${escapeHtml(stage.claim)}</h4>
-                    <p>${escapeHtml(stage.why)}</p>
-                  </div>
-                  <small>${escapeHtml(stage.evidence)}</small>
-                </article>
-              `,
-            )
-            .join("")}
+        <div class="fabric-architecture-cards" aria-label="Secuencia causal de arquitectura Fabric">
+          ${renderFabricArchitectureCard(fabricArchitectureStages[0], 0)}
+          ${renderFabricArchitectureConnector("ingesta-almacenamiento", 0)}
+          ${renderFabricArchitectureCard(fabricArchitectureStages[1], 1)}
+          <span class="fabric-architecture-connector fabric-architecture-gap" aria-hidden="true"></span>
+          ${renderFabricArchitectureCard(fabricArchitectureStages[2], 2)}
+          ${renderFabricArchitectureConnector("procesamiento-consumo", 2)}
+          ${renderFabricArchitectureCard(fabricArchitectureStages[3], 3)}
         </div>
 
         <div class="fabric-onelake-spine" aria-label="OneLake como columna vertebral de la arquitectura">
@@ -4055,6 +4031,34 @@ function renderFabricArchitectureLayer() {
         </div>
       </div>
     </section>
+  `;
+}
+
+function renderFabricArchitectureCard(stage, index) {
+  return `
+    <article class="fabric-architecture-card" style="--architecture-order:${index}; --arrival-delay:${(index * 1.05).toFixed(2)}s">
+      <div class="fabric-architecture-card-head">
+        <span>${String(index + 1).padStart(2, "0")}</span>
+        <strong>${escapeHtml(stage.label)}</strong>
+      </div>
+      <div class="fabric-architecture-frame">
+        ${renderFabricIllustration(stage.iconName)}
+        <h4>${escapeHtml(stage.claim)}</h4>
+        <p>${escapeHtml(stage.why)}</p>
+      </div>
+      <small>${escapeHtml(stage.evidence)}</small>
+    </article>
+  `;
+}
+
+function renderFabricArchitectureConnector(name, index) {
+  return `
+    <span
+      class="fabric-architecture-connector"
+      style="--connector-order:${index}"
+      data-architecture-connector="${escapeHtml(name)}"
+      aria-hidden="true"
+    ></span>
   `;
 }
 
