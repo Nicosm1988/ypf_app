@@ -5931,6 +5931,23 @@ html body .datalito-chat .icon-button:hover {
   fill: var(--ypf-yellow);
 }
 
+.flow-arrival {
+  animation: fabricBlockArrival 6.8s ease-in-out infinite;
+  animation-delay: var(--arrival-delay, 0s);
+}
+
+.flow-arrival-onelake {
+  --arrival-delay: 2.2s;
+}
+
+.flow-arrival-direct-lake {
+  --arrival-delay: 1s;
+}
+
+.flow-arrival-power-bi {
+  --arrival-delay: 2.1s;
+}
+
 .fabric-route-callout {
   position: absolute;
   z-index: 5;
@@ -5965,11 +5982,6 @@ html body .datalito-chat .icon-button:hover {
 .route-transformacion {
   top: 12px;
   left: 54%;
-}
-
-.route-consumo {
-  top: 12px;
-  right: 15%;
 }
 
 .fabric-guide-stage,
@@ -6522,6 +6534,16 @@ html body .datalito-chat .icon-button:hover {
   border-right: 3px solid var(--ypf-yellow);
 }
 
+.fabric-architecture-flow .fabric-flow-break {
+  height: 1px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.fabric-architecture-flow .fabric-flow-break::after {
+  display: none;
+}
+
 .fabric-architecture-cards {
   position: relative;
   z-index: 1;
@@ -6544,6 +6566,8 @@ html body .datalito-chat .icon-button:hover {
   box-shadow:
     0 16px 40px rgba(0, 12, 24, 0.24),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  animation: fabricBlockArrival 7.4s ease-in-out infinite;
+  animation-delay: var(--arrival-delay, 0s);
   overflow: visible;
 }
 
@@ -6611,6 +6635,33 @@ html body .datalito-chat .icon-button:hover {
   justify-self: center;
   width: 76px;
   height: 76px;
+}
+
+.fabric-architecture-frame .architecture-icon {
+  width: 112px;
+  height: 86px;
+  color: var(--ypf-blue-2);
+  fill: rgba(58, 160, 255, 0.13);
+}
+
+.architecture-icon text {
+  fill: currentcolor;
+  stroke: none;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0;
+}
+
+.architecture-storage {
+  color: var(--green);
+}
+
+.architecture-processing {
+  color: var(--orange);
+}
+
+.architecture-consumption {
+  color: var(--ypf-blue-2);
 }
 
 .fabric-architecture-frame h4 {
@@ -6797,6 +6848,27 @@ html body .datalito-chat .icon-button:hover {
   }
 }
 
+@keyframes fabricBlockArrival {
+  0%,
+  48%,
+  100% {
+    border-color: rgba(103, 232, 220, 0.2);
+    box-shadow:
+      0 16px 40px rgba(0, 12, 24, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  56%,
+  68% {
+    border-color: rgba(255, 221, 73, 0.72);
+    box-shadow:
+      0 0 0 1px rgba(255, 221, 73, 0.24),
+      0 0 34px rgba(53, 201, 189, 0.26),
+      0 20px 54px rgba(0, 18, 36, 0.32),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+}
+
 @property --neon-angle {
   syntax: "<angle>";
   inherits: false;
@@ -6826,12 +6898,17 @@ html body .datalito-chat .icon-button:hover {
 .fabric-guide-stage,
 .fabric-guide-card,
 .fabric-consumption,
+.fabric-platform-row span,
+.fabric-duo strong,
+.fabric-mode-panel,
 .fabric-mode-card span,
 .fabric-pillar-band,
 .fabric-pillar-card,
 .fabric-architecture-board,
 .fabric-architecture-card,
+.fabric-architecture-frame,
 .fabric-onelake-spine,
+.fabric-spine-rail,
 .fabric-causality-panel,
 .guide-journey-step .guide-step-body,
 .guide-readiness-panel,
@@ -6884,12 +6961,17 @@ html body .datalito-chat .icon-button:hover {
 .fabric-guide-stage:hover,
 .fabric-guide-card:hover,
 .fabric-consumption:hover,
+.fabric-platform-row span:hover,
+.fabric-duo strong:hover,
+.fabric-mode-panel:hover,
 .fabric-mode-card:hover span,
 .fabric-pillar-band:hover,
 .fabric-pillar-card:hover,
 .fabric-architecture-board:hover,
 .fabric-architecture-card:hover,
+.fabric-architecture-frame:hover,
 .fabric-onelake-spine:hover,
+.fabric-spine-rail:hover,
 .fabric-causality-panel:hover,
 .guide-journey-step:hover .guide-step-body,
 .guide-readiness-panel:hover,
@@ -6938,6 +7020,11 @@ html body .datalito-chat .icon-button:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .flow-arrival,
+  .fabric-architecture-card {
+    animation: none;
+  }
+
   .platform-card:hover,
   .platform-definition-card:hover,
   .platform-timeline-card:hover,
@@ -6961,12 +7048,17 @@ html body .datalito-chat .icon-button:hover {
   .fabric-guide-stage:hover,
   .fabric-guide-card:hover,
   .fabric-consumption:hover,
+  .fabric-platform-row span:hover,
+  .fabric-duo strong:hover,
+  .fabric-mode-panel:hover,
   .fabric-mode-card:hover span,
   .fabric-pillar-band:hover,
   .fabric-pillar-card:hover,
   .fabric-architecture-board:hover,
   .fabric-architecture-card:hover,
+  .fabric-architecture-frame:hover,
   .fabric-onelake-spine:hover,
+  .fabric-spine-rail:hover,
   .fabric-causality-panel:hover,
   .guide-journey-step:hover .guide-step-body,
   .guide-readiness-panel:hover,

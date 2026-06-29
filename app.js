@@ -413,28 +413,28 @@ const fabricAdoptionPillars = [
 const fabricArchitectureStages = [
   {
     label: "Ingesta",
-    iconName: "stream",
+    iconName: "architectureIngestion",
     claim: "El recorrido empieza cuando la fuente ingresa con reglas claras.",
     why: "Data Factory, Eventstreams y Mirroring evitan copiar datos sin gobierno o reconstruir integraciones caso por caso.",
     evidence: "Fuente, frecuencia, owner, latencia y criterio de aceptación quedan definidos antes de cargar.",
   },
   {
     label: "Almacenamiento",
-    iconName: "oneLake",
+    iconName: "architectureStorage",
     claim: "OneLake convierte fuentes dispersas en una base común.",
     why: "Lakehouses, Warehouses y arquitectura medallion ordenan el dato para que pueda ser reutilizado, auditado y escalado.",
     evidence: "Bronze, Silver, Gold, linaje, permisos y particiones quedan explícitos como contrato técnico.",
   },
   {
     label: "Procesamiento",
-    iconName: "sparkNotebook",
+    iconName: "architectureProcessing",
     claim: "El procesamiento transforma datos disponibles en información confiable.",
     why: "Spark, T-SQL y Dataflow Gen2 separan limpieza, enriquecimiento y agregación para no esconder lógica crítica en el reporte.",
     evidence: "Reglas de transformación, pruebas, reconciliación y salida semántica quedan documentadas.",
   },
   {
     label: "Consumo",
-    iconName: "powerBi",
+    iconName: "architectureConsumption",
     claim: "El consumo entrega decisión, no solo visualización.",
     why: "SQL, Direct Lake, Power BI y asistentes interactivos consumen el mismo activo gobernado, con menor duplicación y mejor trazabilidad.",
     evidence: "Modelo semántico, RLS, permisos, refresh o Direct Lake, UX y monitoreo quedan controlados.",
@@ -1205,11 +1205,16 @@ const interactiveSurfaceSelector = [
   ".fabric-guide-stage",
   ".fabric-guide-card",
   ".fabric-consumption",
+  ".fabric-platform-row span",
+  ".fabric-duo strong",
+  ".fabric-mode-panel",
   ".fabric-mode-card",
   ".fabric-pillar-card",
   ".fabric-architecture-board",
   ".fabric-architecture-card",
+  ".fabric-architecture-frame",
   ".fabric-onelake-spine",
+  ".fabric-spine-rail",
   ".fabric-causality-panel",
   ".design-system-card",
   ".design-system-benefit",
@@ -1624,11 +1629,6 @@ function syncFabricRoutes() {
       anchor('[data-fabric-node="onelake"]', "right", 0.62),
       anchor('[data-fabric-process="2"]', "left", 0.5),
       0.52,
-    ),
-    "process-consumption": curvePath(
-      anchor(".fabric-processing", "right", 0.5),
-      anchor('[data-fabric-node="consumer-onelake"]', "left", 0.5),
-      0.55,
     ),
   };
 
@@ -3755,6 +3755,52 @@ function renderFabricIllustration(type) {
         <path d="M70 32h26M70 41h26M74 49v8M92 49v8"></path>
       </svg>
     `,
+    architectureIngestion: `
+      <svg class="fabric-illustration architecture-icon architecture-ingestion" viewBox="0 0 116 84" aria-hidden="true">
+        <ellipse cx="24" cy="19" rx="14" ry="6"></ellipse>
+        <path d="M10 19v25c0 3.5 6.3 6 14 6s14-2.5 14-6V19"></path>
+        <path d="M10 31c0 3.5 6.3 6 14 6s14-2.5 14-6"></path>
+        <circle cx="20" cy="65" r="5"></circle><circle cx="38" cy="55" r="5"></circle><circle cx="51" cy="69" r="5"></circle>
+        <path d="M24 61l10-5M42 59l6 7"></path>
+        <path d="M60 35h19l20-10v34L79 49H60z"></path>
+        <path d="M79 35v14"></path>
+        <path d="M45 42h15"></path><path d="m55 36 7 6-7 6"></path>
+      </svg>
+    `,
+    architectureStorage: `
+      <svg class="fabric-illustration architecture-icon architecture-storage" viewBox="0 0 116 84" aria-hidden="true">
+        <rect x="9" y="18" width="31" height="25" rx="4"></rect>
+        <path d="M15 24h19M15 31h19M15 38h19"></path>
+        <ellipse cx="59" cy="49" rx="18" ry="8"></ellipse>
+        <path d="M41 49v16c0 4.5 8 8 18 8s18-3.5 18-8V49"></path>
+        <path d="M83 18 101 9l10 6-18 10z"></path>
+        <path d="M83 18v22l18 10 10-6V15"></path>
+        <path d="M93 25v22"></path>
+        <path d="M41 28h16v12"></path><path d="M77 54h13V40"></path>
+      </svg>
+    `,
+    architectureProcessing: `
+      <svg class="fabric-illustration architecture-icon architecture-processing" viewBox="0 0 116 84" aria-hidden="true">
+        <rect x="11" y="10" width="34" height="58" rx="5"></rect>
+        <path d="M18 25h19M18 36h13M18 47h17"></path>
+        <path d="m58 18 4 9 9 4-9 4-4 9-4-9-9-4 9-4z"></path>
+        <path d="M54 56h24"></path><path d="m70 48 10 8-10 8"></path>
+        <path d="M85 30h20"></path><path d="M85 42h14"></path><path d="M85 54h20"></path>
+        <text x="78" y="25">Spark</text>
+      </svg>
+    `,
+    architectureConsumption: `
+      <svg class="fabric-illustration architecture-icon architecture-consumption" viewBox="0 0 116 84" aria-hidden="true">
+        <ellipse cx="25" cy="18" rx="15" ry="7"></ellipse>
+        <path d="M10 18v28c0 4 6.7 7 15 7s15-3 15-7V18"></path>
+        <text x="14" y="38">SQL</text>
+        <rect x="58" y="41" width="8" height="22" rx="3"></rect>
+        <rect x="71" y="30" width="8" height="33" rx="3"></rect>
+        <rect x="84" y="18" width="8" height="45" rx="3"></rect>
+        <path d="M45 54h9"></path><path d="m51 49 6 5-6 5"></path>
+        <path d="M52 20c8-9 19-7 23 2 7-1 14 4 14 12 0 9-8 15-17 12-5 8-18 8-23-1-9-1-14-10-9-18 3-5 7-7 12-7z"></path>
+      </svg>
+    `,
   };
 
   return drawings[type] || drawings.database;
@@ -3809,7 +3855,6 @@ function renderFabricMasterGuide() {
           <path class="fabric-route fabric-route-processing" data-fabric-path="onelake-process-0" marker-end="url(#fabricArrowHead)" d="M665 220 C755 220 790 145 875 145"></path>
           <path class="fabric-route fabric-route-processing" data-fabric-path="onelake-process-1" marker-end="url(#fabricArrowHead)" d="M665 285 C755 285 790 285 875 285"></path>
           <path class="fabric-route fabric-route-processing" data-fabric-path="onelake-process-2" marker-end="url(#fabricArrowHead)" d="M665 350 C755 350 790 430 875 430"></path>
-          <path class="fabric-route fabric-route-consume" data-fabric-path="process-consumption" marker-end="url(#fabricArrowHead)" d="M1110 285 C1165 285 1195 270 1240 270"></path>
           <circle class="fabric-route-pulse pulse-a" data-fabric-pulse="source-0-onelake" r="6">
             <animateMotion dur="4.8s" repeatCount="indefinite" path="M245 135 C340 135 350 190 430 205"></animateMotion>
           </circle>
@@ -3828,13 +3873,9 @@ function renderFabricMasterGuide() {
           <circle class="fabric-route-pulse pulse-process" data-fabric-pulse="onelake-process-2" r="6">
             <animateMotion dur="5.2s" begin="1s" repeatCount="indefinite" path="M665 350 C755 350 790 430 875 430"></animateMotion>
           </circle>
-          <circle class="fabric-route-pulse pulse-consume" data-fabric-pulse="process-consumption" r="7">
-            <animateMotion dur="3.4s" repeatCount="indefinite" path="M1110 285 C1165 285 1195 270 1240 270"></animateMotion>
-          </circle>
         </svg>
         <div class="fabric-route-callout route-ingesta">Ingesta</div>
         <div class="fabric-route-callout route-transformacion">Transformación</div>
-        <div class="fabric-route-callout route-consumo">Direct Lake</div>
 
         <div class="fabric-guide-stage fabric-sources">
           <div class="fabric-stage-label">
@@ -3858,7 +3899,7 @@ function renderFabricMasterGuide() {
 
         <div class="fabric-arrow fabric-arrow-one" aria-hidden="true"></div>
 
-        <div class="fabric-guide-stage fabric-onelake" data-fabric-node="onelake">
+        <div class="fabric-guide-stage fabric-onelake flow-arrival flow-arrival-onelake" data-fabric-node="onelake">
           <div class="fabric-orb" aria-hidden="true"></div>
           <span class="fabric-stage-kicker">Ingesta y almacenamiento unificado</span>
           <h3>OneLake como base común</h3>
@@ -3881,7 +3922,7 @@ function renderFabricMasterGuide() {
             ${fabricProcessingNodes
               .map(
                 (node, index) => `
-                  <article class="fabric-guide-card fabric-processing-card" data-fabric-process="${index}" style="--fabric-order:${index}">
+                  <article class="fabric-guide-card fabric-processing-card flow-arrival" data-fabric-process="${index}" style="--fabric-order:${index}; --arrival-delay:${(3.2 + index * 0.7).toFixed(1)}s">
                     ${renderFabricIllustration(node.iconName)}
                     <strong>${escapeHtml(node.title)}</strong>
                     <p>${escapeHtml(node.text)}</p>
@@ -3901,9 +3942,9 @@ function renderFabricMasterGuide() {
             </div>
           </div>
           <div class="fabric-duo">
-            <strong data-fabric-node="consumer-onelake">${renderFabricIllustration("oneLake")}OneLake</strong>
+            <strong class="flow-arrival flow-arrival-direct-lake" data-fabric-node="consumer-onelake">${renderFabricIllustration("oneLake")}OneLake</strong>
             <i aria-hidden="true"></i>
-            <strong data-fabric-node="consumer-powerbi">${renderFabricIllustration("powerBi")}Power BI</strong>
+            <strong class="flow-arrival flow-arrival-power-bi" data-fabric-node="consumer-powerbi">${renderFabricIllustration("powerBi")}Power BI</strong>
           </div>
           <div class="fabric-mode-panel">
             <div class="fabric-mode-caption">
@@ -3962,27 +4003,26 @@ function renderFabricArchitectureLayer() {
   return `
     <section class="fabric-architecture-layer" id="road-fabric-architecture-layer" aria-labelledby="fabricArchitectureLayerTitle">
       <div class="fabric-architecture-head">
-        <span class="flow-chip">capa 2 · arquitectura</span>
         <h3 id="fabricArchitectureLayerTitle">La arquitectura end-to-end en Fabric conecta cada decisión técnica con una consecuencia operativa.</h3>
         <p>La causalidad es deliberada: si la ingesta entra gobernada, OneLake puede funcionar como base común; si la base común está bien organizada, el procesamiento se vuelve reutilizable; si el procesamiento queda probado, el consumo en Power BI, SQL o asistentes puede sostener decisiones confiables.</p>
       </div>
 
-      <div class="fabric-architecture-board" aria-label="Capa 2 de arquitectura end-to-end en Microsoft Fabric">
+      <div class="fabric-architecture-board" aria-label="Arquitectura end-to-end en Microsoft Fabric">
         <div class="fabric-architecture-flow" aria-hidden="true">
-          <span></span>
-          <i></i>
-          <span></span>
-          <i></i>
-          <span></span>
-          <i></i>
-          <span></span>
+          <span class="fabric-flow-segment"></span>
+          <i class="fabric-flow-arrow"></i>
+          <span class="fabric-flow-segment"></span>
+          <i class="fabric-flow-break"></i>
+          <span class="fabric-flow-segment"></span>
+          <i class="fabric-flow-arrow"></i>
+          <span class="fabric-flow-segment"></span>
         </div>
 
         <div class="fabric-architecture-cards">
           ${fabricArchitectureStages
             .map(
               (stage, index) => `
-                <article class="fabric-architecture-card" style="--architecture-order:${index}">
+                <article class="fabric-architecture-card" style="--architecture-order:${index}; --arrival-delay:${(index * 1.05).toFixed(2)}s">
                   <div class="fabric-architecture-card-head">
                     <span>${String(index + 1).padStart(2, "0")}</span>
                     <strong>${escapeHtml(stage.label)}</strong>
