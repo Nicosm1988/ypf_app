@@ -73,6 +73,9 @@ import { toolingDocs, toolingGroups } from "./data/toolingLibrary.js";
 const appRoot = document.querySelector("#appRoot");
 const contentTarget = document.querySelector("#content");
 const navLinks = [...document.querySelectorAll("[data-route]")];
+const navFrame = document.querySelector(".site-nav-frame");
+const mobileMenuToggle = document.querySelector("[data-mobile-menu-toggle]");
+const mainNav = document.querySelector("#mainNav");
 let scrollRevealObserver;
 let fabricRouteFrame;
 
@@ -312,6 +315,72 @@ const homeResearchFrame = [
     label: "Resultado esperado",
     title: "El área gana una base gobernada para escalar.",
     text: "La plataforma deja criterios, plantillas, definiciones, cadencias y controles para que el conocimiento pueda crecer sin perder coherencia.",
+  },
+];
+
+const homeDecisionPath = [
+  {
+    step: "1",
+    title: "Entender el marco",
+    text: "Leer la tesis, el criterio de datalización y el mapa del hub antes de abrir documentación técnica.",
+    route: "/inicio/estudio",
+    action: "Leer inicio",
+  },
+  {
+    step: "2",
+    title: "Aplicar el método",
+    text: "Usar Road y Método para convertir una necesidad en PRD, evidencia, backlog, publicación y control.",
+    route: "/road-y-metodologia",
+    action: "Ver secuencia",
+  },
+  {
+    step: "3",
+    title: "Operar con evidencia",
+    text: "Sostener el producto con diccionario, Datalito, design system, tooling, atajos y gobierno.",
+    route: "/metodo-datalizacion/backlog",
+    action: "Ir a operación",
+  },
+];
+
+const methodActionCards = [
+  {
+    title: "Crear estructura base",
+    text: "Abrir el proyecto con las doce zonas de evidencia, README mínimo y owner visible.",
+    action: "Usar plantilla de proyecto",
+    route: "/metodo-datalizacion/proyecto",
+  },
+  {
+    title: "Nombrar sin ambigüedad",
+    text: "Aplicar código, tipo, descripción, fecha ISO y versión para que SharePoint y Copilot encuentren el activo correcto.",
+    action: "Copiar patrón de naming",
+    copy: methodNaming.pattern,
+  },
+  {
+    title: "Medir flujo real",
+    text: "Registrar estado, fechas, etapa, responsable, producto vinculado y áreas impactadas antes de discutir esfuerzo.",
+    action: "Revisar backlog v0",
+    route: "/metodo-datalizacion/backlog",
+  },
+];
+
+const shortcutAdoptionPlan = [
+  { title: "Semana 1", text: "Elegir tres atajos de uso frecuente y medir qué tareas dejan de requerir mouse." },
+  { title: "Semana 2", text: "Sumar edición de visuales, tablas y panel de selección para reducir microajustes." },
+  { title: "Semana 3", text: "Adoptar DAX y vista de modelo solo cuando el equipo ya tenga una rutina estable." },
+];
+
+const toolingDecisionCards = [
+  {
+    title: "Instalar ahora",
+    text: "Solo herramientas que reducen riesgo de calidad, accesibilidad, release o documentación del portal.",
+  },
+  {
+    title: "Documentar sin instalar",
+    text: "Capacidades útiles para evaluar, pero que no necesitan vivir como dependencia del sitio estático.",
+  },
+  {
+    title: "Escalar con control",
+    text: "Cualquier MCP, agente o API con token, escritura externa o cloud requiere owner, permisos y validación.",
   },
 ];
 
@@ -1432,6 +1501,57 @@ function scrollToRouteHash(hash) {
   window.requestAnimationFrame(() => target.focus({ preventScroll: true }));
 }
 
+function setMobileMenuOpen(isOpen) {
+  const isMobile = window.matchMedia("(max-width: 980px)").matches;
+  const shouldHideNav = !isOpen && isMobile;
+
+  navFrame?.classList.toggle("nav-open", isOpen);
+  mobileMenuToggle?.setAttribute("aria-expanded", String(isOpen));
+  mobileMenuToggle?.setAttribute("aria-label", isOpen ? "Cerrar menú principal" : "Abrir menú principal");
+  mainNav?.setAttribute("aria-hidden", String(shouldHideNav));
+  if (mainNav) mainNav.inert = shouldHideNav;
+}
+
+function setupMobileNavigation() {
+  if (!mobileMenuToggle || !navFrame || !mainNav) return;
+
+  setMobileMenuOpen(false);
+
+  mobileMenuToggle.addEventListener("click", () => {
+    setMobileMenuOpen(!navFrame.classList.contains("nav-open"));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setMobileMenuOpen(false);
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!navFrame.classList.contains("nav-open")) return;
+    if (event.target.closest(".site-nav-frame")) return;
+    setMobileMenuOpen(false);
+  });
+
+  window.addEventListener(
+    "resize",
+    () => {
+      const isMobile = window.matchMedia("(max-width: 980px)").matches;
+      setMobileMenuOpen(isMobile && navFrame.classList.contains("nav-open"));
+    },
+    { passive: true },
+  );
+}
+
+function updateDatalitoLauncherVisibility() {
+  const shouldQuiet = window.matchMedia("(max-width: 720px)").matches && !datalitoState.isOpen && window.scrollY < 620;
+  document.body.classList.toggle("datalito-launcher-quiet", shouldQuiet);
+}
+
+function setupDatalitoLauncherVisibility() {
+  updateDatalitoLauncherVisibility();
+  window.addEventListener("scroll", updateDatalitoLauncherVisibility, { passive: true });
+  window.addEventListener("resize", updateDatalitoLauncherVisibility, { passive: true });
+}
+
 function setupAmbientPointer() {
   const root = document.documentElement;
   const applyPointer = (clientX, clientY) => {
@@ -1750,6 +1870,8 @@ function renderHomePage() {
 
       ${renderHomeResearchFrame()}
 
+      ${renderHomeDecisionPath()}
+
       <section class="method-model-cta page-inner" id="inicio-marco-vmc" aria-label="Nuevo marco de evaluación de datalización">
         <div>
           <span class="flow-chip">nuevo módulo metodológico</span>
@@ -1904,6 +2026,35 @@ function renderHomeResearchFrame() {
         <strong>Lectura sugerida</strong>
         <p>Primero se entiende el punto de partida, luego se recorre Road y Metodología, después se aplica el Método de Datalización y finalmente se gobierna el conocimiento con Datalito, diccionario, design system y documentación.</p>
       </aside>
+    </section>
+  `;
+}
+
+function renderHomeDecisionPath() {
+  return `
+    <section class="home-decision-path page-inner" aria-labelledby="homeDecisionPathTitle">
+      <div>
+        <span class="flow-chip">camino recomendado</span>
+        <h2 id="homeDecisionPathTitle">Tres decisiones alcanzan para empezar sin perderse en el detalle.</h2>
+        <p>La plataforma tiene profundidad, pero el primer recorrido debe ser simple: entender el marco, aplicar el método y sostener la operación con evidencia.</p>
+      </div>
+      <div class="home-decision-steps" aria-label="Recorrido recomendado del hub">
+        ${homeDecisionPath
+          .map(
+            (item) => `
+              <article class="home-decision-card">
+                <span>${escapeHtml(item.step)}</span>
+                <h3>${escapeHtml(item.title)}</h3>
+                <p>${escapeHtml(item.text)}</p>
+                <a class="button small secondary" href="${escapeHtml(item.route)}" data-route>
+                  ${escapeHtml(item.action)}
+                  ${icon("arrowRight")}
+                </a>
+              </article>
+            `,
+          )
+          .join("")}
+      </div>
     </section>
   `;
 }
@@ -3100,6 +3251,7 @@ function refreshDatalitoViews() {
   if (panelChat) panelChat.innerHTML = renderDatalitoChat("panel");
   if (pageChat) pageChat.innerHTML = renderDatalitoChat("page");
 
+  updateDatalitoLauncherVisibility();
   requestAnimationFrame(scrollDatalitoThreadsToLatest);
 }
 
@@ -3292,8 +3444,14 @@ function renderExecutiveBrief(narrative, variant = "") {
           .join("")}
       </div>
       <div class="executive-action">
-        <strong>${escapeHtml(narrativeFrame.actionLabel)}</strong>
-        <p>${escapeHtml(narrative.action)}</p>
+        <div>
+          <strong>${escapeHtml(narrativeFrame.actionLabel)}</strong>
+          <p>${escapeHtml(narrative.action)}</p>
+        </div>
+        <button class="button small secondary executive-datalito-action" type="button" data-datalito-prompt="Explicame cómo aplicar esta decisión: ${escapeHtml(narrative.title)}">
+          ${icon("bot")}
+          Preguntar a Datalito
+        </button>
       </div>
     </section>
   `;
@@ -4210,6 +4368,8 @@ function renderDatalizationMethodPage() {
 
       ${renderExecutiveBrief(pageNarratives.method)}
 
+      ${renderMethodActionStrip()}
+
       ${renderMethodEvaluationModel()}
 
       <section class="method-operating-flow page-inner" id="metodo-proceso" aria-labelledby="methodOperatingFlowTitle">
@@ -4316,6 +4476,10 @@ function renderDatalizationMethodPage() {
           <div class="method-naming-lab">
             <span>patrón estándar</span>
             <code>${escapeHtml(methodNaming.pattern)}</code>
+            <button class="button small secondary" type="button" data-copy-text="${escapeHtml(methodNaming.pattern)}">
+              ${icon("clipboard")}
+              Copiar patrón
+            </button>
             <div>
               ${methodNaming.examples.map((example) => `<p>${escapeHtml(example)}</p>`).join("")}
             </div>
@@ -4422,6 +4586,35 @@ function renderDatalizationMethodPage() {
           )}
         </div>
       </section>
+    </section>
+  `;
+}
+
+function renderMethodActionStrip() {
+  return `
+    <section class="method-action-strip page-inner" aria-labelledby="methodActionTitle">
+      <div class="method-section-head">
+        <span class="flow-chip">próxima acción</span>
+        <h2 id="methodActionTitle">El método avanza cuando alguien puede ejecutar el siguiente paso sin pedir contexto.</h2>
+        <p>Estas acciones concentran las tres decisiones más operativas: crear estructura, nombrar activos y medir flujo real.</p>
+      </div>
+      <div class="method-action-grid">
+        ${methodActionCards
+          .map(
+            (item) => `
+              <article class="method-action-card">
+                <h3>${escapeHtml(item.title)}</h3>
+                <p>${escapeHtml(item.text)}</p>
+                ${
+                  item.copy
+                    ? `<button class="button small secondary" type="button" data-copy-text="${escapeHtml(item.copy)}">${escapeHtml(item.action)}</button>`
+                    : `<a class="button small secondary" href="${escapeHtml(item.route)}" data-route>${escapeHtml(item.action)} ${icon("arrowRight")}</a>`
+                }
+              </article>
+            `,
+          )
+          .join("")}
+      </div>
     </section>
   `;
 }
@@ -4686,6 +4879,9 @@ function renderDecisionDisclosure(title, items, tone) {
 }
 
 function renderDictionaryPage() {
+  const primaryCategories = ["Todas", "Producto", "Delivery BI", "Power BI", "Microsoft Fabric", "Gobierno", "Seguridad"];
+  const secondaryCategories = dictionaryCategories.filter((category) => !primaryCategories.includes(category));
+
   appRoot.innerHTML = `
     <section class="page tool-page dictionary-layout">
       <header class="page-heading page-inner">
@@ -4711,8 +4907,9 @@ function renderDictionaryPage() {
           </label>
           <div class="result-count" id="dictionaryCount"></div>
         </div>
-        <div class="chip-row" aria-label="Categorías">
-          ${["Todas", ...dictionaryCategories]
+        <div class="dictionary-category-panel">
+          <div class="chip-row" aria-label="Categorías frecuentes">
+            ${primaryCategories
             .map(
               (category) => `
                 <button
@@ -4725,6 +4922,25 @@ function renderDictionaryPage() {
               `,
             )
             .join("")}
+          </div>
+          <details class="dictionary-more-categories">
+            <summary>Ver más categorías</summary>
+            <div class="chip-row" aria-label="Categorías complementarias">
+              ${secondaryCategories
+                .map(
+                  (category) => `
+                    <button
+                      class="chip ${dictionaryState.category === category ? "active" : ""}"
+                      type="button"
+                      data-category="${escapeHtml(category)}"
+                    >
+                      ${escapeHtml(category)}
+                    </button>
+                  `,
+                )
+                .join("")}
+            </div>
+          </details>
         </div>
       </section>
 
@@ -5025,7 +5241,7 @@ function renderGuideJourneyStep(section, index) {
           <span>${escapeHtml(section.eyebrow)}</span>
           <strong>${renderExplainedText(story.outcome || "Salida verificable para la etapa siguiente.")}</strong>
         </div>
-        <h2>${renderExplainedText(section.title)}</h2>
+        <h2>${escapeHtml(section.title)}</h2>
         <p class="guide-scene">${renderExplainedText(story.scene || section.summary)}</p>
         <p>${renderExplainedText(section.summary)}</p>
         <div class="guide-automation-note">
@@ -5063,6 +5279,26 @@ function renderToolingPage() {
 
       ${renderExecutiveBrief(pageNarratives.tooling)}
 
+      <section class="tooling-decision page-inner" aria-labelledby="toolingDecisionTitle">
+        <div>
+          <span class="flow-chip">criterio de adopción</span>
+          <h2 id="toolingDecisionTitle">Una herramienta entra cuando reduce un riesgo real del delivery BI.</h2>
+          <p>El catálogo no busca acumular opciones. Sirve para decidir qué instalar, qué documentar y qué dejar en evaluación con controles explícitos.</p>
+        </div>
+        <div class="tooling-decision-grid">
+          ${toolingDecisionCards
+            .map(
+              (item) => `
+                <article>
+                  <h3>${escapeHtml(item.title)}</h3>
+                  <p>${escapeHtml(item.text)}</p>
+                </article>
+              `,
+            )
+            .join("")}
+        </div>
+      </section>
+
       <section class="shortcut-hero page-inner" id="librerias-catalogo">
         <div>
           <span class="flow-chip">inventario del repo</span>
@@ -5092,16 +5328,26 @@ function renderToolingGroup(group) {
       <p>${escapeHtml(group.description)}</p>
       <div class="tooling-tags">
         ${group.items
-          .map((item) => `<span data-tooltip="${escapeHtml(getToolingTooltip(group, item))}">${escapeHtml(item)}</span>`)
+          .map((item) => `<span data-tooltip="${escapeHtml(getToolingTooltip(group))}">${escapeHtml(item)}</span>`)
           .join("")}
       </div>
     </article>
   `;
 }
 
-function getToolingTooltip(group, item) {
+function getToolingTooltip(group) {
   const key = normalizeText(group.group);
   const explanations = [
+    {
+      match: "sistema",
+      technical: "validar, documentar y publicar el portal con controles locales y trazabilidad de cambios",
+      plain: "cuidar la calidad del hub antes de llevarlo a producción",
+    },
+    {
+      match: "mcps",
+      technical: "conectar capacidades externas mediante servidores MCP con permisos y alcance explícitos",
+      plain: "sumar herramientas al flujo de trabajo sin perder control sobre qué pueden leer o hacer",
+    },
     {
       match: "base",
       technical: "almacenar, consultar o vectorizar datos que alimentan modelos, APIs o procesos analíticos",
@@ -5153,8 +5399,11 @@ function getToolingTooltip(group, item) {
       plain: "resolver partes específicas de una solución cuando Power BI o Fabric no alcanzan solos",
     },
   ];
-  const explanation = explanations.find((entry) => key.includes(entry.match)) || explanations[0];
-  return `${item}. Técnico: permite ${explanation.technical}. En simple: sirve para ${explanation.plain}.`;
+  const explanation = explanations.find((entry) => key.includes(entry.match)) || {
+    technical: "evaluar una capacidad técnica por caso de uso, riesgo, costo operativo y gobierno",
+    plain: "decidir con criterio antes de sumar una herramienta al ecosistema",
+  };
+  return `Técnico: permite ${explanation.technical}. En simple: sirve para ${explanation.plain}.`;
 }
 
 function getFilteredTerms() {
@@ -5191,7 +5440,10 @@ function renderDictionaryResults() {
   container.className = "term-grid page-inner";
   container.innerHTML = results
     .map(
-      (term) => `
+      (term) => {
+        const relatedTerms = getRelatedDictionaryTerms(term);
+        const definitionCopy = `${term.term}: ${term.definition}`;
+        return `
         <article class="term-card" id="${escapeHtml(term.id)}">
           <div class="card-topline">
             <h2>${escapeHtml(term.term)}</h2>
@@ -5212,11 +5464,30 @@ function renderDictionaryResults() {
               <dd>${escapeHtml(term.risk)}</dd>
             </div>
           </dl>
+          <div class="term-actions">
+            <button class="button small secondary" type="button" data-copy-text="${escapeHtml(definitionCopy)}">
+              ${icon("clipboard")}
+              Copiar definición
+            </button>
+            ${
+              relatedTerms.length
+                ? `<div class="term-related" aria-label="Términos relacionados con ${escapeHtml(term.term)}">
+                    <strong>Relacionado</strong>
+                    ${relatedTerms.map((item) => `<a href="#${escapeHtml(item.id)}">${escapeHtml(item.term)}</a>`).join("")}
+                  </div>`
+                : ""
+            }
+          </div>
         </article>
-      `,
+      `;
+      },
     )
     .join("");
   requestAnimationFrame(enhanceInteractiveSurfaces);
+}
+
+function getRelatedDictionaryTerms(term) {
+  return dictionaryTerms.filter((item) => item.id !== term.id && item.category === term.category).slice(0, 3);
 }
 
 function renderRoadmapPage() {
@@ -5381,6 +5652,26 @@ function renderShortcutsPage() {
         </a>
       </section>
 
+      <section class="shortcut-adoption page-inner" aria-labelledby="shortcutAdoptionTitle">
+        <div>
+          <span class="flow-chip">adopción gradual</span>
+          <h2 id="shortcutAdoptionTitle">Pocos atajos por semana cambian más que una lista completa sin práctica.</h2>
+          <p>La mejora se sostiene cuando el equipo incorpora acciones de alto uso, mide fricción eliminada y recién después suma comandos más técnicos.</p>
+        </div>
+        <div class="shortcut-adoption-grid">
+          ${shortcutAdoptionPlan
+            .map(
+              (item) => `
+                <article>
+                  <h3>${escapeHtml(item.title)}</h3>
+                  <p>${escapeHtml(item.text)}</p>
+                </article>
+              `,
+            )
+            .join("")}
+        </div>
+      </section>
+
       <section class="shortcut-grid page-inner" id="atajos-listado" aria-label="Atajos de Power BI" tabindex="0">
         ${powerBiShortcuts.map(renderShortcutCategory).join("")}
       </section>
@@ -5481,6 +5772,27 @@ document.addEventListener("click", (event) => {
   if (gapButton) {
     event.preventDefault();
     recordDatalitoGap(gapButton.dataset.datalitoGap || "");
+    return;
+  }
+
+  const copyButton = event.target.closest("[data-copy-text]");
+  if (copyButton) {
+    event.preventDefault();
+    const originalHtml = copyButton.innerHTML;
+    const copyPromise = navigator.clipboard?.writeText(copyButton.dataset.copyText || "");
+
+    if (!copyPromise) return;
+
+    copyPromise
+      .then(() => {
+        copyButton.dataset.copyState = "copied";
+        copyButton.textContent = "Copiado";
+        window.setTimeout(() => {
+          copyButton.dataset.copyState = "";
+          copyButton.innerHTML = originalHtml;
+        }, 1600);
+      })
+      .catch(() => {});
   }
 });
 
@@ -5493,6 +5805,7 @@ document.addEventListener("click", (event) => {
 
   event.preventDefault();
   if (link.closest(".datalito-chat")) closeDatalitoPanel();
+  setMobileMenuOpen(false);
   navigate(`${url.pathname}${url.hash}`);
 });
 
@@ -5510,5 +5823,7 @@ if ("serviceWorker" in navigator && window.location.protocol === "https:") {
 }
 
 setupAmbientPointer();
+setupMobileNavigation();
 renderRoute();
 renderDatalitoGlobalShell();
+setupDatalitoLauncherVisibility();

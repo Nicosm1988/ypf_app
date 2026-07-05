@@ -130,6 +130,8 @@ try {
       if (route.path === "/") {
         const homeReport = await page.evaluate(() => ({
           navRows: new Set([...document.querySelectorAll(".nav-menu-link")].map((item) => Math.round(item.getBoundingClientRect().top))).size,
+          mobileMenuButton: Boolean(document.querySelector("[data-mobile-menu-toggle]")),
+          mobileMenuExpanded: document.querySelector("[data-mobile-menu-toggle]")?.getAttribute("aria-expanded") === "true",
           dropdowns: document.querySelectorAll(".nav-dropdown").length,
           dropdownLinks: document.querySelectorAll(".nav-dropdown a").length,
           footerColumns: document.querySelectorAll(".footer-map > div").length,
@@ -146,8 +148,9 @@ try {
           ),
           hero: document.querySelector(".hero h1")?.textContent?.trim(),
         }));
+        const navStructureOk = viewport.label === "mobile" ? homeReport.mobileMenuButton && !homeReport.mobileMenuExpanded : homeReport.navRows === 1;
         if (
-          homeReport.navRows !== 1 ||
+          !navStructureOk ||
           homeReport.dropdowns < 6 ||
           homeReport.dropdownLinks < 30 ||
           homeReport.footerColumns !== 4 ||

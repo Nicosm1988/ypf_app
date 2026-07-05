@@ -265,6 +265,64 @@ p {
   min-width: 0;
 }
 
+.mobile-menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 0 13px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.075);
+  color: #ffffff;
+  font-weight: 900;
+}
+
+.mobile-menu-toggle span,
+.mobile-menu-toggle span::before,
+.mobile-menu-toggle span::after {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentcolor;
+  transition:
+    transform 160ms ease,
+    opacity 160ms ease;
+}
+
+.mobile-menu-toggle span {
+  position: relative;
+}
+
+.mobile-menu-toggle span::before,
+.mobile-menu-toggle span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.mobile-menu-toggle span::before {
+  top: -6px;
+}
+
+.mobile-menu-toggle span::after {
+  top: 6px;
+}
+
+.site-nav-frame.nav-open .mobile-menu-toggle span {
+  background: transparent;
+}
+
+.site-nav-frame.nav-open .mobile-menu-toggle span::before {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.site-nav-frame.nav-open .mobile-menu-toggle span::after {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
 .nav-menu-item {
   position: relative;
 }
@@ -2113,8 +2171,10 @@ body .datalito-chat.compact {
   color: #ffffff;
   pointer-events: auto;
   transition:
+    opacity 180ms ease,
     filter 180ms ease,
-    transform 180ms ease;
+    transform 180ms ease,
+    visibility 180ms ease;
 }
 
 .datalito-launcher:hover {
@@ -2123,6 +2183,13 @@ body .datalito-chat.compact {
 
 .datalito-launcher[aria-expanded="true"] {
   pointer-events: none;
+}
+
+.datalito-launcher-quiet .datalito-launcher {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(22px) scale(0.82);
 }
 
 .datalito-panel-wrap {
@@ -2647,7 +2714,7 @@ html body .datalito-chat .icon-button:hover {
 .executive-action {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 12px;
   align-items: center;
   padding: 14px 16px;
@@ -2656,11 +2723,23 @@ html body .datalito-chat .icon-button:hover {
   background: rgba(53, 201, 189, 0.08);
 }
 
+.executive-action > div {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+}
+
 .executive-action strong {
   color: var(--ypf-yellow-2);
   font-size: 0.78rem;
   font-weight: 950;
   text-transform: uppercase;
+}
+
+.executive-datalito-action {
+  width: auto;
 }
 
 .concept-tree {
@@ -3425,6 +3504,31 @@ html body .datalito-chat .icon-button:hover {
   gap: 8px;
 }
 
+.dictionary-category-panel {
+  display: grid;
+  gap: 10px;
+}
+
+.dictionary-more-categories {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.dictionary-more-categories summary {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  padding: 0 13px;
+  color: var(--ypf-yellow-2);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.dictionary-more-categories .chip-row {
+  padding: 0 13px 13px;
+}
+
 .chip {
   min-height: 36px;
   padding: 0 12px;
@@ -3532,6 +3636,47 @@ html body .datalito-chat .icon-button:hover {
   margin: 0;
   color: var(--ink);
   line-height: 1.48;
+}
+
+.term-actions {
+  display: grid;
+  gap: 10px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.term-actions .button {
+  justify-self: start;
+  width: auto;
+}
+
+.term-related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.term-related strong,
+.term-related a {
+  min-height: 28px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.term-related strong {
+  color: var(--muted);
+}
+
+.term-related a {
+  padding: 0 9px;
+  border: 1px solid rgba(53, 201, 189, 0.26);
+  background: rgba(53, 201, 189, 0.08);
+  color: var(--ypf-yellow-2);
+  text-decoration: none;
 }
 
 .empty-state {
@@ -7855,6 +8000,99 @@ html body .datalito-chat .icon-button:hover {
     rgba(4, 10, 16, 0.4);
 }
 
+.home-decision-path,
+.method-action-strip,
+.tooling-decision,
+.shortcut-adoption {
+  display: grid;
+  gap: 18px;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid rgba(53, 201, 189, 0.22);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(53, 201, 189, 0.09), rgba(58, 160, 255, 0.05)),
+    rgba(17, 23, 32, 0.9);
+  box-shadow: 0 16px 40px rgba(0, 20, 38, 0.16);
+}
+
+.home-decision-path > div:first-child,
+.method-action-strip > .method-section-head,
+.tooling-decision > div:first-child,
+.shortcut-adoption > div:first-child {
+  max-width: 940px;
+}
+
+.home-decision-path h2,
+.method-action-strip h2,
+.tooling-decision h2,
+.shortcut-adoption h2 {
+  margin: 0;
+  color: var(--ypf-blue-3);
+  font-size: clamp(1.55rem, 2.7vw, 2.3rem);
+  line-height: 1.08;
+}
+
+.home-decision-path p,
+.method-action-strip p,
+.tooling-decision p,
+.shortcut-adoption p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.58;
+}
+
+.home-decision-steps,
+.method-action-grid,
+.tooling-decision-grid,
+.shortcut-adoption-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.home-decision-card,
+.method-action-card,
+.tooling-decision-grid article,
+.shortcut-adoption-grid article {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+  min-height: 190px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.home-decision-card span {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius);
+  background: var(--ypf-yellow);
+  color: #071316;
+  font-weight: 950;
+}
+
+.home-decision-card h3,
+.method-action-card h3,
+.tooling-decision-grid h3,
+.shortcut-adoption-grid h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.05rem;
+  line-height: 1.18;
+}
+
+.home-decision-card .button,
+.method-action-card .button {
+  align-self: end;
+  justify-self: start;
+  width: auto;
+}
+
 .road-methodology-page .executive-brief,
 .road-methodology-page .bi-flow-showcase,
 .road-methodology-page .methodology-process {
@@ -9481,54 +9719,98 @@ kbd {
 
 @media (max-width: 980px) {
   .site-shell {
-    padding-top: 132px;
+    padding-top: 88px;
   }
 
   .site-header {
-    min-height: 132px;
+    min-height: 88px;
     padding: 10px 12px;
   }
 
   .site-nav-frame {
     inset: 10px 12px auto;
-    grid-template-columns: 1fr;
-    gap: 8px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
     min-height: auto;
+    position: absolute;
   }
 
   .brand {
     min-width: 0;
   }
 
+  .mobile-menu-toggle {
+    display: inline-flex;
+    justify-self: end;
+  }
+
   .main-nav {
-    width: 100%;
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 4px;
+    position: fixed;
+    top: 84px;
+    right: 12px;
+    left: 12px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    max-height: min(78vh, 680px);
+    padding: 12px;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 16px;
+    background:
+      radial-gradient(circle at 82% 0, rgba(53, 201, 189, 0.16), transparent 13rem),
+      linear-gradient(180deg, rgba(18, 23, 33, 0.98), rgba(7, 9, 15, 0.98));
+    box-shadow: 0 28px 72px rgba(0, 0, 0, 0.48);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px) scale(0.985);
+    transition:
+      opacity 160ms ease,
+      transform 160ms ease;
+  }
+
+  .site-nav-frame.nav-open .main-nav {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+
+  .nav-menu-item {
+    display: grid;
+    gap: 6px;
   }
 
   .nav-menu-link {
+    width: 100%;
     min-height: 38px;
-    padding: 0 10px;
+    justify-content: flex-start;
+    padding: 0 12px;
+    background: rgba(255, 255, 255, 0.06);
   }
 
   .nav-dropdown,
   .nav-dropdown.wide {
-    position: fixed;
-    top: 124px;
-    right: 12px;
-    left: 12px;
+    position: static;
     grid-template-columns: 1fr;
-    width: auto;
-    max-height: min(70vh, 560px);
-    transform: translateY(8px) scale(0.98);
-    overflow-y: auto;
+    width: 100%;
+    max-height: none;
+    transform: none;
+    overflow: visible;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: none;
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .nav-menu-item:hover .nav-dropdown,
   .nav-menu-item:focus-within .nav-dropdown {
-    transform: translateY(0) scale(1);
+    transform: none;
+  }
+
+  .nav-dropdown a {
+    min-height: 0;
+    padding: 10px 12px;
   }
 
   .footer-top,
@@ -9646,6 +9928,10 @@ kbd {
   .platform-definition-grid,
   .platform-timeline-grid,
   .platform-discipline-grid,
+  .home-decision-steps,
+  .method-action-grid,
+  .tooling-decision-grid,
+  .shortcut-adoption-grid,
   .design-system-hero-metrics,
   .design-system-benefit-grid,
   .design-system-token-grid,
@@ -9744,7 +10030,7 @@ kbd {
 
 @media (max-width: 720px) {
   .site-shell {
-    padding-top: 128px;
+    padding-top: 88px;
   }
 
   .page-inner {
@@ -9828,6 +10114,10 @@ kbd {
   .platform-definition-grid,
   .platform-timeline-grid,
   .platform-discipline-grid,
+  .home-decision-steps,
+  .method-action-grid,
+  .tooling-decision-grid,
+  .shortcut-adoption-grid,
   .datalization-grid,
   .datalization-level-grid,
   .executive-brief,
@@ -9863,6 +10153,14 @@ kbd {
   .methodology-close,
   .mini-roadmap {
     grid-template-columns: 1fr;
+  }
+
+  .executive-action > div {
+    grid-template-columns: 1fr;
+  }
+
+  .executive-datalito-action {
+    width: 100%;
   }
 
   .oee-formula {
@@ -9915,14 +10213,14 @@ kbd {
   }
 
   .datalito-launcher {
-    width: 84px;
-    height: 116px;
+    width: 68px;
+    height: 92px;
     justify-self: end;
   }
 
   .datalito-avatar.launcher {
-    width: 74px;
-    height: 106px;
+    width: 62px;
+    height: 88px;
   }
 
   .datalito-panel-wrap {
