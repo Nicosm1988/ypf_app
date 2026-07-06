@@ -1,36 +1,36 @@
 export const platformHeroMetrics = [
   { value: "End-to-end", label: "PRD, Spec, datos, modelo, DAX, UX, seguridad y publicación" },
-  { value: "Gobernada", label: "Estándares, trazabilidad, responsables y evidencia" },
-  { value: "Escalable", label: "Una forma común de construir y sostener inteligencia de datos" },
+  { value: "Trazable", label: "Cada decisión deja owner, evidencia y criterio de aceptación" },
+  { value: "Operable", label: "La salida incluye monitoreo, soporte y backlog de mejora" },
 ];
 
 export const platformPillars = [
   {
-    title: "Ordena el delivery BI",
-    text: "Alinea la forma de relevar, diseñar, construir, documentar, publicar y mantener productos analíticos.",
+    title: "Convierte pedidos en contrato",
+    text: "Alinea problema, alcance, dato, regla y salida esperada antes de que el equipo construya.",
   },
   {
-    title: "Reduce variabilidad",
-    text: "Convierte criterios dispersos en estándares comunes de calidad, performance, seguridad y gobierno.",
+    title: "Hace revisable la entrega",
+    text: "Deja criterios de calidad, performance, seguridad y publicación que otro integrante puede auditar.",
   },
   {
-    title: "Eleva el estándar",
-    text: "Instala una práctica profesional para que cada tablero sea parte de una arquitectura de decisión sostenible.",
+    title: "Prepara operación",
+    text: "Conecta uso real, incidentes, responsables y mejoras para que el producto no termine en el go-live.",
   },
 ];
 
 export const platformDefinitionCards = [
   {
     title: "Estructurar información",
-    text: "Definir fuentes, granularidad, reglas, linaje, frecuencia y responsables antes de construir la experiencia visual.",
+    text: "Definir fuentes, granularidad, reglas, linaje, frecuencia y responsables antes de diseñar pantallas.",
   },
   {
     title: "Gobernar decisiones",
-    text: "Asegurar que cada KPI, medida, permiso, transformación y publicación tenga criterio técnico y funcional explícito.",
+    text: "Asegurar que cada KPI, medida, permiso y transformación tenga criterio técnico y funcional explícito.",
   },
   {
     title: "Sostener operación",
-    text: "Dejar monitoreo, documentación, seguridad, mejora continua y trazabilidad para que el producto siga siendo confiable.",
+    text: "Dejar monitoreo, documentación, seguridad y backlog para que el producto siga siendo confiable.",
   },
 ];
 
@@ -71,6 +71,6 @@ export const platformCapabilityShift = [
   {
     from: "Entrega puntual",
     to: "Capacidad organizacional",
-    detail: "El área gana una forma estable de escalar inteligencia de datos con trazabilidad, gobierno y continuidad.",
+    detail: "El área gana una práctica estable para iniciar, revisar, publicar y mejorar productos BI.",
   },
 ];

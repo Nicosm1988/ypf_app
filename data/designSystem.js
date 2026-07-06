@@ -1,21 +1,21 @@
 export const designSystemHeroMetrics = [
-  { value: "Consistencia", label: "Una misma lógica visual, funcional y comunicacional" },
-  { value: "Velocidad", label: "Componentes y patrones reutilizables para nuevas secciones" },
-  { value: "Gobierno", label: "Reglas de calidad para sostener la experiencia digital" },
+  { value: "Patrones", label: "Soluciones reutilizables para problemas que se repiten" },
+  { value: "Criterio", label: "Reglas para decidir jerarquía, interacción y densidad" },
+  { value: "Mantenimiento", label: "Componentes que se pueden corregir sin rehacer páginas" },
 ];
 
 export const designSystemDefinition = [
   {
-    title: "Lenguaje común",
-    text: "Ordena principios, patrones, componentes, reglas visuales y criterios de experiencia para construir con coherencia.",
+    title: "Patrones compartidos",
+    text: "Ordena principios, componentes, reglas visuales y criterios de experiencia para no resolver lo mismo varias veces.",
   },
   {
-    title: "Base de producto",
-    text: "Permite presentar información, estados, riesgos, métricas, procesos y decisiones con una lógica común.",
+    title: "Decisiones de interfaz",
+    text: "Define cómo presentar información, estados, riesgos, métricas, procesos y acciones sin improvisar cada pantalla.",
   },
   {
-    title: "Madurez digital",
-    text: "Profesionaliza cómo el área construye, documenta, mantiene y escala experiencias internas de inteligencia de datos.",
+    title: "Cuidado operativo",
+    text: "Facilita corregir, extender y documentar experiencias internas sin depender de decisiones visuales aisladas.",
   },
 ];
 
@@ -43,14 +43,14 @@ export const designSystemComparison = {
 };
 
 export const designSystemBenefits = [
-  ["Consistencia", "Permite que toda la plataforma mantenga una misma lógica visual, funcional y comunicacional."],
-  ["Escalabilidad", "Facilita agregar nuevos módulos, procesos y contenidos sin rediseñar desde cero."],
-  ["Velocidad", "Reduce tiempos de construcción al reutilizar componentes, patrones y estructuras ya definidas."],
-  ["Calidad", "Eleva el estándar visual, técnico y funcional de la plataforma."],
-  ["Gobernanza", "Define reglas claras sobre cómo se construyen, documentan y presentan los contenidos."],
-  ["Mantenibilidad", "Hace que el producto sea más fácil de sostener, corregir y evolucionar."],
-  ["Adopción", "Mejora la comprensión y confianza de los usuarios internos."],
-  ["Identidad", "Consolida una presencia digital más profesional, robusta y alineada al área."],
+  ["Menos decisiones repetidas", "Resuelve una vez botones, cards, estados, tablas y bloques de documentación."],
+  ["Crecimiento ordenado", "Permite agregar módulos nuevos sin cambiar la lógica de navegación ni jerarquía."],
+  ["Construcción más rápida", "Reutiliza componentes y estructuras que ya fueron probadas en el portal."],
+  ["Lectura más clara", "Define jerarquías para que cada pantalla muestre primero la decisión y después el detalle."],
+  ["Control de calidad", "Establece reglas sobre cómo se construyen, revisan y documentan los contenidos."],
+  ["Mantenimiento simple", "Reduce ajustes locales y facilita corregir un patrón en un solo lugar."],
+  ["Mayor adopción", "Hace que usuarios internos reconozcan comportamientos y no tengan que reaprender cada sección."],
+  ["Identidad consistente", "Mantiene una presencia digital profesional sin convertir cada página en una pieza distinta."],
 ];
 
 export const designSystemFoundations = [
@@ -72,8 +72,8 @@ export const designSystemPrinciples = [
     "La coherencia del sistema es más importante que resolver cada pantalla como pieza independiente.",
   ],
   ["Escalar sin perder orden", "Cada nuevo módulo debe integrarse naturalmente al ecosistema existente."],
-  ["Documentar para sostener", "Lo que se diseña también debe poder mantenerse, explicarse y evolucionar."],
-  ["Gobernar la experiencia", "La experiencia digital también necesita estándares, reglas y criterios de calidad."],
+  ["Documentar para sostener", "Cada patrón debe poder mantenerse, explicarse y evolucionar."],
+  ["Cuidar la experiencia", "La experiencia digital también necesita reglas de uso y criterios de revisión."],
 ];
 
 export const designSystemScope = [

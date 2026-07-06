@@ -225,7 +225,7 @@ const datalitoState = {
       id: "welcome",
       role: "assistant",
       answer:
-        "Hola, soy Datalito. Estoy acá para charlar con vos sobre la plataforma, ayudarte a encontrar cosas y bajarte a tierra cualquier concepto de BI, gobierno o metodología. Podés saludarme, pedirme contexto o preguntarme algo puntual.",
+        "Hola, soy Datalito. Te ayudo a ubicar contenido del hub, aclarar conceptos y conectar decisiones con fuentes. Preguntame por método, PRD, Spec, Power BI, Fabric o gobierno.",
       confidence: null,
       grounded: false,
       unresolved: false,
@@ -244,19 +244,19 @@ const hubNavigationSections = [
     title: "Road y Metodología",
     route: "/road-y-metodologia",
     iconName: "route",
-    text: "Roadmap, gates, OEE BI, DMAIC y mejora continua en una única secuencia de trabajo.",
+    text: "Cuándo avanzar, qué pérdida se interviene y qué control queda después del release.",
   },
   {
     title: "Método",
     route: "/metodo-datalizacion",
     iconName: "folder",
-    text: "Estructura de trabajo, Teams, SharePoint, naming, backlog, VMC y gobierno.",
+    text: "Dónde vive cada activo, cómo se nombra, quién responde y cómo se mide el flujo.",
   },
   {
     title: "Proyecto Power BI",
     route: "/proyecto-power-bi",
     iconName: "code",
-    text: "PRD, Spec, PBIP, TMDL, Git, documentación técnica y operación del producto.",
+    text: "Cómo pasar de PRD y Spec a PBIP, TMDL, Git y operación del producto.",
   },
   {
     title: "Diccionario BI",
@@ -268,7 +268,7 @@ const hubNavigationSections = [
     title: "Design System",
     route: "/design-system",
     iconName: "layers",
-    text: "Lenguaje visual y funcional para escalar la plataforma sin perder coherencia.",
+    text: "Patrones de interfaz para crecer sin rediseñar cada sección desde cero.",
   },
   {
     title: "Datalito",
@@ -280,7 +280,7 @@ const hubNavigationSections = [
     title: "Librerías",
     route: "/librerias",
     iconName: "terminal",
-    text: "Catálogo técnico de agentes, MCPs, sandboxes, APIs y librerías evaluables.",
+    text: "Inventario técnico para decidir qué instalar, documentar o mantener en evaluación.",
   },
   {
     title: "Atajos",
@@ -293,28 +293,28 @@ const hubNavigationSections = [
 const homeResearchFrame = [
   {
     label: "Punto de partida",
-    title: "Delivery BI como sistema de decisión.",
-    text: "La unidad de análisis no es el tablero aislado, sino el ciclo completo que conecta necesidad operativa, fuente, regla, modelo, experiencia, gobierno y operación.",
+    title: "El pedido inicial debe convertirse en contrato.",
+    text: "La primera claridad no está en el tablero, sino en definir proceso, usuario, regla, dato, salida esperada y criterio de éxito.",
   },
   {
     label: "Tensión operativa",
-    title: "La variabilidad metodológica reduce trazabilidad.",
-    text: "Cuando cada iniciativa documenta, valida y publica con criterios distintos, el área depende más de memoria individual que de evidencia reutilizable.",
+    title: "Cada criterio distinto crea deuda de mantenimiento.",
+    text: "Si documentar, validar y publicar depende de cada persona, el área pierde capacidad de revisar, delegar y mejorar.",
   },
   {
     label: "Decisión de gestión",
-    title: "Datalización Hub convierte experiencia dispersa en disciplina interna.",
-    text: "El portal ordena una práctica común para iniciar, construir, medir, publicar y sostener inteligencia de datos con responsabilidad explícita.",
+    title: "El hub transforma oficio acumulado en estándar visible.",
+    text: "La experiencia del equipo queda expresada en rutas, plantillas, definiciones, controles y decisiones reutilizables.",
   },
   {
     label: "Forma de trabajo",
-    title: "El avance se decide por gates, evidencia y control.",
-    text: "PRD, Spec, roadmap, metodología de mejora, seguridad, calidad y operación se leen como una secuencia verificable, no como documentos independientes.",
+    title: "Los gates evitan que urgencia reemplace evidencia.",
+    text: "Cada etapa declara qué debe quedar aprobado antes de mover el producto hacia construcción, publicación u operación.",
   },
   {
     label: "Resultado esperado",
-    title: "El área gana una base gobernada para escalar.",
-    text: "La plataforma deja criterios, plantillas, definiciones, cadencias y controles para que el conocimiento pueda crecer sin perder coherencia.",
+    title: "La escala aparece cuando otro puede continuar el trabajo.",
+    text: "El estándar sirve si un integrante que no participó del origen puede entender, revisar y sostener el producto.",
   },
 ];
 
@@ -329,14 +329,14 @@ const homeDecisionPath = [
   {
     step: "2",
     title: "Aplicar el método",
-    text: "Usar Road y Método para convertir una necesidad en PRD, evidencia, backlog, publicación y control.",
+    text: "Usar Road para decidir avance y Método para ordenar activos, owners, backlog y publicación.",
     route: "/road-y-metodologia",
     action: "Ver secuencia",
   },
   {
     step: "3",
     title: "Operar con evidencia",
-    text: "Sostener el producto con diccionario, Datalito, design system, tooling, atajos y gobierno.",
+    text: "Sostener el producto con lenguaje común, asistencia, patrones de interfaz y herramientas controladas.",
     route: "/metodo-datalizacion/backlog",
     action: "Ir a operación",
   },
@@ -371,12 +371,12 @@ const shortcutAdoptionPlan = [
 
 const toolingDecisionCards = [
   {
-    title: "Instalar ahora",
-    text: "Solo herramientas que reducen riesgo de calidad, accesibilidad, release o documentación del portal.",
+    title: "Mantener instalado",
+    text: "Herramientas que participan de build, QA, accesibilidad, documentación o release del portal.",
   },
   {
-    title: "Documentar sin instalar",
-    text: "Capacidades útiles para evaluar, pero que no necesitan vivir como dependencia del sitio estático.",
+    title: "Registrar para evaluar",
+    text: "Capacidades útiles que conviene conocer sin sumarlas todavía como dependencia del sitio estático.",
   },
   {
     title: "Escalar con control",
@@ -1855,7 +1855,7 @@ function renderHomePage() {
             <span class="eyebrow">Datalización Hub | BI Delivery Playbook</span>
             <h1>De tableros aislados a una disciplina interna de inteligencia de datos.</h1>
             <p class="hero-kicker">Esta plataforma nace para ordenar, estandarizar y escalar la forma en que el área construye inteligencia de datos.</p>
-            <p class="hero-text">Lo que estamos construyendo no es solo una web. Es una capacidad organizacional: una guía viva, clara y gobernada para estructurar proyectos BI end-to-end con estándar técnico, metodológico y operativo.</p>
+            <p class="hero-text">Su función es convertir experiencia dispersa en una forma de trabajo visible: decisiones, evidencia, roles, controles y operación para productos BI end-to-end.</p>
             <div class="platform-metric-row" aria-label="Capacidades principales de la plataforma">
               ${platformHeroMetrics.map(renderPlatformMetric).join("")}
             </div>
@@ -1865,7 +1865,7 @@ function renderHomePage() {
 
       <section class="quote-band page-inner" id="inicio-punto-inflexion">
         ${icon("quote")}
-        <strong>Esta gestión busca marcar un punto de inflexión: pasar de construir tableros a construir una disciplina interna de inteligencia de datos.</strong>
+        <strong>El punto de inflexión no es publicar más pantallas: es que cada entrega pueda explicarse, revisarse y sostenerse.</strong>
       </section>
 
       ${renderHomeResearchFrame()}
@@ -1890,8 +1890,6 @@ function renderHomePage() {
 
       ${renderExecutiveBrief(pageNarratives.home)}
 
-      ${renderConceptDecantation()}
-
       ${renderDatalizationDefinition()}
 
       ${renderWorkflowLab()}
@@ -1899,15 +1897,15 @@ function renderHomePage() {
       <div class="section-title page-inner" id="inicio-recursos">
         <div>
           <h2>Recursos principales</h2>
-          <p>Cada sección responde una decisión del sistema: qué mejorar, cómo medirlo, cómo construirlo, cómo gobernarlo y cómo sostenerlo.</p>
+          <p>El mapa evita recorrer todo de una vez: cada entrada lleva a una decisión distinta del ciclo BI.</p>
         </div>
       </div>
 
       <section class="feature-grid page-inner" aria-label="Secciones principales">
         <article class="feature-card">
           <span class="feature-icon">${icon("folder")}</span>
-          <h3>El método ordena el trabajo</h3>
-          <p>Define Teams, SharePoint, carpetas, nombres, backlog, DEV/PROD, VMC y roles para que el sistema sea delegable.</p>
+          <h3>El método fija responsabilidad</h3>
+          <p>Define dónde guardar, cómo nombrar, qué medir y quién responde cuando el producto entra en operación.</p>
           <a class="button small secondary" href="/metodo-datalizacion" data-route>
             Ver método
             ${icon("arrowRight")}
@@ -1915,8 +1913,8 @@ function renderHomePage() {
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("layers")}</span>
-          <h3>Road y Metodología ordena avance y mejora</h3>
-          <p>Convierte PRD, datos, modelo, DAX, seguridad, OEE BI, DMAIC, VSM, FMEA y control en una secuencia verificable.</p>
+          <h3>Road y Metodología ordenan el avance</h3>
+          <p>Conectan PRD, datos, modelo, DAX, seguridad, OEE BI, DMAIC y control en gates verificables.</p>
           <a class="button small secondary" href="/road-y-metodologia" data-route>
             Ver Road y Metodología
             ${icon("arrowRight")}
@@ -1951,8 +1949,8 @@ function renderHomePage() {
         </article>
         <article class="feature-card">
           <span class="feature-icon">${icon("folder")}</span>
-          <h3>Las herramientas reducen riesgo</h3>
-          <p>MCPs, agentes, bases, cloud, sandboxes y APIs se seleccionan por valor operativo, seguridad y control.</p>
+          <h3>Las herramientas entran con criterio</h3>
+          <p>MCPs, agentes, bases, cloud, sandboxes y APIs se evalúan por riesgo, permisos y costo de operación.</p>
           <a class="button small secondary" href="/librerias" data-route>
             Ver librerías
             ${icon("arrowRight")}
@@ -1972,15 +1970,15 @@ function renderHomePage() {
       <section class="story-band">
         <div class="page-inner story-content">
           <span class="eyebrow">procesos que operan mejor</span>
-          <h2>La mejora se demuestra cuando la operación decide mejor con menos retrabajo.</h2>
-          <p>La evidencia no está en la cantidad de páginas publicadas, sino en procesos con reglas explícitas, datos gobernados, responsables, métricas e incidentes controlados.</p>
+          <h2>La mejora se demuestra cuando una señal dispara una acción verificable.</h2>
+          <p>El valor no está en la cantidad de páginas, sino en reducir esperas, excepciones, dudas de regla e incidentes sin dueño.</p>
         </div>
       </section>
 
       <div class="section-title page-inner">
         <div>
           <h2>La madurez avanza cuando cada gate deja una evidencia más fuerte.</h2>
-          <p>El recorrido empieza en el proceso, pasa por datos, modelo, reglas, confianza y experiencia, y termina en release, operación y mejora continua.</p>
+          <p>El recorrido no salta etapas: primero entiende el proceso, después prueba datos y reglas, y finalmente publica con operación definida.</p>
         </div>
       </div>
 
@@ -2006,8 +2004,8 @@ function renderHomeResearchFrame() {
     <section class="home-research page-inner" id="inicio-estudio" aria-labelledby="homeResearchTitle">
       <div class="home-research-copy">
         <span class="flow-chip">lectura ejecutiva inicial</span>
-        <h2 id="homeResearchTitle">La plataforma ordena cómo escalar inteligencia de datos gobernada.</h2>
-        <p>La conversación que ordena esta página es concreta: qué necesita el área para transformar pedidos, reportes y conocimiento disperso en una forma común de trabajo, con evidencia, responsables, gobierno y continuidad operativa.</p>
+        <h2 id="homeResearchTitle">La plataforma aclara qué decisión toma cada parte del sistema.</h2>
+        <p>Inicio no intenta explicar todo: ubica el problema de gestión, muestra el recorrido recomendado y deriva el detalle metodológico a las páginas especializadas.</p>
       </div>
       <div class="home-research-grid" aria-label="Estructura ejecutiva de Inicio">
         ${homeResearchFrame
@@ -2024,7 +2022,7 @@ function renderHomeResearchFrame() {
       </div>
       <aside class="home-research-note" aria-label="Criterio de lectura">
         <strong>Lectura sugerida</strong>
-        <p>Primero se entiende el punto de partida, luego se recorre Road y Metodología, después se aplica el Método de Datalización y finalmente se gobierna el conocimiento con Datalito, diccionario, design system y documentación.</p>
+        <p>Primero entendé el punto de partida; después usá Road para los gates, Método para el setup operativo y las páginas de soporte para lenguaje, asistencia, diseño y herramientas.</p>
       </aside>
     </section>
   `;
@@ -2036,7 +2034,7 @@ function renderHomeDecisionPath() {
       <div>
         <span class="flow-chip">camino recomendado</span>
         <h2 id="homeDecisionPathTitle">Tres decisiones alcanzan para empezar sin perderse en el detalle.</h2>
-        <p>La plataforma tiene profundidad, pero el primer recorrido debe ser simple: entender el marco, aplicar el método y sostener la operación con evidencia.</p>
+        <p>El primer recorrido debe responder tres preguntas: qué problema ordenamos, con qué método avanzamos y cómo se sostiene después de publicar.</p>
       </div>
       <div class="home-decision-steps" aria-label="Recorrido recomendado del hub">
         ${homeDecisionPath
@@ -2073,15 +2071,15 @@ function renderPlatformExecutiveSection() {
     <section class="platform-executive page-inner" id="inicio-capacidad" aria-labelledby="platformExecutiveTitle">
       <div class="platform-executive-head">
         <span class="flow-chip">plataforma interna de estándares, gobierno y delivery</span>
-        <h2 id="platformExecutiveTitle">Datalización Hub convierte una necesidad de orden en una capacidad permanente del área.</h2>
-        <p>La plataforma funciona como sistema operativo metodológico: define cómo se relevan requerimientos, cómo se documentan decisiones, cómo se construyen modelos y cómo se publican productos BI con trazabilidad, gobierno y continuidad.</p>
+        <h2 id="platformExecutiveTitle">Datalización Hub convierte conocimiento disperso en una forma común de entrega.</h2>
+        <p>La plataforma define qué se releva, qué se documenta, qué se prueba, qué se publica y qué se monitorea para que el trabajo no dependa de memoria individual.</p>
       </div>
 
       <div class="platform-purpose-grid">
         <article class="platform-card platform-thesis">
           <span>Por qué existe esta plataforma</span>
           <h3>El crecimiento del área exige pasar de prácticas dispersas a una forma común de entregar inteligencia de datos.</h3>
-          <p>Antes se hizo lo posible con las herramientas y condiciones disponibles. Ahora el desafío es elevar el estándar técnico, metodológico y de gobierno para que cada entrega sea consistente, mantenible y confiable.</p>
+          <p>Antes se resolvió con oficio, herramientas disponibles y criterio del equipo. Ahora el desafío es dejar un estándar que pueda revisarse, enseñarse y sostenerse.</p>
           <strong>Lo que estamos construyendo no es solo una web. Es una capacidad organizacional.</strong>
         </article>
         <div class="platform-pillar-grid" aria-label="Ganancias principales del área">
@@ -2093,7 +2091,7 @@ function renderPlatformExecutiveSection() {
         <div>
           <span class="flow-chip">qué entendemos por datalizar</span>
           <h3 id="platformDefinitionTitle">Datalizar no es simplemente automatizar procesos. Es estructurar información, definir estándares, asegurar trazabilidad, gobernar datos y convertirlos en decisiones confiables.</h3>
-          <p>Automatizar acelera una tarea; datalizar instala una disciplina. Por eso el foco no está solo en publicar un tablero, sino en asegurar que cada dato, regla, permiso, medida y decisión pueda explicarse, sostenerse y mejorarse.</p>
+          <p>La diferencia operativa está en dejar fuente, regla, owner, validación, permiso, monitoreo y aprendizaje documentado.</p>
         </div>
         <div class="platform-definition-grid">
           ${platformDefinitionCards.map(renderPlatformDefinitionCard).join("")}
@@ -2131,7 +2129,7 @@ function renderHubSectionLauncher() {
       <div class="hub-nav-head">
         <span class="flow-chip">mapa de navegación</span>
         <h2 id="hubNavTitle">Cada sección del hub responde una decisión del sistema de Datalización.</h2>
-        <p>La plataforma se recorre como una botonera ejecutiva: método, guía, metodología, proyecto, lenguaje, diseño, herramientas y operación diaria conectados en una misma experiencia.</p>
+        <p>Usá el mapa para saltar al punto de decisión que necesitás resolver, sin repetir el recorrido completo.</p>
       </div>
       <div class="hub-nav-grid">
         ${hubNavigationSections.map(renderHubNavCard).join("")}
@@ -2199,8 +2197,8 @@ function renderDesignSystemPage() {
     <section class="page tool-page design-system-page">
       <header class="page-heading page-inner design-system-hero">
         <span class="eyebrow">Design System</span>
-        <h1>Una base común para construir experiencias digitales consistentes, escalables y gobernadas.</h1>
-        <p class="lede">El Design System ordena cómo diseñamos, documentamos, comunicamos y evolucionamos la plataforma interna de Datalización.</p>
+        <h1>Un sistema de patrones para que la plataforma crezca sin reabrir las mismas decisiones.</h1>
+        <p class="lede">El Design System define cómo resolvemos jerarquía, interacción, densidad y documentación en la experiencia de Datalización.</p>
         <div class="design-system-hero-metrics" aria-label="Capacidades principales del Design System">
           ${designSystemHeroMetrics.map(renderDesignSystemHeroMetric).join("")}
         </div>
@@ -2209,8 +2207,8 @@ function renderDesignSystemPage() {
       <section class="design-system-intro page-inner" id="design-intro" aria-labelledby="designSystemIntroTitle">
         <div>
           <span class="flow-chip">mensaje central</span>
-          <h2 id="designSystemIntroTitle">El Design System nos permite pasar de soluciones visuales aisladas a una experiencia digital consistente, gobernada y escalable.</h2>
-          <p>En Datalización no se trata solamente de definir colores, tipografías o componentes visuales. Se trata de establecer un lenguaje común de diseño, documentación, interacción y comunicación para todo el ecosistema de inteligencia de datos del área.</p>
+          <h2 id="designSystemIntroTitle">El sistema evita que cada nueva sección vuelva a resolver los mismos problemas.</h2>
+          <p>En Datalización no alcanza con definir colores o tipografías. La prioridad es acordar patrones de lectura, componentes, estados y reglas de uso para que el portal se mantenga claro cuando crece.</p>
         </div>
         <div class="design-system-definition-grid">
           ${designSystemDefinition.map(renderDesignSystemDefinition).join("")}
@@ -2220,8 +2218,8 @@ function renderDesignSystemPage() {
       <section class="design-system-why page-inner" id="design-por-que" aria-labelledby="designSystemWhyTitle">
         <div class="design-system-section-head">
           <span class="flow-chip">por qué lo necesitamos</span>
-          <h2 id="designSystemWhyTitle">La plataforma crece; la experiencia debe crecer con coherencia.</h2>
-          <p>A medida que la plataforma de Datalización suma módulos, también crece la necesidad de mantener claridad y escalabilidad. Sin un sistema común, cada nueva sección puede resolver de forma distinta problemas similares: botones, cards, estados, alertas, navegación, jerarquías, bloques de documentación, indicadores, componentes de proceso o visualizaciones.</p>
+          <h2 id="designSystemWhyTitle">A más módulos, más riesgo de resolver distinto lo mismo.</h2>
+          <p>Sin un sistema compartido, botones, cards, estados, alertas, navegación, jerarquías e indicadores empiezan a variar por página. Esa variación agrega mantenimiento y le pide al usuario reaprender patrones.</p>
         </div>
         <div class="design-system-comparison">
           ${renderDesignSystemComparisonColumn("Sin Design System", designSystemComparison.without, "without")}
@@ -2232,8 +2230,8 @@ function renderDesignSystemPage() {
       <section class="design-system-benefits page-inner" id="design-beneficios" aria-labelledby="designSystemBenefitsTitle">
         <div class="design-system-section-head">
           <span class="flow-chip">beneficios esperados</span>
-          <h2 id="designSystemBenefitsTitle">El sistema mejora velocidad, calidad, adopción y mantenimiento.</h2>
-          <p>La ganancia no es estética: es operativa. Cada patrón reutilizable reduce decisiones repetitivas, acelera nuevas secciones y sostiene una experiencia interna más profesional.</p>
+          <h2 id="designSystemBenefitsTitle">Reutilizar patrones reduce decisiones repetidas.</h2>
+          <p>La ganancia no es estética: es operativa. Cada patrón probado acelera nuevas secciones y reduce ajustes locales difíciles de mantener.</p>
         </div>
         <div class="design-system-benefit-grid">
           ${designSystemBenefits.map(renderDesignSystemBenefit).join("")}
@@ -2263,7 +2261,7 @@ function renderDesignSystemPage() {
       <section class="design-system-scope page-inner" id="design-alcance" aria-labelledby="designSystemScopeTitle">
         <div class="design-system-section-head">
           <span class="flow-chip">alcance inicial</span>
-          <h2 id="designSystemScopeTitle">El primer alcance cubre los patrones que más se repiten en la plataforma.</h2>
+          <h2 id="designSystemScopeTitle">El primer alcance cubre los elementos con mayor riesgo de variación.</h2>
         </div>
         <div class="design-system-chip-cloud">
           ${designSystemScope.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
@@ -2273,8 +2271,8 @@ function renderDesignSystemPage() {
       <section class="design-system-components page-inner" id="design-componentes" aria-labelledby="designSystemComponentsTitle">
         <div class="design-system-section-head">
           <span class="flow-chip">componentes esperados</span>
-          <h2 id="designSystemComponentsTitle">La visión del sistema se materializa en componentes reutilizables.</h2>
-          <p>No hace falta desarrollar todo en detalle en esta primera sección. El objetivo es mostrar la arquitectura de componentes que ordenará futuras páginas, dashboards, guías y documentación.</p>
+          <h2 id="designSystemComponentsTitle">Los componentes convierten el criterio en piezas verificables.</h2>
+          <p>El objetivo no es listar UI por listar. Es mostrar qué piezas deberán resolver futuras páginas, dashboards, guías y documentación.</p>
         </div>
         <div class="design-system-component-grid">
           ${designSystemComponents.map(renderDesignSystemComponent).join("")}
@@ -2295,10 +2293,10 @@ function renderDesignSystemPage() {
       <section class="design-system-final page-inner">
         <div>
           <span class="eyebrow">resultado esperado</span>
-          <h2>Una herramienta de madurez digital para construir con mayor velocidad, calidad y consistencia.</h2>
-          <p>El Design System debe asegurar que cada nueva sección, componente o contenido mantenga el mismo estándar corporativo, la misma lógica de experiencia y la misma orientación a valor.</p>
+          <h2>Una herramienta para cambiar una vez y mejorar muchas pantallas.</h2>
+          <p>El Design System debe asegurar que cada nueva sección, componente o contenido mantenga criterios de lectura, accesibilidad y mantenimiento.</p>
         </div>
-        <strong>El Design System no solo ordena cómo se ve la plataforma. Ordena cómo construimos, comunicamos y escalamos nuestra forma de trabajar.</strong>
+        <strong>El Design System no solo ordena cómo se ve la plataforma. Ordena cómo construimos, decidimos y mantenemos la experiencia.</strong>
       </section>
     </section>
   `;
@@ -3613,7 +3611,7 @@ function renderRoadMethodologyPage() {
       <header class="page-heading page-inner road-methodology-hero">
         <span class="eyebrow">Road y Metodología</span>
         <h1>Del caso operativo a la mejora controlada.</h1>
-        <p class="lede">Esta sección unifica la guía, el roadmap y la metodología en una forma de trabajo común: cada iniciativa BI debe avanzar por evidencia, explicar la pérdida que resuelve y dejar un control sostenible en producción.</p>
+        <p class="lede">Esta sección une dos preguntas: qué evidencia permite avanzar y qué pérdida operativa justifica la mejora.</p>
       </header>
 
       ${renderExecutiveBrief(pageNarratives.roadMethodology)}
@@ -3623,8 +3621,8 @@ function renderRoadMethodologyPage() {
       <section class="methodology-intro page-inner" id="road-encuadre" aria-labelledby="methodologyIntroTitle">
         <div class="methodology-intro-copy">
           <span class="flow-chip">encuadre</span>
-          <h2 id="methodologyIntroTitle">La metodología sirve si convierte pérdida en decisión y decisión en control.</h2>
-          <p>La pregunta central es cómo sabemos que una automatización BI mejora el proceso, se sostiene en producción y aprende con evidencia; por eso cada concepto se conecta con un momento del trabajo: definir, medir, analizar, mejorar o controlar.</p>
+          <h2 id="methodologyIntroTitle">La metodología importa cuando evita resolver síntomas.</h2>
+          <p>La pregunta central es cómo sabemos que una automatización BI mejora el proceso. Por eso cada concepto se ubica en un momento del trabajo: definir, medir, analizar, mejorar o controlar.</p>
         </div>
         <div class="methodology-principles" aria-label="Usos del marco metodológico">
           ${methodologyPrinciples.map(renderMethodologyPrinciple).join("")}
@@ -3642,7 +3640,7 @@ function renderRoadMethodologyPage() {
       <section class="guide-journey page-inner" id="road-gates" aria-labelledby="guideJourneyTitle">
         <div class="guide-section-title">
           <span class="flow-chip">historia completa</span>
-          <h2 id="guideJourneyTitle">Del caso operativo a la producción monitoreada.</h2>
+          <h2 id="guideJourneyTitle">Cada gate cuenta qué se decidió y qué prueba lo sostiene.</h2>
           <p>La secuencia se lee como una investigación aplicada: cada etapa declara una decisión, exige evidencia y prepara el control siguiente.</p>
         </div>
         ${guideSections.map(renderGuideJourneyStep).join("")}
@@ -3703,8 +3701,8 @@ function renderRoadMethodologyPage() {
       <section class="methodology-toolchain page-inner" id="road-herramientas" aria-labelledby="toolchainTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">herramientas ubicadas</span>
-          <h2 id="toolchainTitle">Cada herramienta se justifica por la pregunta que responde.</h2>
-          <p>Si una herramienta no ayuda a decidir, medir, reducir riesgo o sostener la mejora, no se fuerza; así Lean Six Sigma, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata quedan integrados al trabajo real del equipo.</p>
+          <h2 id="toolchainTitle">Cada herramienta entra por la pérdida que ayuda a entender o reducir.</h2>
+          <p>Lean Six Sigma, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata quedan integrados al trabajo real cuando explican una decisión, una causa o un control.</p>
         </div>
         <div class="methodology-tool-grid">
           ${methodologyTools.map(renderMethodologyTool).join("")}
@@ -3725,8 +3723,8 @@ function renderRoadMethodologyPage() {
       <section class="lean-practices-section page-inner" id="road-lean" aria-labelledby="leanPracticesTitle">
         <div class="methodology-section-head">
           <span class="flow-chip">patrones de mejora</span>
-          <h2 id="leanPracticesTitle">Las prácticas Lean se vuelven útiles cuando cambian el diseño BI.</h2>
-          <p>Estas prácticas no aparecen como teoría separada: se convierten en requisitos de UX, controles de datos, reglas de publicación, diseño de flujo y cadencia de operación.</p>
+          <h2 id="leanPracticesTitle">Las prácticas Lean valen cuando cambian el flujo del usuario.</h2>
+          <p>No aparecen como teoría separada: se convierten en requisitos de UX, controles de datos, reglas de publicación y cadencia de operación.</p>
         </div>
         <div class="lean-practice-grid">
           ${leanPractices.map(renderLeanPractice).join("")}
@@ -4363,7 +4361,7 @@ function renderDatalizationMethodPage() {
       <header class="page-heading page-inner method-hero">
         <span class="eyebrow">Método de Datalización v0.1</span>
         <h1>Un sistema operativo para trabajar, entregar y sostener productos BI.</h1>
-        <p class="lede">El método ordena cómo el equipo organiza activos, nombra archivos, separa DEV de PROD, mide trabajo, usa Microsoft 365 y prepara el salto hacia VMC/Fabric sin depender de memoria individual.</p>
+        <p class="lede">La página baja el método a decisiones concretas: estructura Microsoft 365, naming, backlog, DEV/PROD, VMC/Fabric y gobierno interno.</p>
       </header>
 
       ${renderExecutiveBrief(pageNarratives.method)}
@@ -4375,8 +4373,8 @@ function renderDatalizationMethodPage() {
       <section class="method-operating-flow page-inner" id="metodo-proceso" aria-labelledby="methodOperatingFlowTitle">
         <div class="method-section-head">
           <span class="flow-chip">proceso end to end</span>
-          <h2 id="methodOperatingFlowTitle">El método baja de una decisión de orden a una rutina concreta de entrega.</h2>
-          <p>La secuencia evita que el equipo acumule documentos sueltos: primero fija el estándar, después ordena DEV, construye evidencia, nombra activos, mide flujo y recién entonces publica y sostiene en VMC.</p>
+          <h2 id="methodOperatingFlowTitle">El flujo muestra qué debe quedar hecho antes de pasar al paso siguiente.</h2>
+          <p>La secuencia no agrega documentación por volumen: fija estándar, ordena DEV, construye evidencia, nombra activos, mide flujo y recién entonces publica en VMC.</p>
         </div>
         <div class="method-flow-track" aria-label="Proceso operativo de Datalización">
           ${methodOperatingFlow.map(renderMethodOperatingStep).join("")}
@@ -4386,8 +4384,8 @@ function renderDatalizationMethodPage() {
       <section class="method-command page-inner" id="metodo-comando" aria-labelledby="methodCommandTitle">
         <div class="method-section-head">
           <span class="flow-chip">respuesta ejecutiva</span>
-          <h2 id="methodCommandTitle">La reconstrucción del área necesita una forma común de trabajar antes de escalar.</h2>
-          <p>La decisión no es crear más carpetas: es instalar un estándar que vuelva cada producto encontrable, mantenible, medible y publicable con evidencia.</p>
+          <h2 id="methodCommandTitle">Antes de escalar, el área necesita reglas mínimas que cualquiera pueda aplicar.</h2>
+          <p>La decisión no es crear más carpetas: es acordar qué información debe existir para encontrar, mantener, medir y publicar cada producto.</p>
         </div>
         <div class="method-command-grid">
           ${methodPrinciples
@@ -4529,7 +4527,7 @@ function renderDatalizationMethodPage() {
       <section class="method-vmc page-inner" id="metodo-vmc-fabric" aria-labelledby="methodVmcTitle">
         <div class="method-section-head">
           <span class="flow-chip">VMC / Fabric</span>
-          <h2 id="methodVmcTitle">La publicación productiva necesita workspaces, Lakehouse y permisos como arquitectura, no como costumbre.</h2>
+          <h2 id="methodVmcTitle">La publicación productiva necesita arquitectura explícita, no costumbre de equipo.</h2>
           <p>El método propone un modelo conceptual para pasar de Teams + SharePoint como DEV a VMC como PROD, con capas Bronze, Silver y Gold y promotion controlada.</p>
         </div>
         <div class="method-vmc-diagram">
@@ -4560,7 +4558,7 @@ function renderDatalizationMethodPage() {
         <div class="method-section-head">
           <span class="flow-chip">implementación</span>
           <h2 id="methodRoadmapTitle">El método se instala con piloto, tablero, adopción y gobierno interno.</h2>
-          <p>No hace falta esperar una solución perfecta: la versión 0.1 se valida con un caso piloto, se mide y se mejora con feedback real.</p>
+          <p>La versión 0.1 se valida con un caso piloto, se mide en backlog y se corrige antes de ampliar el alcance.</p>
         </div>
         <div class="method-roadmap-track">
           ${methodRoadmap.map(renderMethodRoadmapItem).join("")}
@@ -4595,8 +4593,8 @@ function renderMethodActionStrip() {
     <section class="method-action-strip page-inner" aria-labelledby="methodActionTitle">
       <div class="method-section-head">
         <span class="flow-chip">próxima acción</span>
-        <h2 id="methodActionTitle">El método avanza cuando alguien puede ejecutar el siguiente paso sin pedir contexto.</h2>
-        <p>Estas acciones concentran las tres decisiones más operativas: crear estructura, nombrar activos y medir flujo real.</p>
+        <h2 id="methodActionTitle">Si hay que empezar hoy, estas son las tres acciones mínimas.</h2>
+        <p>El bloque resume el arranque operativo: crear estructura, aplicar naming y abrir medición de flujo.</p>
       </div>
       <div class="method-action-grid">
         ${methodActionCards
@@ -4632,7 +4630,7 @@ function renderMethodEvaluationModel() {
       <div class="method-section-head">
         <span class="flow-chip">Marco de Datalización VMC</span>
         <h2 id="methodEvaluationTitle">Un único modelo para decidir si un activo entra, cómo se mide y qué evidencia debe dejar.</h2>
-        <p>El marco concentra definición, pilares, intake, índice, ponderación, metadata y alcance VMC sin convertir cada concepto en una página separada.</p>
+        <p>Este bloque reúne definición, pilares, intake, índice, ponderación, metadata y alcance VMC para evaluar activos con la misma vara.</p>
       </div>
 
       <div class="method-evaluation-grid">
@@ -4886,8 +4884,8 @@ function renderDictionaryPage() {
     <section class="page tool-page dictionary-layout">
       <header class="page-heading page-inner">
         <span class="eyebrow">Glosario operativo</span>
-        <h1>Lenguaje común, menor riesgo.</h1>
-        <p class="lede">Cada término define una decisión, explica por qué importa, muestra un ejemplo y advierte el riesgo de interpretarlo mal.</p>
+        <h1>Un glosario para decidir con el mismo significado.</h1>
+        <p class="lede">Cada término fija definición, ejemplo, impacto y riesgo para que las conversaciones de BI no se traben en ambigüedad.</p>
       </header>
 
       ${renderExecutiveBrief(pageNarratives.dictionary)}
@@ -5273,8 +5271,8 @@ function renderToolingPage() {
     <section class="page tool-page">
       <header class="page-heading page-inner">
         <span class="eyebrow">Documentación técnica</span>
-        <h1>Herramientas por decisión.</h1>
-        <p class="lede">El catálogo agrupa librerías, agentes y MCPs como capacidades de operación: almacenar, ejecutar, observar, colaborar, extender y proteger automatizaciones.</p>
+        <h1>Catálogo técnico con criterio de adopción.</h1>
+        <p class="lede">Las librerías, agentes y MCPs se leen como capacidades: qué resuelven, qué riesgo traen y cuándo tiene sentido incorporarlas.</p>
       </header>
 
       ${renderExecutiveBrief(pageNarratives.tooling)}
@@ -5282,8 +5280,8 @@ function renderToolingPage() {
       <section class="tooling-decision page-inner" aria-labelledby="toolingDecisionTitle">
         <div>
           <span class="flow-chip">criterio de adopción</span>
-          <h2 id="toolingDecisionTitle">Una herramienta entra cuando reduce un riesgo real del delivery BI.</h2>
-          <p>El catálogo no busca acumular opciones. Sirve para decidir qué instalar, qué documentar y qué dejar en evaluación con controles explícitos.</p>
+          <h2 id="toolingDecisionTitle">Antes de instalar, el equipo debe saber qué riesgo baja.</h2>
+          <p>El catálogo no busca acumular opciones. Separa herramientas productivas, capacidades para evaluar y casos que requieren gobierno adicional.</p>
         </div>
         <div class="tooling-decision-grid">
           ${toolingDecisionCards
@@ -5302,7 +5300,7 @@ function renderToolingPage() {
       <section class="shortcut-hero page-inner" id="librerias-catalogo">
         <div>
           <span class="flow-chip">inventario del repo</span>
-          <h2>El inventario sirve para decidir, no para instalar todo.</h2>
+          <h2>El inventario muestra capacidades disponibles y límites de adopción.</h2>
           <p>${toolingGroups.length} familias y ${totalItems} herramientas documentadas para evaluar cuando una automatización lo justifique.</p>
         </div>
         <a class="button" href="/${toolingDocs.source}" target="_blank" rel="noreferrer">
@@ -5499,8 +5497,8 @@ function renderProjectPage() {
     <section class="page tool-page">
       <header class="page-heading page-inner">
         <span class="eyebrow">PRD + Spec + PBIP</span>
-        <h1>Contrato operativo Power BI.</h1>
-        <p class="lede">La construcción recién debe avanzar cuando el proceso, las reglas, la evidencia técnica, el versionado y la operación están conectados en una misma respuesta.</p>
+        <h1>Del PRD al PBIP con control de cambios.</h1>
+        <p class="lede">La construcción avanza cuando proceso, reglas, evidencia técnica, versionado y operación están conectados en una misma respuesta.</p>
       </header>
 
       ${renderExecutiveBrief(pageNarratives.project)}
@@ -5508,8 +5506,8 @@ function renderProjectPage() {
       <section class="project-studio page-inner" id="proyecto-estudio">
         <div class="project-copy">
           <span class="flow-chip">filosofía de trabajo</span>
-          <h2>La documentación vale cuando alinea la decisión, no cuando acumula archivos.</h2>
-          <p>En proyectos reales, el problema rara vez es hacer un gráfico más; el problema es no tener claro qué tarea manual se quiere eliminar, qué regla debe aplicar, qué dato sostiene la acción y cómo se prueba que el proceso automatizado funciona.</p>
+          <h2>La documentación vale cuando permite revisar una decisión.</h2>
+          <p>En proyectos reales, el problema rara vez es hacer un gráfico más; el problema es no tener claro qué tarea manual se elimina, qué regla aplica y cómo se prueba que el proceso funciona.</p>
         </div>
 
         <div class="code-window" aria-label="Estructura sugerida de proyecto Power BI">
@@ -5634,8 +5632,8 @@ function renderShortcutsPage() {
     <section class="page tool-page">
       <header class="page-heading page-inner">
         <span class="eyebrow">Power BI Desktop</span>
-        <h1>Menos fricción diaria.</h1>
-        <p class="lede">El resumen prioriza las acciones que más afectan el trabajo diario: navegar, seleccionar, editar, revisar datos, escribir DAX y controlar el modelo.</p>
+        <h1>Atajos para trabajar con menos interrupciones.</h1>
+        <p class="lede">La página prioriza acciones frecuentes de Power BI: navegar, seleccionar, editar, revisar datos, escribir DAX y controlar el modelo.</p>
       </header>
 
       ${renderExecutiveBrief(pageNarratives.shortcuts)}
@@ -5643,7 +5641,7 @@ function renderShortcutsPage() {
       <section class="shortcut-hero page-inner" id="atajos-power-bi">
         <div>
           <span class="flow-chip">recurso local</span>
-          <h2>El PDF queda como evidencia y la página como guía de adopción.</h2>
+          <h2>El PDF conserva la referencia; la página propone la rutina.</h2>
           <p>${shortcutsPdf.pages} slides por categoría. Guardado en el proyecto y disponible para descargar.</p>
         </div>
         <a class="button" href="/${shortcutsPdf.source}" download>
@@ -5655,8 +5653,8 @@ function renderShortcutsPage() {
       <section class="shortcut-adoption page-inner" aria-labelledby="shortcutAdoptionTitle">
         <div>
           <span class="flow-chip">adopción gradual</span>
-          <h2 id="shortcutAdoptionTitle">Pocos atajos por semana cambian más que una lista completa sin práctica.</h2>
-          <p>La mejora se sostiene cuando el equipo incorpora acciones de alto uso, mide fricción eliminada y recién después suma comandos más técnicos.</p>
+          <h2 id="shortcutAdoptionTitle">Pocos atajos por semana valen más que una lista completa sin práctica.</h2>
+          <p>La adopción se sostiene cuando el equipo incorpora acciones de alto uso, mide fricción eliminada y recién después suma comandos más técnicos.</p>
         </div>
         <div class="shortcut-adoption-grid">
           ${shortcutAdoptionPlan

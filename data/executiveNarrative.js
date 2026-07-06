@@ -8,7 +8,7 @@ export const pageNarratives = {
     eyebrow: "síntesis ejecutiva",
     title: "Capacidad organizacional, no inventario de tableros.",
     summary:
-      "La propuesta central es directa: Datalización Hub instala una forma común, gobernada y escalable de convertir necesidades de negocio en inteligencia de datos confiable.",
+      "La propuesta central es directa: Datalización Hub ordena el paso entre una necesidad de negocio y un producto BI que pueda explicarse, auditarse y sostenerse.",
     support: [
       {
         title: "Orden común",
@@ -49,9 +49,9 @@ export const pageNarratives = {
   },
   roadMethodology: {
     eyebrow: "criterio de trabajo",
-    title: "Road y Metodología: avance con evidencia, mejora con control.",
+    title: "El Road decide avance; la metodología decide intervención.",
     summary:
-      "La sección unificada sostiene una idea central: el roadmap define cuándo avanzar y la metodología explica qué pérdida se reduce, qué causa se interviene y qué control queda instalado.",
+      "La sección unificada evita dos discusiones separadas: cuándo una iniciativa puede pasar de etapa y qué pérdida operativa justifica intervenir.",
     support: [
       {
         title: "El avance se gobierna",
@@ -72,7 +72,7 @@ export const pageNarratives = {
     eyebrow: "método operativo",
     title: "Orden común, ejecución delegable.",
     summary:
-      "El Método de Datalización convierte la reconstrucción del área en una forma de trabajo replicable: dónde se guarda cada activo, cómo se nombra, cómo avanza, quién responde y cómo se mide.",
+      "Esta página traduce el método en decisiones de setup: ubicación de activos, naming, avance, responsables, backlog y frontera DEV/PROD.",
     support: [
       {
         title: "Organiza el trabajo",
@@ -112,7 +112,7 @@ export const pageNarratives = {
   },
   project: {
     eyebrow: "contrato de construcción",
-    title: "Contrato operativo Power BI.",
+    title: "La pregunta y la respuesta técnica se separan antes de construir.",
     summary:
       "Un proyecto Power BI serio no empieza en un archivo; empieza cuando negocio, datos, BI e ingeniería acuerdan qué decisión se va a automatizar y cómo se va a controlar.",
     support: [
@@ -133,9 +133,9 @@ export const pageNarratives = {
   },
   dictionary: {
     eyebrow: "lenguaje compartido",
-    title: "Lenguaje común, menor riesgo.",
+    title: "Una definición sirve cuando cambia una decisión.",
     summary:
-      "El diccionario reduce ambigüedad porque convierte cada concepto en una definición operativa, con ejemplo, impacto y riesgo de mala interpretación.",
+      "El diccionario reduce ambigüedad cuando cada término trae definición operativa, ejemplo, impacto y riesgo de mala interpretación.",
     support: [
       {
         title: "Alinea áreas",
@@ -154,7 +154,7 @@ export const pageNarratives = {
   },
   tooling: {
     eyebrow: "criterio técnico",
-    title: "Herramientas por decisión.",
+    title: "El catálogo ordena adopción técnica, no preferencias de instalación.",
     summary:
       "El catálogo se entiende como un mapa de capacidades: no se trata de instalar más tecnología, sino de elegir lo que reduce riesgo, acelera flujo o fortalece gobierno.",
     support: [
@@ -175,7 +175,7 @@ export const pageNarratives = {
   },
   shortcuts: {
     eyebrow: "productividad aplicada",
-    title: "Menos fricción diaria.",
+    title: "La productividad mejora cuando el hábito cambia.",
     summary:
       "Los atajos importan cuando eliminan microinterrupciones repetidas: navegar, editar, revisar visuales, escribir DAX y controlar el modelo con mayor precisión.",
     support: [
