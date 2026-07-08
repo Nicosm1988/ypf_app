@@ -6,7 +6,7 @@ export const toolingDocs = {
 export const toolingGroups = [
   {
     group: "Sistema instalado en el repo",
-    description: "Capacidades ya incorporadas para evolucionar el portal con QA, agentes, skills, MCP registry y release controlado.",
+    description: "Capacidades ya incorporadas para evolucionar el portal con QA, agentes, skills, MCP registry y release controlado. En la práctica, son parte del circuito de publicación.",
     items: [
       "Skills repo-locales YPF",
       "Agentes operativos Codex",
@@ -25,7 +25,7 @@ export const toolingGroups = [
   },
   {
     group: "MCPs priorizados",
-    description: "Servidores MCP recomendados por utilidad real para investigar, diseñar, validar, desplegar y gobernar el portal.",
+    description: "Servidores MCP recomendados por utilidad real para investigar, diseñar, validar, desplegar y operar el portal con permisos explícitos.",
     items: [
       "Playwright MCP",
       "Chrome DevTools MCP",
@@ -40,7 +40,7 @@ export const toolingGroups = [
   },
   {
     group: "Bases de datos y almacenamiento",
-    description: "Se eligen cuando la decisión requiere una fuente persistente, consultable, gobernable o preparada para exploración analítica.",
+    description: "Se eligen cuando la decisión requiere una fuente persistente, consultable o preparada para exploración analítica.",
     items: [
       "PostgreSQL / CrystalDBA",
       "Qdrant",
@@ -64,7 +64,7 @@ export const toolingGroups = [
   },
   {
     group: "Infraestructura, nube y despliegue",
-    description: "Se incorporan cuando la solución debe ejecutar, escalar, aislar o desplegar workloads con control productivo.",
+    description: "Se incorporan cuando la solución debe ejecutar, escalar, aislar o desplegar workloads con criterios productivos claros.",
     items: [
       "Kubernetes",
       "AWS MCP",
@@ -86,7 +86,7 @@ export const toolingGroups = [
   },
   {
     group: "Desarrollo y control de versiones",
-    description: "Aportan trazabilidad cuando el equipo necesita programar, depurar, revisar cambios y documentar contratos técnicos.",
+    description: "Aportan historial y revisión cuando el equipo necesita programar, depurar, revisar cambios y documentar contratos técnicos.",
     items: [
       "GitHub",
       "GitLab",
@@ -103,7 +103,7 @@ export const toolingGroups = [
   },
   {
     group: "Busqueda, web y scraping",
-    description: "Sirven cuando el proceso necesita buscar, navegar, validar o extraer información externa de forma controlada.",
+    description: "Sirven cuando el proceso necesita buscar, navegar, validar o extraer información externa sin perder criterio de fuente.",
     items: [
       "Puppeteer",
       "Playwright",

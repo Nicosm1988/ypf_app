@@ -4,7 +4,7 @@ export const methodologyProcessFlow = [
     method: "Definir + VSM actual + SIPOC ligero",
     why: "Porque antes de hablar de datos o visuales hay que explicitar qué proceso duele, dónde se pierde valor y qué decisión debe quedar mejor resuelta.",
     purpose:
-      "Alinear sponsor, usuarios, BI y datos alrededor de una misma pregunta de negocio, con alcance, exclusiones y criterios de aceptación claros.",
+      "Alinear sponsor, usuarios, BI y datos alrededor de una misma pregunta de negocio. En ese sentido, alcance, exclusiones y criterios de aceptación dejan de ser supuestos.",
     how: "Se describe el flujo actual, se identifican entradas y salidas, se ordenan actores y se separa la necesidad funcional de la respuesta técnica.",
     technicalDefinition:
       "Contrato inicial que transforma una necesidad de negocio en requerimientos verificables, criterios de aceptación, alcance técnico y base de trazabilidad.",
@@ -20,7 +20,7 @@ export const methodologyProcessFlow = [
     method: "Medir + OEE BI + calidad de datos",
     why: "Porque una automatización no puede sostener una decisión si las fuentes llegan tarde, incompletas, duplicadas o sin responsable claro.",
     purpose:
-      "Construir una línea base de disponibilidad, eficiencia y calidad para entender si los datos están en condiciones de alimentar el proceso.",
+      "Construir una línea base de disponibilidad, eficiencia y calidad para entender si los datos están en condiciones de alimentar el proceso. Si esa base falla, el tablero solo acelera una duda.",
     how: "Se relevan fuentes, owners, frecuencia, latencia, volumen, reglas de limpieza, controles de nulos, duplicados, claves huérfanas y plan de refresh.",
     technicalDefinition:
       "Capa de ingesta, preparación y control que convierte fuentes dispersas en datos actualizables, trazables y aptos para modelado.",
@@ -36,7 +36,7 @@ export const methodologyProcessFlow = [
     method: "Proceso + flujo continuo + criterio de granularidad",
     why: "Porque un modelo mal diseñado multiplica dudas: totales que no cierran, filtros ambiguos y decisiones que nadie puede explicar con seguridad.",
     purpose: "Ordenar hechos, dimensiones, relaciones y granularidad para que el negocio lea una única versión del proceso.",
-    how: "Se define el grano de análisis, se separan hechos y dimensiones, se validan relaciones, calendario, cardinalidad y modo de almacenamiento.",
+    how: "Se define el grano de análisis, se separan hechos y dimensiones, se validan relaciones, calendario, cardinalidad y modo de almacenamiento. A partir de ahí, los KPIs tienen una base defendible.",
     technicalDefinition:
       "Estructura semántica que organiza tablas, relaciones y reglas de filtro para responder preguntas analíticas con consistencia y performance.",
     functionalDefinition:
@@ -54,7 +54,7 @@ export const methodologyProcessFlow = [
     how: "Se documenta cada medida relevante, se separan medidas base y derivadas, se prueban casos borde y se revisan severidad, ocurrencia y detección de fallas.",
     technicalDefinition:
       "Capa de cálculo que implementa reglas de negocio mediante medidas, formatos, dependencias y pruebas sobre el modelo semántico.",
-    functionalDefinition: "Traducción transparente de los criterios del negocio en indicadores que el usuario puede interpretar y auditar.",
+    functionalDefinition: "Traducción transparente de los criterios del negocio en indicadores que el usuario puede interpretar, discutir y auditar.",
     examples: [
       "Probar una medida de margen contra casos con descuentos, devoluciones y costos faltantes.",
       "Crear medidas base reutilizables para evitar que cada página calcule una variante distinta.",
@@ -64,7 +64,7 @@ export const methodologyProcessFlow = [
     stage: "Seguridad y gobierno",
     method: "FMEA + Poka-Yoke + responsables explícitos",
     why: "Porque una solución confiable también debe impedir accesos incorrectos, datos sensibles expuestos y decisiones sin dueño.",
-    purpose: "Asegurar permisos, linaje, certificación, responsables y controles antes de abrir la solución a usuarios reales.",
+    purpose: "Asegurar permisos, linaje, certificación, responsables y controles antes de abrir la solución a usuarios reales. En la práctica, confianza también significa saber quién responde.",
     how: "Se definen roles, RLS/OLS, owners, stewards, sensibilidad, linaje, criterios de certificación y pruebas con usuarios reales.",
     technicalDefinition:
       "Conjunto de controles de acceso, trazabilidad, linaje, clasificación y administración que protege el activo BI durante su ciclo de vida.",
@@ -80,7 +80,7 @@ export const methodologyProcessFlow = [
     method: "VSM futuro + flujo continuo",
     why: "Porque el valor no se captura cuando el usuario mira un tablero, sino cuando entiende la señal, decide y actúa sin reconstruir el caso.",
     purpose: "Diseñar la experiencia futura con menos esperas, menos pasos manuales y una acción claramente indicada.",
-    how: "Se prioriza la lectura ejecutiva, se muestra estado, causa, impacto y acción esperada, y se deja el detalle disponible sin saturar la primera vista.",
+    how: "Se prioriza la lectura ejecutiva, se muestra estado, causa, impacto y acción esperada, y se deja el detalle disponible sin saturar la primera vista. Dicho de otro modo, la pantalla guía el trabajo.",
     technicalDefinition:
       "Capa de experiencia, navegación e interacción que conecta indicadores, filtros, detalle, alertas y salida operativa.",
     functionalDefinition:
@@ -94,7 +94,7 @@ export const methodologyProcessFlow = [
     stage: "Versionado y aprobación",
     method: "SMED + plan de control + revisión por pares",
     why: "Porque cada cambio productivo debe ser rápido, pero también revisable, reversible y suficientemente probado.",
-    purpose: "Reducir fricción de release sin perder trazabilidad ni control de calidad.",
+    purpose: "Reducir fricción de release sin perder trazabilidad ni calidad. Por eso el cambio debe ser rápido, pero también revisable.",
     how: "Se separa preparación previa y ventana de publicación, se versionan PBIP/TMDL, se revisan cambios, se ejecuta UAT y se deja rollback definido.",
     technicalDefinition: "Proceso de control de cambios que combina versionado, pruebas, revisión, aprobación y promoción entre ambientes.",
     functionalDefinition:
@@ -123,7 +123,7 @@ export const methodologyProcessFlow = [
     stage: "Operación y mejora",
     method: "Controlar + OEE BI + Kaizen + Kata",
     why: "Porque la salida a producción no cierra el trabajo; apenas inaugura la etapa en la que la solución debe sostenerse, aprender y mejorar.",
-    purpose: "Mantener el servicio BI saludable, medir adopción real, gestionar incidentes y priorizar mejoras con evidencia.",
+    purpose: "Mantener el servicio BI saludable, medir adopción real, gestionar incidentes y priorizar mejoras con evidencia. En consecuencia, publicar no es el cierre: es el inicio de la operación.",
     how: "Se monitorean refresh, errores, capacidad, uso, acciones pendientes, incidentes, SLA y backlog; luego se ejecutan mejoras incrementales con cadencia.",
     technicalDefinition:
       "Disciplina de operación que observa disponibilidad, performance, calidad, incidentes, adopción y evolución del producto BI.",
@@ -143,7 +143,7 @@ export const methodologyPrinciples = [
   },
   {
     title: "Trabajo diario",
-    text: "Le da al equipo una rutina práctica para priorizar problemas, documentar causas, probar mejoras y sostener controles sin depender de conversaciones sueltas.",
+    text: "Le da al equipo una rutina práctica para priorizar problemas, documentar causas, probar mejoras y sostenerlas sin depender de conversaciones sueltas.",
   },
   {
     title: "Producto BI",
@@ -158,7 +158,7 @@ export const oeeFactors = [
     short: "La solución está disponible cuando la operación la necesita.",
     formula: "Tiempo útil de servicio / tiempo comprometido",
     biMeaning:
-      "Mide si las fuentes, el refresh, el gateway, el modelo semántico, el reporte, los permisos y la salida operativa están disponibles dentro de la ventana acordada.",
+      "Mide si las fuentes, el refresh, el gateway, el modelo semántico, el reporte, los permisos y la salida operativa están disponibles dentro de la ventana acordada. Si no está a tiempo, no sirve para decidir.",
     signals: ["Refresh exitoso", "SLA cumplido", "Gateway estable", "Accesos correctos"],
     failureModes: ["Datos vencidos", "Reporte caído", "Permisos mal aplicados", "Incidente sin responsable"],
   },
@@ -178,7 +178,7 @@ export const oeeFactors = [
     short: "La salida es confiable, entendible y accionable.",
     formula: "Casos correctos / casos procesados",
     biMeaning:
-      "Mide errores de datos, cálculos, reglas, segmentación, UX y decisiones. En definitiva, una salida disponible y rápida también falla si induce retrabajo.",
+      "Mide errores de datos, cálculos, reglas, segmentación, UX y decisiones. En definitiva, una salida disponible y rápida también falla si genera retrabajo.",
     signals: ["Datos conciliados", "Medidas validadas", "Reglas trazables", "Acciones aceptadas"],
     failureModes: ["Número discutido", "Regla ambigua", "Dato incompleto", "Acción incorrecta"],
   },
@@ -199,7 +199,7 @@ export const dmaicStages = [
     title: "Medir",
     question: "¿Dónde se pierde disponibilidad, eficiencia o calidad?",
     biApplication:
-      "Se arma una línea base con OEE BI, tiempos de refresh, latencia, adopción, volumen de excepciones, errores de datos y esfuerzo manual. Así, la discusión deja de apoyarse en percepciones y pasa a apoyarse en evidencia.",
+      "Se arma una línea base con OEE BI, tiempos de refresh, latencia, adopción, volumen de excepciones, errores de datos y esfuerzo manual. Así, la discusión deja de apoyarse en percepciones.",
     evidence: ["Línea base OEE BI", "Mapa de fuentes", "Definición de KPIs", "Plan de medición"],
     tools: ["OEE BI", "Contratos de datos", "Checklist de calidad"],
   },
@@ -247,7 +247,7 @@ export const methodologyTools = [
     role: "Diagnóstico",
     when: "Definir y medir",
     purpose: "Mapea cómo fluye hoy el trabajo: entradas, esperas, aprobaciones, planillas, reprocesos, sistemas y decisiones.",
-    biUse: "Muestra dónde debe intervenir el BI; no solo qué dato falta, sino qué espera, validación o retrabajo debe desaparecer.",
+    biUse: "Muestra dónde debe intervenir el BI: no solo qué dato falta, sino qué espera, validación o retrabajo debe desaparecer.",
   },
   {
     title: "OEE BI",
@@ -262,7 +262,7 @@ export const methodologyTools = [
     when: "Analizar",
     purpose:
       "Identifica modos de falla, efectos, causas, controles actuales y prioridad de acción antes de que el error llegue al usuario.",
-    biUse: "Aplica a fuentes, refresh, modelo, DAX, seguridad, UX, deployment y operación.",
+    biUse: "Aplica a fuentes, refresh, modelo, DAX, seguridad, UX, deployment y operación. Dicho simple: anticipa errores antes de que lleguen al usuario.",
   },
   {
     title: "VSM futuro",
@@ -334,7 +334,7 @@ export const leanPractices = [
   {
     title: "Kaizen",
     focus: "Mejoras incrementales",
-    text: "La mejora no espera un proyecto grande; cada incidente, queja o fricción genera una acción pequeña, observable y medible.",
+    text: "La mejora no espera un proyecto grande; cada incidente, queja o fricción puede convertirse en una acción pequeña, observable y medible.",
     example: "Reducir un refresh de 42 a 18 minutos, eliminar un paso manual o aclarar una regla ambigua.",
   },
   {
@@ -348,7 +348,7 @@ export const leanPractices = [
 export const methodologyCadence = [
   {
     title: "Revisión diaria",
-    text: "Mirar disponibilidad, refresh, incidentes, excepciones y acciones pendientes. El objetivo es sostener el servicio BI en condiciones reales de uso.",
+    text: "Mirar disponibilidad, refresh, incidentes, excepciones y acciones pendientes. El objetivo es sostener el servicio BI en condiciones reales de uso, no solo cuando alguien reclama.",
   },
   {
     title: "Kaizen semanal",
@@ -356,7 +356,7 @@ export const methodologyCadence = [
   },
   {
     title: "Gate de release",
-    text: "Antes de publicar, confirmar Spec, pruebas, seguridad, VSM futuro, FMEA actualizado, rollback y comunicación.",
+    text: "Antes de publicar, confirmar Spec, pruebas, seguridad, VSM futuro, FMEA actualizado, rollback y comunicación. En ese punto no debería quedar nada crítico implícito.",
   },
   {
     title: "Comité mensual",

@@ -7,7 +7,7 @@ export const shortcutsPdf = {
 export const powerBiShortcuts = [
   {
     category: "Antes de empezar",
-    intro: "La primera decisión es conocer el panel oficial y elegir pocos atajos con impacto diario.",
+    intro: "La primera decisión es conocer el panel oficial y elegir pocos atajos con impacto diario. Después se suman más, no antes.",
     items: [
       { action: "Abrir ayuda de atajos", keys: ["Mayus", "?"] },
     ],
@@ -26,7 +26,7 @@ export const powerBiShortcuts = [
   },
   {
     category: "Objeto visual",
-    intro: "La prioridad es revisar evidencia dentro del visual sin romper el flujo de análisis.",
+    intro: "La prioridad es revisar información dentro del visual sin romper el flujo de análisis.",
     items: [
       { action: "Abrir menú del visual", keys: ["Alt", "Mayus", "F10"] },
       { action: "Mostrar datos", keys: ["Alt", "Mayus", "F11"] },
@@ -66,7 +66,7 @@ export const powerBiShortcuts = [
   },
   {
     category: "Matrices y panel de campos",
-    intro: "Expandir, contraer y seleccionar con teclado acelera modelos con muchas tablas y jerarquías.",
+    intro: "Expandir, contraer y seleccionar con teclado ayuda cuando el modelo tiene muchas tablas y jerarquías.",
     items: [
       { action: "Expandir matriz", keys: ["Mayus", "→"] },
       { action: "Contraer matriz", keys: ["Mayus", "←"] },

@@ -1,15 +1,15 @@
 export const methodPrinciples = [
   {
     title: "Convención sobre configuración",
-    text: "Pocas reglas claras, obligatorias y fáciles de recordar. El método debe ordenar sin volver lento al equipo.",
+    text: "Pocas reglas claras, obligatorias y fáciles de recordar. El método debe ordenar el trabajo sin volver lento al equipo.",
   },
   {
     title: "Objetivo antes que subjetivo",
-    text: "El seguimiento se apoya en lead time, cycle time, iteraciones, actividad y uso real; no en esfuerzo declarado.",
+    text: "El seguimiento se apoya en lead time, cycle time, iteraciones, actividad y uso real; no en esfuerzo declarado. En la práctica, mide flujo y no opiniones.",
   },
   {
     title: "Preparado para Copilot",
-    text: "Nombres, carpetas y metadatos se diseñan para que Microsoft 365, búsqueda y Copilot encuentren el contexto correcto.",
+    text: "Nombres, carpetas y metadatos se diseñan para que Microsoft 365, búsqueda y Copilot encuentren el contexto correcto sin depender de quién recuerda dónde quedó.",
   },
   {
     title: "Iterativo y versionado",
@@ -21,9 +21,9 @@ export const methodOperatingFlow = [
   {
     step: "Definir el estándar",
     what: "Un acuerdo mínimo sobre canales, carpetas, nombres, roles y evidencias obligatorias.",
-    why: "Sin estándar, cada entrega depende de la memoria de quien la hizo y el equipo no puede sostener ni delegar.",
+    why: "Sin estándar, cada entrega depende de la memoria de quien la hizo y el equipo no puede sostener ni delegar con tranquilidad.",
     purpose: "Crear una forma común de trabajar que sirva para proyectos nuevos, productos en vida e incorporación de integrantes.",
-    how: "Aprobar la versión vigente del método, publicar plantillas y usarla como criterio de aceptación interno.",
+    how: "Aprobar la versión vigente del método, publicar plantillas y usarla como criterio de aceptación interno. A partir de ahí, cada proyecto arranca con el mismo piso.",
     technical:
       "Metodología operativa versionada sobre Microsoft 365, con estructura PARA + Johnny.Decimal lite y catálogo cerrado de códigos.",
     functional: "Reglas simples para que cualquier integrante sepa dónde guardar, cómo nombrar, qué documentar y cuándo escalar.",
@@ -35,7 +35,7 @@ export const methodOperatingFlow = [
     what: "El Teams privado de Datalización funciona como taller de trabajo interno.",
     why: "Borradores, fuentes auxiliares, minutas y pruebas no deben mezclarse con productos publicados al negocio.",
     purpose: "Proteger la construcción, mejorar la búsqueda y ordenar la colaboración diaria sin exponer material inmaduro.",
-    how: "Usar canales por naturaleza de trabajo, SharePoint como repositorio y metadatos para vincular proyectos con áreas.",
+    how: "Usar canales por naturaleza de trabajo, SharePoint como repositorio y metadatos para vincular proyectos con áreas. En ese sentido, DEV es taller; no vidriera.",
     technical: "Repositorio documental con permisos restringidos, versionado de SharePoint, canales controlados y naming estándar.",
     functional: "El equipo encuentra el contexto correcto sin preguntar quién lo tiene, en qué chat quedó o cuál archivo es el último.",
     example: "Una transcripción cruda queda en 99-Reuniones; la decisión aprobada se resume en una minuta curada dentro de 00-Gestion.",
@@ -56,7 +56,7 @@ export const methodOperatingFlow = [
     what: "Cada activo lleva código, tipo, descripción, fecha y versión.",
     why: "Los nombres informales crean duplicados, versiones falsas y retrabajo cada vez que alguien necesita retomar un tema.",
     purpose: "Volver los activos legibles para personas, búsqueda, SharePoint, Copilot y futuras automatizaciones.",
-    how: "Aplicar el patrón estándar, evitar espacios y tildes en archivos, usar fecha ISO y versionar hitos formales.",
+    how: "Aplicar el patrón estándar, evitar espacios y tildes en archivos, usar fecha ISO y versionar hitos formales. Dicho simple: el nombre debe orientar antes de abrir el archivo.",
     technical: "Convención compatible con orden alfabético, límites de path, historial de SharePoint y clasificación por sensibilidad.",
     functional: "El nombre del archivo cuenta suficiente contexto como para decidir si corresponde abrirlo, reemplazarlo o archivarlo.",
     example: "PRJ001_PRD_Tablero-Objetivos_2026-06-10_v2.docx identifica proyecto, tipo, tema, fecha y versión sin abrir el documento.",
@@ -65,7 +65,7 @@ export const methodOperatingFlow = [
     step: "Medir el flujo",
     what: "El Backlog v0 captura estado, responsable, etapa, fechas, producto vinculado y áreas impactadas.",
     why: "Las horas estimadas no prueban flujo ni valor; el equipo necesita señales objetivas sobre avance, espera y sostenimiento.",
-    purpose: "Gestionar capacidad, prioridades, mantenimiento y salud de productos con evidencia operativa.",
+    purpose: "Gestionar capacidad, prioridades, mantenimiento y salud de productos con evidencia operativa. Así, la conversación cambia de “estoy ocupado” a “este flujo está trabado acá”.",
     how: "Medir lead time, cycle time, iteraciones, actividad, antigüedad, uso real y cantidad de áreas involucradas.",
     technical: "SharePoint List como base transaccional inicial, preparada para vistas, Power BI y una futura PowerApp de ingreso.",
     functional: "La conversación deja de ser quién está ocupado y pasa a ser qué trabajo avanza, dónde se trabó y qué decisión falta.",
@@ -105,7 +105,7 @@ export const methodPlanes = [
 ];
 
 export const methodFunctionalLayers = [
-  { layer: "Comunicación", tool: "Canales de Teams", use: "Conversaciones, reuniones y transcripciones en contexto." },
+  { layer: "Comunicación", tool: "Canales de Teams", use: "Conversaciones, reuniones y transcripciones en contexto, sin mezclar temas que después nadie encuentra." },
   { layer: "Documentos", tool: "SharePoint", use: "Archivos versionados, permisos y estructura común." },
   { layer: "Co-creación", tool: "Loop + páginas SharePoint", use: "PRD, Spec, minutas y acuerdos colaborativos." },
   { layer: "Seguimiento", tool: "SharePoint List", use: "Backlog v0 con estados, responsables y métricas objetivas." },
@@ -231,7 +231,7 @@ export const methodVmcModel = {
 };
 
 export const methodRoles = [
-  { role: "Owner del método", responsibility: "Mantener el documento, evolucionar plantillas y coordinar cambios." },
+  { role: "Owner del método", responsibility: "Mantener el documento, evolucionar plantillas y coordinar cambios para que el método no quede congelado." },
   { role: "Owner del catálogo de códigos", responsibility: "Aprobar nuevos códigos PRJ, PRD, ARE y MET." },
   { role: "Owner de proyecto", responsibility: "Mantener carpeta, README, minutas, release notes y trazabilidad." },
   { role: "Owner de producto en vida", responsibility: "Gestionar mantenimiento, feedback y operación post-publicación." },
@@ -239,11 +239,11 @@ export const methodRoles = [
 ];
 
 export const methodRoadmap = [
-  { moment: "Semana 1", focus: "Decisiones de fondo", deliverable: "Aprobación del método, Teams y canales creados." },
+  { moment: "Semana 1", focus: "Decisiones de fondo", deliverable: "Método aprobado, Teams creado y canales listos para usar." },
   { moment: "Semana 1", focus: "Plantillas", deliverable: "Estructura de proyecto, naming y catálogo de códigos." },
   { moment: "Semana 2", focus: "Migración piloto", deliverable: "Caso MidGas migrado con estándar completo." },
   { moment: "Semana 2", focus: "Seguimiento", deliverable: "Backlog Datalización v0 y primer tablero del equipo." },
-  { moment: "Semana 3", focus: "Adopción", deliverable: "Capacitación de 1 hora, retro y ajustes." },
+  { moment: "Semana 3", focus: "Adopción", deliverable: "Capacitación de 1 hora, retroalimentación y ajustes." },
   { moment: "Semana 3", focus: "Gobernanza interna", deliverable: "Roles asignados y owner del catálogo definido." },
   { moment: "Mes 2", focus: "VMC", deliverable: "Propuesta de workspaces y Lakehouse Fabric." },
   { moment: "Mes 2-3", focus: "PBIP + Git", deliverable: "Equipo preparado para trabajar en formato versionable." },
@@ -289,7 +289,7 @@ export const methodEvaluationModel = {
   pureData:
     "La datalización pura implica trabajar sobre la fuente original del dato. Una ingesta automática no alcanza si no puede explicarse de dónde viene el dato, cómo se transforma, quién lo gobierna, bajo qué reglas se consume, cómo se valida y cómo se audita.",
   scope:
-    "En esta etapa, el modelo de evaluación de datalización aplica al universo del Value Management Center / VMC. El objetivo es construir una metodología clara, medible y replicable antes de extenderla a otros ámbitos.",
+    "En esta etapa, el modelo de evaluación de datalización aplica al universo del Value Management Center / VMC. La decisión es empezar por un alcance claro, medible y replicable antes de extenderlo.",
   pillars: [
     {
       title: "Centralización",
@@ -329,7 +329,7 @@ export const methodEvaluationModel = {
     },
   ],
   intake: {
-    claim: "Antes de medir datalización, se define si el activo es elegible para ingresar al proceso.",
+    claim: "Antes de medir datalización, se define si el activo es elegible para ingresar al proceso. Esa decisión evita evaluar casos que todavía no tienen base suficiente.",
     states: [
       "Aprobado para datalizar",
       "Aprobado con observaciones",

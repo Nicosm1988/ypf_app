@@ -12,7 +12,7 @@ export const prdSpecComparison = [
   {
     characteristic: "Objetivo",
     prd: "Alinear al equipo antes de automatizar y fijar criterios de éxito observables.",
-    spec: "Guiar la construcción paso a paso y dejar reglas, datos y decisiones técnicas trazables.",
+    spec: "Guiar la construcción paso a paso y dejar reglas, datos y decisiones técnicas que puedan revisarse.",
   },
   {
     characteristic: "Contenido habitual",
@@ -27,7 +27,7 @@ export const guideSections = [
     title: "PRD y Spec",
     eyebrow: "Inicio del proyecto",
     summary:
-      "Antes de construir, el equipo debe separar el proceso que quiere automatizar de la solución técnica que va a implementar. El PRD define el problema; la Spec ordena la construcción.",
+      "Antes de construir, el equipo debe separar el proceso que quiere automatizar de la solución técnica que va a implementar. El PRD define el problema; la Spec ordena la construcción. Por eso, ambos documentos se complementan, pero no dicen lo mismo.",
     practices: [
       "Definir proceso, disparador, responsables, audiencia, acciones y métricas de éxito",
       "Acordar alcance, fuera de alcance, supuestos, excepciones y riesgos operativos",
@@ -57,7 +57,7 @@ export const guideSections = [
     title: "Modelado",
     eyebrow: "Modelo semántico",
     summary:
-      "El modelado convierte datos preparados en un motor analítico entendible: hechos, dimensiones, relaciones, granularidad, calendario, modo de almacenamiento y reglas de filtro.",
+      "El modelado convierte datos preparados en un motor analítico entendible: hechos, dimensiones, relaciones, granularidad, calendario, modo de almacenamiento y reglas de filtro. En la práctica, define qué significa cada número.",
     practices: [
       "Separar hechos y dimensiones",
       "Definir granularidad, tabla calendario, claves y direcciones de filtro",
@@ -87,7 +87,7 @@ export const guideSections = [
     title: "Seguridad y gobierno",
     eyebrow: "Confianza",
     summary:
-      "Antes de abrir la solución a usuarios, hay que asegurar permisos, RLS, OLS, linaje, owners, stewards, sensibilidad y certificación. La confianza se diseña antes de publicar.",
+      "Antes de abrir la solución a usuarios, hay que asegurar permisos, RLS, OLS, linaje, owners, stewards, sensibilidad y certificación. Dicho de otro modo, la confianza se diseña antes de publicar.",
     practices: [
       "Definir permisos de workspace, semantic model, reporte y app",
       "Preferir RLS dinámico con tabla de usuarios y USERPRINCIPALNAME() cuando corresponda",
@@ -117,7 +117,7 @@ export const guideSections = [
     title: "Versionado y aprobación",
     eyebrow: "Antes de publicar",
     summary:
-      "Antes de producción, la solución debe pasar por versionado, revisión técnica, pruebas, UAT y aprobación. Este es el control que evita publicar cambios manuales improvisados.",
+      "Antes de producción, la solución debe pasar por versionado, revisión técnica, pruebas, UAT y aprobación. Este es el punto que evita publicar cambios manuales improvisados.",
     practices: [
       "Versionar PBIP/TMDL, documentación, Spec y scripts cuando aplique",
       "Separar Dev, Test y Prod con reglas por ambiente",
@@ -132,7 +132,7 @@ export const guideSections = [
     title: "Publicación",
     eyebrow: "Go-live",
     summary:
-      "Publicar es el paso en el que la automatización pasa a estar disponible para usuarios reales: workspace productivo, app o audiencia, permisos finales, refresh, credenciales y comunicación.",
+      "Publicar es el paso en el que la automatización queda disponible para usuarios reales: workspace productivo, app o audiencia, permisos finales, refresh, credenciales y comunicación.",
     practices: [
       "Publicar o promover contenido al workspace productivo",
       "Configurar semantic model, reporte, app, audiencia, permisos y credenciales",
@@ -147,7 +147,7 @@ export const guideSections = [
     title: "Operación y mejora",
     eyebrow: "Después de publicar",
     summary:
-      "Automatizar no termina al publicar. Hay que sostener refresh, gateway, capacidad, uso real, incidentes, SLA, adopción y backlog de mejora continua.",
+      "Automatizar no termina al publicar. A partir de ahí hay que sostener refresh, gateway, capacidad, uso real, incidentes, SLA, adopción y backlog de mejora continua.",
     practices: [
       "Monitorear refreshes, errores, duración de consultas, CUs, throttling y gateway",
       "Definir alertas, responsables, runbook, SLA e incidentes",
@@ -155,7 +155,7 @@ export const guideSections = [
       "Priorizar mejoras por impacto operativo y costo de mantenimiento",
     ],
     deliverables: ["Dashboard operativo", "Runbook de incidentes", "SLA y alertas", "Backlog de mejora continua"],
-    risk: "La automatización funciona el día de la salida a producción, pero se degrada sin alertas, responsables claros ni aprendizaje operativo.",
+    risk: "La automatización funciona el día de la salida a producción, pero se degrada si no tiene alertas, responsables claros ni aprendizaje operativo.",
   },
 ];
 

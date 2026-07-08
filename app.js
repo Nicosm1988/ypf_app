@@ -225,7 +225,7 @@ const datalitoState = {
       id: "welcome",
       role: "assistant",
       answer:
-        "Hola, soy Datalito. Te ayudo a ubicar contenido del hub, aclarar conceptos y conectar decisiones con fuentes. Preguntame por método, PRD, Spec, Power BI, Fabric o gobierno.",
+        "Hola, soy Datalito. Te ayudo a ubicar contenido del hub, aclarar conceptos y conectar decisiones con fuentes. Preguntame por método, PRD, Spec, Power BI, Fabric o gobierno, y lo bajamos a tierra.",
       confidence: null,
       grounded: false,
       unresolved: false,
@@ -244,13 +244,13 @@ const hubNavigationSections = [
     title: "Road y Metodología",
     route: "/road-y-metodologia",
     iconName: "route",
-    text: "Cuándo avanzar, qué pérdida se interviene y qué control queda después del release.",
+    text: "Cuándo avanzar, qué pérdida se interviene y cómo se sostiene después del release.",
   },
   {
     title: "Método",
     route: "/metodo-datalizacion",
     iconName: "folder",
-    text: "Dónde vive cada activo, cómo se nombra, quién responde y cómo se mide el flujo.",
+    text: "Dónde vive cada activo, cómo se nombra, quién responde y cómo se mide el avance real.",
   },
   {
     title: "Proyecto Power BI",
@@ -280,7 +280,7 @@ const hubNavigationSections = [
     title: "Librerías",
     route: "/librerias",
     iconName: "terminal",
-    text: "Inventario técnico para decidir qué instalar, documentar o mantener en evaluación.",
+    text: "Inventario técnico para decidir qué instalar, qué documentar y qué dejar en evaluación.",
   },
   {
     title: "Atajos",
@@ -294,17 +294,17 @@ const homeResearchFrame = [
   {
     label: "Punto de partida",
     title: "El pedido inicial debe convertirse en contrato.",
-    text: "La primera claridad no está en el tablero, sino en definir proceso, usuario, regla, dato, salida esperada y criterio de éxito.",
+    text: "La primera claridad no está en el tablero, sino en definir proceso, usuario, regla, dato, salida esperada y criterio de éxito. Recién después tiene sentido construir.",
   },
   {
     label: "Tensión operativa",
     title: "Cada criterio distinto crea deuda de mantenimiento.",
-    text: "Si documentar, validar y publicar depende de cada persona, el área pierde capacidad de revisar, delegar y mejorar.",
+    text: "Si documentar, validar y publicar depende de cada persona, el área pierde capacidad de revisar, delegar y mejorar sin volver a preguntar todo.",
   },
   {
     label: "Decisión de gestión",
     title: "El hub transforma oficio acumulado en estándar visible.",
-    text: "La experiencia del equipo queda expresada en rutas, plantillas, definiciones, controles y decisiones reutilizables.",
+    text: "La experiencia del equipo queda expresada en rutas, plantillas, definiciones, controles y decisiones reutilizables. Eso vuelve enseñable lo que antes era tácito.",
   },
   {
     label: "Forma de trabajo",
@@ -345,7 +345,7 @@ const homeDecisionPath = [
 const methodActionCards = [
   {
     title: "Crear estructura base",
-    text: "Abrir el proyecto con las doce zonas de evidencia, README mínimo y owner visible.",
+    text: "Abrir el proyecto con doce zonas de trabajo, README mínimo y owner visible.",
     action: "Usar plantilla de proyecto",
     route: "/metodo-datalizacion/proyecto",
   },
@@ -380,7 +380,7 @@ const toolingDecisionCards = [
   },
   {
     title: "Escalar con control",
-    text: "Cualquier MCP, agente o API con token, escritura externa o cloud requiere owner, permisos y validación.",
+    text: "Cualquier MCP, agente o API con token, escritura externa o cloud requiere owner, permisos y validación previa.",
   },
 ];
 
@@ -1855,7 +1855,7 @@ function renderHomePage() {
             <span class="eyebrow">Datalización Hub | BI Delivery Playbook</span>
             <h1>De tableros aislados a una disciplina interna de inteligencia de datos.</h1>
             <p class="hero-kicker">Esta plataforma nace para ordenar, estandarizar y escalar la forma en que el área construye inteligencia de datos.</p>
-            <p class="hero-text">Su función es convertir experiencia dispersa en una forma de trabajo visible: decisiones, evidencia, roles, controles y operación para productos BI end-to-end.</p>
+            <p class="hero-text">En la práctica, convierte experiencia dispersa en una forma de trabajo visible: decisiones, evidencia, roles, controles y operación para productos BI end-to-end.</p>
             <div class="platform-metric-row" aria-label="Capacidades principales de la plataforma">
               ${platformHeroMetrics.map(renderPlatformMetric).join("")}
             </div>
@@ -1876,7 +1876,7 @@ function renderHomePage() {
         <div>
           <span class="flow-chip">nuevo módulo metodológico</span>
           <h2>Marco de Datalización VMC</h2>
-          <p>Definición, cinco pilares, intake, índice, ponderación, metadata mínima y alcance inicial integrados dentro del Método.</p>
+          <p>Definición, cinco pilares, intake, índice, ponderación, metadata mínima y alcance inicial, todo integrado dentro del Método para evaluar con la misma vara.</p>
         </div>
         <a class="button secondary" href="/metodo-datalizacion#modelo-evaluacion-datalizacion" data-route>
           Ver modelo dentro del Método
@@ -1897,7 +1897,7 @@ function renderHomePage() {
       <div class="section-title page-inner" id="inicio-recursos">
         <div>
           <h2>Recursos principales</h2>
-          <p>El mapa evita recorrer todo de una vez: cada entrada lleva a una decisión distinta del ciclo BI.</p>
+          <p>El mapa evita recorrer todo de una vez: cada entrada lleva a una decisión distinta del ciclo BI y permite avanzar por necesidad.</p>
         </div>
       </div>
 
@@ -1914,7 +1914,7 @@ function renderHomePage() {
         <article class="feature-card">
           <span class="feature-icon">${icon("layers")}</span>
           <h3>Road y Metodología ordenan el avance</h3>
-          <p>Conectan PRD, datos, modelo, DAX, seguridad, OEE BI, DMAIC y control en gates verificables.</p>
+          <p>Conectan PRD, datos, modelo, DAX, seguridad, OEE BI y DMAIC en gates verificables.</p>
           <a class="button small secondary" href="/road-y-metodologia" data-route>
             Ver Road y Metodología
             ${icon("arrowRight")}
@@ -1923,7 +1923,7 @@ function renderHomePage() {
         <article class="feature-card">
           <span class="feature-icon">${icon("book")}</span>
           <h3>El diccionario fija lenguaje</h3>
-          <p>Define conceptos críticos para que negocio, datos, BI y operación decidan con el mismo criterio.</p>
+          <p>Define conceptos críticos para que negocio, datos, BI y operación no discutan con significados distintos.</p>
           <a class="button small secondary" href="/diccionario" data-route>
             Explorar diccionario
             ${icon("arrowRight")}
@@ -1941,7 +1941,7 @@ function renderHomePage() {
         <article class="feature-card">
           <span class="feature-icon">${icon("code")}</span>
           <h3>El proyecto vuelve revisable la solución</h3>
-          <p>PBIP, TMDL, Git, documentación y scripts transforman la automatización en un activo controlado.</p>
+          <p>PBIP, TMDL, Git, documentación y scripts transforman la automatización en un activo revisable.</p>
           <a class="button small secondary" href="/proyecto-power-bi" data-route>
             Ver proyecto
             ${icon("arrowRight")}
@@ -1959,7 +1959,7 @@ function renderHomePage() {
         <article class="feature-card">
           <span class="feature-icon">${icon("terminal")}</span>
           <h3>Los atajos eliminan fricción diaria</h3>
-          <p>El resumen prioriza acciones repetidas de Power BI que ahorran foco, tiempo y errores.</p>
+          <p>El resumen prioriza acciones repetidas de Power BI que cuidan foco, tiempo y precisión.</p>
           <a class="button small secondary" href="/atajos" data-route>
             Ver atajos
             ${icon("arrowRight")}
@@ -2072,7 +2072,7 @@ function renderPlatformExecutiveSection() {
       <div class="platform-executive-head">
         <span class="flow-chip">plataforma interna de estándares, gobierno y delivery</span>
         <h2 id="platformExecutiveTitle">Datalización Hub convierte conocimiento disperso en una forma común de entrega.</h2>
-        <p>La plataforma define qué se releva, qué se documenta, qué se prueba, qué se publica y qué se monitorea para que el trabajo no dependa de memoria individual.</p>
+        <p>La plataforma define qué se releva, qué se documenta, qué se prueba, qué se publica y qué se monitorea. Por eso, el trabajo deja de depender de memoria individual.</p>
       </div>
 
       <div class="platform-purpose-grid">
@@ -2385,7 +2385,7 @@ function renderDatalitoPage() {
           <span>Hola, soy Datalito</span>
         </div>
         <h1>Hablemos de BI, estándares y proyectos sin vueltas.</h1>
-        <p class="lede">Datalito es el personaje del hub: conversa con vos, te orienta, busca en las fuentes disponibles y te acompaña cuando necesitás entender qué hacer después.</p>
+        <p class="lede">Datalito es el personaje del hub: conversa con vos, te orienta, busca en las fuentes disponibles y te ayuda a entender qué hacer después.</p>
         <div class="datalito-hero-metrics" aria-label="Capacidades principales de Datalito">
           <article>
             <strong>Conversación</strong>
@@ -2405,7 +2405,7 @@ function renderDatalitoPage() {
       <section class="datalito-intro page-inner" id="datalito-intro" aria-labelledby="datalitoIntroTitle">
         <div>
           <span class="flow-chip">conversación viva</span>
-          <h2 id="datalitoIntroTitle">La experiencia empieza como una charla simple y, cuando hace falta precisión, baja a fuentes y evidencia.</h2>
+          <h2 id="datalitoIntroTitle">La experiencia empieza como una charla simple y, cuando hace falta precisión, baja a fuentes.</h2>
           <p>Podés escribirle como a un compañero de trabajo: “hola”, “explicame esto”, “seguí con más detalle” o “dónde está el template”. Si la pregunta necesita respaldo, Datalito trae la fuente; si no hay evidencia suficiente, lo dice sin inventar.</p>
         </div>
         <div class="datalito-card-grid">
@@ -2427,7 +2427,7 @@ function renderDatalitoPage() {
           <div class="datalito-side-block">
             <span class="flow-chip">índice</span>
             <h3>Fuentes autorizadas</h3>
-            <p>La V1 toma su conocimiento desde módulos estructurados de la plataforma y no desde scraping del HTML renderizado.</p>
+            <p>La V1 toma su conocimiento desde módulos estructurados de la plataforma. En consecuencia, responde desde fuentes preparadas y no desde scraping del HTML renderizado.</p>
             <div class="datalito-source-summary">
               ${renderDatalitoSourceTypeSummary()}
             </div>
@@ -2939,7 +2939,7 @@ function buildDatalitoConversationalResponse(question, mode) {
       question,
       mode,
       answer:
-        "Soy Datalito, el personaje-asistente del hub. Mi trabajo es conversar con vos, ayudarte a ubicar conocimiento y, cuando la pregunta necesita precisión, responder con fuentes aprobadas para no chamuyarte.",
+        "Soy Datalito, el personaje-asistente del hub. Mi trabajo es conversar con vos, ayudarte a ubicar conocimiento y, cuando la pregunta necesita precisión, responder con fuentes aprobadas para no contestar de memoria.",
       followUps: ["Qué podés hacer", "Ayudame a empezar", "Mostrame fuentes"],
     });
   }
@@ -3000,7 +3000,7 @@ function composeDatalitoContinuationAnswer(question, source) {
 
   if (/(riesgo|evita|control)/.test(normalized)) {
     const riskText = risk || "evita que el equipo tome decisiones con criterios distintos, sin evidencia o con trabajo manual difícil de sostener.";
-    return `El riesgo principal que evita es este: ${riskText} En términos de gestión, sirve para que el producto BI no dependa de memoria individual, correos o validaciones informales. La referencia está en “${source.title}”, dentro de ${source.section}. [S1]`;
+    return `El riesgo principal que evita es este: ${riskText} En términos de gestión, ayuda a que el producto BI no dependa de memoria individual, correos sueltos o validaciones informales. La referencia está en “${source.title}”, dentro de ${source.section}. [S1]`;
   }
 
   if (/(paso|checklist|como|cómo|aplica)/.test(normalized)) {
@@ -3008,7 +3008,7 @@ function composeDatalitoContinuationAnswer(question, source) {
   }
 
   if (/(gerencia|presenta|resumi)/.test(normalized)) {
-    return `Para gerencia, yo lo diría así: “${source.title}” ayuda a convertir conocimiento disperso en una forma común de decidir, ejecutar y controlar. ${source.summary} La ganancia es trazabilidad: queda claro qué se decidió, con qué evidencia y dónde se sostiene en la plataforma. [S1]`;
+    return `Para gerencia, conviene decirlo sin rodeos: “${source.title}” ayuda a convertir conocimiento disperso en una forma común de decidir, ejecutar y controlar. ${source.summary} La ganancia es trazabilidad: queda claro qué se decidió, con qué evidencia y dónde se sostiene en la plataforma. [S1]`;
   }
 
   const whyText = why ? ` Además, ${why.charAt(0).toLowerCase()}${why.slice(1)}` : "";
@@ -3053,7 +3053,7 @@ function buildDatalitoWorkflowResponse(question, mode) {
     role: "assistant",
     question,
     answer:
-      "Sí. Para armar un flujo de trabajo completo en BI, yo no empezaría por el tablero; empezaría por el recorrido end-to-end de decisión. El flujo sano es: definir el problema y el usuario en un PRD, traducirlo a una Spec técnica y funcional, preparar datos y modelo, construir DAX y UX, validar seguridad, calidad y performance, publicar con responsables claros y sostenerlo con SLA, runbook y mejora continua. [S1][S2][S3]\nLa sección principal para verlo es Roadmap y gates BI end-to-end: ahí están las fases, entregables, gates, riesgos y responsables. Para operarlo en el día a día, lo complementás con el Método operativo de Datalización; y para documentarlo bien, usás PRD vs Spec como contrato entre necesidad, solución y evidencia. [S1][S2][S3]",
+      "Sí. Para armar un flujo de trabajo completo en BI, yo no empezaría por el tablero; empezaría por el recorrido end-to-end de decisión. Primero se define el problema y el usuario en un PRD, después se traduce a una Spec técnica y funcional, luego se preparan datos y modelo, se construyen DAX y UX, se valida seguridad, calidad y performance, y finalmente se publica con responsables claros, SLA, runbook y mejora continua. [S1][S2][S3]\nLa sección principal para verlo es Roadmap y gates BI end-to-end: ahí están las fases, entregables, gates, riesgos y responsables. Para operarlo en el día a día, lo complementás con el Método operativo de Datalización; y para documentarlo bien, usás PRD vs Spec como contrato entre necesidad, solución y evidencia. [S1][S2][S3]",
     intent: ["workflow", "how_to"],
     answerMode: mode,
     confidence: "high",
@@ -3093,11 +3093,11 @@ function composeDatalitoAnswer(question, mode, primary, matches, context) {
   }
 
   if (lowerQuestion.includes("resum") && context.route !== "/") {
-    return `La idea central de esta parte es simple: ${primary.summary} ${citation}\nLa lectura práctica es que esta sección debe ayudarte a decidir qué estándar aplicar, qué evidencia revisar y qué siguiente paso sostener.`;
+    return `La idea central de esta parte es simple: ${primary.summary} ${citation}\nLa lectura práctica es que esta sección debe ayudarte a decidir qué criterio aplicar, qué evidencia revisar y qué siguiente paso sostener.`;
   }
 
   if (mode === "executive") {
-    return `La respuesta ejecutiva es esta: “${primary.title}” sirve para reducir variabilidad y sostener decisiones con evidencia. ${primary.summary} ${citation}\nImpacto: mejora trazabilidad, acelera alineación y baja la dependencia de conocimiento tácito. Siguiente paso: abrir la sección citada y validar si aplica al caso concreto.`;
+    return `En lectura ejecutiva, “${primary.title}” sirve para reducir variabilidad y sostener decisiones con evidencia. ${primary.summary} ${citation}\nImpacto: mejora trazabilidad, acelera alineación y baja la dependencia de conocimiento tácito. Siguiente paso: abrir la sección citada y validar si aplica al caso concreto.`;
   }
 
   if (mode === "functional") {
@@ -3106,7 +3106,7 @@ function composeDatalitoAnswer(question, mode, primary, matches, context) {
 
   if (mode === "technical") {
     const excerpt = primary.content.split("\n").slice(0, 3).join(" ");
-    return `Técnicamente, la base es esta: ${primary.summary} ${citation}\nDetalle: ${excerpt}\nPara que sea gobernable, la implementación tiene que quedar trazable a fuente, versión, owner, steward y URL canónica.`;
+    return `Técnicamente, la base es esta: ${primary.summary} ${citation}\nDetalle: ${excerpt}\nPara que se pueda revisar después, la implementación tiene que quedar trazable a fuente, versión, owner, steward y URL canónica.`;
   }
 
   if (mode === "step_by_step") {
@@ -3114,7 +3114,7 @@ function composeDatalitoAnswer(question, mode, primary, matches, context) {
   }
 
   const relatedText = relatedSections ? ` También puede servirte mirar ${relatedSections}, porque completa el contexto.` : "";
-  return `Te diría esto: ${primary.summary} ${citation}\nLo importante, llevado al trabajo diario, es entender qué decisión habilita y dónde queda la evidencia. La sección correcta para revisar el detalle es “${primary.title}”, dentro de ${primary.section}.${relatedText}`;
+  return `Te diría esto: ${primary.summary} ${citation}\nLo importante, llevado al trabajo diario, es entender qué decisión habilita y dónde queda documentada. La sección correcta para revisar el detalle es “${primary.title}”, dentro de ${primary.section}.${relatedText}`;
 }
 
 function searchDatalitoSources(question, context) {
@@ -3611,7 +3611,7 @@ function renderRoadMethodologyPage() {
       <header class="page-heading page-inner road-methodology-hero">
         <span class="eyebrow">Road y Metodología</span>
         <h1>Del caso operativo a la mejora controlada.</h1>
-        <p class="lede">Esta sección une dos preguntas: qué evidencia permite avanzar y qué pérdida operativa justifica la mejora.</p>
+        <p class="lede">Esta sección une dos preguntas: qué evidencia permite avanzar y qué pérdida operativa justifica la mejora. A partir de ahí, cada gate deja de ser una formalidad.</p>
       </header>
 
       ${renderExecutiveBrief(pageNarratives.roadMethodology)}
@@ -3641,7 +3641,7 @@ function renderRoadMethodologyPage() {
         <div class="guide-section-title">
           <span class="flow-chip">historia completa</span>
           <h2 id="guideJourneyTitle">Cada gate cuenta qué se decidió y qué prueba lo sostiene.</h2>
-          <p>La secuencia se lee como una investigación aplicada: cada etapa declara una decisión, exige evidencia y prepara el control siguiente.</p>
+          <p>La secuencia se lee como una investigación aplicada: cada etapa declara una decisión, exige evidencia y prepara el paso siguiente.</p>
         </div>
         ${guideSections.map(renderGuideJourneyStep).join("")}
       </section>
@@ -3691,7 +3691,7 @@ function renderRoadMethodologyPage() {
         <div class="methodology-section-head">
           <span class="flow-chip">DMAIC</span>
           <h2 id="dmaicTitle">DMAIC evita saltar del síntoma a la solución.</h2>
-          <p>DMAIC ordena el flujo de mejora: primero se define el proceso, después se mide la pérdida, se analiza la causa, se mejora el diseño y finalmente se controla la operación para no volver al circuito manual.</p>
+          <p>DMAIC ordena el flujo de mejora: primero se define el proceso, después se mide la pérdida, se analiza la causa, se mejora el diseño y finalmente se sostiene la operación para no volver al circuito manual.</p>
         </div>
         <div class="dmaic-track" aria-label="Ciclo DMAIC aplicado a BI">
           ${dmaicStages.map(renderDmaicStage).join("")}
@@ -3702,7 +3702,7 @@ function renderRoadMethodologyPage() {
         <div class="methodology-section-head">
           <span class="flow-chip">herramientas ubicadas</span>
           <h2 id="toolchainTitle">Cada herramienta entra por la pérdida que ayuda a entender o reducir.</h2>
-          <p>Lean Six Sigma, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata quedan integrados al trabajo real cuando explican una decisión, una causa o un control.</p>
+          <p>Lean Six Sigma, VSM, FMEA, Kaizen, SMED, Poka-Yoke y Kata quedan integrados al trabajo real cuando explican una decisión, una causa o una forma de sostener la mejora.</p>
         </div>
         <div class="methodology-tool-grid">
           ${methodologyTools.map(renderMethodologyTool).join("")}
@@ -3713,7 +3713,7 @@ function renderRoadMethodologyPage() {
         <div class="methodology-section-head">
           <span class="flow-chip">4P Toyota</span>
           <h2 id="toyotaTitle">Las 4P evitan que la conversación quede atrapada en la herramienta.</h2>
-          <p>Primero se define el propósito, luego el flujo, después los roles y finalmente la rutina de resolución de problemas; esa secuencia sostiene la datalización como sistema de gestión.</p>
+          <p>Primero se define el propósito, luego el flujo, después los roles y finalmente la rutina de resolución de problemas. Esa secuencia sostiene la datalización como sistema de gestión.</p>
         </div>
         <div class="toyota-layers" aria-label="Cuatro P de Toyota aplicadas a BI">
           ${toyotaFourP.map(renderToyotaLayer).join("")}
@@ -3735,7 +3735,7 @@ function renderRoadMethodologyPage() {
         <div class="methodology-section-head">
           <span class="flow-chip">operación diaria</span>
           <h2 id="cadenceTitle">La metodología se sostiene cuando entra en la agenda del equipo.</h2>
-          <p>El marco se mantiene con una cadencia liviana: salud diaria, Kaizen semanal, gate de release y revisión mensual de efectividad. Esa rutina conecta gerencia, ingeniería y usuarios.</p>
+          <p>El marco se mantiene con una cadencia liviana: salud diaria, Kaizen semanal, gate de release y revisión mensual de efectividad. Esa rutina conecta gerencia, ingeniería y usuarios sin sumar burocracia innecesaria.</p>
         </div>
         <div class="cadence-grid">
           ${methodologyCadence.map(renderCadenceItem).join("")}
@@ -4361,7 +4361,7 @@ function renderDatalizationMethodPage() {
       <header class="page-heading page-inner method-hero">
         <span class="eyebrow">Método de Datalización v0.1</span>
         <h1>Un sistema operativo para trabajar, entregar y sostener productos BI.</h1>
-        <p class="lede">La página baja el método a decisiones concretas: estructura Microsoft 365, naming, backlog, DEV/PROD, VMC/Fabric y gobierno interno.</p>
+        <p class="lede">La página baja el método a decisiones concretas: estructura Microsoft 365, naming, backlog, DEV/PROD, VMC/Fabric y gobierno interno. En la práctica, muestra cómo se trabaja.</p>
       </header>
 
       ${renderExecutiveBrief(pageNarratives.method)}
@@ -4406,7 +4406,7 @@ function renderDatalizationMethodPage() {
         <div class="method-section-head">
           <span class="flow-chip">arquitectura base</span>
           <h2 id="methodPlanesTitle">DEV y PROD se separan para que el trabajo interno no contamine lo que consume el negocio.</h2>
-          <p>El Teams de Datalización es el taller controlado; VMC es el ambiente donde vive el producto publicado. Esa frontera evita acoplar borradores, fuentes y pruebas con tableros productivos.</p>
+          <p>El Teams de Datalización es el taller de trabajo; VMC es el ambiente donde vive el producto publicado. Esa frontera evita mezclar borradores, fuentes y pruebas con tableros productivos.</p>
         </div>
         <div class="method-plane-flow" aria-label="Doble plano DEV y PROD">
           ${methodPlanes.map(renderMethodPlane).join("")}
@@ -4428,7 +4428,7 @@ function renderDatalizationMethodPage() {
         <div class="method-section-head">
           <span class="flow-chip">PARA + Johnny.Decimal lite</span>
           <h2 id="methodChannelsTitle">Los canales separan proyecto, producto, área, recurso y archivo sin duplicar información.</h2>
-          <p>Los proyectos viven en Proyectos Activos y se vinculan a áreas por metadatos. Así un proyecto transversal se busca desde varios ángulos sin copiar carpetas.</p>
+          <p>Los proyectos viven en Proyectos Activos y se vinculan a áreas por metadatos. Así, un proyecto transversal se busca desde varios ángulos sin copiar carpetas.</p>
         </div>
         <div class="method-channel-track">
           ${methodChannels.map(renderMethodChannel).join("")}
@@ -4453,7 +4453,7 @@ function renderDatalizationMethodPage() {
             <article>
               <span>${icon("book")}</span>
               <h3>Cada subcarpeta lleva un README mínimo.</h3>
-              <p>Tres líneas alcanzan para explicar qué se guarda, qué no se guarda y quién debería usarlo. El sistema queda autodescubrible y delegable.</p>
+              <p>Tres líneas alcanzan para explicar qué se guarda, qué no se guarda y quién debería usarlo. Con eso, el sistema queda más fácil de delegar.</p>
             </article>
             <article>
               <span>${icon("quote")}</span>
@@ -4528,7 +4528,7 @@ function renderDatalizationMethodPage() {
         <div class="method-section-head">
           <span class="flow-chip">VMC / Fabric</span>
           <h2 id="methodVmcTitle">La publicación productiva necesita arquitectura explícita, no costumbre de equipo.</h2>
-          <p>El método propone un modelo conceptual para pasar de Teams + SharePoint como DEV a VMC como PROD, con capas Bronze, Silver y Gold y promotion controlada.</p>
+          <p>El método propone un modelo conceptual para pasar de Teams + SharePoint como DEV a VMC como PROD, con capas Bronze, Silver y Gold y promoción controlada.</p>
         </div>
         <div class="method-vmc-diagram">
           <article class="method-vmc-card">
@@ -4594,7 +4594,7 @@ function renderMethodActionStrip() {
       <div class="method-section-head">
         <span class="flow-chip">próxima acción</span>
         <h2 id="methodActionTitle">Si hay que empezar hoy, estas son las tres acciones mínimas.</h2>
-        <p>El bloque resume el arranque operativo: crear estructura, aplicar naming y abrir medición de flujo.</p>
+        <p>El bloque resume el arranque operativo: crear estructura, aplicar naming y abrir medición de flujo. Después se puede sofisticar; antes, hay que ordenar lo básico.</p>
       </div>
       <div class="method-action-grid">
         ${methodActionCards
@@ -4670,7 +4670,7 @@ function renderMethodEvaluationModel() {
             <span>02</span>
             <div>
               <strong>Lectura operativa</strong>
-              <p>El método define si el activo entra, cuánto avanzó, cuánto pesa y qué metadata deja para gobierno.</p>
+              <p>El método define si el activo entra, cuánto avanzó, cuánto pesa y qué metadata deja para seguimiento.</p>
             </div>
           </div>
           <article class="method-evaluation-card intake">
@@ -5281,7 +5281,7 @@ function renderToolingPage() {
         <div>
           <span class="flow-chip">criterio de adopción</span>
           <h2 id="toolingDecisionTitle">Antes de instalar, el equipo debe saber qué riesgo baja.</h2>
-          <p>El catálogo no busca acumular opciones. Separa herramientas productivas, capacidades para evaluar y casos que requieren gobierno adicional.</p>
+          <p>El catálogo no busca acumular opciones. Separa herramientas productivas, capacidades para evaluar y casos que requieren una decisión de seguridad o permisos.</p>
         </div>
         <div class="tooling-decision-grid">
           ${toolingDecisionCards
@@ -5548,7 +5548,7 @@ function renderProjectPage() {
         <div class="project-method-head">
           <span class="flow-chip">método de trabajo</span>
           <h2 id="projectMethodTitle">Power BI construye la solución y Git conserva la responsabilidad.</h2>
-          <p>Power BI materializa el modelo y la experiencia; Visual Studio Code ordena el proyecto; Git controla los cambios; y la Spec explica por qué cada decisión técnica existe.</p>
+          <p>Power BI materializa el modelo y la experiencia; Visual Studio Code ordena el proyecto; Git conserva el historial; y la Spec explica por qué cada decisión técnica existe.</p>
         </div>
         <div class="project-step-list">
           ${projectBuildSteps.map(renderProjectBuildStep).join("")}
@@ -5577,7 +5577,7 @@ function renderProjectPage() {
         <div>
           <span class="eyebrow">modo proyecto</span>
           <h2>PBIP convierte el BI en un activo revisable.</h2>
-          <p>Power BI Project permite guardar el reporte y el modelo semántico como carpetas con archivos de texto; en ese escenario, Visual Studio Code, Git y la terminal dejan de ser herramientas ajenas al BI y pasan a cuidar la automatización con PRD y Spec.</p>
+          <p>Power BI Project permite guardar el reporte y el modelo semántico como carpetas con archivos de texto. En ese escenario, Visual Studio Code, Git y la terminal dejan de ser herramientas ajenas al BI y pasan a cuidar la automatización con PRD y Spec.</p>
         </div>
         <ul>
           <li>Separar proceso operativo, reglas de negocio y decisiones técnicas.</li>
@@ -5642,7 +5642,7 @@ function renderShortcutsPage() {
         <div>
           <span class="flow-chip">recurso local</span>
           <h2>El PDF conserva la referencia; la página propone la rutina.</h2>
-          <p>${shortcutsPdf.pages} slides por categoría. Guardado en el proyecto y disponible para descargar.</p>
+          <p>${shortcutsPdf.pages} slides por categoría, guardados en el proyecto y disponibles para descargar.</p>
         </div>
         <a class="button" href="/${shortcutsPdf.source}" download>
           ${icon("download")}

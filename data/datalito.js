@@ -62,11 +62,11 @@ export const datalitoSourceSchema = [
 export const datalitoProductPrinciples = [
   {
     title: "Respuesta respaldada",
-    text: "Datalito responde cuando encuentra evidencia en una fuente aprobada y muestra de dónde salió.",
+    text: "Datalito responde cuando encuentra respaldo en una fuente aprobada y muestra de dónde salió. Si puede citar, cita.",
   },
   {
     title: "No inventar",
-    text: "Cuando la base no alcanza, reconoce la brecha, sugiere contenido relacionado y permite reportarla.",
+    text: "Cuando la base no alcanza, reconoce la brecha, sugiere contenido relacionado y permite reportarla. Ese límite es parte de la calidad.",
   },
   {
     title: "Read-only por diseño",
@@ -77,7 +77,7 @@ export const datalitoProductPrinciples = [
 export const datalitoArchitectureLayers = [
   {
     title: "Interfaz conversacional",
-    text: "Página completa y launcher global para preguntar, cambiar modo de respuesta, revisar fuentes y enviar feedback.",
+    text: "Página completa y launcher global para preguntar, cambiar modo de respuesta, revisar fuentes y enviar feedback sin salir del flujo de lectura.",
   },
   {
     title: "Contexto de página",
@@ -89,7 +89,7 @@ export const datalitoArchitectureLayers = [
   },
   {
     title: "Adaptadores futuros",
-    text: "La evolución enterprise debe conectar proveedor de modelo, búsqueda híbrida, SSO, permisos, telemetría y persistencia.",
+    text: "La evolución enterprise debería conectar proveedor de modelo, búsqueda híbrida, SSO, permisos, telemetría y persistencia sin cambiar la experiencia base.",
   },
 ];
 
@@ -356,12 +356,12 @@ export const datalitoKnowledgeSources = [
     section: "Inicio",
     contentType: "page",
     url: "/",
-    summary: "La plataforma ordena, estandariza y escala el delivery BI end-to-end como capacidad organizacional.",
+    summary: "La plataforma ordena el delivery BI end-to-end y lo convierte en una capacidad organizacional.",
     keywords: ["plataforma", "datalizacion", "hub", "proposito", "capacidad organizacional", "delivery"],
     content: [
       "Datalización Hub funciona como sistema operativo metodológico del área.",
       "Ordena la forma de relevar requerimientos, documentar decisiones, construir modelos y publicar productos BI.",
-      "La plataforma busca pasar de tableros aislados a una disciplina interna de inteligencia de datos gobernada, escalable y trazable.",
+      "La plataforma busca pasar de tableros aislados a una disciplina interna de inteligencia de datos que se pueda explicar, revisar y sostener.",
       ...platformPillars.map((item) => `${item.title}: ${item.text}`),
       ...platformBeforeAfter.map((item) => `${item.moment}: ${item.claim}. ${item.text}`),
     ],
@@ -373,12 +373,12 @@ export const datalitoKnowledgeSources = [
     section: "Inicio",
     contentType: "standard",
     url: "/",
-    summary: "Datalizar no es solo automatizar; implica estructurar información, gobernar decisiones y sostener operación.",
+    summary: "Datalizar no es solo automatizar; implica estructurar información, decidir con datos confiables y sostener la operación.",
     keywords: ["datalizar", "automatizar", "trazabilidad", "gobierno", "decisiones", "operacion"],
     content: [
       "Datalizar no es simplemente automatizar procesos.",
       "Datalizar es estructurar información, definir estándares, asegurar trazabilidad, gobernar datos y convertirlos en decisiones confiables.",
-      "Automatizar acelera una tarea; datalizar instala una disciplina.",
+      "Automatizar acelera una tarea; datalizar instala una disciplina de trabajo.",
       ...platformDefinitionCards.map((item) => `${item.title}: ${item.text}`),
     ],
   }),
@@ -389,10 +389,10 @@ export const datalitoKnowledgeSources = [
     section: "Datalito",
     contentType: "standard",
     url: "/datalito",
-    summary: "Datalito es un asistente interno de conocimiento basado en fuentes aprobadas, citas y brechas.",
+    summary: "Datalito es un asistente interno de conocimiento basado en fuentes aprobadas, citas y registro de brechas.",
     keywords: ["datalito", "asistente", "chatbot", "fuentes", "citas", "brechas", "feedback", "read-only"],
     content: [
-      "Datalito ayuda a encontrar, comprender y aplicar los estándares, procesos y contenidos de Datalización.",
+      "Datalito ayuda a encontrar, comprender y aplicar criterios, procesos y contenidos de Datalización.",
       "Debe responder cuando la respuesta existe en una fuente aprobada y autorizada.",
       "Cuando no hay evidencia suficiente, debe reconocerlo, sugerir contenido relacionado y registrar la brecha.",
       "La primera versión es read-only: no ejecuta cambios en Power BI, Fabric, RLS, permisos ni documentación aprobada.",
@@ -432,10 +432,10 @@ export const datalitoKnowledgeSources = [
     section: "Design System",
     contentType: "standard",
     url: "/design-system",
-    summary: "El Design System crea una experiencia digital consistente, gobernada, escalable y mantenible.",
+    summary: "El Design System ordena patrones de interfaz para que la plataforma crezca sin reabrir las mismas decisiones.",
     keywords: ["design system", "componentes", "consistencia", "accesibilidad", "gobernanza", "experiencia"],
     content: [
-      "El Design System permite pasar de soluciones visuales aisladas a una experiencia digital consistente, gobernada y escalable.",
+      "El Design System permite pasar de soluciones visuales aisladas a una experiencia digital más consistente y fácil de mantener.",
       ...designSystemPrinciples.map(([title, text]) => `${title}: ${text}`),
       ...designSystemBenefits.map(([title, text]) => `${title}: ${text}`),
       `Componentes esperados: ${designSystemComponents.join(", ")}.`,
@@ -448,7 +448,7 @@ export const datalitoKnowledgeSources = [
     section: "Método",
     contentType: "standard",
     url: "/metodo-datalizacion",
-    summary: "El método ordena estándares, plano DEV, proyectos, naming, backlog, VMC y sostenimiento.",
+    summary: "El método ordena plano DEV, proyectos, naming, backlog, VMC y sostenimiento.",
     keywords: ["metodo", "teams", "sharepoint", "dev", "prod", "vmc", "naming", "backlog", "roles"],
     content: [
       `Marco de Datalización VMC: ${methodEvaluationModel.definition}`,
@@ -502,7 +502,7 @@ export const datalitoKnowledgeSources = [
     section: "Road y Metodología",
     contentType: "standard",
     url: "/road-y-metodologia",
-    summary: "DMAIC estructura mejora continua en definir, medir, analizar, mejorar y controlar.",
+    summary: "DMAIC ordena la mejora en cinco momentos: definir, medir, analizar, mejorar y controlar.",
     keywords: ["dmaic", "definir", "medir", "analizar", "mejorar", "controlar", "mejora continua"],
     content: dmaicStages.map((stage) => `${stage.title}: ${stage.question}. ${stage.text}`),
   }),
