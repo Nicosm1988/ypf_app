@@ -40,7 +40,7 @@ import {
   platformHeroMetrics,
   platformPillars,
 } from "../data/platformIntro.js";
-import { powerBiShortcuts, shortcutsPdf } from "../data/powerbiShortcuts.js";
+import { powerBiShortcuts, shortcutsOfficialSource } from "../data/powerbiShortcuts.js";
 import { conceptDecantation, pageNarratives } from "../data/executiveNarrative.js";
 import {
   methodChannels,
@@ -51,13 +51,19 @@ import {
   methodProjectFolders,
 } from "../data/datalizationMethod.js";
 import { products } from "../data/powerPlatformProducts.js";
+import { loadGatePractices, validateGateLibrary } from "../data/practices/index.js";
+import { powerAppsPracticeLibrary } from "../data/practices/powerApps.js";
+import { powerAutomatePracticeLibrary } from "../data/practices/powerAutomate.js";
+import { powerBiPracticeLibrary } from "../data/practices/powerBi.js";
+import { practiceSources } from "../data/practices/sources.js";
 import { powerBiFlowCopy, roadmapPhases } from "../data/roadmap.js";
 import { toolingDocs, toolingGroups } from "../data/toolingLibrary.js";
 
 const requiredTermFields = ["id", "term", "category", "definition", "whyItMatters", "example", "risk"];
-const requiredPhaseFields = ["id", "title", "lane", "objective", "keyActivities", "deliverables", "owner", "riskIfSkipped", "gate"];
+const requiredPhaseFields = ["id", "slug", "title", "lane", "objective", "keyActivities", "deliverables", "owner", "riskIfSkipped", "gate"];
 const requiredProductPhaseFields = [
   "id",
+  "slug",
   "title",
   "objective",
   "keyActivities",
@@ -131,6 +137,68 @@ assert(
 );
 assert(appJs.includes("renderFabricArchitectureConnector"), "La arquitectura Fabric debe usar conectores entre limites de bloque.");
 assert(!appJs.toLowerCase().includes("notebooklm"), "La guía maestra Fabric no debe incluir marca NotebookLM.");
+
+const fabricOfficialIcons = [
+  {
+    label: "Dataflow Gen2",
+    file: "dataflow_gen2_48_item.svg",
+    sha256: "5291386e4344dbd5729c19805d75287fc04eed07ed74979d6b15355213a17aaf",
+  },
+  {
+    label: "Notebook",
+    file: "notebook_48_item.svg",
+    sha256: "d1822f787c453b2edf2f5af8ecca2b8b1258e07859dfaf057562b0f166dbc866",
+  },
+  {
+    label: "Lakehouse",
+    file: "lakehouse_48_item.svg",
+    sha256: "7f4ba4303e8f507d4ec8e47bc055bace80eb9715ccc58df40021b776a3c65f08",
+  },
+  {
+    label: "Data Warehouse",
+    file: "data_warehouse_48_item.svg",
+    sha256: "f1fb93c5c38b69b74c7086bca91626a1f57954b30abbd109ede412b735e0a691",
+  },
+  {
+    label: "Mirrored Generic Database",
+    file: "mirrored_generic_database_48_item.svg",
+    sha256: "a1b2d7cad2063b92b2de71d9a61d0981e44068beaa690351feaeb01a58173597",
+  },
+  {
+    label: "OneLake",
+    file: "one_lake_48_color.svg",
+    sha256: "23fe33bcc61e703f655ac98753512a780bc2ff71d157d6c25682841ed9b6a825",
+  },
+  {
+    label: "Power BI",
+    file: "power_bi_48_color.svg",
+    sha256: "264abad01f50acaffb697b3ede22215b7d87f387c1af92f0a0b14117d2c2e4f1",
+  },
+];
+
+assert(
+  (appJs.match(/<svg class="fabric-illustration/g) || []).length === 12,
+  "La guía Fabric debe conservar únicamente sus doce pictogramas conceptuales inline.",
+);
+assert(
+  (appJs.match(/<img class="fabric-illustration fabric-official-icon/g) || []).length === fabricOfficialIcons.length,
+  "Los siete productos y elementos Fabric deben usar SVG oficiales como imágenes locales.",
+);
+assert(
+  /\.fabric-illustration\.fabric-official-icon\s*\{[^}]*object-fit:\s*contain;[^}]*filter:\s*none;/s.test(stylesCss),
+  "Los íconos oficiales Fabric deben mantener proporción y no recibir filtros visuales.",
+);
+
+for (const icon of fabricOfficialIcons) {
+  const localPath = `assets/microsoft/fabric/${icon.file}`;
+  const publicPath = `/${localPath}`;
+  assert(appJs.includes(`src="${publicPath}"`), `${icon.label} debe renderizar el SVG oficial documentado.`);
+  assert(serviceWorkerJs.includes(`"${publicPath}"`), `${icon.label} debe formar parte del precache v38.`);
+  const iconBuffer = await readFile(localPath);
+  const iconSha256 = createHash("sha256").update(iconBuffer).digest("hex");
+  assert(iconSha256 === icon.sha256, `${icon.label} debe conservar byte a byte el SVG oficial de Microsoft Fabric.`);
+}
+
 assert(indexHtml.includes("/road-y-metodologia"), "La navegación principal debe exponer Road y Metodología.");
 assert(
   !indexHtml.includes("Guía + Roadmap") && !indexHtml.includes('href="/metodologia"'),
@@ -312,21 +380,68 @@ for (const expectedProduct of expectedProducts) {
   );
 }
 
+const practiceLibraries = {
+  "power-bi": powerBiPracticeLibrary,
+  "power-apps": powerAppsPracticeLibrary,
+  "power-automate": powerAutomatePracticeLibrary,
+};
+const allPracticeIds = new Set();
+let practiceCount = 0;
+let practiceExampleCount = 0;
+
+for (const product of products) {
+  const library = practiceLibraries[product.slug];
+  const phaseSlugs = product.phases.map((phase) => phase.slug);
+  assert(library && Object.keys(library).length === 9, `${product.officialName} debe tener prácticas para sus nueve gates.`);
+  assert(
+    Object.keys(library).join("|") === phaseSlugs.join("|"),
+    `La biblioteca de ${product.officialName} debe seguir los slugs y el orden de sus gates.`,
+  );
+
+  for (const phase of product.phases) {
+    const gateLibrary = library[phase.slug];
+    assert(validateGateLibrary(product.slug, phase.slug, gateLibrary), `Biblioteca inválida: ${product.slug}/${phase.slug}.`);
+    const loadedGate = await loadGatePractices(product.slug, phase.slug);
+    assert(
+      loadedGate.practices.every((practice) => practice.sources.every((source) => source?.url?.startsWith("https://learn.microsoft.com/"))),
+      `Las fuentes técnicas de ${product.slug}/${phase.slug} deben ser oficiales de Microsoft Learn.`,
+    );
+
+    gateLibrary.practices.forEach((practice) => {
+      assert(!allPracticeIds.has(practice.id), `El id de práctica ${practice.id} debe ser único en toda la biblioteca.`);
+      allPracticeIds.add(practice.id);
+      assert(practice.examples.length === 3, `${practice.id} debe incluir exactamente tres ejemplos.`);
+      assert(
+        practice.sourceIds.every((sourceId) => practiceSources[sourceId]),
+        `${practice.id} referencia una fuente inexistente.`,
+      );
+      practiceCount += 1;
+      practiceExampleCount += practice.examples.length;
+    });
+  }
+}
+
+assert(practiceCount === 90, "La biblioteca productiva debe incluir 90 buenas prácticas verificadas.");
+assert(practiceExampleCount === 270, "La biblioteca productiva debe incluir exactamente 270 ejemplos.");
+assert(
+  powerBiPracticeLibrary["datos-y-power-query"].practices.length === 12,
+  "Power Query debe incluir su biblioteca ampliada de doce buenas prácticas.",
+);
+assert(
+  ["index", "sources", "powerBi", "powerApps", "powerAutomate"].every((file) => serviceWorkerJs.includes(`"/data/practices/${file}.js"`)),
+  "El service worker v38 debe precachear la biblioteca completa de buenas prácticas.",
+);
+
 const powerBiProduct = products.find((product) => product.slug === "power-bi");
 assert(powerBiProduct.phases === roadmapPhases, "Microsoft Power BI debe referenciar roadmapPhases sin duplicar sus gates.");
-assert(
-  powerBiProduct.flowCopy === powerBiFlowCopy,
-  "Microsoft Power BI debe compartir también la introducción visual del flujo fuente.",
-);
+assert(powerBiProduct.flowCopy === powerBiFlowCopy, "Microsoft Power BI debe compartir también la introducción visual del flujo fuente.");
 assert(
   ["Reliability", "Security", "Operational Excellence", "Performance Efficiency", "Experience Optimization"].every((pillar) =>
     appJs.includes(pillar),
   ),
   "Productos debe presentar los cinco pilares de Power Platform Well-Architected como controles transversales.",
 );
-const serviceWorkerCacheVersion = Number(
-  serviceWorkerJs.match(/^const CACHE_NAME = "datalizacion-ypf-v(\d+)";$/m)?.[1],
-);
+const serviceWorkerCacheVersion = Number(serviceWorkerJs.match(/^const CACHE_NAME = "datalizacion-ypf-v(\d+)";$/m)?.[1]);
 assert(serviceWorkerCacheVersion >= 37, "El service worker debe declarar una caché vigente para Productos.");
 assert(
   serviceWorkerJs.includes("keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))"),
@@ -425,6 +540,14 @@ assert(
   datalitoKnowledgeSources.every((source) => source.status === "approved" && source.confidentiality === "internal"),
   "La V1 de Datalito debe exponer solo fuentes internas aprobadas.",
 );
+assert(
+  datalitoKnowledgeSources.every((source) => !source.content.includes("undefined")),
+  "El índice de Datalito no debe serializar campos inexistentes como undefined.",
+);
+assert(
+  ["power-bi", "power-apps", "power-automate"].every((slug) => datalitoKnowledgeSources.some((source) => source.id === `product-${slug}`)),
+  "Datalito debe indexar los tres ciclos de vida de Productos.",
+);
 assert(datalitoSourceSchema.length >= 14, "Datalito debe documentar el schema mínimo de fuente.");
 assert(datalitoAnswerModes.length === 5, "Datalito debe incluir cinco modos de respuesta.");
 assert(datalitoProductPrinciples.length === 3, "Datalito debe declarar tres principios de producto.");
@@ -460,7 +583,7 @@ assert(
   "La sección debe incluir la definición estratégica de datalización.",
 );
 
-const requiredNarratives = ["home", "roadMethodology", "guide", "method", "methodology", "project", "dictionary", "tooling", "shortcuts"];
+const requiredNarratives = ["roadMethodology", "method", "project", "dictionary"];
 assert(
   requiredNarratives.every((key) => pageNarratives[key]),
   "Todas las páginas principales deben tener narrativa ejecutiva.",
@@ -487,13 +610,46 @@ assert(
   "El catálogo técnico debe registrar al menos 100 herramientas.",
 );
 
-assert(shortcutsPdf.source === "assets/docs/atajos-power-bi.pdf", "El PDF de atajos debe estar publicado en assets/docs.");
+assert(
+  shortcutsOfficialSource.url.startsWith("https://learn.microsoft.com/"),
+  "La referencia de atajos debe apuntar a la documentación oficial de Microsoft.",
+);
+let legacyShortcutPdfExists = true;
+try {
+  await access("assets/docs/atajos-power-bi.pdf");
+} catch {
+  legacyShortcutPdfExists = false;
+}
+assert(!legacyShortcutPdfExists, "El PDF de terceros de atajos no debe publicarse en el repositorio.");
+assert(
+  !appJs.includes("atajos-power-bi.pdf") && !serviceWorkerJs.includes("atajos-power-bi.pdf"),
+  "La UI y el service worker no deben conservar referencias al PDF retirado.",
+);
+for (const removedAsset of [
+  "assets/energy-chain.png",
+  "assets/energy-chain-v1-640.webp",
+  "assets/energy-chain-v1-960.webp",
+  "assets/energy-chain-v1-1280.webp",
+  "assets/energy-chain-v1-1672.webp",
+  "assets/datalito-avatar.png",
+  "assets/datalito-avatar-256.webp",
+  "assets/datalito-avatar-512.webp",
+]) {
+  let exists = true;
+  try {
+    await access(removedAsset);
+  } catch {
+    exists = false;
+  }
+  assert(!exists, `El asset obsoleto ${removedAsset} no debe volver al build.`);
+}
 await access("assets/docs/modelos/prd-datalizacion.docx");
 await access("assets/docs/modelos/spec-datalizacion.docx");
 await access("assets/ypf-industrial-hero-1280.webp");
 await access("assets/ypf-industrial-hero-1280.avif");
 await access("assets/ypf-industrial-hero.png");
 await access("assets/ypf-logo.svg");
+await access("assets/YPF_BRAND_NOTICE.md");
 await access("assets/datalito-robot-v22.png");
 await access("assets/datalito-robot-v22-512.webp");
 await access("assets/datalito-robot-v22-256.webp");
@@ -506,6 +662,18 @@ await access("evals/datalito/golden-questions.json");
 await access("evals/datalito/no-answer-cases.json");
 await access("evals/datalito/security-cases.json");
 await access(".env.example");
+assert(
+  createHash("sha256")
+    .update(await readFile("assets/ypf-logo.svg"))
+    .digest("hex") === "10ef4f997a699fc75e744a0e4598d29fc2006f9dc5822eaf2b0b5c74d9238343",
+  "El header debe usar la geometría oficial del master blanco YPF documentado.",
+);
+assert(
+  createHash("sha256")
+    .update(await readFile("assets/favicon.svg"))
+    .digest("hex") === "7cac119d1e905a5102dafd572b23aeb1f2a7c4519a4b52fd982f370be7f52b07",
+  "El favicon debe usar la geometría oficial del master azul YPF documentado.",
+);
 assert(powerBiShortcuts.length >= 7, "Los atajos deben estar agrupados en categorías útiles.");
 assert(
   powerBiShortcuts.every((category) => category.category && category.intro && Array.isArray(category.items) && category.items.length),
@@ -553,7 +721,7 @@ await cp("assets", "dist/assets", { recursive: true });
 await cp("data", "dist/data", { recursive: true });
 await cp("docs", "dist/docs", { recursive: true });
 
-const rootFiles = ["index.html", "styles.css", "app.js", "manifest.webmanifest", "service-worker.js"];
+const rootFiles = ["index.html", "styles.css", "app.js", "manifest.webmanifest", "service-worker.js", "THIRD_PARTY_NOTICES.md"];
 for (const file of rootFiles) {
   await cp(file, `dist/${file}`);
 }
@@ -605,6 +773,7 @@ const staticRoutes = [
   "metodo-datalizacion/gobernanza",
   "design-system/fundamentos",
   "design-system/componentes",
+  "design-system/principios",
   "design-system/alcance",
   "design-system/entrega",
   "datalito/conversacion",
@@ -629,14 +798,23 @@ await access("dist/road-y-metodologia/fabric-end-to-end/index.html");
 await access("dist/road-y-metodologia/arquitectura-fabric/index.html");
 await access("dist/metodo-datalizacion/backlog/index.html");
 await access("dist/design-system/componentes/index.html");
+await access("dist/design-system/principios/index.html");
+await access("dist/THIRD_PARTY_NOTICES.md");
 await access("dist/productos/index.html");
 await access("dist/productos/power-bi/index.html");
 await access("dist/productos/power-apps/index.html");
 await access("dist/productos/power-automate/index.html");
 await access("dist/data/powerPlatformProducts.js");
+await access("dist/data/practices/index.js");
+await access("dist/data/practices/powerBi.js");
+await access("dist/data/practices/powerApps.js");
+await access("dist/data/practices/powerAutomate.js");
 await access("dist/assets/microsoft/power-platform/power-bi.svg");
 await access("dist/assets/microsoft/power-platform/power-apps.svg");
 await access("dist/assets/microsoft/power-platform/power-automate.svg");
+for (const icon of fabricOfficialIcons) {
+  await access(`dist/assets/microsoft/fabric/${icon.file}`);
+}
 
 console.log("Build validation OK");
 console.log(`- ${dictionaryTerms.length} términos BI`);

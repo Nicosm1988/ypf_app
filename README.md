@@ -8,7 +8,7 @@ Datalización es la práctica de automatizar procesos mediante datos confiables,
 - Portadas con imagen industrial de alta calidad vinculada a refinería, ductos y puerto energético.
 - Road y Metodología BI/Fabric para ordenar en una sola sección el ciclo completo, los gates, OEE BI, DMAIC y mejora continua.
 - Guía maestra Fabric end-to-end dentro de Road y Metodología, con arquitectura OneLake, procesamiento, Direct Lake y pilares de adopción.
-- Método de Datalización v0.1 para organizar DEV/PROD, Teams, SharePoint, canales, carpetas, naming, backlog, VMC, gobierno y el Marco de Datalización VMC.
+- Método de Datalización para organizar DEV/PROD, Teams, SharePoint, canales, carpetas, naming, backlog, VMC, gobierno y el Marco de Datalización VMC.
 - Design System para consolidar patrones visuales, componentes, reglas de experiencia y criterios de calidad.
 - Datalito, asistente interno de conocimiento con personaje animado, conversación natural, búsqueda local, citas, feedback y brechas.
 - Narrativa ejecutiva en cada página para presentar primero la conclusión, luego los argumentos y finalmente la evidencia operativa.
@@ -19,7 +19,7 @@ Datalización es la práctica de automatizar procesos mediante datos confiables,
 - Proyecto de Power BI con Visual Studio para trabajar procesos, Spec, PBIP, TMDL, Git y documentación con criterio.
 - Catálogo de librerías, agentes, MCPs y sandboxes guardado en documentación local.
 - Sistema repo-local de skills, agentes, MCP registry y QA automatizada para evolucionar la web con criterio productivo.
-- Atajos Power BI extraidos del PDF local del repo.
+- Atajos Power BI curados con referencia directa a la documentación oficial de Microsoft Learn.
 
 La app es estatica, sin credenciales, sin datos sensibles y compatible con Vercel.
 
@@ -146,7 +146,23 @@ Decisión de navegación: `Productos` ocupa el único slot superior que antes ag
 
 Las fases de Power Apps y Power Automate viven en ese módulo. Microsoft Power BI referencia directamente `roadmapPhases` desde `data/roadmap.js`: no copiar ni mantener una segunda definición. Para cambiar el ciclo de Power BI, editar únicamente `data/roadmap.js`.
 
+### Buenas prácticas por gate
+
+Cada uno de los 27 gates carga su biblioteca de buenas prácticas bajo demanda. La estructura se mantiene en:
+
+- `data/practices/powerBi.js`
+- `data/practices/powerApps.js`
+- `data/practices/powerAutomate.js`
+- `data/practices/sources.js`, registro único de fuentes oficiales de Microsoft Learn
+- `data/practices/index.js`, carga y validación del contrato
+
+Cada gate debe conservar `intro` y `practices`. Cada práctica necesita un `id` único, título, decisión, fundamento, evidencia, alcance, referencias oficiales y exactamente tres ejemplos completos. Los `slug` de los gates deben coincidir con los definidos en `data/roadmap.js` o `data/powerPlatformProducts.js`.
+
+El build valida las 90 prácticas y sus 270 ejemplos, la cobertura de los 27 gates, las 12 prácticas específicas de Power Query y la existencia de todas las fuentes declaradas. No duplicar URLs dentro de las prácticas: agregarlas una sola vez en `sources.js` y referenciarlas por `sourceIds`.
+
 Los iconos de producto son SVG locales de los paquetes oficiales de Microsoft Power Platform y Microsoft Fabric, y viven en `assets/microsoft/power-platform/`. Su fuente, fecha de obtención, uso previsto, hashes y restricciones están documentados en `assets/microsoft/power-platform/README.md`; el aviso también explica por qué el icono vigente de Power BI proviene del paquete Fabric. No reemplazarlos por URLs remotas, no redibujarlos y no aplicarles filtros, recortes, rotaciones, animaciones ni cambios de color.
+
+Los pictogramas de servicios Fabric viven en `assets/microsoft/fabric/` y siguen el mismo criterio. Los masters oficiales de YPF usados en el encabezado, el pie y el favicon están documentados en `assets/YPF_BRAND_NOTICE.md`. Las ilustraciones no oficiales del hero y de Datalito están identificadas en `assets/GENERATED_ASSETS.md`; las licencias de los íconos de interfaz están en `THIRD_PARTY_NOTICES.md`.
 
 Microsoft, Power BI, Power Apps y Power Automate son marcas del grupo de empresas Microsoft.
 
@@ -300,9 +316,7 @@ Los MCPs que requieren credenciales no deben activarse sin aprobacion explicita 
 
 ## Editar atajos Power BI
 
-El PDF fuente está en `assets/docs/atajos-power-bi.pdf`.
-
-El resumen navegable se edita en `data/powerbiShortcuts.js`, agrupando cada atajo por categoría:
+La guía navegable se edita en `data/powerbiShortcuts.js`, agrupando cada atajo por categoría y manteniendo como referencia la [documentación oficial de Microsoft Learn](https://learn.microsoft.com/es-es/power-bi/create-reports/desktop-accessibility-keyboard-shortcuts):
 
 ```js
 {
@@ -333,10 +347,13 @@ No conectar esta versión a sistemas internos, APIs privadas, tokens ni fuentes 
 - `data/methodology.js`
 - `data/executiveNarrative.js`
 - `data/roadmap.js`
+- `data/practices/`
 - `data/toolingLibrary.js`
 - `data/powerbiShortcuts.js`
+- `THIRD_PARTY_NOTICES.md`
+- `assets/YPF_BRAND_NOTICE.md`
+- `assets/GENERATED_ASSETS.md`
 - `docs/librerias-agentes-mcp.md`
-- `assets/docs/atajos-power-bi.pdf`
 - `scripts/dev-server.mjs`
 - `scripts/validate-build.mjs`
 - `vercel.json`

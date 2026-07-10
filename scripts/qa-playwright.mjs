@@ -18,6 +18,8 @@ const routes = [
   { path: "/metodologia", selector: ".road-methodology-page", name: "Metodologia compat" },
   { path: "/design-system", selector: ".design-system-page", name: "Design System" },
   { path: "/design-system/componentes", selector: "#design-componentes", name: "Design System subseccion Componentes" },
+  { path: "/design-system/principios", selector: "#design-principios", name: "Design System subseccion Principios" },
+  { path: "/design-system/alcance", selector: "#design-principios", name: "Design System compat Alcance" },
   { path: "/datalito", selector: ".datalito-page", name: "Datalito" },
   { path: "/datalito/arquitectura", selector: "#datalito-arquitectura", name: "Datalito subseccion Arquitectura" },
   { path: "/productos", selector: ".products-page", name: "Productos" },
@@ -27,6 +29,7 @@ const routes = [
   { path: "/diccionario", selector: ".dictionary-layout", name: "Diccionario" },
   { path: "/roadmap", selector: ".road-methodology-page", name: "Roadmap compat" },
   { path: "/proyecto-power-bi", selector: ".project-studio", name: "Proyecto Power BI" },
+  { path: "/proyecto-power-bi/herramientas", selector: "#proyecto-metodo", name: "Proyecto Power BI compat Herramientas" },
   { path: "/librerias", selector: ".tooling-grid", name: "Librerias" },
   { path: "/atajos", selector: ".shortcut-grid", name: "Atajos" },
 ];
@@ -69,7 +72,9 @@ try {
     });
     page.on("pageerror", (error) => consoleMessages.push(`pageerror: ${error.message}`));
     page.on("requestfailed", (failedRequest) => {
-      networkMessages.push(`requestfailed: ${failedRequest.method()} ${failedRequest.url()} (${failedRequest.failure()?.errorText || "sin detalle"})`);
+      networkMessages.push(
+        `requestfailed: ${failedRequest.method()} ${failedRequest.url()} (${failedRequest.failure()?.errorText || "sin detalle"})`,
+      );
     });
     page.on("response", (response) => {
       if (response.status() >= 400) {
@@ -169,6 +174,9 @@ try {
           metrics: document.querySelectorAll(".platform-metric").length,
           hubNavCards: document.querySelectorAll(".hub-nav-card").length,
           researchCards: document.querySelectorAll(".home-research-card").length,
+          duplicateFeatureCards: document.querySelectorAll(".feature-grid .feature-card").length,
+          quoteBands: document.querySelectorAll(".quote-band").length,
+          miniRoadmapSteps: document.querySelectorAll(".mini-roadmap .mini-step").length,
           pillars: document.querySelectorAll(".platform-pillar").length,
           definitionCards: document.querySelectorAll(".platform-definition-card").length,
           timelineCards: document.querySelectorAll(".platform-timeline-card").length,
@@ -184,14 +192,17 @@ try {
         if (
           !navStructureOk ||
           homeReport.dropdowns < 6 ||
-          homeReport.dropdownLinks < 30 ||
+          homeReport.dropdownLinks < 29 ||
           homeReport.footerColumns !== 4 ||
           homeReport.footerProducts !== 1 ||
           homeReport.productsTopLevel !== 1 ||
           homeReport.resourcesTopLevel !== 0 ||
           homeReport.metrics !== 3 ||
           homeReport.hubNavCards !== 8 ||
-          homeReport.researchCards !== 5 ||
+          homeReport.researchCards !== 0 ||
+          homeReport.duplicateFeatureCards !== 0 ||
+          homeReport.quoteBands !== 0 ||
+          homeReport.miniRoadmapSteps !== 0 ||
           homeReport.pillars !== 3 ||
           homeReport.definitionCards !== 3 ||
           homeReport.timelineCards !== 3 ||
@@ -293,6 +304,64 @@ try {
         ) {
           throw new Error(`${route.name} no cumple el flujo de producto esperado: ${JSON.stringify(detailReport)}`);
         }
+
+        if (viewport.label === "desktop") {
+          const expectedPracticeCounts = route.path === "/productos/power-bi" ? [3, 12, 3, 3, 3, 3, 3, 3, 3] : Array(9).fill(3);
+          const nodes = page.locator(".product-detail-page .unified-flow-node");
+
+          for (let gateIndex = 0; gateIndex < 9; gateIndex += 1) {
+            await nodes.nth(gateIndex).click();
+            const panelSelector = `.product-detail-page .unified-flow-panel:not([hidden])`;
+            const disclosure = page.locator(`${panelSelector} [data-practice-library]`);
+            await disclosure.locator(":scope > summary").click();
+            await page.waitForFunction(
+              () =>
+                document.querySelector(".product-detail-page .unified-flow-panel:not([hidden]) [data-practice-library]")?.dataset
+                  .practiceStatus === "ready",
+            );
+
+            const practiceReport = await page.locator(panelSelector).evaluate((panel) => ({
+              practices: panel.querySelectorAll(".product-practice").length,
+              exampleCounts: [...panel.querySelectorAll(".product-practice")].map(
+                (practice) => practice.querySelectorAll(".product-practice-examples article").length,
+              ),
+              sourceLinks: [...panel.querySelectorAll(".product-practice-sources a")].map((link) => link.href),
+              metrics: [...panel.querySelectorAll(".product-practice-intro dd")].map((item) => item.textContent.trim()),
+            }));
+            const expectedPracticeCount = expectedPracticeCounts[gateIndex];
+            if (
+              practiceReport.practices !== expectedPracticeCount ||
+              practiceReport.exampleCounts.some((count) => count !== 3) ||
+              practiceReport.sourceLinks.length < expectedPracticeCount ||
+              practiceReport.sourceLinks.some((href) => !href.startsWith("https://learn.microsoft.com/")) ||
+              Number(practiceReport.metrics[0]) !== expectedPracticeCount ||
+              Number(practiceReport.metrics[1]) !== expectedPracticeCount * 3
+            ) {
+              throw new Error(`${route.name} gate ${gateIndex + 1} no renderiza prácticas y ejemplos: ${JSON.stringify(practiceReport)}`);
+            }
+
+            await page.locator(`${panelSelector} .product-practice > summary`).first().click();
+            const firstPracticeOpen = await page
+              .locator(`${panelSelector} .product-practice`)
+              .first()
+              .evaluate((practice) => practice.open);
+            if (!firstPracticeOpen) throw new Error(`${route.name} no abre una práctica mediante su summary nativo.`);
+
+            const gateContrast = await new AxeBuilder({ page }).include(panelSelector).withRules(["color-contrast"]).analyze();
+            if (gateContrast.violations.length) {
+              const summary = gateContrast.violations.map((violation) => `${violation.id}: ${violation.nodes.length} nodo(s)`).join("; ");
+              throw new Error(`${route.name} gate ${gateIndex + 1} falla contraste con una práctica abierta: ${summary}`);
+            }
+          }
+
+          const practiceAccessibility = await new AxeBuilder({ page }).analyze();
+          if (practiceAccessibility.violations.length) {
+            const summary = practiceAccessibility.violations
+              .map((violation) => `${violation.id}: ${violation.nodes.length} nodo(s)`)
+              .join("; ");
+            throw new Error(`${route.name} con biblioteca abierta tiene violaciones de accesibilidad: ${summary}`);
+          }
+        }
       }
 
       if (route.path === "/productos/power-bi") {
@@ -310,6 +379,27 @@ try {
           clickedGateReport.hiddenPanels.filter((hidden) => !hidden).length !== 1
         ) {
           throw new Error(`El click de gate no sincroniza aria-expanded/hidden: ${JSON.stringify(clickedGateReport)}`);
+        }
+
+        if (["mobile", "compact"].includes(viewport.label)) {
+          const practiceDisclosure = page.locator(".product-detail-page .unified-flow-panel:not([hidden]) [data-practice-library]");
+          await practiceDisclosure.locator(":scope > summary").click();
+          await page.waitForFunction(
+            () =>
+              document.querySelector(".product-detail-page .unified-flow-panel:not([hidden]) [data-practice-library]")?.dataset
+                .practiceStatus === "ready",
+          );
+          await page.locator(".product-detail-page .unified-flow-panel:not([hidden]) .product-practice > summary").first().click();
+          const mobilePracticeReport = await page.evaluate(() => ({
+            bodyOverflow: document.documentElement.scrollWidth > window.innerWidth + 2,
+            practices: document.querySelectorAll(".product-detail-page .unified-flow-panel:not([hidden]) .product-practice").length,
+            examples: document.querySelectorAll(
+              ".product-detail-page .unified-flow-panel:not([hidden]) .product-practice:first-of-type .product-practice-examples article",
+            ).length,
+          }));
+          if (mobilePracticeReport.bodyOverflow || mobilePracticeReport.practices !== 12 || mobilePracticeReport.examples !== 3) {
+            throw new Error(`Power Query no responde bien en ${viewport.label}: ${JSON.stringify(mobilePracticeReport)}`);
+          }
         }
 
         await nodes.nth(2).focus();
@@ -389,13 +479,64 @@ try {
         }));
         if (
           designSystemReport.heroMetrics !== 3 ||
-          designSystemReport.definitions !== 3 ||
+          designSystemReport.definitions !== 0 ||
           designSystemReport.comparisons !== 2 ||
-          designSystemReport.benefits !== 8 ||
+          designSystemReport.benefits !== 0 ||
           designSystemReport.components < 16 ||
           !designSystemReport.finalText?.includes("Ordena cómo construimos")
         ) {
           throw new Error(`Design System no cumple estructura esperada: ${JSON.stringify(designSystemReport)}`);
+        }
+      }
+
+      if (viewport.label === "desktop" && route.path === "/diccionario") {
+        const initialDictionaryReport = await page.evaluate(() => ({
+          cards: document.querySelectorAll("[data-dictionary-term]").length,
+          ready: document.querySelectorAll('[data-dictionary-term][data-term-status="ready"]').length,
+          emptyBodies: [...document.querySelectorAll("[data-term-card-body]")].filter((body) => !body.children.length).length,
+        }));
+        if (
+          initialDictionaryReport.cards < 100 ||
+          initialDictionaryReport.ready !== 0 ||
+          initialDictionaryReport.emptyBodies !== initialDictionaryReport.cards
+        ) {
+          throw new Error(`Diccionario no inicia como índice compacto: ${JSON.stringify(initialDictionaryReport)}`);
+        }
+        await page.locator("[data-dictionary-term] > summary").first().click();
+        await page.waitForFunction(() => document.querySelector("[data-dictionary-term]")?.dataset.termStatus === "ready");
+        const openedDictionaryReport = await page
+          .locator("[data-dictionary-term]")
+          .first()
+          .evaluate((card) => ({
+            open: card.open,
+            ready: card.dataset.termStatus,
+            detailSections: card.querySelectorAll(".detail-list > div").length,
+            copyButtons: card.querySelectorAll("[data-copy-text]").length,
+          }));
+        if (
+          !openedDictionaryReport.open ||
+          openedDictionaryReport.ready !== "ready" ||
+          openedDictionaryReport.detailSections !== 3 ||
+          openedDictionaryReport.copyButtons !== 1
+        ) {
+          throw new Error(`Diccionario no expande el detalle bajo demanda: ${JSON.stringify(openedDictionaryReport)}`);
+        }
+      }
+
+      if (viewport.label === "desktop" && route.path === "/librerias") {
+        const toolingReport = await page.evaluate(() => ({
+          cards: document.querySelectorAll(".tooling-card").length,
+          headings: [...document.querySelectorAll(".tooling-card h2")].map((item) => item.textContent.trim()),
+          speculativeToolsVisible: ["AWS", "Stripe", "CoinMarket", "Apple Notes"].some((name) =>
+            document.querySelector(".tooling-grid")?.textContent.includes(name),
+          ),
+        }));
+        if (
+          toolingReport.cards !== 2 ||
+          JSON.stringify(toolingReport.headings) !== JSON.stringify(["Sistema instalado en el repo", "MCPs priorizados"]) ||
+          toolingReport.speculativeToolsVisible
+        ) {
+          throw new Error(`Librerías no distingue estados concretos: ${JSON.stringify(toolingReport)}`);
         }
       }
 
@@ -407,6 +548,7 @@ try {
           architecture: document.querySelectorAll(".datalito-architecture .datalito-card").length,
           kpis: document.querySelectorAll(".datalito-kpi-card").length,
           launcher: Boolean(document.querySelector(".datalito-launcher")),
+          launcherHidden: document.querySelector("[data-datalito-global]")?.hidden,
         }));
         if (
           datalitoReport.heroMetrics !== 3 ||
@@ -414,7 +556,8 @@ try {
           datalitoReport.principles !== 3 ||
           datalitoReport.architecture !== 4 ||
           datalitoReport.kpis < 6 ||
-          !datalitoReport.launcher
+          !datalitoReport.launcher ||
+          !datalitoReport.launcherHidden
         ) {
           throw new Error(`Datalito no cumple estructura esperada: ${JSON.stringify(datalitoReport)}`);
         }
@@ -495,13 +638,13 @@ try {
           const target = document.getElementById("flujo-continuo");
           if (!target) return false;
           const rect = target.getBoundingClientRect();
-          return window.location.hash === "#flujo-continuo" && rect.top >= 0 && rect.top < window.innerHeight * 0.55;
+          return target.open && window.location.hash === "#flujo-continuo" && rect.top >= 0 && rect.top < window.innerHeight * 0.55;
         });
         const anchored = await page.evaluate(() => {
           const target = document.getElementById("flujo-continuo");
           if (!target) return false;
           const rect = target.getBoundingClientRect();
-          return window.location.hash === "#flujo-continuo" && rect.top >= 0 && rect.top < window.innerHeight * 0.55;
+          return target.open && window.location.hash === "#flujo-continuo" && rect.top >= 0 && rect.top < window.innerHeight * 0.55;
         });
         if (!anchored) throw new Error("El link de fuente de Datalito no navega al ancla #flujo-continuo.");
       }
@@ -521,7 +664,7 @@ try {
           methodologyReport.thesisCards !== 3 ||
           methodologyReport.processSteps !== 9 ||
           methodologyReport.processBlocks !== 54 ||
-          methodologyReport.guideSteps !== 9 ||
+          methodologyReport.guideSteps !== 0 ||
           methodologyReport.flowPanels !== 9 ||
           methodologyReport.oeeFactors !== 3 ||
           methodologyReport.dmaicStages !== 5 ||
@@ -631,8 +774,7 @@ async function inspectFlowLayout(page, path, selector) {
     const viewportStyles = getComputedStyle(viewport);
 
     return {
-      viewportScrollable:
-        ["auto", "scroll"].includes(viewportStyles.overflowX) && viewport.scrollWidth > viewport.clientWidth + 2,
+      viewportScrollable: ["auto", "scroll"].includes(viewportStyles.overflowX) && viewport.scrollWidth > viewport.clientWidth + 2,
       viewportOverflowX: viewportStyles.overflowX,
       viewportRole: viewport.getAttribute("role"),
       viewportTabIndex: viewport.tabIndex,

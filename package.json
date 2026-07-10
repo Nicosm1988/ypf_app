@@ -13,7 +13,7 @@
     "lint:js": "eslint app.js data/**/*.js scripts/**/*.mjs service-worker.js",
     "lint:css": "stylelint styles.css",
     "lint:html": "html-validate index.html",
-    "lint:md": "markdownlint README.md docs/**/*.md .codex/**/*.md",
+    "lint:md": "markdownlint README.md THIRD_PARTY_NOTICES.md assets/**/*.md docs/**/*.md .codex/**/*.md",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "qa:install-browsers": "playwright install chromium",

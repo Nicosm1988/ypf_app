@@ -4,11 +4,12 @@ import { guideSections, prdSpecComparison, readinessChecklist } from "./engineer
 import { methodEvaluationModel, methodOperatingFlow, methodPlanes, methodProjectFolders, methodRoles } from "./datalizationMethod.js";
 import { methodologyProcessFlow, methodologyTools, oeeFactors, leanPractices, dmaicStages } from "./methodology.js";
 import { platformBeforeAfter, platformDefinitionCards, platformPillars } from "./platformIntro.js";
+import { powerPlatformProducts } from "./powerPlatformProducts.js";
 import { roadmapPhases } from "./roadmap.js";
 import { toolingGroups } from "./toolingLibrary.js";
 
 export const datalitoPromptVersion = "datalito-prompt-v1.0-static";
-export const datalitoIndexVersion = "datalito-local-index-2026-06-26";
+export const datalitoIndexVersion = "datalito-local-index-2026-07-10";
 
 export const datalitoAnswerModes = [
   {
@@ -143,19 +144,14 @@ export const datalitoSuggestedPrompts = {
     "¿Qué diferencia hay entre medida y columna calculada?",
     "Buscá conceptos relacionados con gobierno.",
   ],
-  "/proyecto-power-bi": [
-    "¿Por qué PBIP vuelve revisable la solución?",
-    "¿Qué aporta TMDL?",
-    "¿Cómo se conecta Git con el ciclo BI?",
-  ],
-  "/librerias": [
-    "¿Qué MCPs están priorizados?",
-    "¿Qué herramientas sirven para QA?",
-    "¿Qué criterios uso para elegir una librería?",
-  ],
-  "/atajos": [
-    "¿Qué atajos reducen fricción diaria?",
-    "¿Dónde está el PDF de atajos?",
+  "/proyecto-power-bi": ["¿Por qué PBIP vuelve revisable la solución?", "¿Qué aporta TMDL?", "¿Cómo se conecta Git con el ciclo BI?"],
+  "/librerias": ["¿Qué MCPs están priorizados?", "¿Qué herramientas sirven para QA?", "¿Qué criterios uso para elegir una librería?"],
+  "/atajos": ["¿Qué atajos reducen fricción diaria?", "¿Cuál es la fuente oficial de los atajos?"],
+  "/productos": [
+    "¿Qué producto corresponde a cada necesidad?",
+    "¿Cuáles son los nueve gates de Power Apps?",
+    "¿Cómo se opera un flujo de Power Automate?",
+    "¿Qué controles comparten los tres productos?",
   ],
 };
 
@@ -461,7 +457,9 @@ export const datalitoKnowledgeSources = [
         (step) =>
           `${step.step}. Qué es: ${step.what}. Por qué: ${step.why}. Para qué: ${step.purpose}. Cómo: ${step.how}. Ejemplo: ${step.example}`,
       ),
-      ...methodPlanes.map((plane) => `${plane.title || plane.id}: ${plane.text || plane.description || ""}`),
+      ...methodPlanes.map(
+        (plane) => `${plane.title || plane.id}. Propósito: ${plane.purpose}. Acceso: ${plane.access}. Control: ${plane.guardrail}.`,
+      ),
       `Carpetas estándar: ${methodProjectFolders.map((folder) => folder.title || folder.name || folder).join(", ")}.`,
       `Roles: ${methodRoles.map((role) => role.title || role.role || role).join(", ")}.`,
     ],
@@ -480,7 +478,7 @@ export const datalitoKnowledgeSources = [
         (step) =>
           `${step.stage}. Método: ${step.method}. Por qué: ${step.why}. Para qué: ${step.purpose}. Cómo: ${step.how}. Definición técnica: ${step.technicalDefinition}. Definición funcional: ${step.functionalDefinition}.`,
       ),
-      ...methodologyTools.map((tool) => `${tool.title}: ${tool.text}`),
+      ...methodologyTools.map((tool) => `${tool.title}. Propósito: ${tool.purpose}. Aplicación BI: ${tool.biUse}.`),
       ...leanPractices.map((practice) => `${practice.title}: ${practice.text}`),
     ],
   }),
@@ -504,7 +502,10 @@ export const datalitoKnowledgeSources = [
     url: "/road-y-metodologia",
     summary: "DMAIC ordena la mejora en cinco momentos: definir, medir, analizar, mejorar y controlar.",
     keywords: ["dmaic", "definir", "medir", "analizar", "mejorar", "controlar", "mejora continua"],
-    content: dmaicStages.map((stage) => `${stage.title}: ${stage.question}. ${stage.text}`),
+    content: dmaicStages.map(
+      (stage) =>
+        `${stage.title}. Pregunta: ${stage.question}. Aplicación BI: ${stage.biApplication}. Evidencia: ${stage.evidence.join(", ")}.`,
+    ),
   }),
   createSource({
     id: "roadmap-gates",
@@ -531,6 +532,25 @@ export const datalitoKnowledgeSources = [
     keywords: ["librerias", "agentes", "mcp", "playwright", "github", "vercel", "qa", "herramientas"],
     content: toolingGroups.map((group) => `${group.group}: ${group.description}. Herramientas: ${group.items.join(", ")}.`),
   }),
+  ...powerPlatformProducts.map((product) =>
+    createSource({
+      id: `product-${product.slug}`,
+      title: `${product.officialName}: ciclo end-to-end`,
+      slug: `producto-${product.slug}`,
+      section: "Productos",
+      contentType: "standard",
+      url: product.route,
+      summary: product.tagline,
+      keywords: [product.officialName, product.shortName, product.category, "producto", "gates", "ciclo end-to-end"].filter(Boolean),
+      content: [
+        `${product.officialName}. Categoría: ${product.category}. Propósito: ${product.tagline}.`,
+        ...product.phases.map(
+          (phase) =>
+            `${phase.id + 1}. ${phase.title}. Objetivo: ${phase.objective}. Por qué importa: ${phase.whyItMatters || phase.riskIfSkipped}. Actividades: ${phase.keyActivities.join(", ")}. Evidencia: ${phase.deliverables.join(", ")}. Salida: ${phase.targetOutcome}. Responsable: ${phase.owner}. Riesgo: ${phase.riskIfSkipped}.`,
+        ),
+      ],
+    }),
+  ),
   ...guideSections.map((section) =>
     createSource({
       id: `guide-${section.id}`,

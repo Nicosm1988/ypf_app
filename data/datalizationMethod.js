@@ -13,7 +13,7 @@ export const methodPrinciples = [
   },
   {
     title: "Iterativo y versionado",
-    text: "La versión 0.1 es punto de partida: se valida con el uso, se ajusta y cada cambio de plantilla queda trazado.",
+    text: "La versión vigente se valida con el uso, se ajusta y cada cambio de plantilla queda trazado.",
   },
 ];
 
@@ -65,9 +65,11 @@ export const methodOperatingFlow = [
     step: "Medir el flujo",
     what: "El Backlog v0 captura estado, responsable, etapa, fechas, producto vinculado y áreas impactadas.",
     why: "Las horas estimadas no prueban flujo ni valor; el equipo necesita señales objetivas sobre avance, espera y sostenimiento.",
-    purpose: "Gestionar capacidad, prioridades, mantenimiento y salud de productos con evidencia operativa. Así, la conversación cambia de “estoy ocupado” a “este flujo está trabado acá”.",
+    purpose:
+      "Gestionar capacidad, prioridades, mantenimiento y salud de productos con evidencia operativa. Así, la conversación cambia de “estoy ocupado” a “este flujo está trabado acá”.",
     how: "Medir lead time, cycle time, iteraciones, actividad, antigüedad, uso real y cantidad de áreas involucradas.",
-    technical: "SharePoint List como base transaccional inicial, preparada para vistas, Power BI y una futura aplicación de Power Apps para el ingreso.",
+    technical:
+      "SharePoint List como base transaccional inicial, preparada para vistas, Power BI y una futura aplicación de Power Apps para el ingreso.",
     functional: "La conversación deja de ser quién está ocupado y pasa a ser qué trabajo avanza, dónde se trabó y qué decisión falta.",
     example:
       "Un producto con muchas intervenciones post-publicación entra al radar como activo crítico, aunque nadie lo haya declarado urgente.",
@@ -105,7 +107,11 @@ export const methodPlanes = [
 ];
 
 export const methodFunctionalLayers = [
-  { layer: "Comunicación", tool: "Canales de Teams", use: "Conversaciones, reuniones y transcripciones en contexto, sin mezclar temas que después nadie encuentra." },
+  {
+    layer: "Comunicación",
+    tool: "Canales de Teams",
+    use: "Conversaciones, reuniones y transcripciones en contexto, sin mezclar temas que después nadie encuentra.",
+  },
   { layer: "Documentos", tool: "SharePoint", use: "Archivos versionados, permisos y estructura común." },
   { layer: "Co-creación", tool: "Loop + páginas SharePoint", use: "PRD, Spec, minutas y acuerdos colaborativos." },
   { layer: "Seguimiento", tool: "SharePoint List", use: "Backlog v0 con estados, responsables y métricas objetivas." },
@@ -231,7 +237,10 @@ export const methodVmcModel = {
 };
 
 export const methodRoles = [
-  { role: "Owner del método", responsibility: "Mantener el documento, evolucionar plantillas y coordinar cambios para que el método no quede congelado." },
+  {
+    role: "Owner del método",
+    responsibility: "Mantener el documento, evolucionar plantillas y coordinar cambios para que el método no quede congelado.",
+  },
   { role: "Owner del catálogo de códigos", responsibility: "Aprobar nuevos códigos PRJ, PRD, ARE y MET." },
   { role: "Owner de proyecto", responsibility: "Mantener carpeta, README, minutas, release notes y trazabilidad." },
   { role: "Owner de producto en vida", responsibility: "Gestionar mantenimiento, feedback y operación post-publicación." },
@@ -302,7 +311,8 @@ export const methodEvaluationModel = {
     {
       title: "Trazabilidad y Linaje",
       weight: 20,
-      definition: "Puede explicarse el recorrido completo del dato desde su origen hasta su consumo final en tableros, modelos, KPIs o procesos.",
+      definition:
+        "Puede explicarse el recorrido completo del dato desde su origen hasta su consumo final en tableros, modelos, KPIs o procesos.",
       implies: "Origen, transformaciones, modelo, KPI y consumo quedan vinculados.",
       evidence: "Diagrama de linaje, reglas de transformación y relación fuente-KPI.",
     },
@@ -329,7 +339,8 @@ export const methodEvaluationModel = {
     },
   ],
   intake: {
-    claim: "Antes de medir datalización, se define si el activo es elegible para ingresar al proceso. Esa decisión evita evaluar casos que todavía no tienen base suficiente.",
+    claim:
+      "Antes de medir datalización, se define si el activo es elegible para ingresar al proceso. Esa decisión evita evaluar casos que todavía no tienen base suficiente.",
     states: [
       "Aprobado para datalizar",
       "Aprobado con observaciones",
@@ -354,8 +365,7 @@ export const methodEvaluationModel = {
   weighting: {
     formula:
       "Factor de Ponderación = 0,30 x Complejidad técnica + 0,30 x Criticidad de negocio + 0,20 x Magnitud / alcance + 0,20 x Dependencia / esfuerzo",
-    aggregate:
-      "Avance ponderado VMC = Σ (Índice de Datalización del activo x Factor de Ponderación) / Σ (Factores de Ponderación)",
+    aggregate: "Avance ponderado VMC = Σ (Índice de Datalización del activo x Factor de Ponderación) / Σ (Factores de Ponderación)",
     variables: ["Complejidad técnica", "Criticidad de negocio", "Magnitud / alcance", "Dependencia operativa / esfuerzo"],
     example: "No pesa igual un tablero con 75 KPIs que una dependencia puntual basada en Excel.",
   },

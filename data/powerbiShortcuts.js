@@ -1,16 +1,15 @@
-export const shortcutsPdf = {
-  title: "Atajos que reducen fricción en Power BI",
-  source: "assets/docs/atajos-power-bi.pdf",
-  pages: 14,
-};
+export const shortcutsOfficialSource = Object.freeze({
+  label: "Atajos de teclado de Power BI",
+  url: "https://learn.microsoft.com/es-es/power-bi/create-reports/desktop-accessibility-keyboard-shortcuts",
+  publisher: "Microsoft Learn",
+  verifiedAt: "2026-07-10",
+});
 
 export const powerBiShortcuts = [
   {
     category: "Antes de empezar",
     intro: "La primera decisión es conocer el panel oficial y elegir pocos atajos con impacto diario. Después se suman más, no antes.",
-    items: [
-      { action: "Abrir ayuda de atajos", keys: ["Mayus", "?"] },
-    ],
+    items: [{ action: "Abrir ayuda de atajos", keys: ["Mayus", "?"] }],
   },
   {
     category: "Uso frecuente",
@@ -42,9 +41,9 @@ export const powerBiShortcuts = [
     category: "Modo edición",
     intro: "La edición gana precisión cuando mover, ordenar y redimensionar no depende de microajustes manuales.",
     items: [
-      { action: "Mover un visual paso pequeño", keys: ["↑", "↓", "←", "→"] },
+      { action: "Mover un visual seleccionado en el lienzo", keys: ["↑", "↓", "←", "→"] },
       { action: "Mover un visual paso grande", keys: ["Mayus", "↑/↓/←/→"] },
-      { action: "Cambiar tamaño del visual", keys: ["↑", "↓", "←", "→"] },
+      { action: "Cambiar tamaño desde un controlador de redimensión", keys: ["↑", "↓", "←", "→"] },
       { action: "Mantener relación de aspecto", keys: ["Mayus", "arrastrar"] },
       { action: "Agrupar visuales seleccionados", keys: ["Ctrl", "G"] },
     ],

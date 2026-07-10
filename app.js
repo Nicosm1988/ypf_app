@@ -10,21 +10,17 @@ import {
   datalitoNoAnswerCases,
   datalitoProductPrinciples,
   datalitoPromptVersion,
-  datalitoSecurityCases,
   datalitoSourceSchema,
   datalitoSuggestedPrompts,
 } from "./data/datalito.js";
 import {
-  designSystemBenefits,
   designSystemComparison,
   designSystemComponents,
-  designSystemDefinition,
   designSystemDeliverables,
   designSystemFoundations,
   designSystemHeroMetrics,
   designSystemPrinciples,
   designSystemQualityRules,
-  designSystemScope,
 } from "./data/designSystem.js";
 import { guideSections, prdSpecComparison, readinessChecklist } from "./data/engineeringGuide.js";
 import {
@@ -58,7 +54,7 @@ import {
   oeeFactors,
   toyotaFourP,
 } from "./data/methodology.js";
-import { powerBiShortcuts, shortcutsPdf } from "./data/powerbiShortcuts.js";
+import { powerBiShortcuts, shortcutsOfficialSource } from "./data/powerbiShortcuts.js";
 import { getProductBySlug, products } from "./data/powerPlatformProducts.js";
 import { conceptDecantation, narrativeFrame, pageNarratives } from "./data/executiveNarrative.js";
 import {
@@ -83,44 +79,66 @@ let productSwitcherPositionFrame;
 let nineGateViewportSyncFrame;
 
 const icons = {
-  arrowRight: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>',
-  alert:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
-  book: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"></path></svg>',
-  bot: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>',
-  chevronDown: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m6 9 6 6 6-6"></path></svg>',
-  clipboard:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect width="8" height="4" x="8" y="2" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>',
-  code: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m16 18 6-6-6-6"></path><path d="m8 6-6 6 6 6"></path></svg>',
-  download:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>',
-  filter: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 3H2l8 9.5V20l4 2v-9.5L22 3z"></path></svg>',
-  folder:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7l-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"></path></svg>',
-  gauge:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>',
-  gitBranch:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="6" x2="6" y1="3" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 0 1-9 9"></path></svg>',
-  layers:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m12 2 10 5-10 5L2 7l10-5z"></path><path d="m2 17 10 5 10-5"></path><path d="m2 12 10 5 10-5"></path></svg>',
-  message:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path></svg>',
-  plus: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>',
-  quote:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.75-2-2-2H5c-1.25 0-2 .75-2 2v6c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-3 2v4z"></path><path d="M14 21c3 0 7-1 7-8V5c0-1.25-.75-2-2-2h-3c-1.25 0-2 .75-2 2v6c0 1.25.75 2 2 2h.75c0 2.25-.75 3.75-2.75 4v4z"></path></svg>',
-  route:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="6" cy="19" r="3"></circle><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7H6.5a3.5 3.5 0 0 1 0-7H15"></path><circle cx="18" cy="5" r="3"></circle></svg>',
-  search:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>',
-  send: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>',
-  shield:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.68 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1v7z"></path></svg>',
-  spark: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M13 2 3 14h8l-1 8 11-13h-8l1-7z"></path></svg>',
-  terminal: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m4 17 6-6-6-6"></path><path d="M12 19h8"></path></svg>',
-  trash:
-    '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="m19 6-1 14H6L5 6"></path></svg>',
-  x: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>',
+  arrowRight: lucideIcon("arrow-right", '<path d="M5 12h14" /><path d="m12 5 7 7-7 7" />'),
+  book: lucideIcon("book", '<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" />'),
+  bot: lucideIcon(
+    "bot",
+    '<path d="M12 8V4H8" /><rect width="16" height="12" x="4" y="8" rx="2" /><path d="M2 14h2" /><path d="M20 14h2" /><path d="M15 13v2" /><path d="M9 13v2" />',
+  ),
+  chevronDown: lucideIcon("chevron-down", '<path d="m6 9 6 6 6-6" />'),
+  clipboard: lucideIcon(
+    "clipboard",
+    '<rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />',
+  ),
+  code: lucideIcon("code", '<path d="m16 18 6-6-6-6" /><path d="m8 6-6 6 6 6" />'),
+  download: lucideIcon("download", '<path d="M12 15V3" /><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="m7 10 5 5 5-5" />'),
+  filter: lucideIcon(
+    "filter",
+    '<path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z" />',
+  ),
+  folder: lucideIcon(
+    "folder",
+    '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />',
+  ),
+  gauge: lucideIcon("gauge", '<path d="m12 14 4-4" /><path d="M3.34 19a10 10 0 1 1 17.32 0" />'),
+  gitBranch: lucideIcon("git-branch", '<path d="M15 6a9 9 0 0 0-9 9V3" /><circle cx="18" cy="6" r="3" /><circle cx="6" cy="18" r="3" />'),
+  layers: lucideIcon(
+    "layers",
+    '<path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" /><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" /><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" />',
+  ),
+  plus: lucideIcon("plus", '<path d="M5 12h14" /><path d="M12 5v14" />'),
+  quote: lucideIcon(
+    "quote",
+    '<path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" /><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" />',
+  ),
+  route: lucideIcon(
+    "route",
+    '<circle cx="6" cy="19" r="3" /><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" /><circle cx="18" cy="5" r="3" />',
+  ),
+  search: lucideIcon("search", '<path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" />'),
+  send: lucideIcon(
+    "send",
+    '<path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /><path d="m21.854 2.147-10.94 10.939" />',
+  ),
+  shield: lucideIcon(
+    "shield",
+    '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />',
+  ),
+  spark: lucideIcon(
+    "zap",
+    '<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />',
+  ),
+  terminal: lucideIcon("terminal", '<path d="M12 19h8" /><path d="m4 17 6-6-6-6" />'),
+  trash: lucideIcon(
+    "trash-2",
+    '<path d="M10 11v6" /><path d="M14 11v6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /><path d="M3 6h18" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />',
+  ),
+  x: lucideIcon("x", '<path d="M18 6 6 18" /><path d="m6 6 12 12" />'),
 };
+
+function lucideIcon(name, content) {
+  return `<svg class="lucide lucide-${name}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-icon-source="lucide-1.24.0">${content}</svg>`;
+}
 
 const routeTitles = {
   "/": "Datalización Hub | BI Delivery Playbook",
@@ -168,11 +186,11 @@ const baseRoutes = new Set([
 
 const subsectionRoutes = {
   "/inicio/proposito": { route: "/", hash: "#inicio-proposito" },
-  "/inicio/estudio": { route: "/", hash: "#inicio-estudio" },
+  "/inicio/estudio": { route: "/", hash: "#inicio-capacidad" },
   "/inicio/capacidad": { route: "/", hash: "#inicio-capacidad" },
   "/inicio/secciones": { route: "/", hash: "#inicio-secciones" },
-  "/inicio/decantacion": { route: "/", hash: "#inicio-decantacion" },
-  "/inicio/workflow": { route: "/", hash: "#inicio-workflow" },
+  "/inicio/decantacion": { route: "/road-y-metodologia", hash: "#inicio-decantacion" },
+  "/inicio/workflow": { route: "/road-y-metodologia", hash: "#road-flujo-bi" },
   "/road-y-metodologia/tesis": { route: "/road-y-metodologia", hash: "#road-tesis" },
   "/road-y-metodologia/enfoque": { route: "/road-y-metodologia", hash: "#road-tesis" },
   "/road-y-metodologia/proceso": { route: "/road-y-metodologia", hash: "#road-proceso" },
@@ -180,7 +198,7 @@ const subsectionRoutes = {
   "/road-y-metodologia/arquitectura-fabric": { route: "/road-y-metodologia", hash: "#road-fabric-architecture-layer" },
   "/road-y-metodologia/flujo-bi": { route: "/road-y-metodologia", hash: "#road-flujo-bi" },
   "/road-y-metodologia/prd-spec": { route: "/road-y-metodologia", hash: "#modelos-prd-spec" },
-  "/road-y-metodologia/gates": { route: "/road-y-metodologia", hash: "#road-gates" },
+  "/road-y-metodologia/gates": { route: "/road-y-metodologia", hash: "#road-flujo-bi" },
   "/road-y-metodologia/checklist": { route: "/road-y-metodologia", hash: "#road-checklist" },
   "/road-y-metodologia/oee-bi": { route: "/road-y-metodologia", hash: "#road-oee-bi" },
   "/road-y-metodologia/dmaic": { route: "/road-y-metodologia", hash: "#road-dmaic" },
@@ -198,7 +216,8 @@ const subsectionRoutes = {
   "/metodo-datalizacion/gobernanza": { route: "/metodo-datalizacion", hash: "#metodo-gobernanza" },
   "/design-system/fundamentos": { route: "/design-system", hash: "#design-fundamentos" },
   "/design-system/componentes": { route: "/design-system", hash: "#design-componentes" },
-  "/design-system/alcance": { route: "/design-system", hash: "#design-alcance" },
+  "/design-system/principios": { route: "/design-system", hash: "#design-principios" },
+  "/design-system/alcance": { route: "/design-system", hash: "#design-principios" },
   "/design-system/entrega": { route: "/design-system", hash: "#design-entrega" },
   "/datalito/conversacion": { route: "/datalito", hash: "#datalito-conversacion" },
   "/datalito/arquitectura": { route: "/datalito", hash: "#datalito-arquitectura" },
@@ -206,7 +225,7 @@ const subsectionRoutes = {
   "/datalito/evaluacion": { route: "/datalito", hash: "#datalito-evaluacion" },
   "/proyecto-power-bi/estudio": { route: "/proyecto-power-bi", hash: "#proyecto-estudio" },
   "/proyecto-power-bi/metodo": { route: "/proyecto-power-bi", hash: "#proyecto-metodo" },
-  "/proyecto-power-bi/herramientas": { route: "/proyecto-power-bi", hash: "#proyecto-herramientas" },
+  "/proyecto-power-bi/herramientas": { route: "/proyecto-power-bi", hash: "#proyecto-metodo" },
   "/diccionario/busqueda": { route: "/diccionario", hash: "#diccionario-busqueda" },
   "/librerias/catalogo": { route: "/librerias", hash: "#librerias-catalogo" },
   "/atajos/power-bi": { route: "/atajos", hash: "#atajos-power-bi" },
@@ -301,40 +320,12 @@ const hubNavigationSections = [
   },
 ];
 
-const homeResearchFrame = [
-  {
-    label: "Punto de partida",
-    title: "El pedido inicial debe convertirse en contrato.",
-    text: "La primera claridad no está en el tablero, sino en definir proceso, usuario, regla, dato, salida esperada y criterio de éxito. Recién después tiene sentido construir.",
-  },
-  {
-    label: "Tensión operativa",
-    title: "Cada criterio distinto crea deuda de mantenimiento.",
-    text: "Si documentar, validar y publicar depende de cada persona, el área pierde capacidad de revisar, delegar y mejorar sin volver a preguntar todo.",
-  },
-  {
-    label: "Decisión de gestión",
-    title: "El hub transforma oficio acumulado en estándar visible.",
-    text: "La experiencia del equipo queda expresada en rutas, plantillas, definiciones, controles y decisiones reutilizables. Eso vuelve enseñable lo que antes era tácito.",
-  },
-  {
-    label: "Forma de trabajo",
-    title: "Los gates evitan que urgencia reemplace evidencia.",
-    text: "Cada etapa declara qué debe quedar aprobado antes de mover el producto hacia construcción, publicación u operación.",
-  },
-  {
-    label: "Resultado esperado",
-    title: "La escala aparece cuando otro puede continuar el trabajo.",
-    text: "El estándar sirve si un integrante que no participó del origen puede entender, revisar y sostener el producto.",
-  },
-];
-
 const homeDecisionPath = [
   {
     step: "1",
     title: "Entender el marco",
     text: "Leer la tesis, el criterio de datalización y el mapa del hub antes de abrir documentación técnica.",
-    route: "/inicio/estudio",
+    route: "/inicio/capacidad",
     action: "Leer inicio",
   },
   {
@@ -452,18 +443,18 @@ const fabricProcessingNodes = [
 const fabricStorageModes = [
   {
     mode: "Import",
-    speed: "Máxima en memoria",
-    freshness: "Basada en programación",
+    speed: "Habitualmente alta en memoria",
+    freshness: "Según la política de actualización",
   },
   {
     mode: "DirectQuery",
     speed: "Variable según fuente",
-    freshness: "Tiempo real",
+    freshness: "Cercana al origen, según fuente y caché",
   },
   {
     mode: "Direct Lake",
-    speed: "Máxima sobre OneLake",
-    freshness: "Tiempo real sin refresh tradicional",
+    speed: "Alta cuando archivos, framing y capacidad acompañan",
+    freshness: "Cercana a OneLake, con comportamiento sujeto al modelo",
   },
 ];
 
@@ -523,171 +514,6 @@ const fabricArchitectureStages = [
 
 let pointerFrame = 0;
 
-const workflowSteps = [
-  {
-    title: "Proceso",
-    short: "Tarea repetible, responsable y disparador.",
-    iconName: "clipboard",
-    tone: "orange",
-    technical:
-      "Mapa operativo del proceso: evento que lo dispara, entradas necesarias, responsables, SLA, excepciones, decisión esperada y salida que debe producirse.",
-    functional:
-      "Define qué parte del trabajo puede automatizarse, qué parte requiere intervención humana y cómo se mide que el proceso mejoró.",
-    examples: [
-      "Abastecimiento identifica que el proceso repetible es detectar quiebres de stock críticos antes de que impacten en operación.",
-      "Operaciones define que cada desvío de despacho debe generar una revisión con responsable, plazo y evidencia.",
-      "Finanzas formaliza el cierre mensual de margen como proceso con cortes, validaciones, aprobaciones y explicación de variaciones.",
-    ],
-  },
-  {
-    title: "Reglas",
-    short: "Criterios, umbrales y excepciones.",
-    iconName: "code",
-    tone: "blue",
-    technical:
-      "Conjunto versionable de reglas de negocio: condiciones, fórmulas, umbrales, prioridades, excepciones, validaciones y criterios de aprobación.",
-    functional:
-      "Convierte conocimiento experto en instrucciones consistentes para que el proceso no dependa de interpretaciones manuales distintas.",
-    examples: [
-      "Si el stock proyectado cae por debajo del mínimo, el sistema prioriza el material y dispara una alerta al responsable.",
-      "La variación de margen se clasifica por precio, volumen, mix o costo con una regla única para todas las áreas.",
-      "Una orden duplicada, sin fecha válida o sin centro de costo queda observada antes de entrar al circuito de aprobación.",
-    ],
-  },
-  {
-    title: "Datos",
-    short: "Fuentes, calidad, frecuencia y linaje.",
-    iconName: "layers",
-    tone: "cyan",
-    technical:
-      "Integración de fuentes con owners, contratos de datos, frecuencia, linaje, controles de calidad, preparación, historización y trazabilidad.",
-    functional: "Hace que la automatización use datos confiables en el momento correcto. Sin esta base, el proceso automatiza errores.",
-    examples: [
-      "El volumen despachado se toma del sistema transaccional con corte horario, responsable de negocio y regla de conciliación.",
-      "Power Query elimina columnas innecesarias y preserva folding para que la actualización no bloquee el proceso.",
-      "Los controles detectan duplicados, fechas nulas y códigos sin correspondencia antes de alimentar la automatización.",
-    ],
-  },
-  {
-    title: "Motor",
-    short: "Modelo, lógica, cálculo y decisión.",
-    iconName: "gitBranch",
-    tone: "green",
-    technical:
-      "Modelo semántico y motor de decisión que calculan estado, riesgo, prioridad, recomendación o resultado a partir de reglas y datos gobernados.",
-    functional: "Transforma datos en señales accionables. La automatización sabe qué ocurrió, qué importa y qué debería pasar después.",
-    examples: [
-      "El motor prioriza desvíos por impacto económico, criticidad operativa y antigüedad del evento.",
-      "El modelo calcula margen, volumen neto y variación con la misma lógica para Finanzas, Comercial y Operaciones.",
-      "Las medidas se documentan y versionan para que cada automatización pueda auditar cómo llegó a un resultado.",
-    ],
-  },
-  {
-    title: "Acción",
-    short: "Salida operativa, permisos y trazabilidad.",
-    iconName: "shield",
-    tone: "violet",
-    technical:
-      "Diseño de la salida del proceso: tablero, alerta, tarea, ticket, API, aprobación, RLS/OLS, permisos, auditoría y confirmación de ejecución.",
-    functional:
-      "La automatización debe terminar en una acción concreta y trazable, no solo en una visualización que alguien debe interpretar manualmente.",
-    examples: [
-      "Un desvío crítico crea una tarea para el responsable, con evidencia, prioridad y fecha límite.",
-      "Un tablero muestra qué acciones están pendientes, cuáles fueron resueltas y qué excepciones siguen abiertas.",
-      "Los permisos aseguran que cada usuario vea solo los procesos, montos y activos que le corresponden.",
-    ],
-  },
-  {
-    title: "Orquestación",
-    short: "Pipelines, Git, ambientes y agenda.",
-    iconName: "terminal",
-    tone: "blue",
-    technical:
-      "Ejecución controlada con jobs, refresh, pipelines, notebooks, PBIP/TMDL, ramas, pull requests, ambientes Dev-Test-Prod y reglas de despliegue.",
-    functional:
-      "Permite que el proceso corra sin intervención manual, con control de cambios, ambientes separados y posibilidad de rollback.",
-    examples: [
-      "Un pipeline actualiza datos, recalcula reglas y publica alertas cada mañana antes de la reunión operativa.",
-      "Una regla nueva pasa por pull request antes de entrar a producción.",
-      "Las conexiones cambian entre desarrollo, prueba y producción sin editar manualmente el proceso.",
-    ],
-  },
-  {
-    title: "Operación",
-    short: "SLA, incidentes, adopción y mejora.",
-    iconName: "gauge",
-    tone: "orange",
-    technical:
-      "Monitoreo continuo de SLA, refresh, gateway, capacidad Fabric, latencia, errores, adopción, incidentes, auditoría y backlog de optimización.",
-    functional: "Automatizar no es publicar una vez: es sostener el proceso, detectar fallas, medir impacto y mejorarlo con evidencia.",
-    examples: [
-      "Si falla un refresh, se registra incidente, responsable, causa y acción correctiva.",
-      "Capacity Metrics muestra throttling y el equipo ajusta modelo, agenda o capacidad antes de afectar al usuario.",
-      "La adopción muestra qué alertas se atienden, cuáles se ignoran y qué parte del proceso debe rediseñarse.",
-    ],
-  },
-];
-
-const datalizationCriteria = [
-  {
-    title: "Proceso mapeado",
-    text: "Existe un proceso repetible con disparador, responsable, entrada, salida, SLA y excepciones conocidas.",
-  },
-  {
-    title: "Reglas explícitas",
-    text: "Los criterios de negocio están escritos como reglas, umbrales, validaciones y prioridades auditables.",
-  },
-  {
-    title: "Datos confiables",
-    text: "Las fuentes tienen owner, linaje, calidad, frecuencia y controles suficientes para ejecutar el proceso.",
-  },
-  {
-    title: "Motor automatizado",
-    text: "La lógica transforma datos en estado, prioridad, recomendación o acción sin depender de cálculo manual.",
-  },
-  {
-    title: "Acción integrada",
-    text: "La salida llega al usuario, tablero, ticket, alerta o sistema que permite ejecutar el siguiente paso.",
-  },
-  {
-    title: "Operación gobernada",
-    text: "El proceso tiene monitoreo, incidentes, permisos, runbook, mejora continua y medición de adopción.",
-  },
-];
-
-const datalizationLevels = [
-  {
-    percent: "0-20%",
-    title: "Proceso manual",
-    text: "El trabajo depende de planillas, correos, criterio individual o carga manual. Hay datos, pero no automatización real.",
-  },
-  {
-    percent: "21-40%",
-    title: "Proceso definido",
-    text: "El circuito está identificado y hay reglas iniciales, aunque todavía faltan datos gobernados y ejecución automática.",
-  },
-  {
-    percent: "41-60%",
-    title: "Datos y reglas conectados",
-    text: "Las fuentes y reglas principales están integradas, pero la acción todavía requiere intervención manual frecuente.",
-  },
-  {
-    percent: "61-80%",
-    title: "Automatización controlada",
-    text: "El proceso calcula, alerta o prioriza con trazabilidad, seguridad y controles, aunque aún tiene brechas operativas.",
-  },
-  {
-    percent: "81-99%",
-    title: "Automatización operativa",
-    text: "El proceso se ejecuta en la rutina real, se monitorea y mejora; solo quedan excepciones o integraciones menores.",
-  },
-  {
-    percent: "100%",
-    title: "Datalizado",
-    text: "El proceso se dispara, calcula, controla, ejecuta, registra y mejora con datos gobernados y responsables claros.",
-  },
-];
-
 const guideStoryPalette = ["#ff6b3b", "#3aa0ff", "#35c9bd", "#30d174", "#8d72ff", "#67e8dc", "#5fa8ff", "#f2c94c", "#ff8a5c"];
 
 const guideStoryDetails = {
@@ -744,15 +570,6 @@ const guideStoryDetails = {
     automation:
       "La UX convierte el cálculo en operación: prioriza señales, guía el análisis y deja evidencia suficiente para que la acción ocurra sin volver a reconstruir el caso.",
     outcome: "Una salida accionable, clara y adoptable.",
-  },
-  "fabric-direct-lake": {
-    iconName: "folder",
-    flow: "La arquitectura define cómo llegarán los datos.",
-    scene:
-      "Antes de escribir transformaciones o medidas, el equipo debe saber qué fuentes alimentan el proceso, con qué latencia, bajo qué permisos y en qué arquitectura van a vivir. Fabric, OneLake, Lakehouse, Warehouse, Import, Direct Lake o DirectQuery no son adornos: condicionan todo el diseño posterior.",
-    automation:
-      "La automatización solo puede ser confiable si la arquitectura asegura acceso, frecuencia, capacidad y modo de almacenamiento compatibles con la operación que se quiere automatizar.",
-    outcome: "Fuentes, plataforma y storage decididos antes de modelar.",
   },
   "cicd-pbip": {
     iconName: "terminal",
@@ -863,414 +680,8 @@ const projectBuildSteps = [
   },
 ];
 
-const projectToolStack = [
-  {
-    title: "Power BI Desktop",
-    text: "Construye el reporte y el modelo. Es donde se diseñan páginas, relaciones, medidas DAX y configuración principal.",
-  },
-  {
-    title: "Visual Studio Code",
-    text: "Ordena el proyecto como carpeta: documentación, PBIP, TMDL, scripts y contexto para revisión o asistencia con IA.",
-  },
-  {
-    title: "Git y GitHub",
-    text: "Registran cambios, permiten revisión por pull request y evitan publicar modificaciones sin trazabilidad.",
-  },
-  {
-    title: "PBIP y TMDL",
-    text: "Vuelven el reporte y el modelo semántico archivos revisables. Permiten ver diferencias de medidas, tablas y metadatos.",
-  },
-  {
-    title: "DAX Studio y Tabular Editor",
-    text: "Ayudan a revisar medidas, performance, metadatos y calidad del modelo cuando el proyecto empieza a crecer.",
-  },
-  {
-    title: "Power BI Service / Fabric",
-    text: "Publica, asegura, refresca y opera la solución con workspaces, apps, pipelines, permisos y monitoreo.",
-  },
-];
-
-const guideGlossaryCuratedTerms = [
-  termFromDictionary("datalizacion", ["Datalización"]),
-  termFromDictionary("automatizacion-procesos", ["Automatización", "automatización", "automatización de procesos"]),
-  {
-    id: "bi",
-    title: "BI",
-    definition: "Business Intelligence: disciplina que convierte datos en información confiable para analizar, decidir y operar mejor.",
-    whyItMatters: "En esta guía, BI no es solo reportar; es sostener procesos automatizados con datos y reglas.",
-    aliases: ["BI", "Business Intelligence"],
-  },
-  termFromDictionary("prd", ["PRD"]),
-  termFromDictionary("spec-producto-tecnica", ["Spec", "Spec técnica"]),
-  termFromDictionary("criterio-aceptacion", ["Criterios de aceptación", "criterio de aceptación"]),
-  termFromDictionary("disparador-proceso", ["Disparador", "disparador"]),
-  {
-    id: "stakeholder",
-    title: "Stakeholder",
-    definition: "Persona o grupo que participa, valida, usa o se ve afectado por el proceso automatizado.",
-    whyItMatters: "Ayuda a identificar quién decide, quién usa la salida y quién debe resolver excepciones.",
-    aliases: ["Stakeholder", "stakeholders", "Mapa de stakeholders"],
-  },
-  {
-    id: "etl",
-    title: "ETL",
-    definition: "Extract, Transform, Load: proceso de extraer datos, transformarlos y cargarlos para uso analítico u operativo.",
-    whyItMatters: "Ordena cómo los datos llegan al modelo o a la automatización sin depender de tareas manuales.",
-    aliases: ["ETL"],
-  },
-  termFromDictionary("power-query", ["Power Query"]),
-  termFromDictionary("query-folding", ["Query Folding", "Query folding", "folding", "Folding"]),
-  termFromDictionary("refresh", ["Refresh", "refresh", "refresco", "refrescos"]),
-  termFromDictionary("data-quality", ["Calidad de datos", "calidad"]),
-  termFromDictionary("modelo-semantico", ["Modelo semántico", "modelo semántico", "motor semántico"]),
-  termFromDictionary("vertipaq", ["VertiPaq", "VeryPaq", "verypaq"]),
-  termFromDictionary("esquema-estrella", ["Esquema estrella", "modelo estrella"]),
-  termFromDictionary("granularidad", ["Granularidad", "granularidad"]),
-  termFromDictionary("cardinalidad", ["Cardinalidad", "cardinalidad"]),
-  termFromDictionary("tabla-hechos", ["Hechos", "hechos", "tabla de hechos"]),
-  termFromDictionary("tabla-dimensiones", ["Dimensiones", "dimensiones", "tabla de dimensiones"]),
-  termFromDictionary("relacion-uno-a-muchos", ["Relaciones", "relaciones"]),
-  {
-    id: "dax",
-    title: "DAX",
-    definition:
-      "Data Analysis Expressions: lenguaje de fórmulas de Power BI para crear medidas, reglas y cálculos sobre el modelo semántico.",
-    whyItMatters: "Permite expresar reglas de negocio reutilizables y auditables.",
-    aliases: ["DAX"],
-  },
-  termFromDictionary("medida-dax", ["Medidas", "medidas", "medida"]),
-  {
-    id: "var-dax",
-    title: "VAR",
-    definition: "Palabra clave de DAX para guardar un valor intermedio dentro de una medida y evitar recálculos.",
-    whyItMatters: "Mejora legibilidad y puede ayudar a performance en medidas complejas.",
-    aliases: ["VAR"],
-  },
-  {
-    id: "iteradores-x",
-    title: "Iteradores X",
-    definition: "Funciones DAX como SUMX, AVERAGEX o FILTER que recorren filas y evalúan una expresión por cada una.",
-    whyItMatters: "Son potentes, pero mal usados pueden volver lento el modelo.",
-    aliases: ["iteradores X", "iteradores", "SUMX", "AVERAGEX"],
-  },
-  termFromDictionary("formula-engine", ["Formula Engine"]),
-  {
-    id: "tabular-editor",
-    title: "Tabular Editor",
-    definition: "Herramienta para editar, auditar y automatizar modelos tabulares de Power BI y Analysis Services.",
-    whyItMatters: "Permite ordenar metadatos, revisar medidas y mantener modelos con criterio de ingeniería.",
-    aliases: ["Tabular Editor"],
-  },
-  {
-    id: "seguridad",
-    title: "Seguridad",
-    definition: "Diseño de permisos, roles y controles para que cada usuario acceda solo a lo que corresponde.",
-    whyItMatters: "Una automatización sin seguridad puede exponer datos o disparar acciones indebidas.",
-    aliases: ["Seguridad", "seguridad"],
-  },
-  termFromDictionary("rls", ["RLS", "RLS dinámico"]),
-  termFromDictionary("ols", ["OLS"]),
-  {
-    id: "rls-ols",
-    title: "RLS/OLS",
-    definition: "Combinación de seguridad por filas y por objetos para limitar datos visibles según usuario o rol.",
-    whyItMatters: "Permite proteger alcance operativo y atributos sensibles dentro de un mismo modelo.",
-    aliases: ["RLS/OLS"],
-  },
-  termFromDictionary("userprincipalname", ["USERPRINCIPALNAME()"]),
-  termFromDictionary("lineage", ["Linaje", "linaje"]),
-  termFromDictionary("data-owner", ["Owner", "owner", "owners", "ownership"]),
-  termFromDictionary("data-steward", ["Steward", "steward", "stewards", "stewardship"]),
-  termFromDictionary("certificacion-dataset", ["Certificación", "certificación", "certificación de dataset"]),
-  {
-    id: "b2b",
-    title: "B2B",
-    definition: "Business-to-business: usuarios externos o invitados que pertenecen a otra organización o tenant.",
-    whyItMatters: "En seguridad Power BI, usuarios B2B pueden comportarse distinto y deben probarse con identidades reales.",
-    aliases: ["B2B"],
-  },
-  {
-    id: "ux",
-    title: "UX",
-    definition: "User Experience: diseño de la experiencia para que el usuario entienda, navegue y actúe con bajo esfuerzo.",
-    whyItMatters: "Una automatización falla si la salida no guía la acción correcta.",
-    aliases: ["UX"],
-  },
-  termFromDictionary("regla-3-30-300", ["3-30-300", "regla 3-30-300"]),
-  {
-    id: "drill-through",
-    title: "Drill-through",
-    definition: "Navegación desde un resumen hacia una página de detalle filtrada por el contexto seleccionado.",
-    whyItMatters: "Permite pasar de señal a evidencia sin reconstruir manualmente el caso.",
-    aliases: ["drill-through", "drill through"],
-  },
-  {
-    id: "slicer",
-    title: "Slicer",
-    definition: "Filtro visual de Power BI que permite al usuario elegir valores como fecha, región o producto.",
-    whyItMatters: "Demasiados slicers agregan carga cognitiva y pueden degradar performance.",
-    aliases: ["slicers", "Slicers", "slicer"],
-  },
-  termFromDictionary("visual", ["Visuales", "visuales", "visual"]),
-  termFromDictionary("accion-trazable", ["Acción trazable", "acción trazable", "acciones trazables"]),
-  {
-    id: "performance",
-    title: "Performance",
-    definition: "Capacidad de responder rápido, refrescar a tiempo y sostener uso real sin degradarse.",
-    whyItMatters: "Condiciona adopción y confiabilidad operativa.",
-    aliases: ["Performance", "performance"],
-  },
-  {
-    id: "fabric",
-    title: "Microsoft Fabric",
-    definition:
-      "Plataforma de Microsoft que integra almacenamiento, ingeniería, ciencia de datos, BI y operación analítica en una experiencia unificada.",
-    whyItMatters: "Permite acercar datos, pipelines, lakehouse y Power BI en una arquitectura común.",
-    aliases: ["Fabric", "Microsoft Fabric"],
-  },
-  termFromDictionary("direct-lake", ["Direct Lake"]),
-  termFromDictionary("onelake", ["OneLake"]),
-  {
-    id: "delta-parquet",
-    title: "Delta/Parquet",
-    definition:
-      "Formatos de almacenamiento analítico usados en lakehouses: Parquet guarda columnas; Delta agrega transacciones y control de versiones.",
-    whyItMatters: "Son la base habitual para que Fabric y Direct Lake lean datos de forma eficiente.",
-    aliases: ["Delta/Parquet", "Delta", "Parquet"],
-  },
-  {
-    id: "import-mode",
-    title: "Import",
-    definition: "Modo de Power BI que copia datos al modelo en memoria para lograr consultas rápidas.",
-    whyItMatters: "Sirve de referencia para comparar la experiencia de Direct Lake.",
-    aliases: ["import", "Import"],
-  },
-  {
-    id: "storage-mode",
-    title: "Modo de almacenamiento",
-    definition:
-      "Configuración que define cómo una tabla del modelo semántico accede a los datos: Import, DirectQuery, Direct Lake, Dual o combinaciones controladas.",
-    whyItMatters: "Condiciona performance, refresh, seguridad, capacidad y comportamiento de las consultas.",
-    aliases: ["storage", "storage mode", "modo de almacenamiento", "modo de storage"],
-  },
-  termFromDictionary("v-order", ["V-Order"]),
-  termFromDictionary("spark-optimize", ["Optimize", "Spark Optimize"]),
-  termFromDictionary("vacuum", ["Vacuum"]),
-  {
-    id: "directquery",
-    title: "DirectQuery",
-    definition: "Modo que consulta la fuente en tiempo real sin importar todos los datos al modelo.",
-    whyItMatters: "Reduce copia de datos, pero puede ser más lento y depender de la fuente.",
-    aliases: ["DirectQuery"],
-  },
-  termFromDictionary("directquery-fallback", ["fallback", "Fallback", "fallbacks"]),
-  {
-    id: "lakehouse",
-    title: "Lakehouse",
-    definition: "Arquitectura que combina almacenamiento tipo lago con capacidades de consulta y gobierno más cercanas a un warehouse.",
-    whyItMatters: "Es una pieza habitual en Fabric para preparar datos analíticos reutilizables.",
-    aliases: ["Lakehouse", "lakehouse"],
-  },
-  {
-    id: "warehouse",
-    title: "Warehouse",
-    definition: "Almacén de datos optimizado para consultas analíticas, reporting y consumo estructurado.",
-    whyItMatters: "Puede ser la capa ordenada desde la que se alimentan modelos BI.",
-    aliases: ["Warehouse", "warehouse"],
-  },
-  {
-    id: "cicd",
-    title: "CI/CD",
-    definition: "Continuous Integration / Continuous Delivery: práctica para integrar, probar y desplegar cambios de forma controlada.",
-    whyItMatters: "Reduce riesgo al mover BI entre ambientes y evita publicaciones manuales sin revisión.",
-    aliases: ["CI/CD"],
-  },
-  termFromDictionary("pbip", ["PBIP"]),
-  termFromDictionary("tmdl", ["TMDL"]),
-  {
-    id: "pbip-tmdl",
-    title: "PBIP/TMDL",
-    definition: "Uso combinado de Power BI Project y TMDL para versionar reportes, modelos y metadatos como archivos revisables.",
-    whyItMatters: "Hace que el BI pueda revisarse con Git, pull requests y diferencias legibles.",
-    aliases: ["PBIP/TMDL"],
-  },
-  {
-    id: "git",
-    title: "Git",
-    definition: "Sistema de control de versiones que registra cambios, autores, ramas y evolución de archivos.",
-    whyItMatters: "Permite revisar y recuperar cambios en modelos, specs y documentación.",
-    aliases: ["Git"],
-  },
-  termFromDictionary("pull-request", ["Pull Request", "pull request", "pull requests", "PRs", "PR"]),
-  termFromDictionary("feature-branch", ["Ramas", "ramas", "branches", "feature branch"]),
-  {
-    id: "dev-test-prod",
-    title: "Dev-Test-Prod",
-    definition: "Separación de ambientes de desarrollo, prueba y producción.",
-    whyItMatters: "Permite validar cambios antes de afectar a usuarios productivos.",
-    aliases: ["Dev-Test-Prod", "Dev, Test y Prod", "desarrollo, prueba y producción"],
-  },
-  termFromDictionary("deployment-pipelines", ["Deployment Pipelines", "pipeline de deployment", "pipelines"]),
-  {
-    id: "release",
-    title: "Release",
-    definition: "Publicación controlada de una versión hacia un ambiente de uso.",
-    whyItMatters: "Ordena qué cambia, quién aprueba y cómo volver atrás si algo falla.",
-    aliases: ["Release", "release"],
-  },
-  {
-    id: "sla",
-    title: "SLA",
-    definition:
-      "Service Level Agreement: compromiso de nivel de servicio, como horario de disponibilidad, tiempo de respuesta o ventana de actualización.",
-    whyItMatters: "Define qué espera la operación y contra qué se mide el cumplimiento.",
-    aliases: ["SLA"],
-  },
-  termFromDictionary("gateway-power-bi", ["Gateway", "gateway"]),
-  termFromDictionary("capacity-units", ["CUs", "Capacity Units"]),
-  termFromDictionary("fabric-capacity-metrics", ["Fabric Capacity Metrics"]),
-  termFromDictionary("throttling", ["Throttling", "throttling"]),
-  termFromDictionary("incremental-refresh", ["Incremental Refresh", "incremental refresh"]),
-  {
-    id: "incidente",
-    title: "Incidente",
-    definition: "Evento que afecta o amenaza el funcionamiento esperado de una automatización.",
-    whyItMatters: "Debe registrarse con causa, impacto, responsable y acción correctiva.",
-    aliases: ["Incidente", "incidente", "incidentes"],
-  },
-  {
-    id: "backlog",
-    title: "Backlog",
-    definition: "Lista priorizada de mejoras, incidentes o tareas pendientes.",
-    whyItMatters: "Permite evolucionar la automatización con orden y evidencia de impacto.",
-    aliases: ["Backlog", "backlog"],
-  },
-  {
-    id: "api",
-    title: "API",
-    definition: "Interfaz que permite que sistemas intercambien datos o acciones de forma programática.",
-    whyItMatters: "Puede conectar la automatización BI con tareas, tickets, alertas u otros sistemas.",
-    aliases: ["API", "APIs"],
-  },
-];
-
-const guideGlossaryCuratedIds = new Set(guideGlossaryCuratedTerms.map((term) => term.id));
-const guideGlossaryTerms = [
-  ...guideGlossaryCuratedTerms,
-  ...dictionaryTerms
-    .filter((term) => !guideGlossaryCuratedIds.has(term.id))
-    .map((term) => ({
-      id: term.id,
-      title: term.term,
-      definition: term.definition,
-      whyItMatters: term.whyItMatters,
-      aliases: [term.term],
-    })),
-];
-
-const guideGlossaryTermById = new Map(guideGlossaryTerms.map((term) => [term.id, term]));
-const guideGlossaryAliasEntries = guideGlossaryTerms
-  .flatMap((term) => [...new Set([term.title, ...(term.aliases || [])])].map((alias) => ({ alias, term })))
-  .filter((entry) => entry.alias)
-  .sort((a, b) => b.alias.length - a.alias.length);
-const guideGlossaryAliasMap = new Map(guideGlossaryAliasEntries.map((entry) => [normalizeText(entry.alias), entry.term]));
-const guideGlossaryRegex = new RegExp(
-  `(^|[^\\p{L}\\p{N}_])(${guideGlossaryAliasEntries.map((entry) => escapeRegExp(entry.alias)).join("|")})(?=$|[^\\p{L}\\p{N}_])`,
-  "giu",
-);
-
-const guideGlossaryBySectionId = {
-  "prd-spec": ["prd", "spec-producto-tecnica", "criterio-aceptacion", "disparador-proceso", "stakeholder", "bi", "power-query", "dax"],
-  "etl-power-query": [
-    "etl",
-    "power-query",
-    "query-folding",
-    "refresh",
-    "data-quality",
-    "incremental-refresh",
-    "fabric",
-    "lakehouse",
-    "warehouse",
-    "direct-lake",
-    "import-mode",
-    "directquery",
-  ],
-  "modelo-vertipaq": [
-    "modelo-semantico",
-    "storage-mode",
-    "vertipaq",
-    "direct-lake",
-    "import-mode",
-    "directquery",
-    "directquery-fallback",
-    "esquema-estrella",
-    "granularidad",
-    "cardinalidad",
-    "tabla-hechos",
-    "tabla-dimensiones",
-    "relacion-uno-a-muchos",
-  ],
-  dax: ["dax", "medida-dax", "var-dax", "iteradores-x", "formula-engine", "tabular-editor", "performance"],
-  "seguridad-gobierno": [
-    "seguridad",
-    "rls",
-    "ols",
-    "rls-ols",
-    "userprincipalname",
-    "lineage",
-    "data-owner",
-    "data-steward",
-    "certificacion-dataset",
-    "b2b",
-  ],
-  "ux-reportes": ["ux", "regla-3-30-300", "drill-through", "slicer", "visual", "performance", "accion-trazable"],
-  "fabric-direct-lake": [
-    "fabric",
-    "onelake",
-    "lakehouse",
-    "warehouse",
-    "storage-mode",
-    "direct-lake",
-    "import-mode",
-    "directquery",
-    "delta-parquet",
-    "v-order",
-    "spark-optimize",
-    "vacuum",
-    "directquery-fallback",
-  ],
-  "cicd-pbip": [
-    "cicd",
-    "pbip",
-    "tmdl",
-    "pbip-tmdl",
-    "git",
-    "pull-request",
-    "feature-branch",
-    "dev-test-prod",
-    "deployment-pipelines",
-    "release",
-  ],
-  publicacion: ["release", "deployment-pipelines", "pbip", "tmdl", "git", "pull-request"],
-  "operacion-capacidad": [
-    "sla",
-    "refresh",
-    "gateway-power-bi",
-    "capacity-units",
-    "fabric-capacity-metrics",
-    "throttling",
-    "incremental-refresh",
-    "incidente",
-    "backlog",
-  ],
-};
-
 const interactiveSurfaceSelector = [
-  ".visual-summary",
   ".stat",
-  ".feature-card",
-  ".datalization-card",
-  ".datalization-level",
   ".platform-card",
   ".platform-definition-card",
   ".platform-timeline-card",
@@ -1278,8 +689,6 @@ const interactiveSurfaceSelector = [
   ".platform-metric",
   ".hub-nav-card",
   ".footer-card",
-  ".home-research-card",
-  ".home-research-note",
   ".road-thesis-card",
   ".road-methodology-thesis",
   ".fabric-guide-stage",
@@ -1296,8 +705,6 @@ const interactiveSurfaceSelector = [
   ".fabric-onelake-spine",
   ".fabric-spine-rail",
   ".fabric-causality-panel",
-  ".design-system-card",
-  ".design-system-benefit",
   ".design-system-component",
   ".design-system-final",
   ".datalito-card",
@@ -1330,19 +737,9 @@ const interactiveSurfaceSelector = [
   ".methodology-process",
   ".methodology-process-step",
   ".process-block",
-  ".workflow-lab",
-  ".workflow-case",
-  ".workflow-node-card",
-  ".workflow-step-panel",
-  ".workflow-output",
-  ".mini-step",
   ".term-card",
   ".empty-state",
   ".control-panel",
-  ".roadmap-pipeline",
-  ".pipeline-step",
-  ".pipeline-lane-card",
-  ".phase-card",
   ".product-card",
   ".product-identity",
   ".product-complementarity",
@@ -1351,7 +748,6 @@ const interactiveSurfaceSelector = [
   ".project-copy",
   ".code-window",
   ".quality-card",
-  ".pbip-note",
   ".shortcut-hero",
   ".shortcut-card",
   ".tooling-card",
@@ -1369,21 +765,6 @@ function icon(name) {
   return `<span class="icon" aria-hidden="true">${icons[name] || ""}</span>`;
 }
 
-function termFromDictionary(id, aliases = [], title = "") {
-  const term = dictionaryTerms.find((item) => item.id === id);
-  if (!term) {
-    throw new Error(`No existe el término de diccionario: ${id}`);
-  }
-
-  return {
-    id,
-    title: title || aliases[0] || term.term,
-    definition: term.definition,
-    whyItMatters: term.whyItMatters,
-    aliases: [term.term, ...aliases],
-  };
-}
-
 function normalizeText(value) {
   return String(value)
     .normalize("NFD")
@@ -1398,67 +779,6 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
-}
-
-function escapeRegExp(value) {
-  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function renderExplainedText(value) {
-  const text = String(value);
-  let html = "";
-  let lastIndex = 0;
-
-  text.replace(guideGlossaryRegex, (fullMatch, prefix, matchedTerm, offset) => {
-    const matchStart = offset + prefix.length;
-    const term = guideGlossaryAliasMap.get(normalizeText(matchedTerm));
-    if (!term) return fullMatch;
-
-    html += escapeHtml(text.slice(lastIndex, matchStart));
-    html += renderInlineTerm(matchedTerm, term);
-    lastIndex = matchStart + matchedTerm.length;
-    return fullMatch;
-  });
-
-  html += escapeHtml(text.slice(lastIndex));
-  return html;
-}
-
-function renderInlineTerm(label, term) {
-  const tooltip = `${term.title}: ${term.definition}`;
-  return `
-    <button
-      class="explain-term"
-      type="button"
-      data-tooltip="${escapeHtml(tooltip)}"
-      aria-label="${escapeHtml(tooltip)}"
-    >${escapeHtml(label)}</button>
-  `;
-}
-
-function renderGuideStepGlossary(section) {
-  const terms = (guideGlossaryBySectionId[section.id] || []).map((id) => guideGlossaryTermById.get(id)).filter(Boolean);
-
-  if (!terms.length) return "";
-
-  return `
-    <div class="guide-step-glossary" aria-label="Glosario de ${escapeHtml(section.title)}">
-      <h3>Glosario de esta etapa</h3>
-      <div class="guide-glossary-grid">
-        ${terms
-          .map(
-            (term) => `
-              <article class="guide-glossary-card">
-                <strong>${escapeHtml(term.title)}</strong>
-                <p>${escapeHtml(term.definition)}</p>
-                <small>${escapeHtml(term.whyItMatters)}</small>
-              </article>
-            `,
-          )
-          .join("")}
-      </div>
-    </div>
-  `;
 }
 
 function getRoute(pathname = window.location.pathname) {
@@ -1510,6 +830,7 @@ function scrollToRouteHash(hash) {
     return;
   }
 
+  if (target instanceof HTMLDetailsElement) target.open = true;
   target.setAttribute("tabindex", "-1");
   const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0;
   const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - headerHeight - 18);
@@ -1632,12 +953,9 @@ function enhanceInteractiveSurfaces() {
 
 function setupScrollReveal() {
   const revealSelector = [
-    ".home-research-card",
-    ".home-research-note",
     ".road-thesis-card",
     ".road-methodology-thesis",
     ".methodology-process-step",
-    ".guide-journey-step",
     ".guide-model-card",
     ".guide-contract-row",
     ".oee-factor",
@@ -1646,13 +964,11 @@ function setupScrollReveal() {
     ".toyota-layer",
     ".lean-practice",
     ".cadence-item",
-    ".feature-card",
     ".hub-nav-card",
     ".platform-card",
     ".platform-definition-card",
     ".platform-timeline-card",
     ".platform-discipline-card",
-    ".mini-step",
   ].join(",");
   const targets = [...appRoot.querySelectorAll(revealSelector)];
 
@@ -1736,18 +1052,9 @@ function syncFabricRoutes() {
   };
 
   const routes = {
-    "source-0-onelake": curvePath(
-      anchor('[data-fabric-source="0"]', "right", 0.5),
-      anchor('[data-fabric-node="onelake"]', "left", 0.34),
-    ),
-    "source-1-onelake": curvePath(
-      anchor('[data-fabric-source="1"]', "right", 0.5),
-      anchor('[data-fabric-node="onelake"]', "left", 0.5),
-    ),
-    "source-2-onelake": curvePath(
-      anchor('[data-fabric-source="2"]', "right", 0.5),
-      anchor('[data-fabric-node="onelake"]', "left", 0.66),
-    ),
+    "source-0-onelake": curvePath(anchor('[data-fabric-source="0"]', "right", 0.5), anchor('[data-fabric-node="onelake"]', "left", 0.34)),
+    "source-1-onelake": curvePath(anchor('[data-fabric-source="1"]', "right", 0.5), anchor('[data-fabric-node="onelake"]', "left", 0.5)),
+    "source-2-onelake": curvePath(anchor('[data-fabric-source="2"]', "right", 0.5), anchor('[data-fabric-node="onelake"]', "left", 0.66)),
     "onelake-process-0": curvePath(
       anchor('[data-fabric-node="onelake"]', "right", 0.38),
       anchor('[data-fabric-process="0"]', "left", 0.5),
@@ -1807,6 +1114,7 @@ function renderRoute(route = getRoute()) {
     renderProductDetailPage(route.slice("/productos/".length));
     setupNineGateFlowInteractions();
     setupProductSwitcherPosition();
+    setupProductPracticeLibraries();
   } else if (route === "/diccionario") {
     renderDictionaryPage();
   } else if (route === "/metodo-datalizacion") {
@@ -1829,7 +1137,6 @@ function renderRoute(route = getRoute()) {
     renderToolingPage();
   } else {
     renderHomePage();
-    setupWorkflowInteractions();
   }
 
   if (document.querySelector("[data-datalito-global]")) {
@@ -1876,7 +1183,7 @@ function renderHomePage() {
             height="941"
             fetchpriority="high"
             decoding="async"
-            alt="Complejo industrial energético con refinería, ductos y puerto"
+            alt="Ilustración de un complejo industrial energético con refinería, ductos y puerto"
           />
           </picture>
         <div class="hero-shade" aria-hidden="true"></div>
@@ -1893,18 +1200,11 @@ function renderHomePage() {
         </div>
       </section>
 
-      <section class="quote-band page-inner" id="inicio-punto-inflexion">
-        ${icon("quote")}
-        <strong>El punto de inflexión no es publicar más pantallas: es que cada entrega pueda explicarse, revisarse y sostenerse.</strong>
-      </section>
-
-      ${renderHomeResearchFrame()}
-
       ${renderHomeDecisionPath()}
 
       <section class="method-model-cta page-inner" id="inicio-marco-vmc" aria-label="Nuevo marco de evaluación de datalización">
         <div>
-          <span class="flow-chip">nuevo módulo metodológico</span>
+          <span class="flow-chip">criterio de evaluación</span>
           <h2>Marco de Datalización VMC</h2>
           <p>Definición, cinco pilares, intake, índice, ponderación, metadata mínima y alcance inicial, todo integrado dentro del Método para evaluar con la misma vara.</p>
         </div>
@@ -1918,142 +1218,6 @@ function renderHomePage() {
 
       ${renderHubSectionLauncher()}
 
-      ${renderExecutiveBrief(pageNarratives.home)}
-
-      ${renderDatalizationDefinition()}
-
-      ${renderWorkflowLab()}
-
-      <div class="section-title page-inner" id="inicio-recursos">
-        <div>
-          <h2>Recursos principales</h2>
-          <p>El mapa evita recorrer todo de una vez: cada entrada lleva a una decisión distinta del ciclo BI y permite avanzar por necesidad.</p>
-        </div>
-      </div>
-
-      <section class="feature-grid page-inner" aria-label="Secciones principales">
-        <article class="feature-card">
-          <span class="feature-icon">${icon("folder")}</span>
-          <h3>El método fija responsabilidad</h3>
-          <p>Define dónde guardar, cómo nombrar, qué medir y quién responde cuando el producto entra en operación.</p>
-          <a class="button small secondary" href="/metodo-datalizacion" data-route>
-            Ver método
-            ${icon("arrowRight")}
-          </a>
-        </article>
-        <article class="feature-card">
-          <span class="feature-icon">${icon("layers")}</span>
-          <h3>Road y Metodología ordenan el avance</h3>
-          <p>Conectan PRD, datos, modelo, DAX, seguridad, OEE BI y DMAIC en gates verificables.</p>
-          <a class="button small secondary" href="/road-y-metodologia" data-route>
-            Ver Road y Metodología
-            ${icon("arrowRight")}
-          </a>
-        </article>
-        <article class="feature-card">
-          <span class="feature-icon">${icon("book")}</span>
-          <h3>El diccionario fija lenguaje</h3>
-          <p>Define conceptos críticos para que negocio, datos, BI y operación no discutan con significados distintos.</p>
-          <a class="button small secondary" href="/diccionario" data-route>
-            Explorar diccionario
-            ${icon("arrowRight")}
-          </a>
-        </article>
-        <article class="feature-card">
-          <span class="feature-icon">${icon("route")}</span>
-          <h3>Los modelos fijan contrato</h3>
-          <p>PRD y Spec separan la pregunta ejecutiva de la implementación técnica para reducir ambigüedad.</p>
-          <a class="button small secondary" href="/road-y-metodologia#modelos-prd-spec" data-route>
-            Ver modelos
-            ${icon("arrowRight")}
-          </a>
-        </article>
-        <article class="feature-card">
-          <span class="feature-icon">${icon("code")}</span>
-          <h3>El proyecto vuelve revisable la solución</h3>
-          <p>PBIP, TMDL, Git, documentación y scripts transforman la automatización en un activo revisable.</p>
-          <a class="button small secondary" href="/proyecto-power-bi" data-route>
-            Ver proyecto
-            ${icon("arrowRight")}
-          </a>
-        </article>
-        <article class="feature-card">
-          <span class="feature-icon">${icon("folder")}</span>
-          <h3>Las herramientas entran con criterio</h3>
-          <p>MCPs, agentes, bases, cloud, sandboxes y APIs se evalúan por riesgo, permisos y costo de operación.</p>
-          <a class="button small secondary" href="/librerias" data-route>
-            Ver librerías
-            ${icon("arrowRight")}
-          </a>
-        </article>
-        <article class="feature-card">
-          <span class="feature-icon">${icon("terminal")}</span>
-          <h3>Los atajos eliminan fricción diaria</h3>
-          <p>El resumen prioriza acciones repetidas de Power BI que cuidan foco, tiempo y precisión.</p>
-          <a class="button small secondary" href="/atajos" data-route>
-            Ver atajos
-            ${icon("arrowRight")}
-          </a>
-        </article>
-      </section>
-
-      <section class="story-band">
-        <div class="page-inner story-content">
-          <span class="eyebrow">procesos que operan mejor</span>
-          <h2>La mejora se demuestra cuando una señal dispara una acción verificable.</h2>
-          <p>El valor no está en la cantidad de páginas, sino en reducir esperas, excepciones, dudas de regla e incidentes sin dueño.</p>
-        </div>
-      </section>
-
-      <div class="section-title page-inner">
-        <div>
-          <h2>La madurez avanza cuando cada gate deja una evidencia más fuerte.</h2>
-          <p>El recorrido no salta etapas: primero entiende el proceso, después prueba datos y reglas, y finalmente publica con operación definida.</p>
-        </div>
-      </div>
-
-      <section class="mini-roadmap page-inner" tabindex="0" aria-label="Primeras fases del roadmap; desplazamiento horizontal disponible">
-        ${roadmapPhases
-          .map((phase, index) => {
-            const lane = laneStyles[phase.lane] || { color: "var(--ypf-blue)" };
-            return `
-              <article class="mini-step" style="--lane-color:${lane.color}; --step-order:${index}">
-                <span>${phase.id + 1}</span>
-                <strong>${escapeHtml(phase.title)}</strong>
-              </article>
-            `;
-          })
-          .join("")}
-      </section>
-    </section>
-  `;
-}
-
-function renderHomeResearchFrame() {
-  return `
-    <section class="home-research page-inner" id="inicio-estudio" aria-labelledby="homeResearchTitle">
-      <div class="home-research-copy">
-        <span class="flow-chip">lectura ejecutiva inicial</span>
-        <h2 id="homeResearchTitle">La plataforma aclara qué decisión toma cada parte del sistema.</h2>
-        <p>Inicio no intenta explicar todo: ubica el problema de gestión, muestra el recorrido recomendado y deriva el detalle metodológico a las páginas especializadas.</p>
-      </div>
-      <div class="home-research-grid" aria-label="Estructura ejecutiva de Inicio">
-        ${homeResearchFrame
-          .map(
-            (item, index) => `
-              <article class="home-research-card" style="--research-order:${index}">
-                <span>${escapeHtml(item.label)}</span>
-                <h3>${escapeHtml(item.title)}</h3>
-                <p>${escapeHtml(item.text)}</p>
-              </article>
-            `,
-          )
-          .join("")}
-      </div>
-      <aside class="home-research-note" aria-label="Criterio de lectura">
-        <strong>Lectura sugerida</strong>
-        <p>Primero entendé el punto de partida; después usá Road para los gates, Método para el setup operativo y las páginas de soporte para lenguaje, asistencia, diseño y herramientas.</p>
-      </aside>
     </section>
   `;
 }
@@ -2234,17 +1398,6 @@ function renderDesignSystemPage() {
         </div>
       </header>
 
-      <section class="design-system-intro page-inner" id="design-intro" aria-labelledby="designSystemIntroTitle">
-        <div>
-          <span class="flow-chip">mensaje central</span>
-          <h2 id="designSystemIntroTitle">El sistema evita que cada nueva sección vuelva a resolver los mismos problemas.</h2>
-          <p>En Datalización no alcanza con definir colores o tipografías. La prioridad es acordar patrones de lectura, componentes, estados y reglas de uso para que el portal se mantenga claro cuando crece.</p>
-        </div>
-        <div class="design-system-definition-grid">
-          ${designSystemDefinition.map(renderDesignSystemDefinition).join("")}
-        </div>
-      </section>
-
       <section class="design-system-why page-inner" id="design-por-que" aria-labelledby="designSystemWhyTitle">
         <div class="design-system-section-head">
           <span class="flow-chip">por qué lo necesitamos</span>
@@ -2254,17 +1407,6 @@ function renderDesignSystemPage() {
         <div class="design-system-comparison">
           ${renderDesignSystemComparisonColumn("Sin Design System", designSystemComparison.without, "without")}
           ${renderDesignSystemComparisonColumn("Con Design System", designSystemComparison.with, "with")}
-        </div>
-      </section>
-
-      <section class="design-system-benefits page-inner" id="design-beneficios" aria-labelledby="designSystemBenefitsTitle">
-        <div class="design-system-section-head">
-          <span class="flow-chip">beneficios esperados</span>
-          <h2 id="designSystemBenefitsTitle">Reutilizar patrones reduce decisiones repetidas.</h2>
-          <p>La ganancia no es estética: es operativa. Cada patrón probado acelera nuevas secciones y reduce ajustes locales difíciles de mantener.</p>
-        </div>
-        <div class="design-system-benefit-grid">
-          ${designSystemBenefits.map(renderDesignSystemBenefit).join("")}
         </div>
       </section>
 
@@ -2285,16 +1427,6 @@ function renderDesignSystemPage() {
         </div>
         <div class="design-system-principle-grid">
           ${designSystemPrinciples.map(renderDesignSystemPrinciple).join("")}
-        </div>
-      </section>
-
-      <section class="design-system-scope page-inner" id="design-alcance" aria-labelledby="designSystemScopeTitle">
-        <div class="design-system-section-head">
-          <span class="flow-chip">alcance inicial</span>
-          <h2 id="designSystemScopeTitle">El primer alcance cubre los elementos con mayor riesgo de variación.</h2>
-        </div>
-        <div class="design-system-chip-cloud">
-          ${designSystemScope.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
         </div>
       </section>
 
@@ -2341,31 +1473,11 @@ function renderDesignSystemHeroMetric(item) {
   `;
 }
 
-function renderDesignSystemDefinition(item, index) {
-  return `
-    <article class="design-system-card" style="--ds-order:${index}">
-      <span>${String(index + 1).padStart(2, "0")}</span>
-      <h3>${escapeHtml(item.title)}</h3>
-      <p>${escapeHtml(item.text)}</p>
-    </article>
-  `;
-}
-
 function renderDesignSystemComparisonColumn(title, items, tone) {
   return `
     <article class="design-system-compare ${tone}">
       <h3>${escapeHtml(title)}</h3>
       <ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-    </article>
-  `;
-}
-
-function renderDesignSystemBenefit([title, text], index) {
-  return `
-    <article class="design-system-benefit" style="--ds-order:${index}">
-      <span>${String(index + 1).padStart(2, "0")}</span>
-      <h3>${escapeHtml(title)}</h3>
-      <p>${escapeHtml(text)}</p>
     </article>
   `;
 }
@@ -2423,7 +1535,7 @@ function renderDatalitoPage() {
           </article>
           <article>
             <strong>${datalitoKnowledgeSources.length}</strong>
-            <span>fuentes locales disponibles cuando hace falta citar</span>
+            <span>entradas indexadas y aprobadas para responder con respaldo</span>
           </article>
           <article>
             <strong>Seguro</strong>
@@ -2456,7 +1568,7 @@ function renderDatalitoPage() {
         <aside class="datalito-side-panel" aria-label="Gobierno de Datalito">
           <div class="datalito-side-block">
             <span class="flow-chip">índice</span>
-            <h3>Fuentes autorizadas</h3>
+            <h3>Entradas indexadas</h3>
             <p>La V1 toma su conocimiento desde módulos estructurados de la plataforma. En consecuencia, responde desde fuentes preparadas y no desde scraping del HTML renderizado.</p>
             <div class="datalito-source-summary">
               ${renderDatalitoSourceTypeSummary()}
@@ -2478,7 +1590,7 @@ function renderDatalitoPage() {
       <section class="datalito-architecture page-inner" id="datalito-arquitectura" aria-labelledby="datalitoArchitectureTitle">
         <div class="datalito-section-head">
           <span class="flow-chip">arquitectura compatible</span>
-          <h2 id="datalitoArchitectureTitle">La solución queda desacoplada para pasar de índice local a RAG enterprise sin rediseñar la experiencia.</h2>
+          <h2 id="datalitoArchitectureTitle">La solución queda desacoplada para evolucionar hacia búsqueda empresarial con permisos sin rediseñar la experiencia.</h2>
         </div>
         <div class="datalito-card-grid four">
           ${datalitoArchitectureLayers.map(renderDatalitoCard).join("")}
@@ -2504,9 +1616,13 @@ function renderDatalitoPage() {
             </div>
           </article>
           <article class="datalito-card">
-            <h3>Casos adversariales cubiertos</h3>
+            <h3>Categorías adversariales cubiertas</h3>
             <ul>
-              ${datalitoSecurityCases.slice(0, 5).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+              <li>Intentos de sobrescribir instrucciones.</li>
+              <li>Pedidos de secretos o configuración interna.</li>
+              <li>Acceso a contenido no publicado o restringido.</li>
+              <li>Solicitudes de inventar respuestas sin evidencia.</li>
+              <li>Conflictos entre fuentes y contenido vencido.</li>
             </ul>
           </article>
         </div>
@@ -2515,7 +1631,7 @@ function renderDatalitoPage() {
       <section class="datalito-evaluation page-inner" id="datalito-evaluacion" aria-labelledby="datalitoEvaluationTitle">
         <div class="datalito-section-head">
           <span class="flow-chip">evaluación</span>
-          <h2 id="datalitoEvaluationTitle">El producto se mide por respuestas respaldadas, calidad de citas y brechas detectadas.</h2>
+          <h2 id="datalitoEvaluationTitle">Los indicadores definidos medirán respaldo, calidad de citas y brechas; todavía no representan resultados observados.</h2>
         </div>
         <div class="datalito-kpi-grid">
           ${datalitoKpis.map(renderDatalitoKpi).join("")}
@@ -2796,7 +1912,10 @@ function renderDatalitoFollowUps(items) {
 
   return `
     <div class="datalito-followups" aria-label="Preguntas relacionadas">
-      ${items.slice(0, 3).map((item) => `<button type="button" data-datalito-prompt="${escapeHtml(item)}">${escapeHtml(item)}</button>`).join("")}
+      ${items
+        .slice(0, 3)
+        .map((item) => `<button type="button" data-datalito-prompt="${escapeHtml(item)}">${escapeHtml(item)}</button>`)
+        .join("")}
     </div>
   `;
 }
@@ -3029,7 +2148,8 @@ function composeDatalitoContinuationAnswer(question, source) {
   }
 
   if (/(riesgo|evita|control)/.test(normalized)) {
-    const riskText = risk || "evita que el equipo tome decisiones con criterios distintos, sin evidencia o con trabajo manual difícil de sostener.";
+    const riskText =
+      risk || "evita que el equipo tome decisiones con criterios distintos, sin evidencia o con trabajo manual difícil de sostener.";
     return `El riesgo principal que evita es este: ${riskText} En términos de gestión, ayuda a que el producto BI no dependa de memoria individual, correos sueltos o validaciones informales. La referencia está en “${source.title}”, dentro de ${source.section}. [S1]`;
   }
 
@@ -3047,9 +2167,7 @@ function composeDatalitoContinuationAnswer(question, source) {
 
 function extractDatalitoContentField(source, fieldName) {
   const normalizedField = normalizeText(fieldName);
-  const line = source.content
-    .split("\n")
-    .find((item) => normalizeText(item).startsWith(`${normalizedField}:`));
+  const line = source.content.split("\n").find((item) => normalizeText(item).startsWith(`${normalizedField}:`));
   return line ? line.slice(line.indexOf(":") + 1).trim() : "";
 }
 
@@ -3231,7 +2349,8 @@ function buildDatalitoFollowUps(source) {
   if (source.section === "Road y Metodología") {
     return ["¿Qué entregables corresponden?", "¿Qué riesgo evita este gate?", "¿Qué control sostiene la mejora?"];
   }
-  if (source.section === "Design System") return ["¿Qué componente aplica?", "¿Qué regla de calidad corresponde?", "¿Cómo mantengo consistencia?"];
+  if (source.section === "Design System")
+    return ["¿Qué componente aplica?", "¿Qué regla de calidad corresponde?", "¿Cómo mantengo consistencia?"];
   if (source.section === "Diccionario BI") return ["Dame un ejemplo funcional.", "¿Qué riesgo evita?", "¿Con qué conceptos se relaciona?"];
   return ["¿Dónde está la fuente?", "Explicalo para gerencia.", "Dame un paso a paso."];
 }
@@ -3257,7 +2376,9 @@ function getDatalitoPromptsForCurrentRoute() {
 function getDatalitoPageContext() {
   const route = getRoute();
   const title = routeTitles[route] || routeTitles["/"];
-  const selectedText = String(window.getSelection?.().toString() || "").trim().slice(0, 700);
+  const selectedText = String(window.getSelection?.().toString() || "")
+    .trim()
+    .slice(0, 700);
 
   return {
     route,
@@ -3269,11 +2390,15 @@ function getDatalitoPageContext() {
 }
 
 function refreshDatalitoViews() {
+  const globalShell = document.querySelector("[data-datalito-global]");
   const wrap = document.querySelector("[data-datalito-panel-wrap]");
   const launcher = document.querySelector("[data-datalito-open]");
   const panelChat = document.querySelector('[data-datalito-chat="panel"]');
   const pageChat = document.querySelector('[data-datalito-chat="page"]');
 
+  const isDatalitoPage = getRoute() === "/datalito";
+  if (globalShell) globalShell.hidden = isDatalitoPage;
+  if (isDatalitoPage) datalitoState.isOpen = false;
   if (wrap) wrap.classList.toggle("is-open", datalitoState.isOpen);
   if (launcher) launcher.setAttribute("aria-expanded", datalitoState.isOpen ? "true" : "false");
   if (panelChat) panelChat.innerHTML = renderDatalitoChat("panel");
@@ -3403,51 +2528,6 @@ function tokenizeDatalitoText(value) {
     .filter((token) => token.length > 2 && !datalitoStopwords.has(token));
 }
 
-function renderDatalizationDefinition() {
-  return `
-    <section class="datalization-section page-inner" aria-labelledby="datalizationTitle">
-      <div class="datalization-copy">
-        <span class="flow-chip">qué es datalizar</span>
-        <h2 id="datalizationTitle">Un proceso está datalizado cuando decide y se controla con evidencia.</h2>
-        <p>Un proyecto alcanza datalización real cuando deja de depender de planillas aisladas, tareas manuales o criterios individuales, y pasa a operar con datos confiables, reglas explícitas, disparadores, acciones trazables, responsables y monitoreo continuo.</p>
-      </div>
-
-      <div class="datalization-grid" aria-label="Condiciones de datalización completa">
-        ${datalizationCriteria
-          .map(
-            (item) => `
-              <article class="datalization-card">
-                <h3>${escapeHtml(item.title)}</h3>
-                <p>${escapeHtml(item.text)}</p>
-              </article>
-            `,
-          )
-          .join("")}
-      </div>
-
-      <div class="datalization-levels" aria-label="Niveles porcentuales de datalización">
-        <div class="datalization-level-head">
-          <h3>Porcentaje de datalización</h3>
-          <p>El porcentaje expresa cuánto del proceso está automatizado, gobernado y operado; no cuántos reportes existen.</p>
-        </div>
-        <div class="datalization-level-grid">
-          ${datalizationLevels
-            .map(
-              (level) => `
-                <article class="datalization-level">
-                  <strong>${escapeHtml(level.percent)}</strong>
-                  <h4>${escapeHtml(level.title)}</h4>
-                  <p>${escapeHtml(level.text)}</p>
-                </article>
-              `,
-            )
-            .join("")}
-        </div>
-      </div>
-    </section>
-  `;
-}
-
 function renderExecutiveBrief(narrative, variant = "") {
   if (!narrative) return "";
 
@@ -3526,115 +2606,6 @@ function renderConceptDecantation() {
   `;
 }
 
-function renderWorkflowLab() {
-  return `
-    <section class="workflow-lab page-inner" id="inicio-workflow" aria-label="Flujo operativo de datalización">
-      <div class="workflow-board" aria-label="Canvas del flujo de datalización">
-        <div class="workflow-board-head">
-          <div>
-            <span class="flow-chip">flujo de automatización</span>
-            <h2>La transformación ocurre cuando cada paso responde una pregunta ejecutiva.</h2>
-            <p>El flujo muestra cómo una tarea manual se convierte en sistema: primero se entiende el proceso, luego se fijan reglas y datos, después se automatiza la acción y finalmente se controla la mejora.</p>
-          </div>
-          <div class="workflow-lanes" aria-label="Carriles del flujo">
-            <span>Proceso</span>
-            <span>Reglas y datos</span>
-            <span>Acción y operación</span>
-          </div>
-        </div>
-        <div class="workflow-chain" aria-label="Pasos clickeables del flujo">
-          ${workflowSteps
-            .map(
-              (step, index) => `
-                <button
-                  class="workflow-node-card tone-${step.tone} ${index === 0 ? "active" : ""}"
-                  type="button"
-                  style="--node-order:${index}"
-                  data-workflow-step="${index}"
-                  aria-expanded="${index === 0 ? "true" : "false"}"
-                  aria-controls="workflow-panel-${index}"
-                >
-                    <span class="node-icon">${icon(step.iconName)}</span>
-                    <strong>${escapeHtml(step.title)}</strong>
-                    <small>${escapeHtml(step.short)}</small>
-                    <span class="node-disclosure">${index === 0 ? "Detalle abierto" : "Abrir detalle"} ${icon("chevronDown")}</span>
-                </button>
-              `,
-            )
-            .join("")}
-        </div>
-        <div class="workflow-detail-drawer" aria-live="polite">
-          ${workflowSteps
-            .map(
-              (step, index) => `
-                <section class="workflow-step-panel" id="workflow-panel-${index}" data-workflow-panel="${index}" ${index === 0 ? "" : "hidden"}>
-                  <div class="workflow-panel-summary">
-                    <span>Paso ${index + 1}</span>
-                    <h3>${escapeHtml(step.title)}</h3>
-                    <p>${escapeHtml(step.short)}</p>
-                  </div>
-                  <div>
-                    <h3>Significado técnico</h3>
-                    <p>${escapeHtml(step.technical)}</p>
-                  </div>
-                  <div>
-                    <h3>Significado funcional</h3>
-                    <p>${escapeHtml(step.functional)}</p>
-                  </div>
-                  <div>
-                    <h3>Ejemplos reales</h3>
-                    <ul>
-                      ${step.examples.map((example) => `<li>${escapeHtml(example)}</li>`).join("")}
-                    </ul>
-                  </div>
-                </section>
-              `,
-            )
-            .join("")}
-        </div>
-        <div class="workflow-output">
-          <span>${icon("spark")}</span>
-          <div>
-            <strong>Conclusión operativa</strong>
-            <p>Un reporte informa, pero una automatización toma una señal, aplica reglas, dispara una acción, registra evidencia y permite mejorar el proceso.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  `;
-}
-
-function setupWorkflowInteractions() {
-  const buttons = [...document.querySelectorAll("[data-workflow-step]")];
-  const panels = [...document.querySelectorAll("[data-workflow-panel]")];
-  if (!buttons.length || !panels.length) return;
-
-  buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const target = button.dataset.workflowStep;
-      const isOpen = button.getAttribute("aria-expanded") === "true";
-      if (isOpen) return;
-
-      buttons.forEach((item) => {
-        item.classList.remove("active");
-        item.setAttribute("aria-expanded", "false");
-        const disclosure = item.querySelector(".node-disclosure");
-        if (disclosure) disclosure.innerHTML = `Abrir detalle ${icon("chevronDown")}`;
-      });
-      panels.forEach((panel) => {
-        panel.hidden = true;
-      });
-
-      button.classList.add("active");
-      button.setAttribute("aria-expanded", "true");
-      const disclosure = button.querySelector(".node-disclosure");
-      if (disclosure) disclosure.innerHTML = `Detalle abierto ${icon("chevronDown")}`;
-      const panel = panels.find((item) => item.dataset.workflowPanel === target);
-      if (panel) panel.hidden = false;
-    });
-  });
-}
-
 function renderRoadMethodologyPage() {
   appRoot.innerHTML = `
     <section class="page tool-page road-methodology-page">
@@ -3666,15 +2637,6 @@ function renderRoadMethodologyPage() {
       ${renderUnifiedAutomationFlow()}
 
       ${renderPrdSpecModelSection()}
-
-      <section class="guide-journey page-inner" id="road-gates" aria-labelledby="guideJourneyTitle">
-        <div class="guide-section-title">
-          <span class="flow-chip">historia completa</span>
-          <h2 id="guideJourneyTitle">Cada gate cuenta qué se decidió y qué prueba lo sostiene.</h2>
-          <p>La secuencia se lee como una investigación aplicada: cada etapa declara una decisión, exige evidencia y prepara el paso siguiente.</p>
-        </div>
-        ${guideSections.map(renderGuideJourneyStep).join("")}
-      </section>
 
       <section class="guide-readiness-panel page-inner" id="road-checklist" aria-labelledby="guideReadinessTitle">
         <div class="guide-readiness-copy">
@@ -3854,19 +2816,10 @@ function renderFabricIllustration(type) {
       </svg>
     `,
     dataflow: `
-      <svg class="fabric-illustration dataflow" viewBox="0 0 84 84" aria-hidden="true">
-        <rect x="16" y="14" width="22" height="22" rx="6"></rect>
-        <rect x="46" y="14" width="22" height="22" rx="6"></rect>
-        <rect x="31" y="48" width="22" height="22" rx="6"></rect>
-        <path d="M38 25h8"></path><path d="M29 36l9 12"></path><path d="M55 36l-8 12"></path>
-      </svg>
+      <img class="fabric-illustration fabric-official-icon" src="/assets/microsoft/fabric/dataflow_gen2_48_item.svg" alt="" width="48" height="48" aria-hidden="true">
     `,
     sparkNotebook: `
-      <svg class="fabric-illustration spark-notebook" viewBox="0 0 84 84" aria-hidden="true">
-        <rect x="18" y="14" width="42" height="56" rx="7"></rect>
-        <path d="M29 31h18"></path><path d="M29 42h12"></path><path d="M29 53h17"></path>
-        <path d="m59 37 4 9 9 4-9 4-4 9-4-9-9-4 9-4z"></path>
-      </svg>
+      <img class="fabric-illustration fabric-official-icon" src="/assets/microsoft/fabric/notebook_48_item.svg" alt="" width="48" height="48" aria-hidden="true">
     `,
     aiModel: `
       <svg class="fabric-illustration ai-model" viewBox="0 0 84 84" aria-hidden="true">
@@ -3875,36 +2828,19 @@ function renderFabricIllustration(type) {
       </svg>
     `,
     lakehouse: `
-      <svg class="fabric-illustration mini" viewBox="0 0 84 84" aria-hidden="true">
-        <path d="M18 46 42 23l24 23"></path><path d="M25 43v23h34V43"></path><path d="M34 66V52h16v14"></path>
-        <path d="M17 72c8-5 15-5 25 0 10 5 17 5 25 0"></path>
-      </svg>
+      <img class="fabric-illustration fabric-official-icon fabric-official-icon--compact" src="/assets/microsoft/fabric/lakehouse_48_item.svg" alt="" width="48" height="48" aria-hidden="true">
     `,
     warehouse: `
-      <svg class="fabric-illustration mini" viewBox="0 0 84 84" aria-hidden="true">
-        <path d="M15 32 42 17l27 15"></path><path d="M21 32h42v35H21z"></path>
-        <path d="M29 40v20"></path><path d="M42 40v20"></path><path d="M55 40v20"></path>
-      </svg>
+      <img class="fabric-illustration fabric-official-icon fabric-official-icon--compact" src="/assets/microsoft/fabric/data_warehouse_48_item.svg" alt="" width="48" height="48" aria-hidden="true">
     `,
     mirroring: `
-      <svg class="fabric-illustration mini" viewBox="0 0 84 84" aria-hidden="true">
-        <rect x="18" y="20" width="32" height="28" rx="5"></rect><rect x="34" y="36" width="32" height="28" rx="5"></rect>
-        <path d="M27 58h10"></path><path d="m34 53 6 6-6 6"></path>
-      </svg>
+      <img class="fabric-illustration fabric-official-icon fabric-official-icon--compact" src="/assets/microsoft/fabric/mirrored_generic_database_48_item.svg" alt="" width="48" height="48" aria-hidden="true">
     `,
     oneLake: `
-      <svg class="fabric-illustration product" viewBox="0 0 84 84" aria-hidden="true">
-        <circle cx="42" cy="42" r="25"></circle>
-        <path d="M18 44c18-3 24-17 48-13"></path>
-        <path d="M23 55c18 8 31 5 45-9"></path>
-      </svg>
+      <img class="fabric-illustration fabric-official-icon" src="/assets/microsoft/fabric/one_lake_48_color.svg" alt="" width="48" height="48" aria-hidden="true">
     `,
     powerBi: `
-      <svg class="fabric-illustration product" viewBox="0 0 84 84" aria-hidden="true">
-        <rect x="19" y="45" width="12" height="22" rx="4"></rect>
-        <rect x="36" y="31" width="12" height="36" rx="4"></rect>
-        <rect x="53" y="19" width="12" height="48" rx="4"></rect>
-      </svg>
+      <img class="fabric-illustration fabric-official-icon" src="/assets/microsoft/fabric/power_bi_48_color.svg" alt="" width="48" height="48" aria-hidden="true">
     `,
     starSchema: `
       <svg class="fabric-illustration pillar" viewBox="0 0 116 84" aria-hidden="true">
@@ -4389,7 +3325,7 @@ function renderDatalizationMethodPage() {
   appRoot.innerHTML = `
     <section class="page tool-page method-page">
       <header class="page-heading page-inner method-hero">
-        <span class="eyebrow">Método de Datalización v0.1</span>
+        <span class="eyebrow">Método de Datalización</span>
         <h1>Un sistema operativo para trabajar, entregar y sostener productos BI.</h1>
         <p class="lede">La página baja el método a decisiones concretas: estructura Microsoft 365, naming, backlog, DEV/PROD, VMC/Fabric y gobierno interno. En la práctica, muestra cómo se trabaja.</p>
       </header>
@@ -4588,7 +3524,7 @@ function renderDatalizationMethodPage() {
         <div class="method-section-head">
           <span class="flow-chip">implementación</span>
           <h2 id="methodRoadmapTitle">El método se instala con piloto, tablero, adopción y gobierno interno.</h2>
-          <p>La versión 0.1 se valida con un caso piloto, se mide en backlog y se corrige antes de ampliar el alcance.</p>
+          <p>La versión vigente se valida con un caso piloto, se mide en backlog y se corrige antes de ampliar el alcance.</p>
         </div>
         <div class="method-roadmap-track">
           ${methodRoadmap.map(renderMethodRoadmapItem).join("")}
@@ -4938,8 +3874,8 @@ function renderDictionaryPage() {
         <div class="dictionary-category-panel">
           <div class="chip-row" aria-label="Categorías frecuentes">
             ${primaryCategories
-            .map(
-              (category) => `
+              .map(
+                (category) => `
                 <button
                   class="chip ${dictionaryState.category === category ? "active" : ""}"
                   type="button"
@@ -4948,8 +3884,8 @@ function renderDictionaryPage() {
                   ${escapeHtml(category)}
                 </button>
               `,
-            )
-            .join("")}
+              )
+              .join("")}
           </div>
           <details class="dictionary-more-categories">
             <summary>Ver más categorías</summary>
@@ -5154,6 +4090,7 @@ function renderProductFlow(product) {
     railLabel: `Carriles del flujo de ${product.officialName}`,
     tooltipPrefix: "Abrir detalle de",
     detailMode: "product",
+    practiceProductSlug: product.slug,
     extraClass: "product-nine-gate-flow",
   });
 }
@@ -5161,7 +4098,6 @@ function renderProductFlow(product) {
 function renderProductCrossCuttingControls(product) {
   const commonControls = product.commonControls || [];
   const specificControls = product.specificControls || product.crossCuttingControls || [];
-  const controlCount = commonControls.length + specificControls.length;
 
   return `
     <section class="product-cross-cutting page-inner" aria-labelledby="${escapeHtml(product.slug)}-controls-title">
@@ -5169,12 +4105,12 @@ function renderProductCrossCuttingControls(product) {
         <summary>
           <span>
             <strong id="${escapeHtml(product.slug)}-controls-title">Controles transversales</strong>
-            <small>${controlCount} controles considerados desde el inicio</small>
+            <small>${commonControls.length} áreas comunes + ${specificControls.length} específicas</small>
           </span>
           ${icon("chevronDown")}
         </summary>
         <div class="product-controls-body">
-          <p>Estos controles se consideran desde la definición, aunque su validación formal aparezca en un gate específico. Incluyen Reliability, Security, Operational Excellence, Performance Efficiency y Experience Optimization de Power Platform Well-Architected. La decisión concreta queda sujeta a la arquitectura aprobada, el licenciamiento aplicable y la política corporativa; el control de versiones se considera fuente de verdad cuando aplique.</p>
+          <p>Estas áreas agrupan controles que se consideran desde la definición, aunque su validación formal aparezca en un gate específico. Incluyen Reliability, Security, Operational Excellence, Performance Efficiency y Experience Optimization de Power Platform Well-Architected. La decisión concreta queda sujeta a la arquitectura aprobada, el licenciamiento aplicable y la política corporativa.</p>
           <div class="product-control-groups">
             <div>
               <h3>Comunes a los tres productos</h3>
@@ -5224,7 +4160,12 @@ function renderOfficialProductIcon(product, variant = "") {
   return `<img class="product-official-icon${className}" src="${escapeHtml(product.iconPath)}" width="48" height="48" alt="">`;
 }
 
-function getNineGateFlowItems({ phases, sections = [], laneConfig = laneStyles, tooltipPrefix = "Abrir definición técnica y funcional de" }) {
+function getNineGateFlowItems({
+  phases,
+  sections = [],
+  laneConfig = laneStyles,
+  tooltipPrefix = "Abrir definición técnica y funcional de",
+}) {
   const positions = [
     { x: 6, y: 56 },
     { x: 17, y: 56 },
@@ -5301,6 +4242,7 @@ function renderNineGateFlow({
   railLabel,
   tooltipPrefix = "Abrir definición técnica y funcional de",
   detailMode = "road",
+  practiceProductSlug = "",
   extraClass = "",
 }) {
   const items = getNineGateFlowItems({ phases, sections, laneConfig, tooltipPrefix });
@@ -5370,7 +4312,7 @@ function renderNineGateFlow({
       </aside>
 
       <div class="unified-flow-menu" aria-live="polite">
-        ${items.map((item) => renderUnifiedFlowPanel(item, { panelPrefix, detailMode })).join("")}
+        ${items.map((item) => renderUnifiedFlowPanel(item, { panelPrefix, detailMode, practiceProductSlug })).join("")}
       </div>
     </section>
   `;
@@ -5399,8 +4341,8 @@ function renderUnifiedFlowNode(item, { panelPrefix = "unified-flow-panel" } = {}
   `;
 }
 
-function renderUnifiedFlowPanel(item, { panelPrefix = "unified-flow-panel", detailMode = "road" } = {}) {
-  if (detailMode === "product") return renderProductFlowPanel(item, panelPrefix);
+function renderUnifiedFlowPanel(item, { panelPrefix = "unified-flow-panel", detailMode = "road", practiceProductSlug = "" } = {}) {
+  if (detailMode === "product") return renderProductFlowPanel(item, panelPrefix, practiceProductSlug);
 
   const { id, section, phase, story, color } = item;
 
@@ -5448,7 +4390,7 @@ function renderUnifiedFlowPanel(item, { panelPrefix = "unified-flow-panel", deta
   `;
 }
 
-function renderProductFlowPanel(item, panelPrefix) {
+function renderProductFlowPanel(item, panelPrefix, productSlug) {
   const { id, section, phase, story, color } = item;
   const activities = phase.keyActivities || phase.secondaryObjectives || section.practices || [];
   const deliverables = phase.deliverables || section.deliverables || [];
@@ -5516,11 +4458,160 @@ function renderProductFlowPanel(item, panelPrefix) {
           : ""
       }
 
+      ${renderProductPracticeDisclosure(productSlug, phase)}
+
       <div class="unified-panel-foot">
         <span>Responsable principal · ${escapeHtml(phase.owner || section.eyebrow)}</span>
         <p><strong>Riesgo si se saltea:</strong> ${escapeHtml(phase.riskIfSkipped || section.risk)}</p>
       </div>
     </section>
+  `;
+}
+
+function renderProductPracticeDisclosure(productSlug, phase) {
+  const gateSlug = phase.slug || `gate-${phase.id + 1}`;
+
+  return `
+    <details
+      class="product-practice-library"
+      data-practice-library
+      data-product-slug="${escapeHtml(productSlug)}"
+      data-gate-slug="${escapeHtml(gateSlug)}"
+    >
+      <summary>
+        <span class="product-practice-summary-icon">${icon("book")}</span>
+        <span>
+          <strong>Buenas prácticas de ${escapeHtml(phase.title)}</strong>
+          <small>Decisiones, evidencia, fuentes oficiales y tres ejemplos por práctica</small>
+        </span>
+        ${icon("chevronDown")}
+      </summary>
+      <div class="product-practice-library-body" data-practice-library-body aria-live="polite">
+        <p>La biblioteca se carga al abrir para mantener ágil el recorrido de los nueve gates.</p>
+      </div>
+    </details>
+  `;
+}
+
+let productPracticeLoaderPromise;
+
+function setupProductPracticeLibraries(root = document) {
+  root.querySelectorAll("[data-practice-library]").forEach((disclosure) => {
+    disclosure.addEventListener("toggle", () => {
+      if (disclosure.open && disclosure.dataset.practiceStatus !== "ready") {
+        loadProductPracticeDisclosure(disclosure);
+      }
+    });
+  });
+}
+
+async function loadProductPracticeDisclosure(disclosure) {
+  if (disclosure.dataset.practiceStatus === "loading") return;
+  const body = disclosure.querySelector("[data-practice-library-body]");
+  if (!body) return;
+
+  disclosure.dataset.practiceStatus = "loading";
+  body.innerHTML = '<p class="product-practice-status">Cargando buenas prácticas…</p>';
+
+  try {
+    productPracticeLoaderPromise ||= import("./data/practices/index.js");
+    const { loadGatePractices } = await productPracticeLoaderPromise;
+    const library = await loadGatePractices(disclosure.dataset.productSlug, disclosure.dataset.gateSlug);
+    body.innerHTML = renderLoadedProductPractices(library);
+    disclosure.dataset.practiceStatus = "ready";
+  } catch (error) {
+    console.error("No se pudo cargar la biblioteca de buenas prácticas", error);
+    productPracticeLoaderPromise = undefined;
+    disclosure.dataset.practiceStatus = "error";
+    body.innerHTML = `
+      <div class="product-practice-error" role="alert">
+        <p>No se pudo cargar esta biblioteca.</p>
+        <button class="button small secondary" type="button" data-practice-retry>Reintentar</button>
+      </div>
+    `;
+    body.querySelector("[data-practice-retry]")?.addEventListener("click", () => loadProductPracticeDisclosure(disclosure), {
+      once: true,
+    });
+  }
+}
+
+function renderLoadedProductPractices(library) {
+  const exampleCount = library.practices.reduce((total, practice) => total + practice.examples.length, 0);
+
+  return `
+    <div class="product-practice-intro">
+      <div>
+        <span class="flow-chip">biblioteca productiva</span>
+        <p>${escapeHtml(library.intro)}</p>
+      </div>
+      <dl aria-label="Cobertura de buenas prácticas">
+        <div><dt>Prácticas</dt><dd>${library.practices.length}</dd></div>
+        <div><dt>Ejemplos</dt><dd>${exampleCount}</dd></div>
+      </dl>
+    </div>
+    <div class="product-practice-list">
+      ${library.practices.map(renderProductPractice).join("")}
+    </div>
+  `;
+}
+
+function renderProductPractice(practice, index) {
+  return `
+    <details class="product-practice" style="--practice-order:${index}">
+      <summary>
+        <span class="product-practice-index">${String(index + 1).padStart(2, "0")}</span>
+        <span>
+          <strong>${escapeHtml(practice.title)}</strong>
+          <small>Decisión + evidencia + 3 ejemplos</small>
+        </span>
+        ${icon("chevronDown")}
+      </summary>
+      <div class="product-practice-body">
+        <div class="product-practice-rationale">
+          <div>
+            <h5>Decisión práctica</h5>
+            <p>${escapeHtml(practice.decision)}</p>
+          </div>
+          <div>
+            <h5>Por qué funciona</h5>
+            <p>${escapeHtml(practice.why)}</p>
+          </div>
+        </div>
+        <div class="product-practice-evidence">
+          <div>
+            <h5>Evidencia esperada</h5>
+            <ul>${practice.evidence.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+          </div>
+          <div>
+            <h5>Aplica a</h5>
+            <ul class="product-practice-tags">${practice.appliesTo.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+          </div>
+        </div>
+        <div class="product-practice-examples" aria-label="Tres ejemplos de ${escapeHtml(practice.title)}">
+          ${practice.examples.map(renderProductPracticeExample).join("")}
+        </div>
+        <div class="product-practice-sources">
+          <strong>Fuentes oficiales</strong>
+          <div>
+            ${practice.sources
+              .map((source) => `<a href="${escapeHtml(source.url)}" target="_blank" rel="noreferrer">${escapeHtml(source.label)}</a>`)
+              .join("")}
+          </div>
+        </div>
+      </div>
+    </details>
+  `;
+}
+
+function renderProductPracticeExample(example, index) {
+  return `
+    <article>
+      <span>Ejemplo ${index + 1}</span>
+      <h5>${escapeHtml(example.title)}</h5>
+      <p><strong>Situación:</strong> ${escapeHtml(example.scenario)}</p>
+      <p><strong>Aplicación:</strong> ${escapeHtml(example.application)}</p>
+      <p><strong>Evidencia:</strong> ${escapeHtml(example.proof)}</p>
+    </article>
   `;
 }
 
@@ -5615,9 +4706,7 @@ function setupNineGateFlowInteractions(root = document) {
         panel.hidden = panel.dataset.unifiedFlowPanel !== target;
       });
 
-      const activeNode = triggers.find(
-        (trigger) => trigger.classList.contains("flow-node") && trigger.dataset.unifiedFlow === target,
-      );
+      const activeNode = triggers.find((trigger) => trigger.classList.contains("flow-node") && trigger.dataset.unifiedFlow === target);
       const viewport = activeNode?.closest(".unified-flow-viewport");
       if (activeNode && viewport?.scrollWidth > viewport.clientWidth + 2) {
         const viewportRect = viewport.getBoundingClientRect();
@@ -5653,56 +4742,16 @@ function getGuideStory(section, index) {
   };
 }
 
-function renderGuideJourneyStep(section, index) {
-  const story = getGuideStory(section, index);
-  return `
-    <article class="guide-journey-step" style="--guide-color:${story.color}; --guide-order:${index}">
-      <div class="guide-step-marker" aria-hidden="true">
-        <span>${String(index + 1).padStart(2, "0")}</span>
-        ${icon(story.iconName || "spark")}
-      </div>
-      <div class="guide-step-body">
-        <div class="guide-step-kicker">
-          <span>${escapeHtml(section.eyebrow)}</span>
-          <strong>${renderExplainedText(story.outcome || "Salida verificable para la etapa siguiente.")}</strong>
-        </div>
-        <h2>${escapeHtml(section.title)}</h2>
-        <p class="guide-scene">${renderExplainedText(story.scene || section.summary)}</p>
-        <p>${renderExplainedText(section.summary)}</p>
-        <div class="guide-automation-note">
-          <span>Clave de automatización</span>
-          <p>${renderExplainedText(story.automation || section.summary)}</p>
-        </div>
-        <div class="guide-step-columns">
-          <div>
-            <h3>Cómo avanza la historia</h3>
-            <ul>${section.practices.map((item) => `<li>${renderExplainedText(item)}</li>`).join("")}</ul>
-          </div>
-          <div>
-            <h3>Qué queda como evidencia</h3>
-            <ul>${section.deliverables.map((item) => `<li>${renderExplainedText(item)}</li>`).join("")}</ul>
-          </div>
-        </div>
-        ${renderGuideStepGlossary(section)}
-        <p class="guide-risk">
-          <strong>Si se saltea:</strong> ${renderExplainedText(section.risk)}
-        </p>
-      </div>
-    </article>
-  `;
-}
-
 function renderToolingPage() {
-  const totalItems = toolingGroups.reduce((total, group) => total + group.items.length, 0);
+  const visibleGroups = toolingGroups.filter((group) => ["Sistema instalado en el repo", "MCPs priorizados"].includes(group.group));
+  const totalItems = visibleGroups.reduce((total, group) => total + group.items.length, 0);
   appRoot.innerHTML = `
     <section class="page tool-page">
       <header class="page-heading page-inner">
         <span class="eyebrow">Documentación técnica</span>
-        <h1>Catálogo técnico con criterio de adopción.</h1>
-        <p class="lede">Las librerías, agentes y MCPs se leen como capacidades: qué resuelven, qué riesgo traen y cuándo tiene sentido incorporarlas.</p>
+        <h1>Herramientas activas y evaluaciones controladas.</h1>
+        <p class="lede">La página visible distingue lo que ya integra el repo de los MCPs priorizados. El inventario exploratorio queda en la documentación técnica.</p>
       </header>
-
-      ${renderExecutiveBrief(pageNarratives.tooling)}
 
       <section class="tooling-decision page-inner" aria-labelledby="toolingDecisionTitle">
         <div>
@@ -5727,8 +4776,8 @@ function renderToolingPage() {
       <section class="shortcut-hero page-inner" id="librerias-catalogo">
         <div>
           <span class="flow-chip">inventario del repo</span>
-          <h2>El inventario muestra capacidades disponibles y límites de adopción.</h2>
-          <p>${toolingGroups.length} familias y ${totalItems} herramientas documentadas para evaluar cuando una automatización lo justifique.</p>
+          <h2>La vista pública muestra sólo capacidades con estado concreto.</h2>
+          <p>${visibleGroups.length} grupos y ${totalItems} capacidades instaladas o priorizadas. Las alternativas futuras no se presentan como recomendación.</p>
         </div>
         <a class="button" href="/${toolingDocs.source}" target="_blank" rel="noreferrer">
           ${icon("book")}
@@ -5737,7 +4786,7 @@ function renderToolingPage() {
       </section>
 
       <section class="tooling-grid page-inner" id="librerias-herramientas" aria-label="Catálogo de librerías y agentes">
-        ${toolingGroups.map(renderToolingGroup).join("")}
+        ${visibleGroups.map(renderToolingGroup).join("")}
       </section>
     </section>
   `;
@@ -5752,9 +4801,7 @@ function renderToolingGroup(group) {
       </div>
       <p>${escapeHtml(group.description)}</p>
       <div class="tooling-tags">
-        ${group.items
-          .map((item) => `<span data-tooltip="${escapeHtml(getToolingTooltip(group))}">${escapeHtml(item)}</span>`)
-          .join("")}
+        ${group.items.map((item) => `<span data-tooltip="${escapeHtml(getToolingTooltip(group))}">${escapeHtml(item)}</span>`).join("")}
       </div>
     </article>
   `;
@@ -5865,54 +4912,95 @@ function renderDictionaryResults() {
   container.className = "term-grid page-inner";
   container.innerHTML = results
     .map(
-      (term) => {
-        const relatedTerms = getRelatedDictionaryTerms(term);
-        const definitionCopy = `${term.term}: ${term.definition}`;
-        return `
-        <article class="term-card" id="${escapeHtml(term.id)}">
-          <div class="card-topline">
-            <h2>${escapeHtml(term.term)}</h2>
-            <span class="badge">${escapeHtml(term.category)}</span>
-          </div>
-          <p class="term-definition">${escapeHtml(term.definition)}</p>
-          <dl class="detail-list">
-            <div>
-              <dt>Por qué importa</dt>
-              <dd>${escapeHtml(term.whyItMatters)}</dd>
-            </div>
-            <div>
-              <dt>Ejemplo</dt>
-              <dd>${escapeHtml(term.example)}</dd>
-            </div>
-            <div>
-              <dt>Riesgo de entenderlo mal</dt>
-              <dd>${escapeHtml(term.risk)}</dd>
-            </div>
-          </dl>
-          <div class="term-actions">
-            <button class="button small secondary" type="button" data-copy-text="${escapeHtml(definitionCopy)}">
-              ${icon("clipboard")}
-              Copiar definición
-            </button>
-            ${
-              relatedTerms.length
-                ? `<div class="term-related" aria-label="Términos relacionados con ${escapeHtml(term.term)}">
-                    <strong>Relacionado</strong>
-                    ${relatedTerms.map((item) => `<a href="#${escapeHtml(item.id)}">${escapeHtml(item.term)}</a>`).join("")}
-                  </div>`
-                : ""
-            }
-          </div>
-        </article>
-      `;
-      },
+      (term) => `
+        <details class="term-card" id="${escapeHtml(term.id)}" data-dictionary-term="${escapeHtml(term.id)}">
+          <summary>
+            <span class="card-topline">
+              <h2>${escapeHtml(term.term)}</h2>
+              <span class="badge">${escapeHtml(term.category)}</span>
+            </span>
+            <span class="term-definition">${escapeHtml(term.definition)}</span>
+            <span class="term-disclosure">Ver aplicación, ejemplo y riesgo ${icon("chevronDown")}</span>
+          </summary>
+          <div class="term-card-body" data-term-card-body></div>
+        </details>
+      `,
     )
     .join("");
+
+  container.querySelectorAll("[data-dictionary-term]").forEach((card) => {
+    card.addEventListener("toggle", () => {
+      if (!card.open || card.dataset.termStatus === "ready") return;
+      const term = dictionaryTerms.find((item) => item.id === card.dataset.dictionaryTerm);
+      const body = card.querySelector("[data-term-card-body]");
+      if (!term || !body) return;
+      body.innerHTML = renderDictionaryTermDetail(term);
+      card.dataset.termStatus = "ready";
+      requestAnimationFrame(enhanceInteractiveSurfaces);
+    });
+  });
   requestAnimationFrame(enhanceInteractiveSurfaces);
 }
 
+function renderDictionaryTermDetail(term) {
+  const relatedTerms = getRelatedDictionaryTerms(term);
+  const definitionCopy = `${term.term}: ${term.definition}`;
+
+  return `
+    <dl class="detail-list">
+      <div>
+        <dt>Por qué importa</dt>
+        <dd>${escapeHtml(term.whyItMatters)}</dd>
+      </div>
+      <div>
+        <dt>Ejemplo</dt>
+        <dd>${escapeHtml(term.example)}</dd>
+      </div>
+      <div>
+        <dt>Riesgo de entenderlo mal</dt>
+        <dd>${escapeHtml(term.risk)}</dd>
+      </div>
+    </dl>
+    <div class="term-actions">
+      <button class="button small secondary" type="button" data-copy-text="${escapeHtml(definitionCopy)}">
+        ${icon("clipboard")}
+        Copiar definición
+      </button>
+      ${
+        relatedTerms.length
+          ? `<div class="term-related" aria-label="Términos relacionados con ${escapeHtml(term.term)}">
+              <strong>Relacionado</strong>
+              ${relatedTerms.map((item) => `<a href="#${escapeHtml(item.id)}">${escapeHtml(item.term)}</a>`).join("")}
+            </div>`
+          : ""
+      }
+    </div>
+  `;
+}
+
 function getRelatedDictionaryTerms(term) {
-  return dictionaryTerms.filter((item) => item.id !== term.id && item.category === term.category).slice(0, 3);
+  if (term.relatedIds?.length) {
+    return term.relatedIds
+      .map((id) => dictionaryTerms.find((item) => item.id === id))
+      .filter(Boolean)
+      .slice(0, 3);
+  }
+
+  const meaningfulTokens = new Set(
+    tokenizeDatalitoText(`${term.term} ${term.definition} ${term.whyItMatters}`).filter((token) => token.length > 3),
+  );
+
+  return dictionaryTerms
+    .filter((item) => item.id !== term.id)
+    .map((item) => {
+      const itemTokens = tokenizeDatalitoText(`${item.term} ${item.definition}`);
+      const sharedTokens = itemTokens.filter((token) => meaningfulTokens.has(token)).length;
+      return { item, score: sharedTokens + (item.category === term.category ? 2 : 0) };
+    })
+    .filter(({ score }) => score > 1)
+    .sort((left, right) => right.score - left.score || left.item.term.localeCompare(right.item.term))
+    .slice(0, 3)
+    .map(({ item }) => item);
 }
 
 function renderRoadmapPage() {
@@ -5943,8 +5031,8 @@ function renderProjectPage() {
 ├─ PRD.md
 ├─ SPEC.md
 ├─ README.md
-├─ CLAUDE.md
-├─ documentación/
+├─ AGENTS.md
+├─ documentacion/
 │  ├─ contexto-negocio.md
 │  ├─ arquitectura-datos.md
 │  ├─ mapa-modelo.md
@@ -5955,7 +5043,7 @@ function renderProjectPage() {
 │  ├─ dax.md
 │  ├─ power-query.md
 │  ├─ tmdl.md
-│  └─ documentación.md
+│  └─ documentacion.md
 ├─ Modelo.SemanticModel/
 │  └─ definition/
 │     ├─ tables/
@@ -5982,17 +5070,6 @@ function renderProjectPage() {
         </div>
       </section>
 
-      <section class="project-tools page-inner" id="proyecto-herramientas" aria-labelledby="projectToolsTitle">
-        <div class="project-method-head">
-          <span class="flow-chip">herramientas necesarias</span>
-          <h2 id="projectToolsTitle">Cada herramienta entra cuando agrega trazabilidad, calidad o control.</h2>
-          <p>No todas las herramientas se usan al mismo tiempo; se incorporan cuando el proyecto necesita revisión, performance, seguridad, publicación controlada u operación sostenida.</p>
-        </div>
-        <div class="project-tool-grid">
-          ${projectToolStack.map(renderProjectTool).join("")}
-        </div>
-      </section>
-
       <section class="quality-grid page-inner" aria-label="Buenas prácticas Power BI avanzado">
         ${renderQualityCard("Proceso aprobado", "El equipo sabe qué tarea se automatiza, quién la usa, qué disparador la inicia y qué métrica prueba la mejora.", ["Disparadores", "SLA y responsables", "Criterios de aceptación"])}
         ${renderQualityCard("Spec ejecutable", "La lógica del proceso se transforma en arquitectura, datos, modelo, reglas, seguridad, UX y pruebas.", ["Fuentes y granularidad", "Reglas técnicas", "Casos de prueba"])}
@@ -6000,19 +5077,6 @@ function renderProjectPage() {
         ${renderQualityCard("Operación cuidada", "Producción implica monitorear refresh, gateways, capacidad, permisos, uso real y backlog de mejoras.", ["Capacity metrics", "Incremental refresh", "Runbook operativo"])}
       </section>
 
-      <section class="pbip-note page-inner">
-        <div>
-          <span class="eyebrow">modo proyecto</span>
-          <h2>PBIP convierte el BI en un activo revisable.</h2>
-          <p>Power BI Project permite guardar el reporte y el modelo semántico como carpetas con archivos de texto. En ese escenario, Visual Studio Code, Git y la terminal dejan de ser herramientas ajenas al BI y pasan a cuidar la automatización con PRD y Spec.</p>
-        </div>
-        <ul>
-          <li>Separar proceso operativo, reglas de negocio y decisiones técnicas.</li>
-          <li>Revisar diferencias de medidas, relaciones y expresiones.</li>
-          <li>Documentar reglas y excepciones junto al proyecto, no en un chat perdido.</li>
-          <li>Usar IA con reglas y contexto, no como una caja negra.</li>
-        </ul>
-      </section>
     </section>
   `;
 }
@@ -6029,15 +5093,6 @@ function renderProjectBuildStep(step, index) {
           ${step.tools.map((tool) => `<small>${escapeHtml(tool)}</small>`).join("")}
         </div>
       </div>
-    </article>
-  `;
-}
-
-function renderProjectTool(tool) {
-  return `
-    <article class="project-tool-card">
-      <h3>${escapeHtml(tool.title)}</h3>
-      <p>${escapeHtml(tool.text)}</p>
     </article>
   `;
 }
@@ -6063,17 +5118,15 @@ function renderShortcutsPage() {
         <p class="lede">La página prioriza acciones frecuentes de Power BI: navegar, seleccionar, editar, revisar datos, escribir DAX y controlar el modelo.</p>
       </header>
 
-      ${renderExecutiveBrief(pageNarratives.shortcuts)}
-
       <section class="shortcut-hero page-inner" id="atajos-power-bi">
         <div>
-          <span class="flow-chip">recurso local</span>
-          <h2>El PDF conserva la referencia; la página propone la rutina.</h2>
-          <p>${shortcutsPdf.pages} slides por categoría, guardados en el proyecto y disponibles para descargar.</p>
+          <span class="flow-chip">referencia oficial</span>
+          <h2>Una guía navegable, contrastada con la documentación de Microsoft.</h2>
+          <p>El portal resume los comandos por contexto de uso. La fuente oficial permite comprobar alcance y cambios de Power BI Desktop.</p>
         </div>
-        <a class="button" href="/${shortcutsPdf.source}" download>
-          ${icon("download")}
-          Descargar PDF
+        <a class="button" href="${escapeHtml(shortcutsOfficialSource.url)}" target="_blank" rel="noreferrer">
+          ${icon("book")}
+          Ver fuente oficial
         </a>
       </section>
 

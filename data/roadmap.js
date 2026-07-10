@@ -16,10 +16,13 @@ export const powerBiFlowCopy = Object.freeze({
 export const roadmapPhases = [
   {
     id: 0,
+    slug: "prd-y-spec",
     title: "PRD y Spec",
     lane: "Producto y negocio",
     objective:
       "Definir qué proceso se quiere automatizar, qué problema operativo resuelve, quién lo usa, qué reglas aplican y cómo se medirá que el trabajo manual disminuyó.",
+    whyItMatters:
+      "Sin un acuerdo verificable sobre problema, usuario, alcance y resultado, el equipo puede construir una solución correcta para una decisión que no genera valor.",
     secondaryObjectives: [
       "Separar necesidad de negocio de solución técnica",
       "Acordar disparador, alcance, fuera de alcance, KPI, usuarios y excepciones",
@@ -40,10 +43,13 @@ export const roadmapPhases = [
   },
   {
     id: 1,
+    slug: "datos-y-power-query",
     title: "Datos y Power Query",
     lane: "Datos",
     objective:
       "Conectar, preparar y validar los datos que sostienen la automatización, incluyendo fuentes, owners, frecuencia, calidad, Power Query, Query Folding y refresh.",
+    whyItMatters:
+      "La calidad del reporte no puede superar la de sus datos: una consulta opaca, lenta o frágil termina degradando cada cálculo y cada decisión posterior.",
     secondaryObjectives: [
       "Mapear fuentes, owners, frecuencia, volumen, latencia y restricciones de acceso",
       "Definir si aplica Import, DirectQuery, Direct Lake, Lakehouse, Warehouse, Dataflow o Pipeline",
@@ -60,10 +66,13 @@ export const roadmapPhases = [
   },
   {
     id: 2,
+    slug: "modelado",
     title: "Modelado",
     lane: "Desarrollo BI",
     objective:
       "Construir el modelo semántico que organiza hechos, dimensiones, relaciones, granularidad, calendario y modo de almacenamiento para que el proceso pueda analizarse sin ambigüedad.",
+    whyItMatters:
+      "El modelo define cómo se propagan los filtros y se interpretan los totales; una estructura ambigua produce respuestas distintas para la misma pregunta.",
     secondaryObjectives: [
       "Separar hechos y dimensiones con relaciones uno a muchos",
       "Definir granularidad, tabla calendario, claves y direcciones de filtro",
@@ -79,10 +88,13 @@ export const roadmapPhases = [
   },
   {
     id: 3,
+    slug: "dax",
     title: "DAX",
     lane: "Desarrollo BI",
     objective:
       "Convertir reglas de negocio en medidas DAX claras, mantenibles y performantes, cuidando contexto de filtro, variables, formatos, carpetas y pruebas funcionales.",
+    whyItMatters:
+      "Las medidas son reglas ejecutables de negocio: si se duplican, no se prueban o consumen recursos de más, la solución pierde consistencia y confianza.",
     secondaryObjectives: [
       "Separar medidas base, medidas derivadas, KPIs y reglas de estado",
       "Usar VAR para legibilidad y evitar recálculos innecesarios",
@@ -99,10 +111,13 @@ export const roadmapPhases = [
   },
   {
     id: 4,
+    slug: "seguridad-y-gobierno",
     title: "Seguridad y gobierno",
     lane: "Gobierno y experiencia",
     objective:
       "Asegurar que datos, modelo y acciones se publiquen con permisos correctos, RLS/OLS, linaje, owners, stewards, sensibilidad y criterios de certificación.",
+    whyItMatters:
+      "Compartir contenido no equivale a gobernarlo; deben quedar demostrados el acceso mínimo, la protección del dato, el linaje y la responsabilidad operativa.",
     secondaryObjectives: [
       "Diseñar permisos de workspace, semantic model, reporte y app",
       "Probar RLS/OLS con usuarios reales, grupos e invitados B2B",
@@ -118,10 +133,13 @@ export const roadmapPhases = [
   },
   {
     id: 5,
+    slug: "ux-y-accion",
     title: "UX y acción",
     lane: "Gobierno y experiencia",
     objective:
       "Diseñar una experiencia que lleve al usuario desde la señal hasta la acción esperada: reporte, alerta, tarea, ticket, aprobación o seguimiento operativo.",
+    whyItMatters:
+      "Un indicador sólo genera valor cuando la persona entiende el desvío, encuentra la evidencia y puede ejecutar la acción esperada sin reconstruir el proceso por fuera.",
     secondaryObjectives: [
       "Diseñar wireframes y navegación antes de cerrar páginas",
       "Priorizar lectura rápida, análisis guiado y detalle bajo demanda",
@@ -138,10 +156,13 @@ export const roadmapPhases = [
   },
   {
     id: 6,
+    slug: "versionado-y-aprobacion",
     title: "Versionado y aprobación",
     lane: "Publicación y operación",
     objective:
       "Preparar el paso a producción con control de cambios, revisión técnica, pruebas, UAT, ramas, pull requests, PBIP/TMDL y deployment pipeline cuando aplique.",
+    whyItMatters:
+      "Versionar y probar el cambio permite saber qué se aprobó, reproducirlo entre ambientes y recuperar una versión estable sin improvisación.",
     secondaryObjectives: [
       "Versionar archivos, modelo, reporte, documentación y Spec",
       "Separar Dev, Test y Prod con reglas por ambiente",
@@ -157,10 +178,13 @@ export const roadmapPhases = [
   },
   {
     id: 7,
+    slug: "publicacion",
     title: "Publicación",
     lane: "Publicación y operación",
     objective:
       "Publicar la solución en el workspace productivo, configurar app o audiencia, refresh, credenciales, permisos finales, endorsement y comunicación de salida.",
+    whyItMatters:
+      "Una solución no está publicada sólo porque el archivo llegó al servicio: acceso, datos actualizables, seguridad y comunicación deben funcionar para el usuario real.",
     secondaryObjectives: [
       "Promover contenido desde Test a Prod o publicar en el workspace productivo definido",
       "Configurar semantic model, reporte, app, audiencia, permisos y credenciales",
@@ -176,10 +200,13 @@ export const roadmapPhases = [
   },
   {
     id: 8,
+    slug: "operacion-y-mejora",
     title: "Operación y mejora",
     lane: "Publicación y operación",
     objective:
       "Sostener la automatización después de publicada con monitoreo, refresh, gateway, capacidad, uso real, incidentes, SLA y backlog de mejora continua.",
+    whyItMatters:
+      "Fuentes, credenciales, capacidad y necesidades cambian; sin observación y ownership, el producto se degrada hasta dejar de ser confiable o útil.",
     secondaryObjectives: [
       "Monitorear refreshes, errores, duración de consultas, CUs, throttling y gateway",
       "Definir alertas, responsables, runbook, SLA e incidentes",
