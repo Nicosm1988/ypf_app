@@ -67,7 +67,7 @@ export const methodOperatingFlow = [
     why: "Las horas estimadas no prueban flujo ni valor; el equipo necesita señales objetivas sobre avance, espera y sostenimiento.",
     purpose: "Gestionar capacidad, prioridades, mantenimiento y salud de productos con evidencia operativa. Así, la conversación cambia de “estoy ocupado” a “este flujo está trabado acá”.",
     how: "Medir lead time, cycle time, iteraciones, actividad, antigüedad, uso real y cantidad de áreas involucradas.",
-    technical: "SharePoint List como base transaccional inicial, preparada para vistas, Power BI y una futura PowerApp de ingreso.",
+    technical: "SharePoint List como base transaccional inicial, preparada para vistas, Power BI y una futura aplicación de Power Apps para el ingreso.",
     functional: "La conversación deja de ser quién está ocupado y pasa a ser qué trabajo avanza, dónde se trabó y qué decisión falta.",
     example:
       "Un producto con muchas intervenciones post-publicación entra al radar como activo crítico, aunque nadie lo haya declarado urgente.",
@@ -250,7 +250,7 @@ export const methodRoadmap = [
 ];
 
 export const methodFutureBacklog = [
-  ["v0.2", "PowerApp de ingreso al Backlog"],
+  ["v0.2", "Aplicación de Power Apps para ingresar al Backlog"],
   ["v0.2", "Automatización para mover transcripciones externas"],
   ["v0.2", "Alerta de inactividad a 60 días en productos"],
   ["v0.2", "Catálogo de medidas DAX reutilizables"],

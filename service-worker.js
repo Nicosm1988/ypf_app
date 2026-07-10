@@ -1,4 +1,4 @@
-const CACHE_NAME = "datalizacion-ypf-v36";
+const CACHE_NAME = "datalizacion-ypf-v37";
 const PRECACHE_URLS = [
   "/",
   "/road-y-metodologia",
@@ -12,6 +12,10 @@ const PRECACHE_URLS = [
   "/metodologia",
   "/design-system",
   "/datalito",
+  "/productos",
+  "/productos/power-bi",
+  "/productos/power-apps",
+  "/productos/power-automate",
   "/roadmap",
   "/proyecto-power-bi",
   "/atajos",
@@ -28,6 +32,7 @@ const PRECACHE_URLS = [
   "/data/datalizationMethod.js",
   "/data/executiveNarrative.js",
   "/data/platformIntro.js",
+  "/data/powerPlatformProducts.js",
   "/data/roadmap.js",
   "/data/powerbiShortcuts.js",
   "/data/toolingLibrary.js",
@@ -45,6 +50,9 @@ const PRECACHE_URLS = [
   "/assets/docs/modelos/spec-datalizacion.docx",
   "/assets/favicon.svg",
   "/assets/ypf-logo.svg",
+  "/assets/microsoft/power-platform/power-bi.svg",
+  "/assets/microsoft/power-platform/power-apps.svg",
+  "/assets/microsoft/power-platform/power-automate.svg",
   "/assets/datalito-robot-v22.png",
   "/assets/datalito-robot-v22-256.webp",
   "/assets/datalito-robot-v22-512.webp",

@@ -10,6 +10,10 @@ const appRoutes = new Set([
   "/metodologia",
   "/design-system",
   "/datalito",
+  "/productos",
+  "/productos/power-bi",
+  "/productos/power-apps",
+  "/productos/power-automate",
   "/diccionario",
   "/roadmap",
   "/proyecto-power-bi",
@@ -27,7 +31,14 @@ const appRoutePrefixes = [
   "/librerias/",
   "/atajos/",
 ];
-const sourceFiles = ["index.html", "app.js", "styles.css", "manifest.webmanifest", "service-worker.js"];
+const sourceFiles = [
+  "index.html",
+  "app.js",
+  "styles.css",
+  "manifest.webmanifest",
+  "service-worker.js",
+  "data/powerPlatformProducts.js",
+];
 const problems = [];
 let checked = 0;
 
@@ -63,8 +74,10 @@ function extractLinks(text) {
   const attrPattern = /\b(?:href|src)\s*=\s*["']([^"']+)["']/gi;
   const cssUrlPattern = /url\(\s*["']?([^"')]+)["']?\s*\)/gi;
   const stringPathPattern = /["'](\/(?:assets|docs|data)\/[^"']+)["']/g;
+  const productRoutePattern = /["'](\/productos(?:\/[^"'?#\s]*)?(?:#[^"']*)?)["']/g;
+  const routePropertyPattern = /\b(?:route|iconPath)\s*:\s*["'](\/[^"']+)["']/g;
 
-  for (const pattern of [attrPattern, cssUrlPattern, stringPathPattern]) {
+  for (const pattern of [attrPattern, cssUrlPattern, stringPathPattern, productRoutePattern, routePropertyPattern]) {
     for (const match of text.matchAll(pattern)) {
       links.add(match[1]);
     }

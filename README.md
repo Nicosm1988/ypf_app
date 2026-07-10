@@ -13,6 +13,7 @@ Datalización es la práctica de automatizar procesos mediante datos confiables,
 - Datalito, asistente interno de conocimiento con personaje animado, conversación natural, búsqueda local, citas, feedback y brechas.
 - Narrativa ejecutiva en cada página para presentar primero la conclusión, luego los argumentos y finalmente la evidencia operativa.
 - Mega menú y footer tipo mapa de plataforma, con secciones y subsecciones navegables como páginas internas.
+- Productos de Datalización con catálogo y ciclos end-to-end de Microsoft Power BI, Microsoft Power Apps y Microsoft Power Automate.
 - Diccionario BI para alinear conceptos de automatización, datos, Power BI, Fabric, performance, gobierno y adopción.
 - Roadmap BI integrado en Road y Metodología, estructurado en 9 gates de ingeniería: PRD/Spec, datos/Power Query, modelado, DAX, seguridad/gobierno, UX/acción, versionado/aprobación, publicación y operación/mejora.
 - Proyecto de Power BI con Visual Studio para trabajar procesos, Spec, PBIP, TMDL, Git y documentación con criterio.
@@ -26,7 +27,7 @@ La app es estatica, sin credenciales, sin datos sensibles y compatible con Verce
 
 - HTML, CSS y JavaScript vanilla.
 - Modulos ES para separar datos de UI.
-- Contenido local editable en `data/platformIntro.js`, `data/datalito.js`, `data/designSystem.js`, `data/dictionary.js`, `data/engineeringGuide.js`, `data/datalizationMethod.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
+- Contenido local editable en `data/platformIntro.js`, `data/powerPlatformProducts.js`, `data/datalito.js`, `data/designSystem.js`, `data/dictionary.js`, `data/engineeringGuide.js`, `data/datalizationMethod.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
 - Documentación técnica en `docs/librerias-agentes-mcp.md` y documentación operativa de Datalito en `docs/datalito-*.md`.
 - Casos de evaluación de Datalito en `evals/datalito`.
 - Skills repo-locales en `.codex/skills`.
@@ -55,6 +56,10 @@ http://127.0.0.1:8001/road-y-metodologia
 http://127.0.0.1:8001/metodo-datalizacion
 http://127.0.0.1:8001/design-system
 http://127.0.0.1:8001/datalito
+http://127.0.0.1:8001/productos
+http://127.0.0.1:8001/productos/power-bi
+http://127.0.0.1:8001/productos/power-apps
+http://127.0.0.1:8001/productos/power-automate
 http://127.0.0.1:8001/diccionario
 http://127.0.0.1:8001/proyecto-power-bi
 http://127.0.0.1:8001/librerias
@@ -80,6 +85,7 @@ npm run build
 El build valida que:
 
 - Exista Home, Road y Metodología, Método de Datalización, Design System, Datalito, Diccionario BI, Proyecto Power BI, Librerías y Atajos.
+- Existan el catálogo de Productos y las fichas de Microsoft Power BI, Microsoft Power Apps y Microsoft Power Automate, cada una con nueve gates.
 - Exista mega menú con grupos, dropdowns y subsecciones; el footer funcione como mapa completo de navegación.
 - La Home tenga portada ejecutiva Datalización Hub, narrativa Antes/Ahora/Después y transición de tableros a disciplina.
 - La Home tenga una primera lectura con estructura de estudio, tesis y contribución operativa.
@@ -122,7 +128,7 @@ npm run qa:install-browsers
 
 ## Desplegar en Vercel
 
-El proyecto está preparado para deploy estatico.
+El proyecto está preparado para deploy estatico, pero los comandos de build y QA no despliegan. La publicación a producción es una acción separada y requiere autorización explícita.
 
 Si el proyecto ya está linkeado a Vercel:
 
@@ -131,6 +137,18 @@ vercel deploy --prod
 ```
 
 Si se despliega desde GitHub, Vercel puede publicar automáticamente cuando haya push a la rama configurada.
+
+## Editar Productos
+
+Editar `data/powerPlatformProducts.js` para mantener las fichas de Microsoft Power BI, Microsoft Power Apps y Microsoft Power Automate. Cada producto debe conservar `slug`, `officialName`, `route`, `iconPath`, nueve fases con ids de `0` a `8`, recursos relacionados y la separación entre `commonControls` y `specificControls`.
+
+Decisión de navegación: `Productos` ocupa el único slot superior que antes agrupaba `Recursos`, para mantener el header en una sola fila también a 1024 px. La ruta `/proyecto-power-bi` se conserva y se enlaza desde la ficha de Power BI; Diccionario, Librerías, Atajos y los demás recursos siguen disponibles desde la Home, las fichas relacionadas y el footer.
+
+Las fases de Power Apps y Power Automate viven en ese módulo. Microsoft Power BI referencia directamente `roadmapPhases` desde `data/roadmap.js`: no copiar ni mantener una segunda definición. Para cambiar el ciclo de Power BI, editar únicamente `data/roadmap.js`.
+
+Los iconos de producto son SVG locales de los paquetes oficiales de Microsoft Power Platform y Microsoft Fabric, y viven en `assets/microsoft/power-platform/`. Su fuente, fecha de obtención, uso previsto, hashes y restricciones están documentados en `assets/microsoft/power-platform/README.md`; el aviso también explica por qué el icono vigente de Power BI proviene del paquete Fabric. No reemplazarlos por URLs remotas, no redibujarlos y no aplicarles filtros, recortes, rotaciones, animaciones ni cambios de color.
+
+Microsoft, Power BI, Power Apps y Power Automate son marcas del grupo de empresas Microsoft.
 
 ## Agregar términos al diccionario
 

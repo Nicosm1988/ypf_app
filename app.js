@@ -59,6 +59,7 @@ import {
   toyotaFourP,
 } from "./data/methodology.js";
 import { powerBiShortcuts, shortcutsPdf } from "./data/powerbiShortcuts.js";
+import { getProductBySlug, products } from "./data/powerPlatformProducts.js";
 import { conceptDecantation, narrativeFrame, pageNarratives } from "./data/executiveNarrative.js";
 import {
   platformBeforeAfter,
@@ -67,7 +68,7 @@ import {
   platformHeroMetrics,
   platformPillars,
 } from "./data/platformIntro.js";
-import { laneStyles, roadmapPhases } from "./data/roadmap.js";
+import { laneStyles, powerBiFlowCopy, roadmapPhases } from "./data/roadmap.js";
 import { toolingDocs, toolingGroups } from "./data/toolingLibrary.js";
 
 const appRoot = document.querySelector("#appRoot");
@@ -78,6 +79,8 @@ const mobileMenuToggle = document.querySelector("[data-mobile-menu-toggle]");
 const mainNav = document.querySelector("#mainNav");
 let scrollRevealObserver;
 let fabricRouteFrame;
+let productSwitcherPositionFrame;
+let nineGateViewportSyncFrame;
 
 const icons = {
   arrowRight: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>',
@@ -129,6 +132,10 @@ const routeTitles = {
   "/datalito": "Datalito | Asistente interno de conocimiento",
   "/diccionario": "Diccionario BI | Datalización YPF",
   "/roadmap": "Road y Metodología BI/Fabric | Datalización YPF",
+  "/productos": "Productos de Datalización | Datalización YPF",
+  "/productos/power-bi": "Microsoft Power BI | Productos de Datalización",
+  "/productos/power-apps": "Microsoft Power Apps | Productos de Datalización",
+  "/productos/power-automate": "Microsoft Power Automate | Productos de Datalización",
   "/proyecto-power-bi": "Proyecto de Power BI con Visual Studio Code | Datalización YPF",
   "/atajos": "Atajos Power BI | Datalización YPF",
   "/librerias": "Librerías y agentes | Datalización YPF",
@@ -150,6 +157,10 @@ const baseRoutes = new Set([
   "/datalito",
   "/diccionario",
   "/roadmap",
+  "/productos",
+  "/productos/power-bi",
+  "/productos/power-apps",
+  "/productos/power-automate",
   "/proyecto-power-bi",
   "/atajos",
   "/librerias",
@@ -253,10 +264,10 @@ const hubNavigationSections = [
     text: "Dónde vive cada activo, cómo se nombra, quién responde y cómo se mide el avance real.",
   },
   {
-    title: "Proyecto Power BI",
-    route: "/proyecto-power-bi",
-    iconName: "code",
-    text: "Cómo pasar de PRD y Spec a PBIP, TMDL, Git y operación del producto.",
+    title: "Productos",
+    route: "/productos",
+    iconName: "layers",
+    text: "Tres ciclos de vida para analítica, aplicaciones y automatización con un mismo estándar de delivery.",
   },
   {
     title: "Diccionario BI",
@@ -1332,6 +1343,11 @@ const interactiveSurfaceSelector = [
   ".pipeline-step",
   ".pipeline-lane-card",
   ".phase-card",
+  ".product-card",
+  ".product-identity",
+  ".product-complementarity",
+  ".product-cross-cutting",
+  ".product-related-resources",
   ".project-copy",
   ".code-window",
   ".quality-card",
@@ -1763,13 +1779,21 @@ function syncFabricRoutes() {
 function setActiveNav(route) {
   const activeRoute = routeAliases[route] || route;
   const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
+  const isProductRoute = activeRoute === "/productos" || activeRoute.startsWith("/productos/");
   navLinks.forEach((link) => {
     const url = new URL(link.href);
     const linkPath = url.pathname.replace(/\/+$/, "") || "/";
     const linkRoute = getRoute(url.pathname);
     const isTopLevel = link.classList.contains("nav-menu-link") || link.closest(".brand");
-    const isActive = isTopLevel ? linkRoute === activeRoute : linkPath === currentPath || (!subsectionRoutes[currentPath] && linkRoute === activeRoute);
+    const isActive = isTopLevel
+      ? linkRoute === activeRoute || (isProductRoute && linkPath === "/productos")
+      : linkPath === currentPath || (!subsectionRoutes[currentPath] && linkRoute === activeRoute);
     link.classList.toggle("active", isActive);
+    if (isActive) {
+      link.setAttribute("aria-current", linkPath === currentPath ? "page" : "location");
+    } else {
+      link.removeAttribute("aria-current");
+    }
   });
 }
 
@@ -1777,7 +1801,13 @@ function renderRoute(route = getRoute()) {
   document.title = routeTitles[route] || routeTitles["/"];
   setActiveNav(route);
 
-  if (route === "/diccionario") {
+  if (route === "/productos") {
+    renderProductsPage();
+  } else if (route.startsWith("/productos/")) {
+    renderProductDetailPage(route.slice("/productos/".length));
+    setupNineGateFlowInteractions();
+    setupProductSwitcherPosition();
+  } else if (route === "/diccionario") {
     renderDictionaryPage();
   } else if (route === "/metodo-datalizacion") {
     renderDatalizationMethodPage();
@@ -1982,7 +2012,7 @@ function renderHomePage() {
         </div>
       </div>
 
-      <section class="mini-roadmap page-inner" aria-label="Primeras fases del roadmap">
+      <section class="mini-roadmap page-inner" tabindex="0" aria-label="Primeras fases del roadmap; desplazamiento horizontal disponible">
         ${roadmapPhases
           .map((phase, index) => {
             const lane = laneStyles[phase.lane] || { color: "var(--ypf-blue)" };
@@ -4509,7 +4539,7 @@ function renderDatalizationMethodPage() {
         <div class="method-section-head">
           <span class="flow-chip">Backlog Datalización v0</span>
           <h2 id="methodBacklogTitle">El seguimiento mide flujo real, no esfuerzo declarado.</h2>
-          <p>La lista de SharePoint arranca simple: coexistencia con el sistema actual, backlog propio en paralelo y, más adelante, PowerApp de ingreso con tablero del equipo en Power BI.</p>
+          <p>La lista de SharePoint arranca simple: coexistencia con el sistema actual, backlog propio en paralelo y, más adelante, una aplicación de Power Apps para el ingreso con tablero del equipo en Power BI.</p>
         </div>
         <div class="method-backlog-grid">
           <div class="method-column-cloud" aria-label="Columnas del backlog">
@@ -4964,7 +4994,237 @@ function renderDictionaryPage() {
   renderDictionaryResults();
 }
 
-function getUnifiedFlowItems() {
+function renderProductsPage() {
+  appRoot.innerHTML = `
+    <section class="page products-page">
+      <header class="page-heading page-inner">
+        <span class="eyebrow">PRODUCTOS DE DATALIZACIÓN</span>
+        <h1>Tres productos, tres ciclos de vida, un mismo estándar de delivery.</h1>
+        <p class="lede">La plataforma organiza cómo diseñamos, construimos, aprobamos, publicamos y operamos soluciones de analítica, aplicaciones y automatización.</p>
+      </header>
+
+      <section class="product-grid page-inner" aria-label="Catálogo de productos de Datalización">
+        ${products.map(renderProductCard).join("")}
+      </section>
+
+      ${renderProductComplementarity()}
+
+      <p class="product-trademark-note page-inner">Microsoft, Power BI, Power Apps y Power Automate son marcas del grupo de empresas Microsoft.</p>
+    </section>
+  `;
+}
+
+function renderProductCard(product) {
+  return `
+    <a class="product-card" href="${escapeHtml(product.route)}" data-route>
+      <span class="product-card-topline">
+        ${renderOfficialProductIcon(product)}
+        <span class="badge">9 gates</span>
+      </span>
+      <span class="product-category">${escapeHtml(product.category)}</span>
+      <h2>${escapeHtml(product.officialName)}</h2>
+      <p>${escapeHtml(product.tagline)}</p>
+      <span class="product-card-action">Ver flujo ${escapeHtml(product.shortName || product.officialName.replace("Microsoft ", ""))} ${icon("arrowRight")}</span>
+    </a>
+  `;
+}
+
+function renderProductComplementarity() {
+  const sequence = [
+    { slug: "power-apps", text: "Captura y habilita la acción" },
+    { slug: "power-automate", text: "Orquesta el proceso" },
+    { slug: "power-bi", text: "Mide, explica y permite decidir" },
+  ];
+
+  return `
+    <section class="product-complementarity bi-flow-showcase page-inner" aria-labelledby="productComplementarityTitle">
+      <div class="product-complementarity-copy">
+        <span class="flow-chip">capacidades complementarias</span>
+        <h2 id="productComplementarityTitle">Pueden trabajar juntos o resolver necesidades independientes.</h2>
+        <p>Power Apps digitaliza la interacción y la operación; Power Automate orquesta tareas, eventos, decisiones y excepciones; Power BI convierte datos gobernados en análisis, indicadores y decisiones.</p>
+      </div>
+      <div class="product-complementarity-flow" aria-label="Secuencia ilustrativa entre productos">
+        ${sequence
+          .map(({ slug, text }, index) => {
+            const product = getProductBySlug(slug);
+            if (!product) return "";
+            return `
+              <a class="product-complementarity-step" href="${escapeHtml(product.route)}" data-route>
+                ${renderOfficialProductIcon(product, "compact")}
+                <span>
+                  <strong>${escapeHtml(product.officialName)}</strong>
+                  <small>${escapeHtml(text)}</small>
+                </span>
+              </a>
+              ${index < sequence.length - 1 ? `<span class="product-complementarity-arrow" aria-hidden="true">${icon("arrowRight")}</span>` : ""}
+            `;
+          })
+          .join("")}
+      </div>
+      <p class="product-complementarity-note">La secuencia es ilustrativa. Cada producto puede operar de forma independiente o integrarse con los demás según el caso.</p>
+    </section>
+  `;
+}
+
+function renderProductDetailPage(slug) {
+  const product = getProductBySlug(slug);
+  if (!product) {
+    renderProductsPage();
+    return;
+  }
+
+  appRoot.innerHTML = `
+    <section class="page products-page product-detail-page" data-product="${escapeHtml(product.slug)}">
+      <nav class="product-breadcrumb page-inner" aria-label="Migas de pan">
+        <a href="/productos" data-route>Productos</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">${escapeHtml(product.officialName)}</span>
+      </nav>
+
+      <header class="product-identity page-inner">
+        <div class="product-identity-mark">${renderOfficialProductIcon(product, "identity")}</div>
+        <div class="product-identity-copy">
+          <span class="eyebrow">${escapeHtml(product.category)}</span>
+          <h1>${escapeHtml(product.officialName)}</h1>
+          <p class="lede">${escapeHtml(product.tagline)}</p>
+        </div>
+        <a class="button secondary" href="/productos" data-route>Volver al catálogo</a>
+      </header>
+
+      ${renderProductSwitcher(product.slug)}
+      ${renderProductFlow(product)}
+      ${renderProductCrossCuttingControls(product)}
+      ${renderProductRelatedResources(product)}
+
+      <p class="product-trademark-note page-inner">Microsoft, Power BI, Power Apps y Power Automate son marcas del grupo de empresas Microsoft.</p>
+    </section>
+  `;
+}
+
+function renderProductSwitcher(activeSlug) {
+  return `
+    <nav class="product-switcher page-inner" aria-label="Cambiar producto">
+      ${products
+        .map(
+          (product) => `
+            <a
+              href="${escapeHtml(product.route)}"
+              data-route
+              ${product.slug === activeSlug ? 'class="active" aria-current="page"' : ""}
+            >
+              ${renderOfficialProductIcon(product, "switcher")}
+              <span>${escapeHtml(product.officialName)}</span>
+            </a>
+          `,
+        )
+        .join("")}
+    </nav>
+  `;
+}
+
+function setupProductSwitcherPosition() {
+  window.cancelAnimationFrame(productSwitcherPositionFrame);
+  productSwitcherPositionFrame = window.requestAnimationFrame(() => {
+    const switcher = document.querySelector(".product-switcher");
+    const activeProduct = switcher?.querySelector('[aria-current="page"]');
+    if (!switcher || !activeProduct) return;
+    const switcherRect = switcher.getBoundingClientRect();
+    const activeRect = activeProduct.getBoundingClientRect();
+    const activeLeftInsideScroller = switcher.scrollLeft + activeRect.left - switcherRect.left;
+    const targetLeft = activeLeftInsideScroller - (switcher.clientWidth - activeProduct.offsetWidth) / 2;
+    switcher.scrollLeft = Math.max(0, targetLeft);
+  });
+}
+
+function renderProductFlow(product) {
+  const isPowerBi = product.slug === "power-bi";
+  return renderNineGateFlow({
+    phases: product.phases,
+    sections: isPowerBi ? guideSections : undefined,
+    laneConfig: product.laneStyles || laneStyles,
+    sectionId: `${product.slug}-flow`,
+    titleId: `${product.slug}-flow-title`,
+    panelPrefix: `${product.slug}-flow-panel`,
+    eyebrow: product.flowCopy?.chip || product.flowCopy?.eyebrow || `flujo ${product.officialName}`,
+    title: product.flowCopy?.title || "El camino correcto avanza de decisión en decisión.",
+    description:
+      product.flowCopy?.description ||
+      "Nueve gates conectan definición, arquitectura, construcción, confianza, publicación y mejora continua.",
+    canvasLabel: `Flujo end-to-end de ${product.officialName}`,
+    railLabel: `Carriles del flujo de ${product.officialName}`,
+    tooltipPrefix: "Abrir detalle de",
+    detailMode: "product",
+    extraClass: "product-nine-gate-flow",
+  });
+}
+
+function renderProductCrossCuttingControls(product) {
+  const commonControls = product.commonControls || [];
+  const specificControls = product.specificControls || product.crossCuttingControls || [];
+  const controlCount = commonControls.length + specificControls.length;
+
+  return `
+    <section class="product-cross-cutting page-inner" aria-labelledby="${escapeHtml(product.slug)}-controls-title">
+      <details>
+        <summary>
+          <span>
+            <strong id="${escapeHtml(product.slug)}-controls-title">Controles transversales</strong>
+            <small>${controlCount} controles considerados desde el inicio</small>
+          </span>
+          ${icon("chevronDown")}
+        </summary>
+        <div class="product-controls-body">
+          <p>Estos controles se consideran desde la definición, aunque su validación formal aparezca en un gate específico. Incluyen Reliability, Security, Operational Excellence, Performance Efficiency y Experience Optimization de Power Platform Well-Architected. La decisión concreta queda sujeta a la arquitectura aprobada, el licenciamiento aplicable y la política corporativa; el control de versiones se considera fuente de verdad cuando aplique.</p>
+          <div class="product-control-groups">
+            <div>
+              <h3>Comunes a los tres productos</h3>
+              <ul class="product-control-list">
+                ${commonControls.map((control) => `<li>${escapeHtml(control)}</li>`).join("")}
+              </ul>
+            </div>
+            <div>
+              <h3>Específicos de ${escapeHtml(product.officialName)}</h3>
+              <ul class="product-control-list">
+                ${specificControls.map((control) => `<li>${escapeHtml(control)}</li>`).join("")}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+  `;
+}
+
+function renderProductRelatedResources(product) {
+  if (!product.relatedResources?.length) return "";
+
+  return `
+    <section class="product-related-resources page-inner" aria-labelledby="${escapeHtml(product.slug)}-resources-title">
+      <div>
+        <span class="flow-chip">recursos relacionados</span>
+        <h2 id="${escapeHtml(product.slug)}-resources-title">La ficha conecta el ciclo de vida con la documentación de trabajo.</h2>
+      </div>
+      <div class="product-resource-links">
+        ${product.relatedResources
+          .map(
+            (resource) => `
+              <a class="button secondary" href="${escapeHtml(resource.route)}" data-route>
+                ${escapeHtml(resource.label)} ${icon("arrowRight")}
+              </a>
+            `,
+          )
+          .join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderOfficialProductIcon(product, variant = "") {
+  const className = variant ? ` product-official-icon-${variant}` : "";
+  return `<img class="product-official-icon${className}" src="${escapeHtml(product.iconPath)}" width="48" height="48" alt="">`;
+}
+
+function getNineGateFlowItems({ phases, sections = [], laneConfig = laneStyles, tooltipPrefix = "Abrir definición técnica y funcional de" }) {
   const positions = [
     { x: 6, y: 56 },
     { x: 17, y: 56 },
@@ -4977,10 +5237,26 @@ function getUnifiedFlowItems() {
     { x: 94, y: 56 },
   ];
 
-  return guideSections.map((section, index) => {
-    const phase = roadmapPhases[index] || {};
-    const story = getGuideStory(section, index);
+  return phases.map((phase, index) => {
+    const section = sections[index] || {
+      id: phase.slug || `gate-${index + 1}`,
+      title: phase.shortTitle || phase.title,
+      summary: phase.objective,
+      practices: phase.keyActivities,
+      deliverables: phase.deliverables,
+      risk: phase.riskIfSkipped,
+      eyebrow: phase.gate,
+    };
+    const story = sections[index]
+      ? getGuideStory(section, index)
+      : {
+          color: guideStoryPalette[index % guideStoryPalette.length],
+          iconName: phase.iconName || "spark",
+          outcome: phase.targetOutcome,
+          flow: phase.gate,
+        };
     const lane = laneStyles[phase.lane] || { color: story.color };
+    const configuredLane = laneConfig[phase.lane] || lane;
 
     return {
       id: index,
@@ -4988,47 +5264,89 @@ function getUnifiedFlowItems() {
       phase,
       story,
       position: positions[index],
-      color: lane.color || story.color,
-      tooltip: `Abrir definición técnica y funcional de ${section.title}`,
+      color: configuredLane.color || lane.color || story.color,
+      tooltip: `${tooltipPrefix} ${section.title}`,
     };
   });
 }
 
 function renderUnifiedAutomationFlow() {
-  const items = getUnifiedFlowItems();
-  const laneEntries = Object.entries(laneStyles).map(([lane, style]) => {
-    const firstItem = items.find((item) => item.phase.lane === lane) || items[0];
-    return { lane, style, target: firstItem.id };
+  return renderNineGateFlow({
+    phases: roadmapPhases,
+    sections: guideSections,
+    laneConfig: laneStyles,
+    sectionId: "road-flujo-bi",
+    titleId: "unifiedFlowTitle",
+    panelPrefix: "unified-flow-panel",
+    eyebrow: powerBiFlowCopy.chip,
+    title: powerBiFlowCopy.title,
+    description: powerBiFlowCopy.description,
+    canvasLabel: "Canvas unificado de guía y roadmap",
+    railLabel: "Carriles del flujo de automatización",
+    detailMode: "road",
   });
+}
+
+function renderNineGateFlow({
+  phases,
+  sections = [],
+  laneConfig = laneStyles,
+  sectionId,
+  titleId,
+  panelPrefix,
+  eyebrow,
+  title,
+  description,
+  canvasLabel,
+  railLabel,
+  tooltipPrefix = "Abrir definición técnica y funcional de",
+  detailMode = "road",
+  extraClass = "",
+}) {
+  const items = getNineGateFlowItems({ phases, sections, laneConfig, tooltipPrefix });
+  const laneEntries = Object.entries(laneConfig)
+    .filter(([lane]) => items.some((item) => item.phase.lane === lane))
+    .map(([lane, style]) => {
+      const firstItem = items.find((item) => item.phase.lane === lane);
+      return { lane, style, target: firstItem.id };
+    });
 
   return `
-    <section class="bi-flow-showcase unified-flow-showcase page-inner" id="road-flujo-bi" aria-labelledby="unifiedFlowTitle">
-      <div class="flow-canvas unified-flow-canvas" aria-label="Canvas unificado de guía y roadmap">
-        <div class="flow-canvas-copy">
-          <span class="flow-chip">flujo Power BI/Fabric</span>
-          <h2 id="unifiedFlowTitle">El camino correcto avanza de decisión en decisión.</h2>
-          <p>La animación muestra la lógica gerencial del roadmap: definición, datos, modelado, DAX, confianza, acción, aprobación, publicación y operación.</p>
+    <section class="bi-flow-showcase unified-flow-showcase page-inner${extraClass ? ` ${escapeHtml(extraClass)}` : ""}" id="${escapeHtml(sectionId)}" aria-labelledby="${escapeHtml(titleId)}" data-nine-gate-flow>
+      <div
+        class="unified-flow-viewport"
+        role="region"
+        tabindex="-1"
+        aria-label="${escapeHtml(canvasLabel)}. Desplazamiento horizontal disponible cuando el ancho lo requiere."
+      >
+        <div class="flow-canvas unified-flow-canvas">
+          <div class="flow-canvas-copy">
+            <span class="flow-chip">${escapeHtml(eyebrow)}</span>
+            <h2 id="${escapeHtml(titleId)}">${escapeHtml(title)}</h2>
+            <p>${escapeHtml(description)}</p>
+          </div>
+
+          <svg class="flow-lines unified-flow-lines" viewBox="0 0 1000 540" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <filter id="flowGlow">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"></feGaussianBlur>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"></feMergeNode>
+                  <feMergeNode in="SourceGraphic"></feMergeNode>
+                </feMerge>
+              </filter>
+            </defs>
+            <path class="flow-line unified-main-path unified-main-path-base" d="M52 302 H948"></path>
+            <path class="flow-line active unified-main-path unified-main-path-motion" d="M52 302 H948"></path>
+          </svg>
+
+          <span class="unified-flow-runner" aria-hidden="true"></span>
+          ${items.map((item) => renderUnifiedFlowNode(item, { panelPrefix })).join("")}
         </div>
-
-        <svg class="flow-lines unified-flow-lines" viewBox="0 0 1000 540" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <filter id="flowGlow">
-              <feGaussianBlur stdDeviation="3" result="coloredBlur"></feGaussianBlur>
-              <feMerge>
-                <feMergeNode in="coloredBlur"></feMergeNode>
-                <feMergeNode in="SourceGraphic"></feMergeNode>
-              </feMerge>
-            </filter>
-          </defs>
-          <path class="flow-line unified-main-path unified-main-path-base" d="M52 302 H948"></path>
-          <path class="flow-line active unified-main-path unified-main-path-motion" d="M52 302 H948"></path>
-        </svg>
-
-        <span class="unified-flow-runner" aria-hidden="true"></span>
-        ${items.map(renderUnifiedFlowNode).join("")}
+        <small class="unified-flow-scroll-hint">Desplazá horizontalmente para recorrer los nueve gates.</small>
       </div>
 
-      <aside class="flow-rail unified-flow-rail" aria-label="Carriles del flujo de automatización">
+      <aside class="flow-rail unified-flow-rail" aria-label="${escapeHtml(railLabel)}">
         ${laneEntries
           .map(({ lane, style, target }, index) => {
             const laneItems = items.filter((item) => item.phase.lane === lane);
@@ -5052,13 +5370,13 @@ function renderUnifiedAutomationFlow() {
       </aside>
 
       <div class="unified-flow-menu" aria-live="polite">
-        ${items.map(renderUnifiedFlowPanel).join("")}
+        ${items.map((item) => renderUnifiedFlowPanel(item, { panelPrefix, detailMode })).join("")}
       </div>
     </section>
   `;
 }
 
-function renderUnifiedFlowNode(item) {
+function renderUnifiedFlowNode(item, { panelPrefix = "unified-flow-panel" } = {}) {
   const { id, section, phase, story, position, color, tooltip } = item;
   const isActive = id === 0;
 
@@ -5070,7 +5388,7 @@ function renderUnifiedFlowNode(item) {
       data-unified-flow="${id}"
       data-tooltip="${escapeHtml(tooltip)}"
       aria-expanded="${isActive ? "true" : "false"}"
-      aria-controls="unified-flow-panel-${id}"
+      aria-controls="${escapeHtml(panelPrefix)}-${id}"
       style="--x:${position.x}%; --y:${position.y}%; --flow-color:${color}; --flow-order:${id}"
     >
       <span class="node-index">${id + 1}</span>
@@ -5081,13 +5399,15 @@ function renderUnifiedFlowNode(item) {
   `;
 }
 
-function renderUnifiedFlowPanel(item) {
+function renderUnifiedFlowPanel(item, { panelPrefix = "unified-flow-panel", detailMode = "road" } = {}) {
+  if (detailMode === "product") return renderProductFlowPanel(item, panelPrefix);
+
   const { id, section, phase, story, color } = item;
 
   return `
     <section
       class="unified-flow-panel"
-      id="unified-flow-panel-${id}"
+      id="${escapeHtml(panelPrefix)}-${id}"
       data-unified-flow-panel="${id}"
       style="--flow-color:${color}"
       ${id === 0 ? "" : "hidden"}
@@ -5122,6 +5442,82 @@ function renderUnifiedFlowPanel(item) {
 
       <div class="unified-panel-foot">
         <span>${escapeHtml(phase.owner || section.eyebrow)}</span>
+        <p><strong>Riesgo si se saltea:</strong> ${escapeHtml(phase.riskIfSkipped || section.risk)}</p>
+      </div>
+    </section>
+  `;
+}
+
+function renderProductFlowPanel(item, panelPrefix) {
+  const { id, section, phase, story, color } = item;
+  const activities = phase.keyActivities || phase.secondaryObjectives || section.practices || [];
+  const deliverables = phase.deliverables || section.deliverables || [];
+  const hasSpecificConsiderations = Boolean(phase.considerations?.length);
+  const considerations = hasSpecificConsiderations ? phase.considerations : phase.secondaryObjectives || [];
+  const appliesTo = phase.appliesTo || [];
+
+  return `
+    <section
+      class="unified-flow-panel product-flow-panel"
+      id="${escapeHtml(panelPrefix)}-${id}"
+      data-unified-flow-panel="${id}"
+      style="--flow-color:${color}"
+      ${id === 0 ? "" : "hidden"}
+    >
+      <div class="unified-panel-head">
+        <span>Gate ${id + 1}</span>
+        <h3>${escapeHtml(phase.title || section.title)}</h3>
+        <p>${escapeHtml(phase.gate || story.outcome || "")}</p>
+      </div>
+
+      <div class="unified-panel-grid">
+        <div>
+          <h4>Objetivo</h4>
+          <p>${escapeHtml(phase.objective || section.summary)}</p>
+        </div>
+        <div>
+          <h4>Por qué importa</h4>
+          <p>${escapeHtml(phase.whyItMatters || section.summary || phase.targetOutcome || story.outcome || "")}</p>
+        </div>
+      </div>
+
+      <div class="unified-panel-columns">
+        <div>
+          <h4>Actividades clave</h4>
+          <ul>${activities.map((itemText) => `<li>${escapeHtml(itemText)}</li>`).join("")}</ul>
+        </div>
+        <div>
+          <h4>Entregables o evidencia</h4>
+          <ul>${deliverables.map((itemText) => `<li>${escapeHtml(itemText)}</li>`).join("")}</ul>
+        </div>
+      </div>
+
+      <div class="product-panel-decision">
+        <div>
+          <h4>Criterio de salida</h4>
+          <p>${escapeHtml(phase.targetOutcome || phase.gate || "")}</p>
+        </div>
+        ${
+          considerations.length
+            ? `<div>
+                <h4>${hasSpecificConsiderations ? "Consideraciones particulares" : "Consideraciones de la etapa"}</h4>
+                <ul>${considerations.map((itemText) => `<li>${escapeHtml(itemText)}</li>`).join("")}</ul>
+              </div>`
+            : ""
+        }
+      </div>
+
+      ${
+        appliesTo.length
+          ? `<div class="product-panel-applies">
+              <h4>Aplica a</h4>
+              <ul>${appliesTo.map((itemText) => `<li>${escapeHtml(itemText)}</li>`).join("")}</ul>
+            </div>`
+          : ""
+      }
+
+      <div class="unified-panel-foot">
+        <span>Responsable principal · ${escapeHtml(phase.owner || section.eyebrow)}</span>
         <p><strong>Riesgo si se saltea:</strong> ${escapeHtml(phase.riskIfSkipped || section.risk)}</p>
       </div>
     </section>
@@ -5194,27 +5590,58 @@ function renderGuideDocumentTemplate(template) {
 }
 
 function setupUnifiedFlowInteractions() {
-  const triggers = [...document.querySelectorAll("[data-unified-flow]")];
-  const panels = [...document.querySelectorAll("[data-unified-flow-panel]")];
-  if (!triggers.length || !panels.length) return;
+  setupNineGateFlowInteractions();
+}
 
-  const openPanel = (target) => {
+function setupNineGateFlowInteractions(root = document) {
+  const flows = [...root.querySelectorAll("[data-nine-gate-flow]")];
+  scheduleNineGateViewportSync();
+
+  flows.forEach((flow) => {
+    const triggers = [...flow.querySelectorAll("[data-unified-flow]")];
+    const panels = [...flow.querySelectorAll("[data-unified-flow-panel]")];
+    if (!triggers.length || !panels.length) return;
+
+    const openPanel = (target) => {
+      triggers.forEach((trigger) => {
+        const group = trigger.dataset.unifiedGroup ? trigger.dataset.unifiedGroup.split(",") : [];
+        const isActive = trigger.dataset.unifiedFlow === target || group.includes(target);
+        trigger.classList.toggle("active", isActive);
+        trigger.classList.toggle("spotlight", isActive && trigger.classList.contains("flow-node"));
+        trigger.setAttribute("aria-expanded", String(isActive));
+      });
+
+      panels.forEach((panel) => {
+        panel.hidden = panel.dataset.unifiedFlowPanel !== target;
+      });
+
+      const activeNode = triggers.find(
+        (trigger) => trigger.classList.contains("flow-node") && trigger.dataset.unifiedFlow === target,
+      );
+      const viewport = activeNode?.closest(".unified-flow-viewport");
+      if (activeNode && viewport?.scrollWidth > viewport.clientWidth + 2) {
+        const viewportRect = viewport.getBoundingClientRect();
+        const nodeRect = activeNode.getBoundingClientRect();
+        const nodeLeftInsideScroller = viewport.scrollLeft + nodeRect.left - viewportRect.left;
+        viewport.scrollLeft = Math.max(0, nodeLeftInsideScroller - (viewport.clientWidth - nodeRect.width) / 2);
+      }
+    };
+
     triggers.forEach((trigger) => {
-      const group = trigger.dataset.unifiedGroup ? trigger.dataset.unifiedGroup.split(",") : [];
-      const isActive = trigger.dataset.unifiedFlow === target || group.includes(target);
-      trigger.classList.toggle("active", isActive);
-      trigger.classList.toggle("spotlight", isActive && trigger.classList.contains("flow-node"));
-      trigger.setAttribute("aria-expanded", String(isActive));
+      trigger.addEventListener("click", () => {
+        openPanel(trigger.dataset.unifiedFlow);
+      });
     });
+  });
+}
 
-    panels.forEach((panel) => {
-      panel.hidden = panel.dataset.unifiedFlowPanel !== target;
-    });
-  };
-
-  triggers.forEach((trigger) => {
-    trigger.addEventListener("click", () => {
-      openPanel(trigger.dataset.unifiedFlow);
+function scheduleNineGateViewportSync() {
+  window.cancelAnimationFrame(nineGateViewportSyncFrame);
+  nineGateViewportSyncFrame = window.requestAnimationFrame(() => {
+    document.querySelectorAll(".unified-flow-viewport").forEach((viewport) => {
+      const overflowX = getComputedStyle(viewport).overflowX;
+      const isScrollable = ["auto", "scroll"].includes(overflowX) && viewport.scrollWidth > viewport.clientWidth + 2;
+      viewport.tabIndex = isScrollable ? 0 : -1;
     });
   });
 }
@@ -5809,6 +6236,8 @@ document.addEventListener("click", (event) => {
 
 window.addEventListener("popstate", () => renderRoute());
 window.addEventListener("resize", scheduleFabricRouteSync, { passive: true });
+window.addEventListener("resize", setupProductSwitcherPosition, { passive: true });
+window.addEventListener("resize", scheduleNineGateViewportSync, { passive: true });
 
 if (document.fonts?.ready) {
   document.fonts.ready.then(scheduleFabricRouteSync).catch(() => {});

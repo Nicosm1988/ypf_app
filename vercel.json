@@ -49,6 +49,14 @@
       "destination": "/index.html"
     },
     {
+      "source": "/productos",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/productos/:path*",
+      "destination": "/index.html"
+    },
+    {
       "source": "/diccionario",
       "destination": "/index.html"
     },

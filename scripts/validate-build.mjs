@@ -1,4 +1,5 @@
 import { access, cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import {
   datalitoAnswerModes,
   datalitoEvaluationQuestions,
@@ -49,11 +50,23 @@ import {
   methodPlanes,
   methodProjectFolders,
 } from "../data/datalizationMethod.js";
-import { roadmapPhases } from "../data/roadmap.js";
+import { products } from "../data/powerPlatformProducts.js";
+import { powerBiFlowCopy, roadmapPhases } from "../data/roadmap.js";
 import { toolingDocs, toolingGroups } from "../data/toolingLibrary.js";
 
 const requiredTermFields = ["id", "term", "category", "definition", "whyItMatters", "example", "risk"];
 const requiredPhaseFields = ["id", "title", "lane", "objective", "keyActivities", "deliverables", "owner", "riskIfSkipped", "gate"];
+const requiredProductPhaseFields = [
+  "id",
+  "title",
+  "objective",
+  "keyActivities",
+  "deliverables",
+  "owner",
+  "riskIfSkipped",
+  "gate",
+  "targetOutcome",
+];
 
 function assert(condition, message) {
   if (!condition) {
@@ -71,6 +84,7 @@ function hasFields(item, fields) {
 const indexHtml = await readFile("index.html", "utf8");
 const appJs = await readFile("app.js", "utf8");
 const stylesCss = await readFile("styles.css", "utf8");
+const serviceWorkerJs = await readFile("service-worker.js", "utf8");
 const vercelJson = JSON.parse(await readFile("vercel.json", "utf8"));
 
 assert(indexHtml.includes("Datalización YPF"), "index.html debe exponer el nombre del producto.");
@@ -92,25 +106,69 @@ assert(appJs.includes("fabric-route-layer"), "La guía Fabric debe incluir camin
 assert(appJs.includes("syncFabricRoutes"), "La guía Fabric debe recalcular caminos según los anclajes reales.");
 assert(!appJs.includes("process-consumption"), "La guía Fabric no debe dibujar flujo directo desde procesamiento hacia consumo.");
 assert(appJs.includes("flow-arrival"), "Los bloques Fabric deben iluminarse cuando llega el flujo.");
-assert(!appJs.includes("fabric-processing-card flow-arrival"), "Las tarjetas chicas de procesamiento no deben iluminarse con la llegada del flujo.");
-assert(!appJs.includes("flow-arrival-direct-lake") && !appJs.includes("flow-arrival-power-bi"), "El consumo Direct Lake no debe formar parte de la iluminación automática del flujo principal.");
-assert(appJs.includes("Cada modo define la velocidad de consulta"), "La comparativa Fabric debe explicar la relación modo, velocidad y frescura.");
+assert(
+  !appJs.includes("fabric-processing-card flow-arrival"),
+  "Las tarjetas chicas de procesamiento no deben iluminarse con la llegada del flujo.",
+);
+assert(
+  !appJs.includes("flow-arrival-direct-lake") && !appJs.includes("flow-arrival-power-bi"),
+  "El consumo Direct Lake no debe formar parte de la iluminación automática del flujo principal.",
+);
+assert(
+  appJs.includes("Cada modo define la velocidad de consulta"),
+  "La comparativa Fabric debe explicar la relación modo, velocidad y frescura.",
+);
 assert(appJs.includes("renderFabricArchitectureLayer"), "La guía Fabric debe incluir la Capa 2 de arquitectura end-to-end.");
 assert(appJs.includes("road-fabric-architecture-layer"), "La Capa 2 de arquitectura Fabric debe tener ancla propia.");
 assert(appJs.includes("La causalidad es deliberada"), "La Capa 2 debe explicar la causalidad de la arquitectura.");
-assert(appJs.includes("architectureIngestion") && appJs.includes("architectureConsumption"), "La arquitectura Fabric debe usar iconos compuestos alineados al esquema original.");
-assert(appJs.includes("fabric-architecture-gap"), "La arquitectura Fabric debe cortar el flujo visual entre almacenamiento y procesamiento.");
+assert(
+  appJs.includes("architectureIngestion") && appJs.includes("architectureConsumption"),
+  "La arquitectura Fabric debe usar iconos compuestos alineados al esquema original.",
+);
+assert(
+  appJs.includes("fabric-architecture-gap"),
+  "La arquitectura Fabric debe cortar el flujo visual entre almacenamiento y procesamiento.",
+);
 assert(appJs.includes("renderFabricArchitectureConnector"), "La arquitectura Fabric debe usar conectores entre limites de bloque.");
 assert(!appJs.toLowerCase().includes("notebooklm"), "La guía maestra Fabric no debe incluir marca NotebookLM.");
 assert(indexHtml.includes("/road-y-metodologia"), "La navegación principal debe exponer Road y Metodología.");
-assert(!indexHtml.includes("Guía + Roadmap") && !indexHtml.includes('href="/metodologia"'), "La navegación principal no debe separar guía y metodología.");
+assert(
+  !indexHtml.includes("Guía + Roadmap") && !indexHtml.includes('href="/metodologia"'),
+  "La navegación principal no debe separar guía y metodología.",
+);
 assert(indexHtml.includes("nav-dropdown"), "El menú principal debe incluir dropdowns por sección.");
+const mainNavMarkup = indexHtml.match(/<nav class="main-nav"[\s\S]*?<\/nav>/)?.[0] || "";
+const topLevelNavLinks = [...mainNavMarkup.matchAll(/<a class="nav-menu-link" href="([^"]+)"[^>]*>([^<]+)<\/a>/g)].map(
+  ([, href, label]) => ({ href, label: label.trim() }),
+);
+const productsTopLevelLinks = topLevelNavLinks.filter((link) => link.label === "Productos");
+assert(productsTopLevelLinks.length === 1, "La navegación principal debe incluir un único ítem top-level Productos.");
+assert(productsTopLevelLinks[0].href === "/productos", "El ítem top-level Productos debe enlazar a /productos.");
+assert(!topLevelNavLinks.some((link) => link.label === "Recursos"), "Recursos no debe ocupar un segundo slot top-level.");
+assert(
+  [
+    ["/productos/power-bi", "Microsoft Power BI"],
+    ["/productos/power-apps", "Microsoft Power Apps"],
+    ["/productos/power-automate", "Microsoft Power Automate"],
+  ].every(([href, label]) => mainNavMarkup.includes(`href="${href}"`) && mainNavMarkup.includes(`<strong>${label}</strong>`)),
+  "El dropdown Productos debe incluir las tres rutas y nombres oficiales.",
+);
 assert(indexHtml.includes("/assets/ypf-logo.svg"), "La navegación debe usar el logo original de YPF como asset.");
 assert(indexHtml.includes("/road-y-metodologia/oee-bi"), "El menú debe exponer subsecciones como rutas navegables.");
 assert(indexHtml.includes("/road-y-metodologia/fabric-end-to-end"), "El menú debe exponer la guía maestra Fabric como subsección.");
 assert(indexHtml.includes("/road-y-metodologia/arquitectura-fabric"), "El menú debe exponer la Capa 2 Fabric como subsección.");
 assert(!indexHtml.includes("Capa 2 Fabric"), "La navegación visible no debe mostrar el rótulo Capa 2.");
 assert(indexHtml.includes("footer-map"), "El footer debe incluir un mapa de secciones.");
+assert(indexHtml.includes('<a href="/productos" data-route>Productos</a>'), "El footer debe enlazar al catálogo de Productos.");
+assert(appJs.includes("renderProductsPage"), "app.js debe renderizar el catálogo de Productos.");
+assert(appJs.includes("renderProductDetailPage"), "app.js debe compartir un renderer para las fichas de producto.");
+assert(appJs.includes("renderNineGateFlow"), "app.js debe compartir el renderer de nueve gates.");
+assert(appJs.includes(".products-page") || appJs.includes('class="page products-page"'), "El catálogo debe exponer .products-page.");
+assert(appJs.includes("product-detail-page"), "Las fichas deben exponer .product-detail-page.");
+assert(
+  ["/productos", "/productos/power-bi", "/productos/power-apps", "/productos/power-automate"].every((route) => appJs.includes(route)),
+  "app.js debe registrar el catálogo y las tres fichas de Productos.",
+);
 assert(appJs.includes("renderExecutiveBrief"), "app.js debe renderizar la síntesis ejecutiva.");
 assert(appJs.includes("renderPlatformExecutiveSection"), "app.js debe renderizar la sección ejecutiva inicial.");
 assert(appJs.includes("renderHubSectionLauncher"), "app.js debe renderizar la botonera de secciones.");
@@ -121,10 +179,7 @@ assert(appJs.includes("renderProjectPage"), "app.js debe renderizar el proyecto 
 assert(appJs.includes("renderShortcutsPage"), "app.js debe renderizar los atajos Power BI.");
 assert(appJs.includes("renderToolingPage"), "app.js debe renderizar librerías y agentes.");
 assert(appJs.includes("renderMethodEvaluationModel"), "El Método debe integrar el Modelo de Evaluación de Datalización.");
-assert(
-  appJs.includes('id="modelo-evaluacion-datalizacion"'),
-  "El módulo de evaluación debe tener ancla #modelo-evaluacion-datalizacion.",
-);
+assert(appJs.includes('id="modelo-evaluacion-datalizacion"'), "El módulo de evaluación debe tener ancla #modelo-evaluacion-datalizacion.");
 assert(
   !indexHtml.includes("/que-es-datalizacion") &&
     !indexHtml.includes("/pilares-datalizacion") &&
@@ -141,7 +196,10 @@ assert(
   "Cada pilar debe tener peso 20%, definición, implicancia y evidencia.",
 );
 assert(methodEvaluationModel.pillars.reduce((total, pillar) => total + pillar.weight, 0) === 100, "Los pilares deben sumar 100%.");
-assert(methodEvaluationModel.definition.includes("Datalizar no es simplemente automatizar"), "El modelo debe incluir la definición actualizada.");
+assert(
+  methodEvaluationModel.definition.includes("Datalizar no es simplemente automatizar"),
+  "El modelo debe incluir la definición actualizada.",
+);
 assert(methodEvaluationModel.scope.includes("VMC") && !methodEvaluationModel.scope.includes("BMC"), "El alcance debe usar VMC, no BMC.");
 assert(methodEvaluationModel.intake.states.length === 5, "El intake debe incluir cinco estados.");
 assert(methodEvaluationModel.intake.criteria.length >= 7, "El intake debe incluir criterios mínimos.");
@@ -175,6 +233,123 @@ assert(
   "Los gates deben estar numerados de 0 a 8.",
 );
 assert(normalizeForCheck(roadmapPhases[0].title).includes("prd"), "El roadmap debe comenzar con PRD y Spec.");
+
+const expectedProducts = [
+  {
+    slug: "power-bi",
+    officialName: "Microsoft Power BI",
+    route: "/productos/power-bi",
+    iconSha256: "264abad01f50acaffb697b3ede22215b7d87f387c1af92f0a0b14117d2c2e4f1",
+  },
+  {
+    slug: "power-apps",
+    officialName: "Microsoft Power Apps",
+    route: "/productos/power-apps",
+    iconSha256: "c357907ad0a2d24a6d8c82b23fe4d2aaa4a4524076991f74770fc043a4cc455a",
+  },
+  {
+    slug: "power-automate",
+    officialName: "Microsoft Power Automate",
+    route: "/productos/power-automate",
+    iconSha256: "2025db7bb3feec49d75681934b8561fb958cf11bdf0e2acf6e2b28db5c755e8d",
+  },
+];
+assert(Array.isArray(products) && products.length === 3, "Productos debe incluir exactamente tres productos.");
+assert(
+  products.map((product) => product.slug).join("|") === expectedProducts.map((product) => product.slug).join("|"),
+  "Productos debe mantener el orden Power BI, Power Apps y Power Automate.",
+);
+assert(new Set(products.map((product) => product.slug)).size === products.length, "Los slugs de Productos deben ser únicos.");
+assert(new Set(products.map((product) => product.route)).size === products.length, "Las rutas de Productos deben ser únicas.");
+
+for (const expectedProduct of expectedProducts) {
+  const product = products.find((item) => item.slug === expectedProduct.slug);
+  assert(product, `Falta el producto ${expectedProduct.officialName}.`);
+  assert(product.officialName === expectedProduct.officialName, `${expectedProduct.slug} debe usar el nombre oficial.`);
+  assert(product.route === expectedProduct.route, `${expectedProduct.officialName} debe usar la ruta ${expectedProduct.route}.`);
+  assert(product.category && product.tagline, `${expectedProduct.officialName} debe incluir categoría y propósito.`);
+  assert(Array.isArray(product.phases) && product.phases.length === 9, `${expectedProduct.officialName} debe incluir nueve gates.`);
+  assert(
+    product.phases.every((phase, index) => phase.id === index),
+    `${expectedProduct.officialName} debe numerar sus gates con ids de 0 a 8.`,
+  );
+  assert(
+    product.phases.every((phase) => hasFields(phase, requiredProductPhaseFields)),
+    `${expectedProduct.officialName} debe completar todos los campos obligatorios de cada gate.`,
+  );
+  assert(
+    product.phases.every(
+      (phase) =>
+        Array.isArray(phase.keyActivities) && phase.keyActivities.length && Array.isArray(phase.deliverables) && phase.deliverables.length,
+    ),
+    `${expectedProduct.officialName} debe incluir actividades y entregables no vacíos en cada gate.`,
+  );
+  assert(
+    Array.isArray(product.crossCuttingControls) && product.crossCuttingControls.length,
+    `${expectedProduct.officialName} debe incluir controles transversales.`,
+  );
+  assert(
+    Array.isArray(product.commonControls) &&
+      product.commonControls.length > 0 &&
+      Array.isArray(product.specificControls) &&
+      product.specificControls.length > 0 &&
+      product.crossCuttingControls.length === product.commonControls.length + product.specificControls.length,
+    `${expectedProduct.officialName} debe distinguir controles comunes y específicos sin crear gates adicionales.`,
+  );
+  assert(
+    typeof product.iconPath === "string" &&
+      product.iconPath.startsWith("/assets/microsoft/power-platform/") &&
+      product.iconPath.endsWith(".svg") &&
+      !/^https?:\/\//i.test(product.iconPath) &&
+      !product.iconPath.startsWith("//"),
+    `${expectedProduct.officialName} debe usar un SVG local de un paquete oficial documentado de Microsoft.`,
+  );
+  const iconBuffer = await readFile(product.iconPath.slice(1));
+  const iconSha256 = createHash("sha256").update(iconBuffer).digest("hex");
+  assert(
+    iconSha256 === expectedProduct.iconSha256,
+    `${expectedProduct.officialName} debe conservar byte a byte el SVG oficial documentado.`,
+  );
+}
+
+const powerBiProduct = products.find((product) => product.slug === "power-bi");
+assert(powerBiProduct.phases === roadmapPhases, "Microsoft Power BI debe referenciar roadmapPhases sin duplicar sus gates.");
+assert(
+  powerBiProduct.flowCopy === powerBiFlowCopy,
+  "Microsoft Power BI debe compartir también la introducción visual del flujo fuente.",
+);
+assert(
+  ["Reliability", "Security", "Operational Excellence", "Performance Efficiency", "Experience Optimization"].every((pillar) =>
+    appJs.includes(pillar),
+  ),
+  "Productos debe presentar los cinco pilares de Power Platform Well-Architected como controles transversales.",
+);
+const serviceWorkerCacheVersion = Number(
+  serviceWorkerJs.match(/^const CACHE_NAME = "datalizacion-ypf-v(\d+)";$/m)?.[1],
+);
+assert(serviceWorkerCacheVersion >= 37, "El service worker debe declarar una caché vigente para Productos.");
+assert(
+  serviceWorkerJs.includes("keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))"),
+  "El service worker debe eliminar cachés anteriores durante la activación.",
+);
+assert(
+  ["/productos", ...expectedProducts.map((product) => product.route), "/data/powerPlatformProducts.js"].every((path) =>
+    serviceWorkerJs.includes(`"${path}"`),
+  ),
+  "El service worker debe precachear las rutas y el módulo de Productos.",
+);
+assert(
+  products.every((product) => serviceWorkerJs.includes(`"${product.iconPath}"`)),
+  "El service worker debe precachear los tres iconos de producto.",
+);
+const productIconCss = [...stylesCss.matchAll(/\.product-official-icon[^{]*\{([^}]*)\}/g)]
+  .map(([, declarations]) => declarations)
+  .join("\n");
+assert(productIconCss, "styles.css debe dimensionar los iconos oficiales mediante clases scoped.");
+assert(
+  !/(?:^|;)\s*(?:filter|animation|transform)\s*:/im.test(productIconCss),
+  "Los iconos oficiales no deben recibir filtros, animaciones ni transformaciones CSS.",
+);
 
 assert(guideSections.length >= 9, "La guía debe cubrir el ciclo completo de Power BI/Fabric.");
 assert(prdSpecComparison.length >= 4, "La guía debe comparar PRD y Spec.");
@@ -341,7 +516,8 @@ assert(
   "Cada atajo debe incluir acción y teclas.",
 );
 
-const rewriteSources = new Set((vercelJson.rewrites || []).map((rewrite) => rewrite.source));
+const rewriteDestinations = new Map((vercelJson.rewrites || []).map((rewrite) => [rewrite.source, rewrite.destination]));
+const rewriteSources = new Set(rewriteDestinations.keys());
 assert(rewriteSources.has("/road-y-metodologia"), "Vercel debe reescribir /road-y-metodologia a index.html.");
 assert(rewriteSources.has("/road-y-metodologia/:path*"), "Vercel debe reescribir subsecciones de /road-y-metodologia a index.html.");
 assert(rewriteSources.has("/metodo-datalizacion/:path*"), "Vercel debe reescribir subsecciones de /metodo-datalizacion a index.html.");
@@ -351,11 +527,17 @@ assert(rewriteSources.has("/metodo-datalizacion"), "Vercel debe reescribir /meto
 assert(rewriteSources.has("/metodologia"), "Vercel debe reescribir /metodologia a index.html.");
 assert(rewriteSources.has("/design-system"), "Vercel debe reescribir /design-system a index.html.");
 assert(rewriteSources.has("/datalito"), "Vercel debe reescribir /datalito a index.html.");
+assert(rewriteSources.has("/productos"), "Vercel debe reescribir /productos a index.html.");
+assert(rewriteSources.has("/productos/:path*"), "Vercel debe reescribir las fichas de /productos a index.html.");
 assert(rewriteSources.has("/diccionario"), "Vercel debe reescribir /diccionario a index.html.");
 assert(rewriteSources.has("/roadmap"), "Vercel debe reescribir /roadmap a index.html.");
 assert(rewriteSources.has("/proyecto-power-bi"), "Vercel debe reescribir /proyecto-power-bi a index.html.");
 assert(rewriteSources.has("/atajos"), "Vercel debe reescribir /atajos a index.html.");
 assert(rewriteSources.has("/librerias"), "Vercel debe reescribir /librerias a index.html.");
+assert(
+  ["/productos", "/productos/:path*"].every((source) => rewriteDestinations.get(source) === "/index.html"),
+  "Vercel debe resolver el catálogo y todas las fichas de Productos mediante /index.html.",
+);
 assert(vercelJson.outputDirectory === "dist", "Vercel debe publicar la carpeta dist.");
 const dataCacheHeader = (vercelJson.headers || [])
   .find((item) => item.source === "/data/(.*)")
@@ -383,6 +565,10 @@ const staticRoutes = [
   "metodologia",
   "design-system",
   "datalito",
+  "productos",
+  "productos/power-bi",
+  "productos/power-apps",
+  "productos/power-automate",
   "diccionario",
   "roadmap",
   "proyecto-power-bi",
@@ -443,12 +629,21 @@ await access("dist/road-y-metodologia/fabric-end-to-end/index.html");
 await access("dist/road-y-metodologia/arquitectura-fabric/index.html");
 await access("dist/metodo-datalizacion/backlog/index.html");
 await access("dist/design-system/componentes/index.html");
+await access("dist/productos/index.html");
+await access("dist/productos/power-bi/index.html");
+await access("dist/productos/power-apps/index.html");
+await access("dist/productos/power-automate/index.html");
+await access("dist/data/powerPlatformProducts.js");
+await access("dist/assets/microsoft/power-platform/power-bi.svg");
+await access("dist/assets/microsoft/power-platform/power-apps.svg");
+await access("dist/assets/microsoft/power-platform/power-automate.svg");
 
 console.log("Build validation OK");
 console.log(`- ${dictionaryTerms.length} términos BI`);
 console.log(`- ${guideSections.length} capítulos de guía`);
 console.log(`- ${dmaicStages.length} etapas DMAIC y ${oeeFactors.length} factores OEE BI`);
 console.log(`- ${roadmapPhases.length} gates de roadmap`);
+console.log(`- ${products.length} productos con ${products.reduce((total, product) => total + product.phases.length, 0)} gates`);
 console.log(`- ${toolingGroups.length} familias de librerías/agentes`);
 console.log(`- ${powerBiShortcuts.length} categorías de atajos`);
 console.log(`- ${datalitoKnowledgeSources.length} fuentes Datalito y ${datalitoEvaluationQuestions.length} preguntas de evaluación`);

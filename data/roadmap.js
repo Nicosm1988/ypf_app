@@ -6,6 +6,13 @@ export const laneStyles = {
   "Publicación y operación": { color: "#35c9bd", badge: "green" },
 };
 
+export const powerBiFlowCopy = Object.freeze({
+  chip: "flujo Power BI/Fabric",
+  title: "El camino correcto avanza de decisión en decisión.",
+  description:
+    "La animación muestra la lógica gerencial del roadmap: definición, datos, modelado, DAX, confianza, acción, aprobación, publicación y operación.",
+});
+
 export const roadmapPhases = [
   {
     id: 0,
