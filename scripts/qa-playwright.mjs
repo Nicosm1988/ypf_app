@@ -124,13 +124,19 @@ try {
             return rect.left < -2 || rect.right > window.innerWidth + 2;
           })
           .slice(0, 8)
-          .map((element) => ({
-            tag: element.tagName,
-            className: String(element.className),
-            text: element.textContent.trim().slice(0, 80),
-            scrollWidth: element.scrollWidth,
-            clientWidth: element.clientWidth,
-          }));
+          .map((element) => {
+            const rect = element.getBoundingClientRect();
+            return {
+              tag: element.tagName,
+              className: String(element.className),
+              text: element.textContent.trim().slice(0, 80),
+              left: Math.round(rect.left * 100) / 100,
+              right: Math.round(rect.right * 100) / 100,
+              width: Math.round(rect.width * 100) / 100,
+              scrollWidth: element.scrollWidth,
+              clientWidth: element.clientWidth,
+            };
+          });
         const navigation = performance.getEntriesByType("navigation")[0];
         return {
           textOverflowing,
