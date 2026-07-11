@@ -22,6 +22,13 @@ import {
   designSystemScope,
 } from "../data/designSystem.js";
 import { dictionaryCategories, dictionaryTerms } from "../data/dictionary.js";
+import {
+  academicSectionIds,
+  academicSectionTopics,
+  academicSources,
+  academicTopics,
+  getDictionaryAcademicTopicId,
+} from "../data/academicSources.js";
 import { guideSections, prdSpecComparison, readinessChecklist } from "../data/engineeringGuide.js";
 import {
   dmaicStages,
@@ -246,6 +253,11 @@ assert(appJs.includes("renderRoadMethodologyPage"), "app.js debe renderizar la g
 assert(appJs.includes("renderProjectPage"), "app.js debe renderizar el proyecto Power BI.");
 assert(appJs.includes("renderShortcutsPage"), "app.js debe renderizar los atajos Power BI.");
 assert(appJs.includes("renderToolingPage"), "app.js debe renderizar librerías y agentes.");
+assert(appJs.includes("setupAcademicSources"), "app.js debe agregar trazabilidad académica a cada sección.");
+assert(
+  appJs.includes("renderAcademicSourcesDisclosure"),
+  "app.js debe renderizar las fuentes y el criterio de elaboración en un desplegable reutilizable.",
+);
 assert(appJs.includes("renderMethodEvaluationModel"), "El Método debe integrar el Modelo de Evaluación de Datalización.");
 assert(appJs.includes('id="modelo-evaluacion-datalizacion"'), "El módulo de evaluación debe tener ancla #modelo-evaluacion-datalizacion.");
 assert(
@@ -282,6 +294,71 @@ assert(
   "Cada término debe tener todos los campos requeridos.",
 );
 assert(new Set(dictionaryTerms.map((term) => term.id)).size === dictionaryTerms.length, "Los ids del diccionario deben ser únicos.");
+assert(academicSectionIds.length === 119, "La cobertura académica debe incluir exactamente los 119 bloques auditados.");
+assert(new Set(academicSectionIds).size === academicSectionIds.length, "Los ids de cobertura académica deben ser únicos.");
+assert(
+  Object.keys(academicSectionTopics).length === academicSectionIds.length,
+  "Cada bloque académico debe resolver a un único tema de fuentes.",
+);
+assert(
+  Object.values(academicSectionTopics).every((topicId) => academicTopics[topicId]),
+  "Cada bloque académico debe apuntar a un tema registrado.",
+);
+assert(
+  Object.values(academicTopics).every(
+    (topic) =>
+      topic.label && topic.basis && topic.note && topic.sources.length && topic.sources.every((sourceId) => academicSources[sourceId]),
+  ),
+  "Cada tema académico debe declarar criterio, nota y fuentes existentes.",
+);
+assert(
+  Object.entries(academicSources).every(
+    ([sourceId, source]) =>
+      source.id === sourceId &&
+      source.author &&
+      source.title &&
+      source.publisher &&
+      source.verifiedAt === "2026-07-10" &&
+      (source.url.startsWith("https://") || source.url.startsWith("/")),
+  ),
+  "Cada fuente académica debe tener metadata completa, fecha de consulta y URL segura o interna.",
+);
+assert(
+  dictionaryTerms.every((term) => academicTopics[getDictionaryAcademicTopicId(term)]),
+  "Cada término del diccionario debe resolver a una bibliografía temática propia.",
+);
+const expectedDictionaryAcademicTopics = {
+  "cuatro-p-toyota": "toyota",
+  "fabric-capacity-metrics": "dictionary-capacity",
+  "gateway-power-bi": "dictionary-gateway",
+  rls: "dictionary-rls",
+  ols: "dictionary-ols",
+  pbip: "dictionary-pbip",
+  tmdl: "dictionary-tmdl",
+  "test-studio": "dictionary-app-testing",
+  "live-monitor": "dictionary-app-monitoring",
+  "run-after": "dictionary-run-after",
+  "business-process-flow": "dictionary-flow-types",
+  "power-fx": "dictionary-power-fx",
+  "microsoft-dataverse": "dictionary-dataverse",
+};
+for (const [termId, topicId] of Object.entries(expectedDictionaryAcademicTopics)) {
+  const term = dictionaryTerms.find((item) => item.id === termId);
+  assert(term && getDictionaryAcademicTopicId(term) === topicId, `${termId} debe usar la bibliografía específica ${topicId}.`);
+}
+assert(
+  academicSectionTopics["metodo-vmc-fabric"] === "method-vmc" &&
+    academicTopics[academicSectionTopics["metodo-vmc-fabric"]].basis === "adaptation",
+  "La arquitectura DEV → VMC debe identificarse como adaptación propia.",
+);
+assert(
+  academicSectionTopics["road-cierre"] === "methodology-integration",
+  "El cierre metodológico debe citar el conjunto de herramientas que integra.",
+);
+assert(
+  academicSectionIds.every((sectionId) => academicSectionTopics[sectionId]),
+  "No puede haber secciones académicas sin topic de trazabilidad.",
+);
 assert(
   dictionaryTerms.some((term) => term.id === "prd"),
   "El diccionario debe incluir PRD.",
@@ -429,8 +506,9 @@ assert(
 );
 assert(
   ["index", "sources", "powerBi", "powerApps", "powerAutomate"].every((file) => serviceWorkerJs.includes(`"/data/practices/${file}.js"`)),
-  "El service worker v38 debe precachear la biblioteca completa de buenas prácticas.",
+  "El service worker debe precachear la biblioteca completa de buenas prácticas.",
 );
+assert(serviceWorkerJs.includes('"/data/academicSources.js"'), "El service worker debe precachear el registro académico.");
 
 const powerBiProduct = products.find((product) => product.slug === "power-bi");
 assert(powerBiProduct.phases === roadmapPhases, "Microsoft Power BI debe referenciar roadmapPhases sin duplicar sus gates.");
@@ -442,7 +520,7 @@ assert(
   "Productos debe presentar los cinco pilares de Power Platform Well-Architected como controles transversales.",
 );
 const serviceWorkerCacheVersion = Number(serviceWorkerJs.match(/^const CACHE_NAME = "datalizacion-ypf-v(\d+)";$/m)?.[1]);
-assert(serviceWorkerCacheVersion >= 37, "El service worker debe declarar una caché vigente para Productos.");
+assert(serviceWorkerCacheVersion >= 39, "El service worker debe declarar una caché vigente para la trazabilidad académica.");
 assert(
   serviceWorkerJs.includes("keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))"),
   "El service worker debe eliminar cachés anteriores durante la activación.",
@@ -805,6 +883,7 @@ await access("dist/productos/power-bi/index.html");
 await access("dist/productos/power-apps/index.html");
 await access("dist/productos/power-automate/index.html");
 await access("dist/data/powerPlatformProducts.js");
+await access("dist/data/academicSources.js");
 await access("dist/data/practices/index.js");
 await access("dist/data/practices/powerBi.js");
 await access("dist/data/practices/powerApps.js");
@@ -818,6 +897,7 @@ for (const icon of fabricOfficialIcons) {
 
 console.log("Build validation OK");
 console.log(`- ${dictionaryTerms.length} términos BI`);
+console.log(`- ${academicSectionIds.length} bloques con trazabilidad y ${Object.keys(academicSources).length} fuentes registradas`);
 console.log(`- ${guideSections.length} capítulos de guía`);
 console.log(`- ${dmaicStages.length} etapas DMAIC y ${oeeFactors.length} factores OEE BI`);
 console.log(`- ${roadmapPhases.length} gates de roadmap`);

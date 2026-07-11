@@ -1,5 +1,11 @@
 import { dictionaryCategories, dictionaryTerms } from "./data/dictionary.js";
 import {
+  academicSectionTopics,
+  getAcademicSourcesForTopic,
+  getAcademicTopic,
+  getDictionaryAcademicTopicId,
+} from "./data/academicSources.js";
+import {
   datalitoAnswerModes,
   datalitoArchitectureLayers,
   datalitoEvaluationQuestions,
@@ -781,6 +787,140 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+const academicBasisLabels = Object.freeze({
+  direct: "Fuente directa",
+  synthesis: "Síntesis editorial",
+  adaptation: "Adaptación propia",
+  internal: "Elaboración propia",
+});
+
+const academicSourceTypeLabels = Object.freeze({
+  internal: "interna",
+  standard: "norma",
+  specification: "especificación",
+  "community-standard": "estándar comunitario",
+  "standard-framework": "marco",
+  "metadata-standard": "metadata",
+  "official-doc": "documentación oficial",
+  "official-repository": "repositorio oficial",
+  "official-design-system": "sistema oficial",
+  "primary-source": "fuente primaria",
+  "primary-guide": "guía primaria",
+  "professional-reference": "referencia profesional",
+  "security-guidance": "guía de seguridad",
+  report: "informe",
+  paper: "artículo",
+  book: "libro",
+});
+
+function setupAcademicSources(root = appRoot) {
+  const targets = [...root.querySelectorAll(".page > header[id], .page section[id]")];
+
+  targets.forEach((target) => {
+    const sectionId = target.id;
+    if (!sectionId || root.querySelector(`[data-academic-for="${CSS.escape(sectionId)}"]`)) return;
+
+    const topicId = academicSectionTopics[sectionId];
+    if (!topicId) {
+      console.error(`La sección #${sectionId} no tiene trazabilidad académica configurada.`);
+      return;
+    }
+
+    const isGatePanel = target.classList.contains("unified-flow-panel");
+    const isNestedSection = !isGatePanel && Boolean(target.parentElement?.closest("section[id]"));
+    const labelledBy = (target.getAttribute("aria-labelledby") || "")
+      .split(/\s+/)
+      .map((labelId) => document.getElementById(labelId)?.textContent.trim())
+      .filter(Boolean)
+      .join(" ");
+    const sectionLabel =
+      labelledBy || target.getAttribute("aria-label") || target.querySelector("h1, h2, h3")?.textContent.trim() || sectionId;
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = renderAcademicSourcesDisclosure(topicId, {
+      sectionId,
+      label: sectionLabel,
+      compact: isGatePanel || isNestedSection,
+    }).trim();
+    const academicBlock = wrapper.firstElementChild;
+    if (!academicBlock) return;
+
+    if (isGatePanel) {
+      academicBlock.classList.add("academic-sources-inside-panel");
+      target.append(academicBlock);
+    } else {
+      academicBlock.classList.add(isNestedSection ? "academic-sources-nested" : "page-inner");
+      target.insertAdjacentElement("afterend", academicBlock);
+    }
+  });
+}
+
+function renderAcademicSourcesDisclosure(topicId, { sectionId, label = "", compact = false } = {}) {
+  const topic = getAcademicTopic(topicId);
+  const sources = getAcademicSourcesForTopic(topicId);
+  if (!topic || !sources.length) return "";
+
+  const basisLabel = academicBasisLabels[topic.basis] || "Criterio académico";
+  const referenceLabel = `${sources.length} referencia${sources.length === 1 ? "" : "s"}`;
+
+  return `
+    <aside
+      class="academic-sources ${compact ? "academic-sources-compact" : ""}"
+      ${sectionId ? `data-academic-for="${escapeHtml(sectionId)}"` : ""}
+      aria-label="Fuentes y criterio de elaboración: ${escapeHtml(label || sectionId || topic.label)}"
+    >
+      <details>
+        <summary>
+          <span class="academic-sources-icon">${icon("book")}</span>
+          <span class="academic-sources-summary-copy">
+            <strong>Fuentes y criterio de elaboración</strong>
+            <small>${escapeHtml(basisLabel)} · ${referenceLabel}</small>
+          </span>
+          <span class="academic-sources-topic">${escapeHtml(topic.label)}</span>
+          ${icon("chevronDown")}
+        </summary>
+        <div class="academic-sources-body">
+          <p class="academic-sources-method">
+            <span>${escapeHtml(basisLabel)}</span>
+            ${escapeHtml(topic.note)}
+          </p>
+          <ol class="academic-reference-list">
+            ${sources.map(renderAcademicReference).join("")}
+          </ol>
+        </div>
+      </details>
+    </aside>
+  `;
+}
+
+function renderAcademicReference(source) {
+  const isInternal = source.url.startsWith("/");
+  const typeLabel = academicSourceTypeLabels[source.type] || "fuente";
+  const publisher = source.publisher && source.publisher !== source.author ? ` ${source.publisher}.` : "";
+  const issued = source.issued || "s. f.";
+  const linkAttributes = isInternal ? "data-route" : 'target="_blank" rel="noreferrer"';
+
+  return `
+    <li>
+      <span class="academic-reference-id">${escapeHtml(source.id)}</span>
+      <div>
+        <p>
+          <strong>${escapeHtml(source.author)}</strong> (${escapeHtml(issued)}).
+          <a href="${escapeHtml(source.url)}" ${linkAttributes}>${escapeHtml(source.title)}</a>.${escapeHtml(publisher)}
+        </p>
+        <small>
+          <span>${escapeHtml(typeLabel)}</span>
+          Consultado el ${escapeHtml(formatAcademicDate(source.verifiedAt))}.${source.note ? ` ${escapeHtml(source.note)}` : ""}
+        </small>
+      </div>
+    </li>
+  `;
+}
+
+function formatAcademicDate(value) {
+  const match = String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return match ? `${match[3]}-${match[2]}-${match[1]}` : String(value);
+}
+
 function getRoute(pathname = window.location.pathname) {
   const cleanPath = pathname.replace(/\/+$/, "") || "/";
   if (subsectionRoutes[cleanPath]) return subsectionRoutes[cleanPath].route;
@@ -1139,6 +1279,8 @@ function renderRoute(route = getRoute()) {
     renderHomePage();
   }
 
+  setupAcademicSources();
+
   if (document.querySelector("[data-datalito-global]")) {
     refreshDatalitoViews();
   }
@@ -1224,7 +1366,7 @@ function renderHomePage() {
 
 function renderHomeDecisionPath() {
   return `
-    <section class="home-decision-path page-inner" aria-labelledby="homeDecisionPathTitle">
+    <section class="home-decision-path page-inner" id="inicio-camino" aria-labelledby="homeDecisionPathTitle">
       <div>
         <span class="flow-chip">camino recomendado</span>
         <h2 id="homeDecisionPathTitle">Tres decisiones alcanzan para empezar sin perderse en el detalle.</h2>
@@ -1389,7 +1531,7 @@ function renderPlatformDisciplineCard(item, index) {
 function renderDesignSystemPage() {
   appRoot.innerHTML = `
     <section class="page tool-page design-system-page">
-      <header class="page-heading page-inner design-system-hero">
+      <header class="page-heading page-inner design-system-hero" id="design-hero">
         <span class="eyebrow">Design System</span>
         <h1>Un sistema de patrones para que la plataforma crezca sin reabrir las mismas decisiones.</h1>
         <p class="lede">El Design System define cómo resolvemos jerarquía, interacción, densidad y documentación en la experiencia de Datalización.</p>
@@ -1452,7 +1594,7 @@ function renderDesignSystemPage() {
         </div>
       </section>
 
-      <section class="design-system-final page-inner">
+      <section class="design-system-final page-inner" id="design-resultado">
         <div>
           <span class="eyebrow">resultado esperado</span>
           <h2>Una herramienta para cambiar una vez y mejorar muchas pantallas.</h2>
@@ -1521,7 +1663,7 @@ function renderDesignSystemList(title, items) {
 function renderDatalitoPage() {
   appRoot.innerHTML = `
     <section class="page tool-page datalito-page">
-      <header class="page-heading page-inner datalito-hero">
+      <header class="page-heading page-inner datalito-hero" id="datalito-hero">
         <div class="datalito-hero-avatar">
           ${renderDatalitoAvatar("hero")}
           <span>Hola, soy Datalito</span>
@@ -2528,11 +2670,11 @@ function tokenizeDatalitoText(value) {
     .filter((token) => token.length > 2 && !datalitoStopwords.has(token));
 }
 
-function renderExecutiveBrief(narrative, variant = "") {
+function renderExecutiveBrief(narrative, variant = "", sectionId = "") {
   if (!narrative) return "";
 
   return `
-    <section class="executive-brief page-inner ${variant}" aria-label="Síntesis ejecutiva">
+    <section class="executive-brief page-inner ${variant}" ${sectionId ? `id="${escapeHtml(sectionId)}"` : ""} aria-label="Síntesis ejecutiva">
       <div class="executive-answer">
         <span class="flow-chip">${escapeHtml(narrative.eyebrow)}</span>
         <h2>${escapeHtml(narrative.title)}</h2>
@@ -2609,13 +2751,13 @@ function renderConceptDecantation() {
 function renderRoadMethodologyPage() {
   appRoot.innerHTML = `
     <section class="page tool-page road-methodology-page">
-      <header class="page-heading page-inner road-methodology-hero">
+      <header class="page-heading page-inner road-methodology-hero" id="road-hero">
         <span class="eyebrow">Road y Metodología</span>
         <h1>Del caso operativo a la mejora controlada.</h1>
         <p class="lede">Esta sección une dos preguntas: qué evidencia permite avanzar y qué pérdida operativa justifica la mejora. A partir de ahí, cada gate deja de ser una formalidad.</p>
       </header>
 
-      ${renderExecutiveBrief(pageNarratives.roadMethodology)}
+      ${renderExecutiveBrief(pageNarratives.roadMethodology, "", "road-sintesis")}
 
       ${renderRoadMethodologyThesis()}
 
@@ -2734,7 +2876,7 @@ function renderRoadMethodologyPage() {
         </div>
       </section>
 
-      <section class="methodology-close page-inner" aria-label="Cierre metodológico">
+      <section class="methodology-close page-inner" id="road-cierre" aria-label="Cierre metodológico">
         <div>
           <span class="eyebrow">criterio de uso</span>
           <h2>La metodología se aplica por problema, no por moda.</h2>
@@ -3324,13 +3466,13 @@ function renderCadenceItem(item, index) {
 function renderDatalizationMethodPage() {
   appRoot.innerHTML = `
     <section class="page tool-page method-page">
-      <header class="page-heading page-inner method-hero">
+      <header class="page-heading page-inner method-hero" id="metodo-hero">
         <span class="eyebrow">Método de Datalización</span>
         <h1>Un sistema operativo para trabajar, entregar y sostener productos BI.</h1>
         <p class="lede">La página baja el método a decisiones concretas: estructura Microsoft 365, naming, backlog, DEV/PROD, VMC/Fabric y gobierno interno. En la práctica, muestra cómo se trabaja.</p>
       </header>
 
-      ${renderExecutiveBrief(pageNarratives.method)}
+      ${renderExecutiveBrief(pageNarratives.method, "", "metodo-sintesis")}
 
       ${renderMethodActionStrip()}
 
@@ -3556,7 +3698,7 @@ function renderDatalizationMethodPage() {
 
 function renderMethodActionStrip() {
   return `
-    <section class="method-action-strip page-inner" aria-labelledby="methodActionTitle">
+    <section class="method-action-strip page-inner" id="metodo-acciones" aria-labelledby="methodActionTitle">
       <div class="method-section-head">
         <span class="flow-chip">próxima acción</span>
         <h2 id="methodActionTitle">Si hay que empezar hoy, estas son las tres acciones mínimas.</h2>
@@ -3848,13 +3990,13 @@ function renderDictionaryPage() {
 
   appRoot.innerHTML = `
     <section class="page tool-page dictionary-layout">
-      <header class="page-heading page-inner">
+      <header class="page-heading page-inner" id="diccionario-hero">
         <span class="eyebrow">Glosario operativo</span>
         <h1>Un glosario para decidir con el mismo significado.</h1>
         <p class="lede">Cada término fija definición, ejemplo, impacto y riesgo para que las conversaciones de BI no se traben en ambigüedad.</p>
       </header>
 
-      ${renderExecutiveBrief(pageNarratives.dictionary)}
+      ${renderExecutiveBrief(pageNarratives.dictionary, "", "diccionario-sintesis")}
 
       <section class="control-panel page-inner" id="diccionario-busqueda" aria-label="Filtros del diccionario">
         <div class="search-row">
@@ -3933,13 +4075,13 @@ function renderDictionaryPage() {
 function renderProductsPage() {
   appRoot.innerHTML = `
     <section class="page products-page">
-      <header class="page-heading page-inner">
+      <header class="page-heading page-inner" id="productos-hero">
         <span class="eyebrow">PRODUCTOS DE DATALIZACIÓN</span>
         <h1>Tres productos, tres ciclos de vida, un mismo estándar de delivery.</h1>
         <p class="lede">La plataforma organiza cómo diseñamos, construimos, aprobamos, publicamos y operamos soluciones de analítica, aplicaciones y automatización.</p>
       </header>
 
-      <section class="product-grid page-inner" aria-label="Catálogo de productos de Datalización">
+      <section class="product-grid page-inner" id="productos-catalogo" aria-label="Catálogo de productos de Datalización">
         ${products.map(renderProductCard).join("")}
       </section>
 
@@ -3973,7 +4115,7 @@ function renderProductComplementarity() {
   ];
 
   return `
-    <section class="product-complementarity bi-flow-showcase page-inner" aria-labelledby="productComplementarityTitle">
+    <section class="product-complementarity bi-flow-showcase page-inner" id="productos-complementariedad" aria-labelledby="productComplementarityTitle">
       <div class="product-complementarity-copy">
         <span class="flow-chip">capacidades complementarias</span>
         <h2 id="productComplementarityTitle">Pueden trabajar juntos o resolver necesidades independientes.</h2>
@@ -4017,7 +4159,7 @@ function renderProductDetailPage(slug) {
         <span aria-current="page">${escapeHtml(product.officialName)}</span>
       </nav>
 
-      <header class="product-identity page-inner">
+      <header class="product-identity page-inner" id="${escapeHtml(product.slug)}-identidad">
         <div class="product-identity-mark">${renderOfficialProductIcon(product, "identity")}</div>
         <div class="product-identity-copy">
           <span class="eyebrow">${escapeHtml(product.category)}</span>
@@ -4100,7 +4242,7 @@ function renderProductCrossCuttingControls(product) {
   const specificControls = product.specificControls || product.crossCuttingControls || [];
 
   return `
-    <section class="product-cross-cutting page-inner" aria-labelledby="${escapeHtml(product.slug)}-controls-title">
+    <section class="product-cross-cutting page-inner" id="${escapeHtml(product.slug)}-controles-comunes" aria-labelledby="${escapeHtml(product.slug)}-controls-title">
       <details>
         <summary>
           <span>
@@ -4135,7 +4277,7 @@ function renderProductRelatedResources(product) {
   if (!product.relatedResources?.length) return "";
 
   return `
-    <section class="product-related-resources page-inner" aria-labelledby="${escapeHtml(product.slug)}-resources-title">
+    <section class="product-related-resources page-inner" id="${escapeHtml(product.slug)}-recursos" aria-labelledby="${escapeHtml(product.slug)}-resources-title">
       <div>
         <span class="flow-chip">recursos relacionados</span>
         <h2 id="${escapeHtml(product.slug)}-resources-title">La ficha conecta el ciclo de vida con la documentación de trabajo.</h2>
@@ -4747,13 +4889,13 @@ function renderToolingPage() {
   const totalItems = visibleGroups.reduce((total, group) => total + group.items.length, 0);
   appRoot.innerHTML = `
     <section class="page tool-page">
-      <header class="page-heading page-inner">
+      <header class="page-heading page-inner" id="librerias-hero">
         <span class="eyebrow">Documentación técnica</span>
         <h1>Herramientas activas y evaluaciones controladas.</h1>
         <p class="lede">La página visible distingue lo que ya integra el repo de los MCPs priorizados. El inventario exploratorio queda en la documentación técnica.</p>
       </header>
 
-      <section class="tooling-decision page-inner" aria-labelledby="toolingDecisionTitle">
+      <section class="tooling-decision page-inner" id="librerias-decision" aria-labelledby="toolingDecisionTitle">
         <div>
           <span class="flow-chip">criterio de adopción</span>
           <h2 id="toolingDecisionTitle">Antes de instalar, el equipo debe saber qué riesgo baja.</h2>
@@ -4961,6 +5103,11 @@ function renderDictionaryTermDetail(term) {
         <dd>${escapeHtml(term.risk)}</dd>
       </div>
     </dl>
+    ${renderAcademicSourcesDisclosure(getDictionaryAcademicTopicId(term), {
+      sectionId: `diccionario-termino-${term.id}`,
+      label: term.term,
+      compact: true,
+    })}
     <div class="term-actions">
       <button class="button small secondary" type="button" data-copy-text="${escapeHtml(definitionCopy)}">
         ${icon("clipboard")}
@@ -5010,13 +5157,13 @@ function renderRoadmapPage() {
 function renderProjectPage() {
   appRoot.innerHTML = `
     <section class="page tool-page">
-      <header class="page-heading page-inner">
+      <header class="page-heading page-inner" id="proyecto-power-bi-hero">
         <span class="eyebrow">PRD + Spec + PBIP</span>
         <h1>Del PRD al PBIP con control de cambios.</h1>
         <p class="lede">La construcción avanza cuando proceso, reglas, evidencia técnica, versionado y operación están conectados en una misma respuesta.</p>
       </header>
 
-      ${renderExecutiveBrief(pageNarratives.project)}
+      ${renderExecutiveBrief(pageNarratives.project, "", "proyecto-sintesis")}
 
       <section class="project-studio page-inner" id="proyecto-estudio">
         <div class="project-copy">
@@ -5070,7 +5217,7 @@ function renderProjectPage() {
         </div>
       </section>
 
-      <section class="quality-grid page-inner" aria-label="Buenas prácticas Power BI avanzado">
+      <section class="quality-grid page-inner" id="proyecto-calidad" aria-label="Buenas prácticas Power BI avanzado">
         ${renderQualityCard("Proceso aprobado", "El equipo sabe qué tarea se automatiza, quién la usa, qué disparador la inicia y qué métrica prueba la mejora.", ["Disparadores", "SLA y responsables", "Criterios de aceptación"])}
         ${renderQualityCard("Spec ejecutable", "La lógica del proceso se transforma en arquitectura, datos, modelo, reglas, seguridad, UX y pruebas.", ["Fuentes y granularidad", "Reglas técnicas", "Casos de prueba"])}
         ${renderQualityCard("Modelo como código", "PBIP y TMDL permiten revisar cambios, comparar versiones y trabajar con ramas como en software.", ["Git y PRs", "Diffs legibles", "Checklist de release"])}
@@ -5112,7 +5259,7 @@ function renderQualityCard(title, text, bullets) {
 function renderShortcutsPage() {
   appRoot.innerHTML = `
     <section class="page tool-page">
-      <header class="page-heading page-inner">
+      <header class="page-heading page-inner" id="atajos-hero">
         <span class="eyebrow">Power BI Desktop</span>
         <h1>Atajos para trabajar con menos interrupciones.</h1>
         <p class="lede">La página prioriza acciones frecuentes de Power BI: navegar, seleccionar, editar, revisar datos, escribir DAX y controlar el modelo.</p>
@@ -5130,7 +5277,7 @@ function renderShortcutsPage() {
         </a>
       </section>
 
-      <section class="shortcut-adoption page-inner" aria-labelledby="shortcutAdoptionTitle">
+      <section class="shortcut-adoption page-inner" id="atajos-adopcion" aria-labelledby="shortcutAdoptionTitle">
         <div>
           <span class="flow-chip">adopción gradual</span>
           <h2 id="shortcutAdoptionTitle">Pocos atajos por semana valen más que una lista completa sin práctica.</h2>

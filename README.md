@@ -20,6 +20,7 @@ Datalización es la práctica de automatizar procesos mediante datos confiables,
 - Catálogo de librerías, agentes, MCPs y sandboxes guardado en documentación local.
 - Sistema repo-local de skills, agentes, MCP registry y QA automatizada para evolucionar la web con criterio productivo.
 - Atajos Power BI curados con referencia directa a la documentación oficial de Microsoft Learn.
+- Trazabilidad académica desplegable después de cada sección y subsección, con 119 bloques cubiertos y fuentes específicas dentro de cada término del diccionario.
 
 La app es estatica, sin credenciales, sin datos sensibles y compatible con Vercel.
 
@@ -28,6 +29,7 @@ La app es estatica, sin credenciales, sin datos sensibles y compatible con Verce
 - HTML, CSS y JavaScript vanilla.
 - Modulos ES para separar datos de UI.
 - Contenido local editable en `data/platformIntro.js`, `data/powerPlatformProducts.js`, `data/datalito.js`, `data/designSystem.js`, `data/dictionary.js`, `data/engineeringGuide.js`, `data/datalizationMethod.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
+- Registro bibliográfico, temas, criterios de elaboración y cobertura académica en `data/academicSources.js`.
 - Documentación técnica en `docs/librerias-agentes-mcp.md` y documentación operativa de Datalito en `docs/datalito-*.md`.
 - Casos de evaluación de Datalito en `evals/datalito`.
 - Skills repo-locales en `.codex/skills`.
@@ -91,6 +93,8 @@ El build valida que:
 - La Home tenga una primera lectura con estructura de estudio, tesis y contribución operativa.
 - La Home tenga botonera para las secciones principales, el Design System tenga estructura ejecutiva completa y Datalito tenga vertical slice funcional.
 - El diccionario tenga al menos 65 términos.
+- Los 119 bloques auditados tengan una fuente visible, metadata bibliográfica y criterio explícito de fuente directa, síntesis, adaptación o elaboración propia.
+- Cada término del diccionario resuelva a una bibliografía temática y todas las URLs académicas usen HTTPS o rutas internas controladas.
 - Road y Metodología tenga los 9 gates obligatorios, PRD/Spec, checklist de salida, OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, SMED, Poka-Yoke, Kata y cadencias de operación.
 - El Método de Datalización tenga proceso end to end, separación DEV/PROD, 8 canales base, 12 subcarpetas estándar y naming gobernado.
 - Cada página principal tenga narrativa ejecutiva con tesis, tres soportes y acción.
@@ -183,6 +187,19 @@ Editar `data/dictionary.js` y agregar un objeto en `dictionaryTerms`:
 ```
 
 Las categorías disponibles estan en `dictionaryCategories`.
+
+Cada término recibe fuentes según su categoría y, cuando corresponde, por una asignación específica. Al agregar una categoría nueva, actualizar `dictionaryCategoryTopics` en `data/academicSources.js`; para un concepto metodológico o interno, agregar también un override en `dictionaryTermTopicOverrides`. No presentar ejemplos propios como casos publicados por una fuente externa.
+
+## Editar fuentes académicas
+
+`data/academicSources.js` mantiene un registro único con autor u organización, título, año cuando está verificado, editorial, URL, tipo de fuente y fecha de consulta. Los topics reúnen esas fuentes y declaran uno de cuatro criterios:
+
+- `direct`: el contenido resume directamente la fuente.
+- `synthesis`: el portal integra varias fuentes sin atribuirles la redacción final.
+- `adaptation`: el equipo aplica un marco externo al contexto BI o de Datalización.
+- `internal`: la decisión es elaboración propia y la fuente interna queda identificada.
+
+Cuando se agregue una sección semántica con `id`, incorporarla a `academicSectionTopics`. El build debe conservar 100 % de cobertura. OEE BI, el Marco de Datalización VMC, DEV → VMC y la aplicación de herramientas Lean a gates BI son adaptaciones internas: no deben atribuirse literalmente a ISO, Toyota, Lean Enterprise Institute o Microsoft.
 
 ## Editar gates del roadmap
 

@@ -49,6 +49,33 @@ const productNamesByRoute = new Map([
   ["/productos/power-automate", "Microsoft Power Automate"],
 ]);
 
+const academicExpectedCountsByRoute = new Map([
+  ["/", 5],
+  ["/road-y-metodologia", 27],
+  ["/road-y-metodologia/fabric-end-to-end", 27],
+  ["/road-y-metodologia/oee-bi", 27],
+  ["/guia-power-bi", 27],
+  ["/metodologia", 27],
+  ["/roadmap", 27],
+  ["/metodo-datalizacion", 15],
+  ["/metodo-datalizacion/backlog", 15],
+  ["/design-system", 7],
+  ["/design-system/componentes", 7],
+  ["/design-system/principios", 7],
+  ["/design-system/alcance", 7],
+  ["/datalito", 6],
+  ["/datalito/arquitectura", 6],
+  ["/productos", 3],
+  ["/productos/power-bi", 13],
+  ["/productos/power-apps", 13],
+  ["/productos/power-automate", 13],
+  ["/diccionario", 4],
+  ["/proyecto-power-bi", 5],
+  ["/proyecto-power-bi/herramientas", 5],
+  ["/librerias", 4],
+  ["/atajos", 4],
+]);
+
 const server = spawn(process.execPath, ["scripts/dev-server.mjs", String(port)], {
   env: { ...process.env, PORT: String(port) },
   stdio: ["ignore", "pipe", "pipe"],
@@ -85,6 +112,41 @@ try {
     for (const route of routes) {
       await page.goto(`${baseUrl}${route.path}`, { waitUntil: "networkidle" });
       await page.locator(route.selector).waitFor({ state: "visible", timeout: 7000 });
+
+      const firstAcademicDisclosure = page.locator("#appRoot [data-academic-for] > details").first();
+      await firstAcademicDisclosure.locator(":scope > summary").click();
+      const academicReport = await page.evaluate(() => {
+        const targets = [...document.querySelectorAll("#appRoot .page > header[id], #appRoot .page section[id]")];
+        const blocks = [...document.querySelectorAll("#appRoot [data-academic-for]")];
+        const blockIds = blocks.map((block) => block.dataset.academicFor);
+        return {
+          targets: targets.length,
+          blocks: blocks.length,
+          uniqueBlocks: new Set(blockIds).size,
+          missing: targets
+            .filter((target) => !document.querySelector(`[data-academic-for="${CSS.escape(target.id)}"]`))
+            .map((target) => target.id),
+          openDisclosures: document.querySelectorAll("#appRoot [data-academic-for] > details[open]").length,
+          firstReferences: document.querySelectorAll("#appRoot [data-academic-for] > details[open] .academic-reference-list li").length,
+          firstLinksValid: [...document.querySelectorAll("#appRoot [data-academic-for] > details[open] .academic-reference-list a")].every(
+            (link) => link.href.startsWith(location.origin + "/") || link.href.startsWith("https://"),
+          ),
+          firstHasAccessDate: document.querySelector("#appRoot [data-academic-for] > details[open]")?.textContent.includes("Consultado el"),
+        };
+      });
+      const expectedAcademicCount = academicExpectedCountsByRoute.get(route.path);
+      if (
+        academicReport.targets !== expectedAcademicCount ||
+        academicReport.blocks !== academicReport.targets ||
+        academicReport.uniqueBlocks !== academicReport.blocks ||
+        academicReport.missing.length ||
+        academicReport.openDisclosures !== 1 ||
+        academicReport.firstReferences < 1 ||
+        !academicReport.firstLinksValid ||
+        !academicReport.firstHasAccessDate
+      ) {
+        throw new Error(`${route.name} no cumple trazabilidad académica: ${JSON.stringify(academicReport)}`);
+      }
 
       const pageReport = await page.evaluate(() => {
         const textSelector = [
@@ -269,6 +331,7 @@ try {
               const panelId = node.getAttribute("aria-controls");
               return panelId && document.getElementById(panelId)?.classList.contains("unified-flow-panel");
             }),
+            gateAcademicSources: document.querySelectorAll(".product-detail-page .unified-flow-panel > [data-academic-for]").length,
             logo: logo
               ? {
                   alt: logo.getAttribute("alt"),
@@ -298,6 +361,7 @@ try {
           detailReport.commonControlItems < 1 ||
           detailReport.specificControlItems < 1 ||
           !detailReport.controlsMatch ||
+          detailReport.gateAcademicSources !== 9 ||
           !detailReport.logo?.local ||
           detailReport.logo.alt !== "" ||
           !detailReport.logo.square ||
@@ -518,12 +582,16 @@ try {
             ready: card.dataset.termStatus,
             detailSections: card.querySelectorAll(".detail-list > div").length,
             copyButtons: card.querySelectorAll("[data-copy-text]").length,
+            academicSources: card.querySelectorAll(".academic-sources").length,
+            academicReferenceLinks: card.querySelectorAll(".academic-reference-list a").length,
           }));
         if (
           !openedDictionaryReport.open ||
           openedDictionaryReport.ready !== "ready" ||
           openedDictionaryReport.detailSections !== 3 ||
-          openedDictionaryReport.copyButtons !== 1
+          openedDictionaryReport.copyButtons !== 1 ||
+          openedDictionaryReport.academicSources !== 1 ||
+          openedDictionaryReport.academicReferenceLinks < 1
         ) {
           throw new Error(`Diccionario no expande el detalle bajo demanda: ${JSON.stringify(openedDictionaryReport)}`);
         }

@@ -21,7 +21,7 @@ export const practiceSources = Object.freeze({
     "https://learn.microsoft.com/en-us/power-bi/guidance/import-modeling-data-reduction",
   ),
   B08: source("Guía de modelos DirectQuery", "https://learn.microsoft.com/en-us/power-bi/guidance/directquery-model-guidance"),
-  B09: source("Guía oficial de DAX", "https://learn.microsoft.com/en-us/power-bi/guidance/#dax"),
+  B09: source("Información general sobre DAX", "https://learn.microsoft.com/en-us/dax/dax-overview"),
   B10: source("Uso de variables en expresiones DAX", "https://learn.microsoft.com/en-us/dax/best-practices/dax-variables"),
   B11: source("Guía de seguridad de nivel de fila", "https://learn.microsoft.com/en-us/power-bi/guidance/rls-guidance"),
   B12: source(
