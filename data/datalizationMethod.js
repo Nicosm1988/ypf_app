@@ -97,12 +97,20 @@ export const methodPlanes = [
     guardrail: "El Teams nunca es fuente de datos para tableros productivos.",
   },
   {
+    id: "test",
+    title: "QA/TEST",
+    location: "Workspace de prueba Power BI/Fabric",
+    purpose: "QA interno de Datalización y UAT del cliente sobre el mismo candidato; los defectos vuelven a DEV.",
+    access: "Equipo de Datalización y cliente/negocio invitado sólo para UAT.",
+    guardrail: "El OK de UAT debe quedar trazable antes de solicitar el pase a PROD.",
+  },
+  {
     id: "prod",
     title: "PROD — VMC",
     location: "Workspaces Power BI/Fabric",
     purpose: "Productos publicados que consume el negocio, con permisos, apps, refresh, soporte y operación.",
     access: "Organización o segmentos amplios según gobierno.",
-    guardrail: "La publicación ocurre mediante TEST/PROD y no por archivos sueltos.",
+    guardrail: "Ingeniería de Software es la única responsable de ejecutar la promoción a PROD; Datalización entrega el paquete de release.",
   },
 ];
 
@@ -132,25 +140,31 @@ export const methodChannels = [
 
 export const methodProjectFolders = [
   { code: "00", name: "Gestion", purpose: "Minutas curadas, decisiones, acuerdos y acciones." },
-  { code: "01", name: "PRD-SPEC", purpose: "Problema, necesidad, alcance, criterios de éxito y definición técnica." },
-  { code: "02", name: "Datos-Fuentes", purpose: "Orígenes, conexiones, diccionario de datos y linaje de fuentes." },
-  { code: "03", name: "Modelado", purpose: "Modelo semántico, relaciones y documentación de Power Query." },
-  { code: "04", name: "DAX-Medidas", purpose: "Librería de medidas, lógica de negocio y reglas de cálculo." },
-  { code: "05", name: "Gobierno-Datos", purpose: "Dueños, sensibilidad, linaje y mapeo Bronze/Silver/Gold." },
-  { code: "06", name: "Calidad-Datos", purpose: "Reglas, controles, monitoreo y evidencia de confiabilidad." },
-  { code: "07", name: "Visualizacion", purpose: "PBIX/PBIP DEV como fuente controlada del producto BI." },
-  { code: "08", name: "Codigo", purpose: "Notebooks, scripts, repositorios y automatizaciones auxiliares." },
-  { code: "09", name: "Despliegue-VMC", purpose: "Release notes, links, permisos, checklist, performance y rollback." },
-  { code: "10", name: "Postventa", purpose: "Manuales, capacitación, soporte, feedback y operación del producto." },
+  { code: "01", name: "Maqueta-Feedback", purpose: "Maqueta navegable, datos ficticios, rondas de feedback y aprobación de dirección, previa a PRD-SPEC." },
+  { code: "02", name: "PRD-SPEC", purpose: "Problema, necesidad, alcance, criterios de éxito y definición técnica." },
+  { code: "03", name: "Datos-Fuentes", purpose: "Orígenes, conexiones, diccionario de datos y linaje de fuentes." },
+  { code: "04", name: "Modelado", purpose: "Modelo semántico, relaciones y documentación de Power Query." },
+  { code: "05", name: "DAX-Medidas", purpose: "Librería de medidas, lógica de negocio y reglas de cálculo." },
+  { code: "06", name: "Gobierno-Datos", purpose: "Dueños, sensibilidad, linaje y mapeo Bronze/Silver/Gold." },
+  { code: "07", name: "Calidad-Datos", purpose: "Reglas, controles, monitoreo y evidencia de confiabilidad." },
+  { code: "08", name: "Visualizacion", purpose: "PBIX/PBIP DEV como fuente controlada del producto BI." },
+  { code: "09", name: "Codigo", purpose: "Notebooks, scripts, repositorios y automatizaciones auxiliares." },
+  { code: "10", name: "Despliegue-VMC", purpose: "Release notes, links, permisos, checklist, performance y rollback." },
+  { code: "11", name: "Postventa", purpose: "Manuales, capacitación, soporte, feedback y operación del producto." },
   { code: "99", name: "Reuniones", purpose: "Grabaciones, transcripciones y chats crudos para consulta o auditoría." },
 ];
+
+// Migración documentada: hasta 2026-09-02 PRD-SPEC era el código 01. Se incorporó Maqueta-Feedback como
+// nueva zona obligatoria previa (código 01) y se renumeraron 02-11 en consecuencia; 00 y 99 no cambian.
+export const methodFolderMigrationNote =
+  "01 pasó de PRD-SPEC a Maqueta-Feedback; PRD-SPEC y las carpetas siguientes corrieron un número (antes 01-10, ahora 02-11).";
 
 export const methodNaming = {
   pattern: "[CODIGO]_[TIPO]_[Descripcion-corta]_[YYYY-MM-DD]_v[N].[ext]",
   examples: [
-    "PRJ001_MIN_KickOff-MidGas_2026-06-03_v1.docx",
-    "PRJ001_PRD_Tablero-Objetivos_2026-06-10_v2.docx",
-    "PRJ001_PBIP_Objetivos-MidGas_2026-06-19_v3.pbip",
+    "PRJ001_MIN_KickOff-Eficiencia-Operativa_2026-06-03_v1.docx",
+    "PRJ001_PRD_Tablero-Eficiencia-Operativa_2026-06-10_v2.docx",
+    "PRJ001_PBIP_Eficiencia-Operativa_2026-06-19_v3.pbip",
     "MET_TPL_Estructura-Proyecto_2026-06-24_v1.md",
   ],
   rules: [
@@ -224,12 +238,13 @@ export const methodVmcModel = {
   workspaces: ["VMC-Datalizacion-[Dominio]-DEV", "VMC-Datalizacion-[Dominio]-TEST", "VMC-Datalizacion-[Dominio]-PROD"],
   lakehouse: ["bronze_[dominio]_[fuente]", "silver_[dominio]_[entidad]", "gold_[dominio]_[modelo]"],
   lifecycle: [
+    "Maqueta y feedback con el cliente, previa a PRD y Spec",
     "PRD y Spec en Datalización",
     "Desarrollo PBIP en Visualización",
-    "Validación controlada con negocio",
-    "Deploy a TEST en VMC",
-    "UAT técnica y funcional",
-    "Promoción a PROD por pipeline",
+    "QA interno de Datalización en TEST",
+    "UAT del cliente en TEST, con OK trazable",
+    "Handoff del paquete de release a Ingeniería de Software",
+    "Promoción a PROD por pipeline, ejecutada por Ingeniería de Software",
     "App publicada a usuarios",
     "Mantenimiento vuelve al ciclo",
   ],
@@ -250,7 +265,7 @@ export const methodRoles = [
 export const methodRoadmap = [
   { moment: "Semana 1", focus: "Decisiones de fondo", deliverable: "Método aprobado, Teams creado y canales listos para usar." },
   { moment: "Semana 1", focus: "Plantillas", deliverable: "Estructura de proyecto, naming y catálogo de códigos." },
-  { moment: "Semana 2", focus: "Migración piloto", deliverable: "Caso MidGas migrado con estándar completo." },
+  { moment: "Semana 2", focus: "Migración piloto", deliverable: "Caso de eficiencia operativa migrado con estándar completo." },
   { moment: "Semana 2", focus: "Seguimiento", deliverable: "Backlog Datalización v0 y primer tablero del equipo." },
   { moment: "Semana 3", focus: "Adopción", deliverable: "Capacitación de 1 hora, retroalimentación y ajustes." },
   { moment: "Semana 3", focus: "Gobernanza interna", deliverable: "Roles asignados y owner del catálogo definido." },

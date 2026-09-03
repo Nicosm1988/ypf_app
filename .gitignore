@@ -2,5 +2,6 @@
 *.log
 node_modules/
 dist/
+assets/docs/modelos/*.docx
 .DS_Store
 .vercel

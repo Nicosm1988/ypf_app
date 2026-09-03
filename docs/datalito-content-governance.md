@@ -1,27 +1,49 @@
-# Datalito Content Governance
+# Datalito responde desde la misma fuente que sostiene el hub
 
-## Principio
+El conocimiento de Datalito no se corrige mediante respuestas aisladas. Primero se actualiza el módulo estructurado correspondiente y después se regenera o ajusta su entrada en `data/datalito.js`. Así, la página visible, la cita y la respuesta conservan una misma fuente de verdad.
 
-Datalito debe responder con la misma fuente que alimenta la plataforma. La corrección del conocimiento se hace en la fuente, no en una respuesta hardcodeada.
+## Cada fuente necesita identidad, contexto y trazabilidad
 
-## Metadata mínima
+El contrato `datalitoSourceSchema` exige:
 
-Cada fuente debe tener identificador, título, sección, resumen, tipo de contenido, estado, versión, owner, steward, confidencialidad, roles permitidos, idioma, keywords, URL canónica y checksum.
+| Grupo        | Campos                                            | Uso                                    |
+| ------------ | ------------------------------------------------- | -------------------------------------- |
+| Identidad    | `id`, `title`, `slug`, `section`                  | Distinguir y presentar la fuente.      |
+| Contenido    | `summary`, `content_type`, `language`, `keywords` | Recuperar y estructurar la respuesta.  |
+| Gobierno     | `status`, `version`, `owner`, `steward`           | Declarar vigencia y responsabilidad.   |
+| Revisión     | `reviewed_at`, `review_due_at`                    | Advertir sobre revisión vencida.       |
+| Alcance      | `confidentiality`, `allowed_roles`                | Describir la clasificación prevista.   |
+| Trazabilidad | `canonical_url`, `checksum`                       | Abrir la evidencia y detectar cambios. |
 
-## Estados
+Todas las fuentes incluidas en el bundle actual deben estar aprobadas y tener una URL local válida. El build rechaza registros incompletos y contenido serializado con campos inexistentes.
 
-- `approved`: disponible para usuarios generales.
-- `draft`: solo para roles habilitados.
-- `in_review`: solo para revisión controlada.
-- `deprecated`: puede mostrarse como contexto histórico con advertencia.
+## Los controles actuales son funcionales
 
-## Reglas
+- Una fecha `review_due_at` vencida se muestra como advertencia y reduce la confianza de la respuesta.
+- Registros que representan la misma fuente o tema y difieren en versión o contenido pueden generar una alerta de divergencia.
+- Las citas muestran el título, la sección, la versión, el estado y las fechas disponibles.
+- Una coincidencia por debajo del umbral produce una respuesta de evidencia insuficiente.
+- El feedback conserva la pregunta, la respuesta y las fuentes asociadas para revisión local.
+- Las brechas agrupan consultas repetidas y mantienen estado y timestamps en el navegador.
 
-- Una fuente sin owner no debe entrar al índice.
-- Una fuente vencida debe bajar confianza y mostrar alerta.
-- Una contradicción entre fuentes debe registrarse como alerta de gobierno.
-- Una pregunta frecuente sin respuesta debe convertirse en contenido aprobado o aclaración.
+Estos controles no implementan aprobación editorial, autorización por rol ni distribución de tareas. Tampoco envían registros a un owner o steward.
 
-## V1
+## El deploy público limita qué contenido puede indexarse
 
-La V1 usa `data/datalito.js` como índice local aprobado. Las brechas y feedback se guardan en `localStorage` para demostrar el flujo sin simular persistencia corporativa.
+Datalización Hub no tiene autenticación y publica los módulos de `data/` como archivos estáticos. En consecuencia:
+
+- no incorporar datos internos, personales, productivos o confidenciales;
+- no usar `allowed_roles` como si fuera un filtro real;
+- no incluir URLs privadas, tokens, IDs de tenant ni nombres de recursos internos;
+- no copiar políticas restringidas o documentación no publicada;
+- no registrar datos sensibles en preguntas, feedback o brechas.
+
+`localStorage` pertenece al navegador y al origen del sitio. No es una base corporativa, no tiene identidad de usuario y puede borrarse al limpiar los datos del sitio.
+
+## Una modificación completa termina con evidencia
+
+1. Actualizar la fuente estructurada original en `data/`.
+2. Revisar la entrada generada o específica en `data/datalito.js`.
+3. Confirmar metadata, keywords, URL canónica, versión y fechas.
+4. Verificar manualmente una consulta respaldada y otra sin evidencia.
+5. Ejecutar los gates proporcionales durante el desarrollo y `npm run quality` antes de publicar.

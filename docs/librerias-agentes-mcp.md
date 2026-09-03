@@ -1,20 +1,22 @@
-# Librerias, agentes y MCPs para proyectos BI/IA
+# Librerías, agentes y MCPs para productos de Datalización
 
-Este documento guarda el catalogo de herramientas que podemos evaluar e instalar cuando el proyecto lo requiera. No significa que todas deban estar instaladas ahora: funcionan como inventario tecnico para futuras specs, automatizaciones y pruebas.
+Este documento conserva el catálogo de herramientas que se pueden evaluar cuando una necesidad del producto lo justifique. Una herramienta listada no está necesariamente instalada, configurada, aprobada ni activa. La versión navegable del inventario vive en `data/toolingLibrary.js`.
+
+Datalización Hub es un deploy público y estático. El catálogo no autoriza conexiones con sistemas internos ni el uso de credenciales; cualquier integración externa requiere una Spec, revisión de seguridad y aprobación explícita.
 
 ## Sistema instalado en este repo
 
-El portal ya cuenta con una capa local de calidad, agentes, skills y MCP registry para evolucionar con criterio productivo.
+El repositorio cuenta con una capa local de calidad, agentes, skills y un registro documental de MCPs.
 
 ### Skills repo-locales
 
-- `ypf-executive-communication`: narrativa ejecutiva, fluidez formal argentina y copy gerencial.
+- `ypf-executive-communication`: narrativa ejecutiva, fluidez formal argentina y comunicación gerencial.
 - `ypf-bi-methodology`: OEE BI, DMAIC, Lean Six Sigma, VSM, FMEA, Kaizen, SMED, Poka-Yoke, Kata y 4P aplicados a BI.
-- `ypf-powerbi-fabric-architecture`: arquitectura Power BI/Fabric desde PRD hasta operacion.
+- `ypf-powerbi-fabric-architecture`: arquitectura Power BI/Fabric desde PRD hasta operación.
 - `ypf-frontend-quality`: QA visual, responsive, accesibilidad, consola, overflow y performance local.
-- `ypf-tooling-curator`: seleccion gobernada de librerias, agentes y MCPs.
-- `ypf-security-governance`: seguridad, privacidad, cache, CSP, dependencias y credenciales.
-- `ypf-release-operations`: build, commit, GitHub, Vercel, cache y smoke test productivo.
+- `ypf-tooling-curator`: selección gobernada de librerías, agentes y MCPs.
+- `ypf-security-governance`: seguridad, privacidad, caché, CSP, dependencias y credenciales.
+- `ypf-release-operations`: build, commit, GitHub, Vercel, caché y smoke test productivo.
 
 ### Agentes operativos
 
@@ -26,7 +28,7 @@ El portal ya cuenta con una capa local de calidad, agentes, skills y MCP registr
 - `Security Governance Reviewer`
 - `Release Manager`
 
-Los agentes estan definidos en `.codex/agents/` y el registro esta en `.codex/agents/registry.json`.
+Los agentes están definidos en `.codex/agents/` y el registro está en `.codex/agents/registry.json`.
 
 ### Tooling instalado como dependencia de desarrollo
 
@@ -41,9 +43,9 @@ Los agentes estan definidos en `.codex/agents/` y el registro esta en `.codex/ag
 
 ### MCP registry
 
-El registro MCP esta en `.mcp/registry.json`. Incluye Playwright MCP, Chrome DevTools MCP, Filesystem MCP, Memory MCP, GitHub MCP, Vercel MCP, Figma MCP, Fetch MCP y Sequential Thinking MCP. Los servidores con credenciales quedan marcados como `requires-token` y requieren aprobacion explicita antes de activarse.
+El registro MCP está en `.mcp/registry.json`. Documenta Playwright MCP, Chrome DevTools MCP, Filesystem MCP, Memory MCP, GitHub MCP, Vercel MCP, Figma MCP, Fetch MCP y Sequential Thinking MCP. Estar registrado no equivale a estar instalado o activo. Los servidores con credenciales quedan marcados como `requires-token` y requieren aprobación explícita antes de activarse.
 
-### Comandos de validacion
+### Comandos de validación
 
 - `npm run build`
 - `npm run lint`
@@ -54,16 +56,16 @@ El registro MCP esta en `.mcp/registry.json`. Incluye Playwright MCP, Chrome Dev
 
 ## Fuentes primarias revisadas
 
-- Model Context Protocol servers: https://github.com/modelcontextprotocol/servers
-- Playwright MCP: https://playwright.dev/docs/getting-started-mcp
-- Chrome DevTools para agentes: https://developer.chrome.com/docs/devtools/agents/get-started
-- GitHub MCP Server: https://github.com/github/github-mcp-server
-- Vercel MCP: https://vercel.com/docs/agent-resources/vercel-mcp
-- Playwright accessibility testing: https://playwright.dev/docs/accessibility-testing
-- axe-core npm packages: https://github.com/dequelabs/axe-core-npm
-- HTML Validate: https://html-validate.org/usage
-- Prettier install: https://prettier.io/docs/install
-- ESLint getting started: https://eslint.org/docs/latest/use/getting-started
+- [Model Context Protocol servers](https://github.com/modelcontextprotocol/servers)
+- [Playwright MCP](https://playwright.dev/docs/getting-started-mcp)
+- [Chrome DevTools para agentes](https://developer.chrome.com/docs/devtools/agents/get-started)
+- [GitHub MCP Server](https://github.com/github/github-mcp-server)
+- [Vercel MCP](https://vercel.com/docs/agent-resources/vercel-mcp)
+- [Pruebas de accesibilidad con Playwright](https://playwright.dev/docs/accessibility-testing)
+- [Paquetes npm de axe-core](https://github.com/dequelabs/axe-core-npm)
+- [HTML Validate](https://html-validate.org/usage)
+- [Instalación de Prettier](https://prettier.io/docs/install)
+- [Introducción a ESLint](https://eslint.org/docs/latest/use/getting-started)
 
 ## Bases de datos y almacenamiento
 
@@ -119,7 +121,7 @@ El registro MCP esta en `.mcp/registry.json`. Incluye Playwright MCP, Chrome Dev
 - Postman
 - marimo
 
-## Busqueda, web y scraping
+## Búsqueda, web y scraping
 
 - Puppeteer
 - Playwright
@@ -134,7 +136,7 @@ El registro MCP esta en `.mcp/registry.json`. Incluye Playwright MCP, Chrome Dev
 - Bright Data
 - Browserbase
 
-## Monitorizacion y observabilidad
+## Monitorización y observabilidad
 
 - Sentry
 - Grafana
@@ -143,7 +145,7 @@ El registro MCP esta en `.mcp/registry.json`. Incluye Playwright MCP, Chrome Dev
 - Metoro
 - Amazon CloudWatch
 
-## Productividad y colaboracion
+## Productividad y colaboración
 
 - Slack
 - Atlassian Jira
@@ -172,7 +174,7 @@ El registro MCP esta en `.mcp/registry.json`. Incluye Playwright MCP, Chrome Dev
 
 ## Agentes de IA y entornos de desarrollo
 
-### Agentes de terminal y codigo abierto
+### Agentes de terminal y código abierto
 
 - Claude Code
 - Aider
@@ -191,7 +193,7 @@ El registro MCP esta en `.mcp/registry.json`. Incluye Playwright MCP, Chrome Dev
 - Replit Agent
 - Warp
 
-### Asistentes nube o especificos
+### Asistentes cloud o específicos
 
 - OpenAI Codex
 - Amazon Q Developer
@@ -199,7 +201,7 @@ El registro MCP esta en `.mcp/registry.json`. Incluye Playwright MCP, Chrome Dev
 - Snyk Code
 - Qodo
 
-## Sandboxing y ejecucion aislada
+## Sandboxing y ejecución aislada
 
 ### Tecnologias base
 
@@ -219,7 +221,7 @@ El registro MCP esta en `.mcp/registry.json`. Incluye Playwright MCP, Chrome Dev
 - Cloudflare Sandboxes
 - Bunnyshell / hopx.ai
 
-## Frameworks y librerias tradicionales
+## Frameworks y librerías tradicionales
 
 ### Java
 
@@ -251,7 +253,7 @@ El registro MCP esta en `.mcp/registry.json`. Incluye Playwright MCP, Chrome Dev
 
 ## Criterio de uso
 
-- Primero se define el PRD: que problema resuelve, para quien y con que metrica de exito.
-- Luego se redacta la Spec: que herramientas se necesitan, por que, como se integran y como se prueban.
-- La instalacion se decide caso por caso, evitando agregar dependencias solo por entusiasmo tecnico.
+- Primero se define el PRD: qué problema resuelve, para quién y con qué métrica de éxito.
+- Luego se redacta la Spec: qué herramientas se necesitan, por qué, cómo se integran y cómo se prueban.
+- La instalación se decide caso por caso; aparecer en este inventario no justifica sumar una dependencia.
 - Toda herramienta productiva debe tener owner, criterio de seguridad, rollback y observabilidad.

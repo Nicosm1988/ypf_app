@@ -1,12 +1,12 @@
 # Íconos oficiales de Microsoft Fabric
 
-Activos incorporados el **2026-07-10** para representar productos y elementos de Microsoft Fabric en la documentación interna del portal. Los SVG se copiaron byte a byte desde el paquete oficial; el ZIP de origen no se distribuye con la aplicación.
+Activos incorporados el **2026-07-10** para representar productos y elementos de Microsoft Fabric en la documentación pública del portal. Los SVG se copiaron byte a byte desde el paquete oficial; el ZIP de origen no se distribuye con la aplicación.
 
 ## Fuente y trazabilidad
 
-| Paquete     | Fuente oficial                                                                                                                                                                                                                                            | Versión                                        | SHA-256 del ZIP                                                    |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------ |
-| `Icons.zip` | [Microsoft Fabric en Microsoft Learn](https://learn.microsoft.com/en-us/fabric/fundamentals/icons) · [paquete del repositorio oficial `microsoft/fabric-samples`](https://raw.githubusercontent.com/microsoft/fabric-samples/main/docs-samples/Icons.zip) | paquete interno `@fabric-msft/svg-icons` 6.1.0 | `fc22e71b0545ed15e22c53f16bf4fb06ffe72daabd3c90a947a6e481c9675e6b` |
+| Paquete     | Fuente oficial                                                                                                                                                                                                                                            | Versión                                         | SHA-256 del ZIP                                                    |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------ |
+| `Icons.zip` | [Microsoft Fabric en Microsoft Learn](https://learn.microsoft.com/en-us/fabric/fundamentals/icons) · [paquete del repositorio oficial `microsoft/fabric-samples`](https://raw.githubusercontent.com/microsoft/fabric-samples/main/docs-samples/Icons.zip) | paquete incluido `@fabric-msft/svg-icons` 6.1.0 | `fc22e71b0545ed15e22c53f16bf4fb06ffe72daabd3c90a947a6e481c9675e6b` |
 
 ## Archivos incorporados
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = "datalizacion-ypf-v39";
+const CACHE_NAME = "datalizacion-ypf-v40";
 const PRECACHE_URLS = [
   "/",
   "/road-y-metodologia",
@@ -28,6 +28,7 @@ const PRECACHE_URLS = [
   "/data/dictionary.js",
   "/data/datalito.js",
   "/data/designSystem.js",
+  "/data/documentTemplates.js",
   "/data/engineeringGuide.js",
   "/data/methodology.js",
   "/data/datalizationMethod.js",
@@ -49,10 +50,14 @@ const PRECACHE_URLS = [
   "/docs/datalito-runbook.md",
   "/docs/datalito-threat-model.md",
   "/docs/modelos/prd-datalizacion.md",
-  "/docs/modelos/spec-datalizacion.md",
+  "/docs/modelos/spec-power-bi-fabric.md",
+  "/docs/modelos/spec-power-apps.md",
+  "/docs/modelos/spec-power-automate.md",
   "/manifest.webmanifest",
   "/assets/docs/modelos/prd-datalizacion.docx",
-  "/assets/docs/modelos/spec-datalizacion.docx",
+  "/assets/docs/modelos/spec-power-bi-fabric.docx",
+  "/assets/docs/modelos/spec-power-apps.docx",
+  "/assets/docs/modelos/spec-power-automate.docx",
   "/assets/favicon.svg",
   "/assets/ypf-logo.svg",
   "/assets/microsoft/power-platform/power-bi.svg",

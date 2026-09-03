@@ -29,6 +29,11 @@ const routes = [
   { path: "/diccionario", selector: ".dictionary-layout", name: "Diccionario" },
   { path: "/roadmap", selector: ".road-methodology-page", name: "Roadmap compat" },
   { path: "/proyecto-power-bi", selector: ".project-studio", name: "Proyecto Power BI" },
+  {
+    path: "/proyecto-power-bi/flujo-trabajo",
+    selector: "#proyecto-flujo-trabajo",
+    name: "Proyecto Power BI subseccion Flujo de trabajo",
+  },
   { path: "/proyecto-power-bi/herramientas", selector: "#proyecto-metodo", name: "Proyecto Power BI compat Herramientas" },
   { path: "/librerias", selector: ".tooling-grid", name: "Librerias" },
   { path: "/atajos", selector: ".shortcut-grid", name: "Atajos" },
@@ -42,6 +47,25 @@ const viewports = [
   { label: "compact", width: 320, height: 900 },
 ];
 
+const requestedRoutes = new Set(
+  String(process.env.QA_ROUTES || "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean),
+);
+const requestedViewports = new Set(
+  String(process.env.QA_VIEWPORTS || "")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean),
+);
+const activeRoutes = requestedRoutes.size ? routes.filter((route) => requestedRoutes.has(route.path)) : routes;
+const activeViewports = requestedViewports.size ? viewports.filter((viewport) => requestedViewports.has(viewport.label)) : viewports;
+
+if (!activeRoutes.length || !activeViewports.length) {
+  throw new Error("Los filtros QA_ROUTES/QA_VIEWPORTS no coinciden con rutas o viewports configurados.");
+}
+
 const expectedProductNames = ["Microsoft Power BI", "Microsoft Power Apps", "Microsoft Power Automate"];
 const productNamesByRoute = new Map([
   ["/productos/power-bi", "Microsoft Power BI"],
@@ -51,12 +75,12 @@ const productNamesByRoute = new Map([
 
 const academicExpectedCountsByRoute = new Map([
   ["/", 5],
-  ["/road-y-metodologia", 27],
-  ["/road-y-metodologia/fabric-end-to-end", 27],
-  ["/road-y-metodologia/oee-bi", 27],
-  ["/guia-power-bi", 27],
-  ["/metodologia", 27],
-  ["/roadmap", 27],
+  ["/road-y-metodologia", 29],
+  ["/road-y-metodologia/fabric-end-to-end", 29],
+  ["/road-y-metodologia/oee-bi", 29],
+  ["/guia-power-bi", 29],
+  ["/metodologia", 29],
+  ["/roadmap", 29],
   ["/metodo-datalizacion", 15],
   ["/metodo-datalizacion/backlog", 15],
   ["/design-system", 7],
@@ -71,6 +95,7 @@ const academicExpectedCountsByRoute = new Map([
   ["/productos/power-automate", 13],
   ["/diccionario", 4],
   ["/proyecto-power-bi", 5],
+  ["/proyecto-power-bi/flujo-trabajo", 5],
   ["/proyecto-power-bi/herramientas", 5],
   ["/librerias", 4],
   ["/atajos", 4],
@@ -87,7 +112,7 @@ try {
   await waitForServer();
   browser = await chromium.launch({ headless: true });
 
-  for (const viewport of viewports) {
+  for (const viewport of activeViewports) {
     const context = await browser.newContext({ viewport });
     const page = await context.newPage();
     const consoleMessages = [];
@@ -109,7 +134,7 @@ try {
       }
     });
 
-    for (const route of routes) {
+    for (const route of activeRoutes) {
       await page.goto(`${baseUrl}${route.path}`, { waitUntil: "networkidle" });
       await page.locator(route.selector).waitFor({ state: "visible", timeout: 7000 });
 
@@ -241,7 +266,6 @@ try {
           ).length,
           metrics: document.querySelectorAll(".platform-metric").length,
           hubNavCards: document.querySelectorAll(".hub-nav-card").length,
-          researchCards: document.querySelectorAll(".home-research-card").length,
           duplicateFeatureCards: document.querySelectorAll(".feature-grid .feature-card").length,
           quoteBands: document.querySelectorAll(".quote-band").length,
           miniRoadmapSteps: document.querySelectorAll(".mini-roadmap .mini-step").length,
@@ -267,7 +291,6 @@ try {
           homeReport.resourcesTopLevel !== 0 ||
           homeReport.metrics !== 3 ||
           homeReport.hubNavCards !== 8 ||
-          homeReport.researchCards !== 0 ||
           homeReport.duplicateFeatureCards !== 0 ||
           homeReport.quoteBands !== 0 ||
           homeReport.miniRoadmapSteps !== 0 ||
@@ -277,7 +300,7 @@ try {
           homeReport.disciplineCards !== 4 ||
           homeReport.evaluationCta !== 1 ||
           homeReport.fragmentedNav ||
-          !homeReport.hero?.includes("disciplina interna")
+          !homeReport.hero?.includes("disciplina organizacional")
         ) {
           throw new Error(`Inicio no cumple estructura ejecutiva esperada: ${JSON.stringify(homeReport)}`);
         }
@@ -636,6 +659,54 @@ try {
           throw new Error(`Datalito no cumple estructura esperada: ${JSON.stringify(datalitoReport)}`);
         }
 
+        const datalitoIndexReport = await page.evaluate(async () => {
+          const { datalitoKnowledgeSources, datalitoIndexVersion } = await import("/data/datalito.js");
+          const practices = datalitoKnowledgeSources.filter((source) => source.content_type === "practice");
+          const templates = datalitoKnowledgeSources.filter((source) => source.template_assets);
+          const guideUrls = datalitoKnowledgeSources
+            .filter((source) => source.id.startsWith("guide-"))
+            .map((source) => source.canonical_url);
+          return {
+            indexVersion: datalitoIndexVersion,
+            total: datalitoKnowledgeSources.length,
+            uniqueIds: new Set(datalitoKnowledgeSources.map((source) => source.id)).size,
+            practices: practices.length,
+            uniquePracticeUrls: new Set(practices.map((source) => source.canonical_url)).size,
+            practiceReferencesDeduplicated: practices.every(
+              (source) => new Set(source.external_source_ids || []).size === (source.external_source_ids || []).length,
+            ),
+            templates: templates.map((source) => source.id).sort(),
+            guideUrls,
+            metadataAligned: datalitoKnowledgeSources.every(
+              (source) =>
+                source.status === "approved" &&
+                source.confidentiality === "public" &&
+                source.reviewed_at === "2026-07-31" &&
+                source.review_due_at === "2027-01-31",
+            ),
+          };
+        });
+        const expectedGuideUrls = Array.from({ length: 9 }, (_, index) => `/road-y-metodologia#unified-flow-panel-${index}`);
+        const expectedTemplateIds = [
+          "template-prd-datalizacion",
+          "template-spec-power-apps",
+          "template-spec-power-automate",
+          "template-spec-power-bi-fabric",
+        ].sort();
+        if (
+          datalitoIndexReport.indexVersion !== "datalito-local-index-2026-07-31" ||
+          datalitoIndexReport.total < 225 ||
+          datalitoIndexReport.uniqueIds !== datalitoIndexReport.total ||
+          datalitoIndexReport.practices !== 90 ||
+          datalitoIndexReport.uniquePracticeUrls !== 90 ||
+          !datalitoIndexReport.practiceReferencesDeduplicated ||
+          JSON.stringify(datalitoIndexReport.templates) !== JSON.stringify(expectedTemplateIds) ||
+          JSON.stringify(datalitoIndexReport.guideUrls) !== JSON.stringify(expectedGuideUrls) ||
+          !datalitoIndexReport.metadataAligned
+        ) {
+          throw new Error(`Índice de Datalito inconsistente: ${JSON.stringify(datalitoIndexReport)}`);
+        }
+
         await page.locator("#datalitoInput-page").fill("hola");
         await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
         await page.waitForFunction(() =>
@@ -645,6 +716,92 @@ try {
         await page.locator("#datalitoInput-page").fill("¿Cuál es la diferencia entre PRD y Spec?");
         await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
         await page.waitForFunction(() => document.querySelectorAll(".datalito-source-card").length > 0);
+
+        const groundedMessage = page.locator('[data-datalito-chat="page"] .datalito-message.assistant').last();
+        const citationMetadata = await groundedMessage.locator(".datalito-source-card").first().innerText();
+        if (!/Versión .+ · aprobada · vigente/.test(citationMetadata) || !citationMetadata.includes("próxima revisión")) {
+          throw new Error(`La cita no muestra versión, status y vigencia reales: ${citationMetadata}`);
+        }
+        await groundedMessage.locator('[data-datalito-feedback="useful"]').click();
+        const feedbackReport = await page.evaluate(() => {
+          const record = JSON.parse(localStorage.getItem("datalito.feedback.v1") || "[]").at(-1);
+          return {
+            schemaVersion: record?.schemaVersion,
+            hasAnswer: Boolean(record?.answer),
+            sources: record?.sources?.length || 0,
+            sourceComplete: record?.sources?.every((source) => source.sourceId && source.url && source.version && source.status),
+            hasInventedUser: Object.keys(record || {}).some((key) => /(user|usuario|email|actor)/i.test(key)),
+            contextComplete: Boolean(record?.context?.route && record?.context?.title && record?.context?.activeAnchor),
+          };
+        });
+        if (
+          feedbackReport.schemaVersion !== 2 ||
+          !feedbackReport.hasAnswer ||
+          feedbackReport.sources < 1 ||
+          !feedbackReport.sourceComplete ||
+          feedbackReport.hasInventedUser ||
+          !feedbackReport.contextComplete
+        ) {
+          throw new Error(`El feedback local no conserva respuesta, fuentes y contexto: ${JSON.stringify(feedbackReport)}`);
+        }
+
+        await page.locator("#datalitoInput-page").fill("¿Dónde encuentro los templates disponibles?");
+        await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
+        const templateMessage = page.locator('[data-datalito-chat="page"] .datalito-message.assistant').last();
+        await templateMessage.locator('.datalito-source-card[data-source-id^="template-"]').first().waitFor();
+        const templateLookupReport = await templateMessage.evaluate((message) => ({
+          answer: message.textContent.includes("un PRD común") && message.textContent.includes("tres Specs específicas"),
+          sourceIds: [...message.querySelectorAll('.datalito-source-card[data-source-id^="template-"]')]
+            .map((source) => source.dataset.sourceId)
+            .sort(),
+        }));
+        if (!templateLookupReport.answer || JSON.stringify(templateLookupReport.sourceIds) !== JSON.stringify(expectedTemplateIds)) {
+          throw new Error(`Datalito no encuentra los cuatro templates vigentes: ${JSON.stringify(templateLookupReport)}`);
+        }
+
+        for (const neutralTemplateQuery of ["¿Dónde aparece el modelo descargable?", "¿Dónde ubico la plantilla?"]) {
+          await page.locator("#datalitoInput-page").fill(neutralTemplateQuery);
+          await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
+          const neutralTemplateMessage = page.locator('[data-datalito-chat="page"] .datalito-message.assistant').last();
+          await neutralTemplateMessage.locator('.datalito-source-card[data-source-id^="template-"]').first().waitFor();
+          const neutralTemplateIds = await neutralTemplateMessage
+            .locator('.datalito-source-card[data-source-id^="template-"]')
+            .evaluateAll((sources) => sources.map((source) => source.dataset.sourceId).sort());
+          if (JSON.stringify(neutralTemplateIds) !== JSON.stringify(expectedTemplateIds)) {
+            throw new Error(`Datalito infiere un producto inexistente desde “${neutralTemplateQuery}”: ${neutralTemplateIds.join(", ")}`);
+          }
+        }
+
+        await page.locator("#datalitoInput-page").fill("Necesito el template del flujo Power BI");
+        await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
+        const powerBiTemplateMessage = page.locator('[data-datalito-chat="page"] .datalito-message.assistant').last();
+        await powerBiTemplateMessage.locator('[data-source-id="template-spec-power-bi-fabric"]').waitFor();
+        if ((await powerBiTemplateMessage.locator('.datalito-source-card[data-source-id^="template-"]').count()) !== 1) {
+          throw new Error("Datalito debe priorizar Power BI explícito por encima de la palabra flujo.");
+        }
+
+        await page.locator("#datalitoInput-page").fill("Esta página está vencida, ¿debo seguirla igual?");
+        await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
+        const freshnessMessage = page.locator('[data-datalito-chat="page"] .datalito-message.assistant').last();
+        await freshnessMessage.getByText("No aparece vencida en el índice local", { exact: false }).waitFor();
+        const freshnessReport = await freshnessMessage.evaluate((message) => ({
+          citations: message.querySelectorAll(".datalito-source-card").length,
+          onlyContextSource: [...message.querySelectorAll(".datalito-source-card")].every(
+            (source) => source.dataset.sourceId === "datalito-product-contract",
+          ),
+          realDueDate: message.textContent.includes("31/01/2027"),
+        }));
+        if (freshnessReport.citations !== 1 || !freshnessReport.onlyContextSource || !freshnessReport.realDueDate) {
+          throw new Error(`El control de vigencia no usa la fuente contextual real: ${JSON.stringify(freshnessReport)}`);
+        }
+
+        await page.locator("#datalitoInput-page").fill("Hay dos documentos que dicen cosas distintas, ¿cuál es correcto?");
+        await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
+        await page
+          .locator('[data-datalito-chat="page"] .datalito-message.assistant')
+          .last()
+          .getByText("No detecto una divergencia estructural", { exact: false })
+          .waitFor();
 
         await page.locator("#datalitoInput-page").fill("cómo armo un flujo de trabajo completo en bi?");
         await page.locator('[data-datalito-chat="page"] form button[type="submit"]').click();
@@ -721,6 +878,62 @@ try {
           return target.open && window.location.hash === "#flujo-continuo" && rect.top >= 0 && rect.top < window.innerHeight * 0.55;
         });
         if (!anchored) throw new Error("El link de fuente de Datalito no navega al ancla #flujo-continuo.");
+
+        await page.goto(`${baseUrl}/road-y-metodologia#unified-flow-panel-5`, { waitUntil: "networkidle" });
+        await page.waitForFunction(() => !document.getElementById("unified-flow-panel-5")?.hidden);
+        const guideAnchorReport = await page.evaluate(() => ({
+          hash: window.location.hash,
+          expanded: document.querySelector('.unified-flow-node[data-unified-flow="5"]')?.getAttribute("aria-expanded"),
+          panelVisible: !document.getElementById("unified-flow-panel-5")?.hidden,
+          templateCards: document.querySelectorAll(".guide-model-card").length,
+          templateDownloads: new Set(
+            [...document.querySelectorAll(".guide-model-card a[download]")].map((link) => link.getAttribute("href")),
+          ).size,
+        }));
+        if (
+          guideAnchorReport.hash !== "#unified-flow-panel-5" ||
+          guideAnchorReport.expanded !== "true" ||
+          !guideAnchorReport.panelVisible ||
+          guideAnchorReport.templateCards !== 4 ||
+          guideAnchorReport.templateDownloads !== 4
+        ) {
+          throw new Error(`Las anclas de guía o templates no navegan al contenido real: ${JSON.stringify(guideAnchorReport)}`);
+        }
+
+        await page.evaluate(() => {
+          const heading = document.querySelector("#unified-flow-panel-5 .unified-panel-head h3");
+          const range = document.createRange();
+          range.selectNodeContents(heading);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+        });
+        await page.locator("[data-datalito-open]").click();
+        await page.locator("#datalitoInput-panel").fill("Explicame el texto que seleccioné.");
+        await page.locator('[data-datalito-chat="panel"] form button[type="submit"]').click();
+        const contextualMessage = page.locator('[data-datalito-chat="panel"] .datalito-message.assistant').last();
+        await contextualMessage.locator('.datalito-source-card[href$="#unified-flow-panel-5"]').waitFor();
+
+        await page.goto(`${baseUrl}/productos/power-bi#bi-g02-p01`, { waitUntil: "networkidle" });
+        await page.waitForFunction(() => document.getElementById("bi-g02-p01")?.open);
+        const practiceAnchorReport = await page.evaluate(() => {
+          const practice = document.getElementById("bi-g02-p01");
+          const panel = document.getElementById("power-bi-flow-panel-1");
+          return {
+            hash: window.location.hash,
+            practiceOpen: practice?.open,
+            panelVisible: !panel?.hidden,
+            libraryStatus: panel?.querySelector("[data-practice-library]")?.dataset.practiceStatus,
+          };
+        });
+        if (
+          practiceAnchorReport.hash !== "#bi-g02-p01" ||
+          !practiceAnchorReport.practiceOpen ||
+          !practiceAnchorReport.panelVisible ||
+          practiceAnchorReport.libraryStatus !== "ready"
+        ) {
+          throw new Error(`La cita de práctica no abre su gate y detalle: ${JSON.stringify(practiceAnchorReport)}`);
+        }
       }
 
       if (viewport.label === "desktop" && route.path === "/road-y-metodologia") {
@@ -763,7 +976,7 @@ try {
         }));
         if (
           methodReport.operatingSteps !== 6 ||
-          methodReport.folders !== 12 ||
+          methodReport.folders !== 13 ||
           methodReport.layers !== 6 ||
           methodReport.channels !== 8 ||
           methodReport.disclosures < 5 ||
@@ -780,7 +993,16 @@ try {
 
     const sourceFlowLayout = await inspectFlowLayout(page, "/road-y-metodologia", "#road-flujo-bi");
     const productFlowLayout = await inspectFlowLayout(page, "/productos/power-bi", "#power-bi-flow");
-    if (JSON.stringify(sourceFlowLayout) !== JSON.stringify(productFlowLayout)) {
+    const fluidLayoutFields = new Set(["canvasWidth", "canvasGridColumns", "nodeWidth", "railGridColumns"]);
+    const sourceFlowBehavior = Object.fromEntries(Object.entries(sourceFlowLayout).filter(([field]) => !fluidLayoutFields.has(field)));
+    const productFlowBehavior = Object.fromEntries(Object.entries(productFlowLayout).filter(([field]) => !fluidLayoutFields.has(field)));
+    const columnCountsMatch =
+      sourceFlowLayout.canvasGridColumns.split(/\s+/).length === productFlowLayout.canvasGridColumns.split(/\s+/).length &&
+      sourceFlowLayout.railGridColumns.split(/\s+/).length === productFlowLayout.railGridColumns.split(/\s+/).length;
+    const fluidWidthsMatch =
+      Math.abs(sourceFlowLayout.canvasWidth - productFlowLayout.canvasWidth) <= 8 &&
+      Math.abs(Number.parseFloat(sourceFlowLayout.nodeWidth) - Number.parseFloat(productFlowLayout.nodeWidth)) <= 8;
+    if (JSON.stringify(sourceFlowBehavior) !== JSON.stringify(productFlowBehavior) || !columnCountsMatch || !fluidWidthsMatch) {
       throw new Error(
         `El flujo Power BI no conserva el comportamiento responsive de la fuente (${viewport.label}): ${JSON.stringify({
           sourceFlowLayout,

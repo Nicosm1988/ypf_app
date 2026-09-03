@@ -47,8 +47,14 @@ assert(registry.agents.length === requiredAgents.length, "El registry de agentes
 
 const mcpRegistry = JSON.parse(await readFile(mcpRegistryPath, "utf8"));
 assert(mcpRegistry.servers.length >= 8, "El registry MCP debe listar servidores priorizados.");
-assert(mcpRegistry.servers.some((server) => server.id === "playwright-mcp"), "Debe existir Playwright MCP.");
-assert(mcpRegistry.servers.some((server) => server.id === "github-mcp"), "Debe existir GitHub MCP.");
+assert(
+  mcpRegistry.servers.some((server) => server.id === "playwright-mcp"),
+  "Debe existir Playwright MCP.",
+);
+assert(
+  mcpRegistry.servers.some((server) => server.id === "github-mcp"),
+  "Debe existir GitHub MCP.",
+);
 assert(mcpRegistry.policy?.approvalRequiredForTokens === true, "Los MCP con tokens deben requerir aprobacion.");
 
 console.log("Agent and MCP system OK");

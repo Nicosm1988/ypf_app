@@ -62,7 +62,8 @@ export const dictionaryTerms = [
     term: "DMAIC",
     category: "Mejora continua",
     definition: "Ciclo de mejora de Lean Six Sigma: definir, medir, analizar, mejorar y controlar.",
-    whyItMatters: "Ordena proyectos BI desde el problema operativo hasta el control posterior a producción; por eso evita construir sin medir.",
+    whyItMatters:
+      "Ordena proyectos BI desde el problema operativo hasta el control posterior a producción; por eso evita construir sin medir.",
     example: "Definir el proceso, medir OEE BI, analizar fallas, mejorar el flujo y controlar con SLA y runbook.",
     risk: "Saltear la medición o el control suele dejar mejoras difíciles de sostener.",
   },
@@ -813,7 +814,8 @@ export const dictionaryTerms = [
     id: "microsoft-power-bi",
     term: "Microsoft Power BI",
     category: "Producto",
-    definition: "Plataforma de análisis de Microsoft para modelar datos, crear informes y distribuir información para la toma de decisiones.",
+    definition:
+      "Plataforma de análisis de Microsoft para modelar datos, crear informes y distribuir información para la toma de decisiones.",
     whyItMatters: "Convierte datos gobernados en métricas, visualizaciones y experiencias analíticas que pueden operarse como un producto.",
     example: "Modelo semántico certificado e informe de gestión con actualización, seguridad y monitoreo definidos.",
     risk: "Publicar informes sin definición de métricas, owner ni ciclo de vida puede multiplicar versiones y decisiones inconsistentes.",
@@ -840,7 +842,8 @@ export const dictionaryTerms = [
     id: "canvas-app",
     term: "Canvas app",
     category: "Power Platform",
-    definition: "Tipo de aplicación de Power Apps cuya experiencia se diseña sobre un lienzo con control detallado de pantallas, componentes y comportamiento.",
+    definition:
+      "Tipo de aplicación de Power Apps cuya experiencia se diseña sobre un lienzo con control detallado de pantallas, componentes y comportamiento.",
     whyItMatters: "Permite adaptar la interfaz a una tarea, dispositivo o recorrido operativo específico.",
     example: "Aplicación móvil para registrar una inspección con fotos, ubicación y validaciones en campo.",
     risk: "Elegirla sin evaluar accesibilidad, rendimiento, conectividad y mantenibilidad puede producir una experiencia difícil de operar.",
@@ -858,7 +861,8 @@ export const dictionaryTerms = [
     id: "cloud-flow",
     term: "Cloud flow",
     category: "Power Platform",
-    definition: "Flujo de Power Automate que ejecuta acciones en servicios conectados a partir de un evento, una programación o una invocación explícita.",
+    definition:
+      "Flujo de Power Automate que ejecuta acciones en servicios conectados a partir de un evento, una programación o una invocación explícita.",
     whyItMatters: "Orquesta tareas e integraciones repetibles sin depender de una persona que las inicie manualmente.",
     example: "Crear una tarea y enviar una notificación cuando se aprueba un registro crítico.",
     risk: "Sin idempotencia, manejo de errores y observabilidad puede duplicar acciones o fallar sin una respuesta operativa.",
@@ -867,7 +871,8 @@ export const dictionaryTerms = [
     id: "desktop-flow-rpa",
     term: "Desktop flow (RPA)",
     category: "Power Platform",
-    definition: "Automatización de Power Automate que interactúa con aplicaciones de escritorio o interfaces de usuario mediante capacidades de robotic process automation.",
+    definition:
+      "Automatización de Power Automate que interactúa con aplicaciones de escritorio o interfaces de usuario mediante capacidades de robotic process automation.",
     whyItMatters: "Permite automatizar pasos en sistemas que no ofrecen una integración adecuada mediante API o conector.",
     example: "Capturar datos de una aplicación heredada y registrarlos en un sistema gobernado bajo una ejecución controlada.",
     risk: "Depender de posiciones, ventanas o interfaces cambiantes vuelve frágil la automatización y exige monitoreo específico.",
@@ -885,7 +890,8 @@ export const dictionaryTerms = [
     id: "app-checker",
     term: "App Checker",
     category: "Power Platform",
-    definition: "Capacidad de Power Apps que identifica problemas y recomendaciones de fórmulas, accesibilidad, rendimiento y calidad en una aplicación.",
+    definition:
+      "Capacidad de Power Apps que identifica problemas y recomendaciones de fórmulas, accesibilidad, rendimiento y calidad en una aplicación.",
     whyItMatters: "Ayuda a detectar defectos frecuentes antes de promover la aplicación a un ambiente superior.",
     example: "Revisar fórmulas con errores, controles sin etiqueta accesible y advertencias de delegación antes de la prueba funcional.",
     risk: "Tomarlo como única prueba puede omitir problemas de negocio, integración, seguridad o uso real.",
@@ -894,7 +900,8 @@ export const dictionaryTerms = [
     id: "test-studio",
     term: "Test Studio",
     category: "Power Platform",
-    definition: "Herramienta de Power Apps para crear y ejecutar pruebas automatizadas sobre aplicaciones de lienzo cuando corresponde al escenario.",
+    definition:
+      "Herramienta de Power Apps para crear y ejecutar pruebas automatizadas sobre aplicaciones de lienzo cuando corresponde al escenario.",
     whyItMatters: "Permite repetir recorridos críticos y detectar regresiones con evidencia antes de una liberación.",
     example: "Validar que un usuario complete, envíe y confirme un formulario con las reglas esperadas.",
     risk: "Pruebas frágiles, incompletas o sin datos controlados pueden dar una señal de confianza engañosa.",
@@ -903,7 +910,8 @@ export const dictionaryTerms = [
     id: "live-monitor",
     term: "Live Monitor",
     category: "Power Platform",
-    definition: "Herramienta de diagnóstico de Power Apps para observar eventos, llamadas, tiempos y errores durante una sesión de aplicación.",
+    definition:
+      "Herramienta de diagnóstico de Power Apps para observar eventos, llamadas, tiempos y errores durante una sesión de aplicación.",
     whyItMatters: "Aporta trazabilidad técnica para investigar fallas funcionales y problemas de rendimiento.",
     example: "Identificar una consulta lenta o una respuesta de conector fallida mientras se reproduce el recorrido afectado.",
     risk: "Usarlo sin un caso reproducible ni resguardar los datos observados puede dificultar el diagnóstico o exponer información innecesaria.",
@@ -912,7 +920,8 @@ export const dictionaryTerms = [
     id: "run-after",
     term: "Run after",
     category: "Power Platform",
-    definition: "Configuración de Power Automate que define qué acción se ejecuta según el resultado de un paso anterior, como éxito, error, omisión o timeout.",
+    definition:
+      "Configuración de Power Automate que define qué acción se ejecuta según el resultado de un paso anterior, como éxito, error, omisión o timeout.",
     whyItMatters: "Permite diseñar rutas explícitas de recuperación, cierre y notificación ante distintos resultados.",
     example: "Registrar el error y notificar al soporte cuando una llamada falla o supera el tiempo de espera.",
     risk: "Configurar solo el camino exitoso puede dejar ejecuciones incompletas sin trazabilidad ni respuesta operativa.",
@@ -948,8 +957,10 @@ export const dictionaryTerms = [
     id: "power-platform-pipelines",
     term: "Power Platform Pipelines",
     category: "Power Platform",
-    definition: "Capacidad de ALM de Power Platform para promover soluciones entre ambientes mediante etapas y reglas de despliegue controladas.",
-    whyItMatters: "Estandariza la promoción de componentes de Power Apps y Power Automate empaquetados en soluciones, con trazabilidad entre ambientes.",
+    definition:
+      "Capacidad de ALM de Power Platform para promover soluciones entre ambientes mediante etapas y reglas de despliegue controladas.",
+    whyItMatters:
+      "Estandariza la promoción de componentes de Power Apps y Power Automate empaquetados en soluciones, con trazabilidad entre ambientes.",
     example: "Promover una solución administrada desde desarrollo a prueba y producción después de completar las validaciones aprobadas.",
     risk: "Confundirla con Deployment Pipelines de Power BI o usarla fuera del alcance soportado puede generar una estrategia de entrega incorrecta.",
   },
@@ -976,7 +987,8 @@ export const dictionaryTerms = [
     term: "DLP (Data Loss Prevention)",
     category: "Seguridad",
     definition: "Política de Power Platform que clasifica y restringe conectores para controlar cómo pueden combinarse y mover datos.",
-    whyItMatters: "Reduce el riesgo de que información corporativa fluya hacia servicios no aprobados dentro de una aplicación o automatización.",
+    whyItMatters:
+      "Reduce el riesgo de que información corporativa fluya hacia servicios no aprobados dentro de una aplicación o automatización.",
     example: "En un escenario hipotético, agrupar los conectores corporativos y restringir los personales según la política aprobada.",
     risk: "Una política ausente, demasiado amplia o no probada puede exponer datos o interrumpir flujos productivos.",
   },

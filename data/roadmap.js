@@ -20,7 +20,7 @@ export const roadmapPhases = [
     title: "PRD y Spec",
     lane: "Producto y negocio",
     objective:
-      "Definir qué proceso se quiere automatizar, qué problema operativo resuelve, quién lo usa, qué reglas aplican y cómo se medirá que el trabajo manual disminuyó.",
+      "Definir qué proceso se quiere automatizar, qué problema operativo resuelve, quién lo usa, qué reglas aplican y cómo se medirá que el trabajo manual disminuyó, incorporando las decisiones ya validadas con el cliente en la maqueta.",
     whyItMatters:
       "Sin un acuerdo verificable sobre problema, usuario, alcance y resultado, el equipo puede construir una solución correcta para una decisión que no genera valor.",
     secondaryObjectives: [
@@ -179,24 +179,24 @@ export const roadmapPhases = [
   {
     id: 7,
     slug: "publicacion",
-    title: "Publicación",
+    title: "Handoff y publicación",
     lane: "Publicación y operación",
     objective:
-      "Publicar la solución en el workspace productivo, configurar app o audiencia, refresh, credenciales, permisos finales, endorsement y comunicación de salida.",
+      "Armar el paquete de release (artefactos, versión, evidencias de QA/UAT, dependencias, permisos, configuración por ambiente, release notes, monitoreo y rollback) para que Ingeniería de Software ejecute el pase a producción.",
     whyItMatters:
-      "Una solución no está publicada sólo porque el archivo llegó al servicio: acceso, datos actualizables, seguridad y comunicación deben funcionar para el usuario real.",
+      "Datalización no ejecuta el pase productivo: si el paquete de handoff está incompleto, Ingeniería de Software no puede aprobar ni promover la solución con seguridad.",
     secondaryObjectives: [
-      "Promover contenido desde Test a Prod o publicar en el workspace productivo definido",
-      "Configurar semantic model, reporte, app, audiencia, permisos y credenciales",
-      "Confirmar refresh inicial, gateway, parámetros y conexiones productivas",
-      "Comunicar a usuarios qué cambió, dónde entra cada uno y qué acción se espera",
+      "Consolidar artefactos, versión y evidencias de QA/UAT en un paquete de release trazable",
+      "Documentar dependencias, permisos, configuración por ambiente y plan de rollback",
+      "Entregar el paquete a Ingeniería de Software y acompañar la verificación de la promoción a PROD",
+      "Comunicar a usuarios qué cambió, dónde entra cada uno y qué acción se espera una vez publicado",
     ],
-    keyActivities: ["Publicar en workspace productivo", "Configurar app, permisos y refresh", "Comunicar salida a usuarios"],
-    deliverables: ["Reporte publicado", "Semantic model productivo", "App o acceso configurado", "Comunicación de salida a producción"],
-    targetOutcome: "Automatización publicada y disponible para usuarios reales.",
-    owner: "BI Engineering + Operación BI + Negocio",
-    riskIfSkipped: "La solución queda en desarrollo o prueba, sin acceso real, sin refresh productivo o sin adopción clara.",
-    gate: "Gate 8 - Publicado en producción",
+    keyActivities: ["Armar paquete de release", "Entregar handoff a Ingeniería de Software", "Acompañar verificación de la promoción a PROD"],
+    deliverables: ["Paquete de release", "Evidencias de QA/UAT", "Release notes", "Plan de rollback"],
+    targetOutcome: "Ingeniería de Software promueve la solución a producción con evidencia completa.",
+    owner: "Ingeniería de Software (ejecuta la promoción) + Datalización (arma y entrega el paquete de release)",
+    riskIfSkipped: "Si falta evidencia en el paquete de handoff, el gate no se aprueba y la solución no debe promoverse a PROD.",
+    gate: "Gate 8 - Paquete de release aprobado para pase a PROD",
   },
   {
     id: 8,

@@ -54,7 +54,8 @@ export const methodologyProcessFlow = [
     how: "Se documenta cada medida relevante, se separan medidas base y derivadas, se prueban casos borde y se revisan severidad, ocurrencia y detección de fallas.",
     technicalDefinition:
       "Capa de cálculo que implementa reglas de negocio mediante medidas, formatos, dependencias y pruebas sobre el modelo semántico.",
-    functionalDefinition: "Traducción transparente de los criterios del negocio en indicadores que el usuario puede interpretar, discutir y auditar.",
+    functionalDefinition:
+      "Traducción transparente de los criterios del negocio en indicadores que el usuario puede interpretar, discutir y auditar.",
     examples: [
       "Probar una medida de margen contra casos con descuentos, devoluciones y costos faltantes.",
       "Crear medidas base reutilizables para evitar que cada página calcule una variante distinta.",
@@ -64,7 +65,8 @@ export const methodologyProcessFlow = [
     stage: "Seguridad y gobierno",
     method: "FMEA + Poka-Yoke + responsables explícitos",
     why: "Porque una solución confiable también debe impedir accesos incorrectos, datos sensibles expuestos y decisiones sin dueño.",
-    purpose: "Asegurar permisos, linaje, certificación, responsables y controles antes de abrir la solución a usuarios reales. En la práctica, confianza también significa saber quién responde.",
+    purpose:
+      "Asegurar permisos, linaje, certificación, responsables y controles antes de abrir la solución a usuarios reales. En la práctica, confianza también significa saber quién responde.",
     how: "Se definen roles, RLS/OLS, owners, stewards, sensibilidad, linaje, criterios de certificación y pruebas con usuarios reales.",
     technicalDefinition:
       "Conjunto de controles de acceso, trazabilidad, linaje, clasificación y administración que protege el activo BI durante su ciclo de vida.",
@@ -105,25 +107,26 @@ export const methodologyProcessFlow = [
     ],
   },
   {
-    stage: "Publicación",
+    stage: "Handoff y publicación",
     method: "SMED operativo + Poka-Yoke de salida a producción",
-    why: "Porque publicar no es subir un archivo; es habilitar un servicio con permisos, refresh, comunicación y soporte inicial.",
-    purpose: "Asegurar que la solución llegue a usuarios reales sin improvisar accesos, credenciales, actualización ni mensaje de salida.",
-    how: "Se confirma workspace productivo, app, audiencia, permisos, gateway, credenciales, refresh inicial, comunicación y monitoreo posterior.",
+    why: "Porque el pase a producción no lo ejecuta Datalización: si el paquete de handoff está incompleto, Ingeniería de Software no puede promover con seguridad.",
+    purpose: "Asegurar que Ingeniería de Software reciba evidencia completa para promover la solución sin improvisar accesos, credenciales, actualización ni mensaje de salida.",
+    how: "Datalización arma el paquete de release (artefactos, evidencias de QA/UAT, permisos, configuración por ambiente, release notes y rollback) y lo entrega a Ingeniería de Software, que ejecuta la promoción a producción.",
     technicalDefinition:
-      "Promoción controlada de contenido BI a un ambiente productivo, con configuración de acceso, actualización, credenciales y disponibilidad.",
+      "Empaquetado y handoff de contenido BI hacia Ingeniería de Software para su promoción controlada a un ambiente productivo.",
     functionalDefinition:
-      "Momento en que la automatización queda disponible para operar, con usuarios informados y condiciones mínimas de servicio.",
+      "Momento en que Datalización entrega evidencia suficiente para que Ingeniería de Software habilite el servicio a usuarios reales.",
     examples: [
-      "Validar que la app productiva muestre la versión correcta y que el refresh inicial termine antes de comunicar la salida.",
-      "Confirmar que cada audiencia vea solo los reportes y datos que corresponden.",
+      "Verificar que el paquete de release incluya evidencias de UAT antes de solicitar la promoción a Ingeniería de Software.",
+      "Confirmar que cada audiencia vea solo los reportes y datos que corresponden, antes del handoff.",
     ],
   },
   {
     stage: "Operación y mejora",
     method: "Controlar + OEE BI + Kaizen + Kata",
     why: "Porque la salida a producción no cierra el trabajo; apenas inaugura la etapa en la que la solución debe sostenerse, aprender y mejorar.",
-    purpose: "Mantener el servicio BI saludable, medir adopción real, gestionar incidentes y priorizar mejoras con evidencia. En consecuencia, publicar no es el cierre: es el inicio de la operación.",
+    purpose:
+      "Mantener el servicio BI saludable, medir adopción real, gestionar incidentes y priorizar mejoras con evidencia. En consecuencia, publicar no es el cierre: es el inicio de la operación.",
     how: "Se monitorean refresh, errores, capacidad, uso, acciones pendientes, incidentes, SLA y backlog; luego se ejecutan mejoras incrementales con cadencia.",
     technicalDefinition:
       "Disciplina de operación que observa disponibilidad, performance, calidad, incidentes, adopción y evolución del producto BI.",
@@ -262,7 +265,8 @@ export const methodologyTools = [
     when: "Analizar",
     purpose:
       "Identifica modos de falla, efectos, causas, controles actuales y prioridad de acción antes de que el error llegue al usuario.",
-    biUse: "Aplica a fuentes, refresh, modelo, DAX, seguridad, UX, deployment y operación. Dicho simple: anticipa errores antes de que lleguen al usuario.",
+    biUse:
+      "Aplica a fuentes, refresh, modelo, DAX, seguridad, UX, deployment y operación. Dicho simple: anticipa errores antes de que lleguen al usuario.",
   },
   {
     title: "VSM futuro",

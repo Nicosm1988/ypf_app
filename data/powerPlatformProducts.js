@@ -49,11 +49,9 @@ const powerAppsPhases = [
       "Criterios de aceptación.",
       "KPI de adopción y resultado.",
     ],
-    targetOutcome:
-      "Existe un caso de uso aprobado, con usuario, proceso, valor, alcance y criterios de éxito verificables.",
+    targetOutcome: "Existe un caso de uso aprobado, con usuario, proceso, valor, alcance y criterios de éxito verificables.",
     owner: "Negocio + Product Owner + Power Platform",
-    riskIfSkipped:
-      "Construir una app atractiva que no elimina fricción, no resuelve la acción operativa o agrega una nueva capa manual.",
+    riskIfSkipped: "Construir una app atractiva que no elimina fricción, no resuelve la acción operativa o agrega una nueva capa manual.",
     gate: "Gate 1 - Caso aprobado",
     appliesTo: ["Canvas apps", "Model-driven apps"],
     considerations: [
@@ -117,8 +115,7 @@ const powerAppsPhases = [
     shortTitle: "UX y accesibilidad",
     lane: "Arquitectura y experiencia Power Apps",
     iconName: "route",
-    objective:
-      "Diseñar una experiencia que permita completar la tarea operativa de forma clara, rápida, accesible y consistente.",
+    objective: "Diseñar una experiencia que permita completar la tarea operativa de forma clara, rápida, accesible y consistente.",
     whyItMatters:
       "Una aplicación no genera valor por existir. Genera valor cuando el usuario entiende qué debe hacer, completa la tarea y obtiene feedback sin volver a planillas, correos o llamadas.",
     keyActivities: [
@@ -147,8 +144,7 @@ const powerAppsPhases = [
     ],
     targetOutcome: "El usuario puede completar los escenarios críticos con claridad y sin barreras conocidas.",
     owner: "UX + Maker/Developer + Usuarios clave",
-    riskIfSkipped:
-      "La aplicación funciona, pero el usuario no la comprende, comete errores o retorna al proceso manual.",
+    riskIfSkipped: "La aplicación funciona, pero el usuario no la comprende, comete errores o retorna al proceso manual.",
     gate: "Gate 3 - Experiencia validada",
     appliesTo: ["Canvas apps", "Model-driven apps"],
     considerations: [
@@ -193,11 +189,9 @@ const powerAppsPhases = [
       "App Checker revisado.",
       "Registro de deuda conocida.",
     ],
-    targetOutcome:
-      "Los escenarios funcionales principales están implementados y la solución cumple el criterio técnico acordado.",
+    targetOutcome: "Los escenarios funcionales principales están implementados y la solución cumple el criterio técnico acordado.",
     owner: "Power Apps Maker/Developer + Technical Lead",
-    riskIfSkipped:
-      "La app crece con fórmulas opacas, baja performance y alta dependencia de quien la construyó.",
+    riskIfSkipped: "La app crece con fórmulas opacas, baja performance y alta dependencia de quien la construyó.",
     gate: "Gate 4 - Aplicación construida",
     appliesTo: ["Canvas apps", "Model-driven apps"],
     considerations: [
@@ -212,8 +206,7 @@ const powerAppsPhases = [
     shortTitle: "Integraciones",
     lane: "Construcción e integración Power Apps",
     iconName: "gitBranch",
-    objective:
-      "Conectar la aplicación con datos, APIs y automatizaciones de forma trazable, desacoplada y controlada.",
+    objective: "Conectar la aplicación con datos, APIs y automatizaciones de forma trazable, desacoplada y controlada.",
     whyItMatters:
       "Una app empresarial rara vez opera sola. Las integraciones mal diseñadas generan fallas silenciosas, dependencias personales y problemas entre ambientes.",
     keyActivities: [
@@ -241,11 +234,9 @@ const powerAppsPhases = [
       "Casos de error.",
       "Evidencia de prueba.",
     ],
-    targetOutcome:
-      "Las integraciones críticas funcionan en Test/UAT con configuración separada por ambiente y manejo de errores conocido.",
+    targetOutcome: "Las integraciones críticas funcionan en Test/UAT con configuración separada por ambiente y manejo de errores conocido.",
     owner: "Power Apps + Integration/Data Engineering + Power Automate",
-    riskIfSkipped:
-      "La app depende de conexiones frágiles, credenciales personales o configuraciones manuales imposibles de reproducir.",
+    riskIfSkipped: "La app depende de conexiones frágiles, credenciales personales o configuraciones manuales imposibles de reproducir.",
     gate: "Gate 5 - Integraciones validadas",
     appliesTo: ["Canvas apps", "Model-driven apps"],
     considerations: [
@@ -260,8 +251,7 @@ const powerAppsPhases = [
     shortTitle: "Seguridad y gobierno",
     lane: "Gobierno y validación Power Apps",
     iconName: "shield",
-    objective:
-      "Asegurar identidad, acceso, datos, conexiones, ownership, cumplimiento y continuidad antes de publicar.",
+    objective: "Asegurar identidad, acceso, datos, conexiones, ownership, cumplimiento y continuidad antes de publicar.",
     whyItMatters:
       "Compartir una app no equivale a protegerla. Debe validarse quién puede abrirla, qué datos puede ver, qué acciones puede ejecutar y quién responde por ella.",
     keyActivities: [
@@ -293,8 +283,7 @@ const powerAppsPhases = [
     ],
     targetOutcome: "Usuarios de prueba acceden únicamente a los datos y acciones que les corresponden.",
     owner: "Seguridad + Gobierno + Power Platform Admin + Data Owner",
-    riskIfSkipped:
-      "Se exponen datos, se habilitan acciones incorrectas o la aplicación queda sin continuidad de ownership.",
+    riskIfSkipped: "Se exponen datos, se habilitan acciones incorrectas o la aplicación queda sin continuidad de ownership.",
     gate: "Gate 6 - Confianza aprobada",
     appliesTo: ["Canvas apps", "Model-driven apps"],
     considerations: [
@@ -309,10 +298,8 @@ const powerAppsPhases = [
     shortTitle: "Pruebas y UAT",
     lane: "Gobierno y validación Power Apps",
     iconName: "clipboard",
-    objective:
-      "Demostrar que la aplicación cumple requisitos funcionales, seguridad, accesibilidad y performance en escenarios reales.",
-    whyItMatters:
-      "La prueba del maker no reemplaza la validación con usuarios, permisos, dispositivos, datos y condiciones reales.",
+    objective: "Demostrar que la aplicación cumple requisitos funcionales, seguridad, accesibilidad y performance en escenarios reales.",
+    whyItMatters: "La prueba del maker no reemplaza la validación con usuarios, permisos, dispositivos, datos y condiciones reales.",
     keyActivities: [
       "Probar happy paths.",
       "Probar casos negativos y borde.",
@@ -344,8 +331,7 @@ const powerAppsPhases = [
     ],
     targetOutcome: "No existen defectos críticos abiertos y negocio aprueba la aplicación para producción.",
     owner: "QA + Usuarios clave + Power Apps + Seguridad",
-    riskIfSkipped:
-      "Los usuarios encuentran en producción problemas que debieron detectarse en Test/UAT.",
+    riskIfSkipped: "Los usuarios encuentran en producción problemas que debieron detectarse en Test/UAT.",
     gate: "Gate 7 - Aprobada para publicar",
     appliesTo: ["Canvas apps", "Model-driven apps"],
     considerations: [
@@ -356,14 +342,13 @@ const powerAppsPhases = [
   {
     id: 7,
     slug: "alm-despliegue-y-publicacion",
-    title: "ALM, despliegue y publicación",
+    title: "ALM, handoff y publicación",
     shortTitle: "Despliegue",
     lane: "Publicación y operación Power Apps",
     iconName: "download",
     objective:
-      "Promover la misma solución aprobada a producción mediante un proceso controlado, repetible y auditable.",
-    whyItMatters:
-      "Copiar o editar manualmente entre ambientes destruye trazabilidad y aumenta el riesgo de configuración inconsistente.",
+      "Datalización arma el paquete de release (artifact, dependencias, checklist, evidencia) e Ingeniería de Software promueve la misma solución aprobada a producción mediante un proceso controlado, repetible y auditable.",
+    whyItMatters: "Copiar o editar manualmente entre ambientes destruye trazabilidad y aumenta el riesgo de configuración inconsistente.",
     keyActivities: [
       "Versionar la solución.",
       "Mantener fuente en solución unmanaged en Dev.",
@@ -393,12 +378,10 @@ const powerAppsPhases = [
       "Plan de rollback.",
       "Comunicación.",
     ],
-    targetOutcome:
-      "La versión aprobada está disponible en producción, configurada y validada sin ajustes manuales no documentados.",
-    owner: "Release Manager + Power Platform Admin + Power Apps",
-    riskIfSkipped:
-      "Producción difiere de Test, las conexiones quedan mal configuradas o no existe una versión recuperable.",
-    gate: "Gate 8 - Publicada en producción",
+    targetOutcome: "La versión aprobada está disponible en producción, configurada y validada sin ajustes manuales no documentados.",
+    owner: "Ingeniería de Software (ejecuta la promoción) + Datalización (arma y entrega el paquete de release)",
+    riskIfSkipped: "Producción difiere de Test, las conexiones quedan mal configuradas o no existe una versión recuperable.",
+    gate: "Gate 8 - Paquete de release aprobado para pase a PROD",
     appliesTo: ["Canvas apps", "Model-driven apps"],
     considerations: [
       "El artifact managed se usa en ambientes downstream cuando sea el estándar aprobado.",
@@ -413,8 +396,7 @@ const powerAppsPhases = [
     shortTitle: "Operación y mejora",
     lane: "Publicación y operación Power Apps",
     iconName: "gauge",
-    objective:
-      "Sostener la aplicación como producto, monitoreando salud, uso, incidentes, performance, ownership y evolución.",
+    objective: "Sostener la aplicación como producto, monitoreando salud, uso, incidentes, performance, ownership y evolución.",
     whyItMatters:
       "Publicar no garantiza adopción ni continuidad. La app puede degradarse por cambios en datos, conectores, permisos, volumen o comportamiento del usuario.",
     keyActivities: [
@@ -445,11 +427,9 @@ const powerAppsPhases = [
       "Backlog.",
       "Historial de versiones.",
     ],
-    targetOutcome:
-      "La aplicación tiene responsables, monitoreo, soporte y una cadencia de evolución basada en evidencia.",
+    targetOutcome: "La aplicación tiene responsables, monitoreo, soporte y una cadencia de evolución basada en evidencia.",
     owner: "Product Owner + Operación Power Platform + Soporte + Negocio",
-    riskIfSkipped:
-      "La app queda publicada pero pierde adopción, performance o confiabilidad sin que exista respuesta organizada.",
+    riskIfSkipped: "La app queda publicada pero pierde adopción, performance o confiabilidad sin que exista respuesta organizada.",
     gate: "Gate 9 - Operando y evolucionando",
     appliesTo: ["Canvas apps", "Model-driven apps"],
     considerations: [
@@ -469,8 +449,7 @@ const powerAutomatePhases = [
     iconName: "clipboard",
     objective:
       "Definir el proceso, el problema operativo, el resultado esperado, el volumen, el SLA, los actores y las excepciones antes de automatizar.",
-    whyItMatters:
-      "Automatizar un proceso no entendido acelera errores, desperdicios y decisiones incorrectas.",
+    whyItMatters: "Automatizar un proceso no entendido acelera errores, desperdicios y decisiones incorrectas.",
     keyActivities: [
       "Mapear proceso actual.",
       "Identificar trigger funcional.",
@@ -496,8 +475,7 @@ const powerAutomatePhases = [
       "KPI y SLA.",
       "Criterios de aceptación.",
     ],
-    targetOutcome:
-      "El proceso y el valor de automatizarlo están aprobados y pueden explicarse sin depender de la herramienta.",
+    targetOutcome: "El proceso y el valor de automatizarlo están aprobados y pueden explicarse sin depender de la herramienta.",
     owner: "Negocio + Process Owner + Power Platform",
     riskIfSkipped: "El flujo automatiza una tarea irrelevante, incompleta o inestable.",
     gate: "Gate 1 - Proceso aprobado",
@@ -514,8 +492,7 @@ const powerAutomatePhases = [
     shortTitle: "Evaluación del proceso",
     lane: "Producto y proceso Power Automate",
     iconName: "route",
-    objective:
-      "Determinar si el proceso es apto para automatización y elegir el tipo de flujo y el diseño objetivo.",
+    objective: "Determinar si el proceso es apto para automatización y elegir el tipo de flujo y el diseño objetivo.",
     whyItMatters:
       "No todo proceso debe automatizarse. Algunos requieren primero simplificación, definición de reglas, mejora de datos o intervención humana.",
     keyActivities: [
@@ -546,8 +523,7 @@ const powerAutomatePhases = [
       "Riesgos iniciales.",
       "Decisión go/no-go.",
     ],
-    targetOutcome:
-      "La automatización es viable, tiene frontera clara y no replica desperdicios evitables.",
+    targetOutcome: "La automatización es viable, tiene frontera clara y no replica desperdicios evitables.",
     owner: "Process Owner + Automation Architect + Negocio",
     riskIfSkipped: "Se automatiza un proceso inestable o con excepciones no controladas.",
     gate: "Gate 2 - Automatización viable",
@@ -564,8 +540,7 @@ const powerAutomatePhases = [
     shortTitle: "Trigger y conectores",
     lane: "Arquitectura de automatización",
     iconName: "layers",
-    objective:
-      "Diseñar cómo se dispara, qué datos consume, qué sistemas conecta, con qué identidad y bajo qué límites operativos.",
+    objective: "Diseñar cómo se dispara, qué datos consume, qué sistemas conecta, con qué identidad y bajo qué límites operativos.",
     whyItMatters:
       "Un trigger mal elegido o una conexión mal gobernada produce duplicados, latencia, throttling, fallas y dependencia de credenciales personales.",
     keyActivities: [
@@ -604,11 +579,9 @@ const powerAutomatePhases = [
       "Decisión de gateway/máquina.",
       "Evaluación de licencias.",
     ],
-    targetOutcome:
-      "La arquitectura puede ejecutar el volumen esperado con conexiones, identidad y configuración reproducibles.",
+    targetOutcome: "La arquitectura puede ejecutar el volumen esperado con conexiones, identidad y configuración reproducibles.",
     owner: "Automation Architect + Integration/Data + Power Platform Admin",
-    riskIfSkipped:
-      "El flujo duplica transacciones, excede límites, falla por conexiones personales o no puede moverse entre ambientes.",
+    riskIfSkipped: "El flujo duplica transacciones, excede límites, falla por conexiones personales o no puede moverse entre ambientes.",
     gate: "Gate 3 - Arquitectura aprobada",
     appliesTo: ["Cloud flows", "Desktop flows", "Business process flows"],
     considerations: [
@@ -623,10 +596,8 @@ const powerAutomatePhases = [
     shortTitle: "Construcción",
     lane: "Construcción Power Automate",
     iconName: "code",
-    objective:
-      "Implementar la lógica del flujo de forma modular, legible, eficiente y mantenible.",
-    whyItMatters:
-      "Un flujo visual también puede convertirse en código espagueti. La cantidad de acciones no reemplaza un diseño claro.",
+    objective: "Implementar la lógica del flujo de forma modular, legible, eficiente y mantenible.",
+    whyItMatters: "Un flujo visual también puede convertirse en código espagueti. La cantidad de acciones no reemplaza un diseño claro.",
     keyActivities: [
       "Construir dentro de una solución.",
       "Aplicar naming.",
@@ -657,8 +628,7 @@ const powerAutomatePhases = [
       "Inventario de acciones externas.",
       "Deuda conocida.",
     ],
-    targetOutcome:
-      "El happy path y los caminos controlados están implementados con lógica entendible y modular.",
+    targetOutcome: "El happy path y los caminos controlados están implementados con lógica entendible y modular.",
     owner: "Power Automate Developer/Maker + Technical Lead",
     riskIfSkipped: "El flujo resulta difícil de leer, costoso de ejecutar y peligroso de modificar.",
     gate: "Gate 4 - Flujo construido",
@@ -675,10 +645,8 @@ const powerAutomatePhases = [
     shortTitle: "Errores y observabilidad",
     lane: "Resiliencia y gobierno Power Automate",
     iconName: "gauge",
-    objective:
-      "Asegurar que el flujo detecte, registre, comunique y gestione fallas sin producir resultados incompletos o silenciosos.",
-    whyItMatters:
-      "Una automatización sin manejo de errores no elimina trabajo manual: lo transforma en incidentes invisibles.",
+    objective: "Asegurar que el flujo detecte, registre, comunique y gestione fallas sin producir resultados incompletos o silenciosos.",
+    whyItMatters: "Una automatización sin manejo de errores no elimina trabajo manual: lo transforma en incidentes invisibles.",
     keyActivities: [
       "Configurar Run after.",
       "Usar scopes con patrón Try/Catch/Finally cuando corresponda.",
@@ -710,11 +678,9 @@ const powerAutomatePhases = [
       "Evidencia de pruebas de falla.",
       "Runbook inicial.",
     ],
-    targetOutcome:
-      "Las fallas críticas producen un estado conocido, evidencia suficiente y una acción de recuperación definida.",
+    targetOutcome: "Las fallas críticas producen un estado conocido, evidencia suficiente y una acción de recuperación definida.",
     owner: "Power Automate + Operación/Soporte + Process Owner",
-    riskIfSkipped:
-      "El flujo falla silenciosamente, duplica acciones o deja transacciones a mitad de camino.",
+    riskIfSkipped: "El flujo falla silenciosamente, duplica acciones o deja transacciones a mitad de camino.",
     gate: "Gate 5 - Resiliencia validada",
     appliesTo: ["Cloud flows", "Desktop flows", "Business process flows"],
     considerations: [
@@ -729,8 +695,7 @@ const powerAutomatePhases = [
     shortTitle: "Seguridad y gobierno",
     lane: "Resiliencia y gobierno Power Automate",
     iconName: "shield",
-    objective:
-      "Proteger datos, conexiones, identidades y acciones, y asegurar ownership y cumplimiento.",
+    objective: "Proteger datos, conexiones, identidades y acciones, y asegurar ownership y cumplimiento.",
     whyItMatters:
       "Los flows ejecutan acciones sobre sistemas. Una conexión excesivamente privilegiada puede generar más riesgo que un reporte incorrecto.",
     keyActivities: [
@@ -764,11 +729,9 @@ const powerAutomatePhases = [
       "Plan de auditoría.",
       "Excepciones aprobadas.",
     ],
-    targetOutcome:
-      "El flujo puede ejecutar únicamente las acciones autorizadas con identidad, permisos y ownership conocidos.",
+    targetOutcome: "El flujo puede ejecutar únicamente las acciones autorizadas con identidad, permisos y ownership conocidos.",
     owner: "Seguridad + Gobierno + Power Platform Admin + Process Owner",
-    riskIfSkipped:
-      "El flow expone datos, ejecuta acciones no autorizadas o se detiene cuando cambia una cuenta personal.",
+    riskIfSkipped: "El flow expone datos, ejecuta acciones no autorizadas o se detiene cuando cambia una cuenta personal.",
     gate: "Gate 6 - Confianza aprobada",
     appliesTo: ["Cloud flows", "Desktop flows", "Business process flows"],
     considerations: [
@@ -785,8 +748,7 @@ const powerAutomatePhases = [
     iconName: "clipboard",
     objective:
       "Validar funcionalidad, excepciones, seguridad, volumen, resiliencia y comportamiento operativo antes de activar en producción.",
-    whyItMatters:
-      "Probar solo una ejecución exitosa no demuestra que la automatización sea segura ni confiable.",
+    whyItMatters: "Probar solo una ejecución exitosa no demuestra que la automatización sea segura ni confiable.",
     keyActivities: [
       "Probar happy path.",
       "Probar casos negativos.",
@@ -820,8 +782,7 @@ const powerAutomatePhases = [
       "Defectos resueltos.",
       "Aprobación.",
     ],
-    targetOutcome:
-      "Los escenarios críticos, incluidos los fallos, se comportan según la Spec y no existen defectos críticos abiertos.",
+    targetOutcome: "Los escenarios críticos, incluidos los fallos, se comportan según la Spec y no existen defectos críticos abiertos.",
     owner: "QA + Process Owner + Power Automate + Seguridad",
     riskIfSkipped: "La primera validación real ocurre sobre transacciones productivas.",
     gate: "Gate 7 - Aprobado para activar",
@@ -834,14 +795,13 @@ const powerAutomatePhases = [
   {
     id: 7,
     slug: "alm-despliegue-y-activacion",
-    title: "ALM, despliegue y activación",
+    title: "ALM, handoff y activación",
     shortTitle: "ALM y despliegue",
     lane: "Despliegue y operación Power Automate",
     iconName: "download",
     objective:
-      "Promover y activar la misma solución aprobada en producción con configuración, identidad y rollback controlados.",
-    whyItMatters:
-      "Recrear flows manualmente entre ambientes rompe trazabilidad y suele dejar conexiones, variables u owners incorrectos.",
+      "Datalización arma el paquete de release (artifact, dependencias, checklist, evidencia) e Ingeniería de Software promueve y activa la misma solución aprobada en producción con configuración, identidad y rollback controlados.",
+    whyItMatters: "Recrear flows manualmente entre ambientes rompe trazabilidad y suele dejar conexiones, variables u owners incorrectos.",
     keyActivities: [
       "Mantener el flow como solution-aware.",
       "Versionar solución.",
@@ -872,12 +832,10 @@ const powerAutomatePhases = [
       "Rollback.",
       "Comunicación.",
     ],
-    targetOutcome:
-      "La versión aprobada está activa en producción y ejecuta correctamente con la configuración productiva.",
-    owner: "Release Manager + Power Platform Admin + Power Automate",
-    riskIfSkipped:
-      "El flow se activa con conexiones incorrectas, configuración manual o sin una versión recuperable.",
-    gate: "Gate 8 - Activo en producción",
+    targetOutcome: "La versión aprobada está activa en producción y ejecuta correctamente con la configuración productiva.",
+    owner: "Ingeniería de Software (ejecuta la promoción) + Datalización (arma y entrega el paquete de release)",
+    riskIfSkipped: "El flow se activa con conexiones incorrectas, configuración manual o sin una versión recuperable.",
+    gate: "Gate 8 - Paquete de release aprobado para pase a PROD",
     appliesTo: ["Cloud flows", "Desktop flows", "Business process flows"],
     considerations: [
       "El artifact managed se promueve cuando sea el estándar aprobado.",
@@ -892,8 +850,7 @@ const powerAutomatePhases = [
     shortTitle: "Operación y mejora",
     lane: "Despliegue y operación Power Automate",
     iconName: "gauge",
-    objective:
-      "Operar la automatización como servicio, midiendo salud, valor, errores, capacidad y oportunidades de mejora.",
+    objective: "Operar la automatización como servicio, midiendo salud, valor, errores, capacidad y oportunidades de mejora.",
     whyItMatters:
       "Un flow que funcionó el día del deploy puede degradarse por volumen, cambios de API, expiración de credenciales, DLP, ownership o cambios del proceso.",
     keyActivities: [
@@ -930,11 +887,9 @@ const powerAutomatePhases = [
       "Historial de releases.",
       "Plan de continuidad.",
     ],
-    targetOutcome:
-      "El flow tiene monitoreo, soporte, responsables y una rutina de mejora basada en evidencia.",
+    targetOutcome: "El flow tiene monitoreo, soporte, responsables y una rutina de mejora basada en evidencia.",
     owner: "Operación Power Platform + Process Owner + Soporte",
-    riskIfSkipped:
-      "La automatización se degrada o deja de ejecutar sin que el negocio tenga visibilidad ni respuesta.",
+    riskIfSkipped: "La automatización se degrada o deja de ejecutar sin que el negocio tenga visibilidad ni respuesta.",
     gate: "Gate 9 - Operando y mejorando",
     appliesTo: ["Cloud flows", "Desktop flows", "Business process flows"],
     considerations: [
@@ -1009,8 +964,7 @@ export const powerPlatformProducts = [
     officialName: "Microsoft Power BI",
     shortName: "Power BI",
     category: "Analítica e inteligencia",
-    tagline:
-      "Convierte datos gobernados en modelos semánticos, indicadores y experiencias para decidir.",
+    tagline: "Convierte datos gobernados en modelos semánticos, indicadores y experiencias para decidir.",
     catalogTitle: "Analítica con Microsoft Power BI",
     iconPath: "/assets/microsoft/power-platform/power-bi.svg",
     route: "/productos/power-bi",
@@ -1019,7 +973,7 @@ export const powerPlatformProducts = [
       { label: "Guía + Roadmap", route: "/road-y-metodologia" },
       { label: "Proyecto Power BI", route: "/proyecto-power-bi" },
       { label: "Diccionario BI", route: "/diccionario" },
-      { label: "Templates PRD y Spec", route: "/road-y-metodologia#modelos-prd-spec" },
+      { label: "PRD + Spec Power BI/Fabric", route: "/road-y-metodologia#modelos-prd-spec" },
     ],
     commonControls: commonProductControls,
     specificControls: powerBiSpecificControls,
@@ -1033,15 +987,14 @@ export const powerPlatformProducts = [
     officialName: "Microsoft Power Apps",
     shortName: "Power Apps",
     category: "Aplicaciones de negocio",
-    tagline:
-      "Convierte necesidades operativas en aplicaciones accesibles, seguras y sostenibles.",
+    tagline: "Convierte necesidades operativas en aplicaciones accesibles, seguras y sostenibles.",
     catalogTitle: "Aplicaciones con Microsoft Power Apps",
     iconPath: "/assets/microsoft/power-platform/power-apps.svg",
     route: "/productos/power-apps",
     phases: powerAppsPhases,
     relatedResources: [
       { label: "Método de Datalización", route: "/metodo-datalizacion" },
-      { label: "Templates PRD y Spec", route: "/road-y-metodologia#modelos-prd-spec" },
+      { label: "PRD + Spec Power Apps", route: "/road-y-metodologia#modelos-prd-spec" },
     ],
     commonControls: commonProductControls,
     specificControls: powerAppsSpecificControls,
@@ -1060,15 +1013,14 @@ export const powerPlatformProducts = [
     officialName: "Microsoft Power Automate",
     shortName: "Power Automate",
     category: "Automatización y orquestación",
-    tagline:
-      "Convierte tareas, eventos, decisiones y excepciones en flujos repetibles y controlados.",
+    tagline: "Convierte tareas, eventos, decisiones y excepciones en flujos repetibles y controlados.",
     catalogTitle: "Automatización con Microsoft Power Automate",
     iconPath: "/assets/microsoft/power-platform/power-automate.svg",
     route: "/productos/power-automate",
     phases: powerAutomatePhases,
     relatedResources: [
       { label: "Método de Datalización", route: "/metodo-datalizacion" },
-      { label: "Templates PRD y Spec", route: "/road-y-metodologia#modelos-prd-spec" },
+      { label: "PRD + Spec Power Automate", route: "/road-y-metodologia#modelos-prd-spec" },
     ],
     commonControls: commonProductControls,
     specificControls: powerAutomateSpecificControls,
@@ -1085,7 +1037,6 @@ export const powerPlatformProducts = [
 
 export const products = powerPlatformProducts;
 
-export const getProductBySlug = (slug) =>
-  powerPlatformProducts.find((product) => product.slug === slug);
+export const getProductBySlug = (slug) => powerPlatformProducts.find((product) => product.slug === slug);
 
 export const productRoutes = powerPlatformProducts.map((product) => product.route);

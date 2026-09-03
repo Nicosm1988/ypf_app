@@ -1,5 +1,5 @@
 export const platformHeroMetrics = [
-  { value: "End-to-end", label: "PRD, Spec, datos, modelo, DAX, UX, seguridad y publicación" },
+  { value: "End-to-end", label: "PRD, Specs por producto, datos, lógica, UX, seguridad y publicación" },
   { value: "Trazable", label: "Cada decisión deja responsable, evidencia y criterio de aceptación" },
   { value: "Operable", label: "La salida incluye monitoreo, soporte y mejoras priorizadas" },
 ];
@@ -43,20 +43,21 @@ export const platformBeforeAfter = [
   {
     moment: "Ahora",
     claim: "Se instala una etapa de ordenamiento metodológico.",
-    text: "El área define una plataforma interna de referencia para PRD, Spec, Power Query, modelado, DAX, visualización, seguridad, RLS y publicación.",
+    text: "El área define una plataforma organizacional de referencia para PRD, Specs por producto, datos, construcción, seguridad, gobierno y publicación.",
   },
   {
     moment: "Después",
-    claim: "La inteligencia de datos se vuelve disciplina interna.",
-    text: "Cada producto BI nace con criterios claros, decisión registrada, responsabilidad funcional, revisión técnica, publicación ordenada y mejora sostenible.",
+    claim: "La datalización se vuelve una disciplina compartida.",
+    text: "Cada producto nace con criterios claros, decisión registrada, responsabilidad funcional, revisión técnica, publicación ordenada y mejora sostenible.",
   },
 ];
 
 export const platformCapabilityShift = [
   {
     from: "Tableros aislados",
-    to: "Productos BI gobernados",
-    detail: "Cada entrega se integra a un ciclo de vida con criterios de aceptación, seguridad, publicación y operación. En la práctica, deja de ser un archivo suelto.",
+    to: "Productos Power Platform gobernados",
+    detail:
+      "Cada entrega se integra a un ciclo de vida con criterios de aceptación, seguridad, publicación y operación. En la práctica, deja de ser un archivo suelto.",
   },
   {
     from: "Requerimientos dispersos",
@@ -71,6 +72,6 @@ export const platformCapabilityShift = [
   {
     from: "Entrega puntual",
     to: "Capacidad organizacional",
-    detail: "El área gana una práctica estable para iniciar, revisar, publicar y mejorar productos BI.",
+    detail: "El área gana una práctica estable para iniciar, revisar, publicar y mejorar productos de datalización.",
   },
 ];

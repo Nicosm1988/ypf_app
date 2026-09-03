@@ -28,6 +28,7 @@ import {
   designSystemPrinciples,
   designSystemQualityRules,
 } from "./data/designSystem.js";
+import { documentTemplates } from "./data/documentTemplates.js";
 import { guideSections, prdSpecComparison, readinessChecklist } from "./data/engineeringGuide.js";
 import {
   methodBacklogColumns,
@@ -72,6 +73,7 @@ import {
 } from "./data/platformIntro.js";
 import { laneStyles, powerBiFlowCopy, roadmapPhases } from "./data/roadmap.js";
 import { toolingDocs, toolingGroups } from "./data/toolingLibrary.js";
+import { getDeliveryStage, maquetaFeedbackTemplate } from "./data/deliveryLifecycle.js";
 
 const appRoot = document.querySelector("#appRoot");
 const contentTarget = document.querySelector("#content");
@@ -147,13 +149,13 @@ function lucideIcon(name, content) {
 }
 
 const routeTitles = {
-  "/": "Datalización Hub | BI Delivery Playbook",
+  "/": "Datalización YPF | Método y productos Power Platform",
   "/road-y-metodologia": "Road y Metodología BI/Fabric | Datalización YPF",
   "/guia-power-bi": "Road y Metodología BI/Fabric | Datalización YPF",
   "/metodo-datalizacion": "Método de Datalización | Datalización YPF",
   "/metodologia": "Road y Metodología BI/Fabric | Datalización YPF",
   "/design-system": "Design System | Datalización Hub",
-  "/datalito": "Datalito | Asistente interno de conocimiento",
+  "/datalito": "Datalito | Asistente de conocimiento",
   "/diccionario": "Diccionario BI | Datalización YPF",
   "/roadmap": "Road y Metodología BI/Fabric | Datalización YPF",
   "/productos": "Productos de Datalización | Datalización YPF",
@@ -192,13 +194,13 @@ const baseRoutes = new Set([
 
 const subsectionRoutes = {
   "/inicio/proposito": { route: "/", hash: "#inicio-proposito" },
-  "/inicio/estudio": { route: "/", hash: "#inicio-capacidad" },
   "/inicio/capacidad": { route: "/", hash: "#inicio-capacidad" },
   "/inicio/secciones": { route: "/", hash: "#inicio-secciones" },
   "/inicio/decantacion": { route: "/road-y-metodologia", hash: "#inicio-decantacion" },
   "/inicio/workflow": { route: "/road-y-metodologia", hash: "#road-flujo-bi" },
   "/road-y-metodologia/tesis": { route: "/road-y-metodologia", hash: "#road-tesis" },
   "/road-y-metodologia/enfoque": { route: "/road-y-metodologia", hash: "#road-tesis" },
+  "/road-y-metodologia/maqueta": { route: "/road-y-metodologia", hash: "#road-maqueta" },
   "/road-y-metodologia/proceso": { route: "/road-y-metodologia", hash: "#road-proceso" },
   "/road-y-metodologia/fabric-end-to-end": { route: "/road-y-metodologia", hash: "#road-fabric-master-guide" },
   "/road-y-metodologia/arquitectura-fabric": { route: "/road-y-metodologia", hash: "#road-fabric-architecture-layer" },
@@ -229,7 +231,7 @@ const subsectionRoutes = {
   "/datalito/arquitectura": { route: "/datalito", hash: "#datalito-arquitectura" },
   "/datalito/gobierno": { route: "/datalito", hash: "#datalito-gobierno" },
   "/datalito/evaluacion": { route: "/datalito", hash: "#datalito-evaluacion" },
-  "/proyecto-power-bi/estudio": { route: "/proyecto-power-bi", hash: "#proyecto-estudio" },
+  "/proyecto-power-bi/flujo-trabajo": { route: "/proyecto-power-bi", hash: "#proyecto-flujo-trabajo" },
   "/proyecto-power-bi/metodo": { route: "/proyecto-power-bi", hash: "#proyecto-metodo" },
   "/proyecto-power-bi/herramientas": { route: "/proyecto-power-bi", hash: "#proyecto-metodo" },
   "/diccionario/busqueda": { route: "/diccionario", hash: "#diccionario-busqueda" },
@@ -272,6 +274,10 @@ const datalitoState = {
   ],
   feedback: loadDatalitoCollection(datalitoStorageKeys.feedback),
   gaps: loadDatalitoCollection(datalitoStorageKeys.gaps),
+  selectionContext: {
+    route: "",
+    text: "",
+  },
   status: "",
 };
 
@@ -310,7 +316,7 @@ const hubNavigationSections = [
     title: "Datalito",
     route: "/datalito",
     iconName: "bot",
-    text: "Asistente interno para encontrar conocimiento, citar fuentes y registrar brechas.",
+    text: "Asistente de conocimiento para encontrar contenido, citar fuentes y registrar brechas.",
   },
   {
     title: "Librerías",
@@ -605,41 +611,6 @@ const guideStoryDetails = {
     outcome: "Producción monitoreada, con responsables y mejora continua.",
   },
 };
-
-const guideDocumentTemplates = [
-  {
-    id: "prd",
-    title: "Modelo PRD",
-    eyebrow: "Proceso y negocio",
-    source: "assets/docs/modelos/prd-datalizacion.docx",
-    format: "Word editable",
-    purpose:
-      "Sirve para acordar qué proceso se quiere automatizar, por qué importa, quién lo usa, qué reglas funcionales aplican y cómo se mide el éxito.",
-    preview: [
-      "Resumen ejecutivo",
-      "Proceso actual y problema a resolver",
-      "Disparador, usuarios y responsabilidades",
-      "Reglas de negocio, KPIs y alcance",
-      "Riesgos, supuestos y criterios de aceptación",
-    ],
-  },
-  {
-    id: "spec",
-    title: "Modelo Spec",
-    eyebrow: "Implementación técnica",
-    source: "assets/docs/modelos/spec-datalizacion.docx",
-    format: "Word editable",
-    purpose:
-      "Convierte el PRD aprobado en arquitectura construible: datos, modelado, DAX, seguridad, UX, versionado, publicación y operación.",
-    preview: [
-      "Contexto técnico y arquitectura",
-      "Fuentes, contratos de datos y Power Query",
-      "Modelo semántico, medidas y reglas DAX",
-      "Seguridad, gobierno y salida operativa",
-      "Despliegue, operación, pruebas y aceptación técnica",
-    ],
-  },
-];
 
 const projectBuildSteps = [
   {
@@ -961,9 +932,36 @@ function navigate(path) {
   }
 }
 
-function scrollToRouteHash(hash) {
+async function scrollToRouteHash(hash) {
   const targetId = decodeURIComponent(hash.slice(1));
-  const target = document.getElementById(targetId);
+  let target = document.getElementById(targetId);
+
+  if (target?.matches("[data-unified-flow-panel][hidden]")) {
+    const flow = target.closest("[data-nine-gate-flow]");
+    flow?.querySelector(`.unified-flow-node[data-unified-flow="${CSS.escape(target.dataset.unifiedFlowPanel || "")}"]`)?.click();
+  }
+
+  if (!target) {
+    const practiceMatch = targetId.match(/^(bi|pa|at)-g(\d{2})-p\d{2}$/);
+    const productSlug = {
+      bi: "power-bi",
+      pa: "power-apps",
+      at: "power-automate",
+    }[practiceMatch?.[1]];
+    const gateIndex = practiceMatch ? Number(practiceMatch[2]) - 1 : -1;
+    const flow = productSlug ? document.getElementById(`${productSlug}-flow`) : null;
+
+    if (flow && gateIndex >= 0 && gateIndex < 9) {
+      flow.querySelector(`.unified-flow-node[data-unified-flow="${gateIndex}"]`)?.click();
+      const panel = document.getElementById(`${productSlug}-flow-panel-${gateIndex}`);
+      const disclosure = panel?.querySelector("[data-practice-library]");
+      if (disclosure) {
+        disclosure.open = true;
+        await loadProductPracticeDisclosure(disclosure);
+        target = document.getElementById(targetId);
+      }
+    }
+  }
 
   if (!target) {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -971,6 +969,9 @@ function scrollToRouteHash(hash) {
   }
 
   if (target instanceof HTMLDetailsElement) target.open = true;
+  for (let ancestor = target.closest("details"); ancestor; ancestor = ancestor.parentElement?.closest("details")) {
+    ancestor.open = true;
+  }
   target.setAttribute("tabindex", "-1");
   const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0;
   const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - headerHeight - 18);
@@ -1331,10 +1332,10 @@ function renderHomePage() {
         <div class="hero-shade" aria-hidden="true"></div>
         <div class="page-inner hero-grid">
           <div class="hero-copy">
-            <span class="eyebrow">Datalización Hub | BI Delivery Playbook</span>
-            <h1>De tableros aislados a una disciplina interna de inteligencia de datos.</h1>
-            <p class="hero-kicker">Esta plataforma nace para ordenar, estandarizar y escalar la forma en que el área construye inteligencia de datos.</p>
-            <p class="hero-text">En la práctica, convierte experiencia dispersa en una forma de trabajo visible: decisiones, evidencia, roles, controles y operación para productos BI end-to-end.</p>
+            <span class="eyebrow">Datalización YPF | Método y productos Power Platform</span>
+            <h1>De entregables aislados a una disciplina organizacional de datalización.</h1>
+            <p class="hero-kicker">Esta plataforma ordena, estandariza y escala cómo el área diseña, construye y opera soluciones con Power BI y Fabric, Power Apps y Power Automate.</p>
+            <p class="hero-text">En la práctica, convierte experiencia dispersa en una forma de trabajo visible: decisiones, evidencia, roles, controles y operación para productos de datalización end-to-end.</p>
             <div class="platform-metric-row" aria-label="Capacidades principales de la plataforma">
               ${platformHeroMetrics.map(renderPlatformMetric).join("")}
             </div>
@@ -1406,7 +1407,7 @@ function renderPlatformExecutiveSection() {
   return `
     <section class="platform-executive page-inner" id="inicio-capacidad" aria-labelledby="platformExecutiveTitle">
       <div class="platform-executive-head">
-        <span class="flow-chip">plataforma interna de estándares, gobierno y delivery</span>
+        <span class="flow-chip">plataforma organizacional de estándares, gobierno y delivery</span>
         <h2 id="platformExecutiveTitle">Datalización Hub convierte conocimiento disperso en una forma común de entrega.</h2>
         <p>La plataforma define qué se releva, qué se documenta, qué se prueba, qué se publica y qué se monitorea. Por eso, el trabajo deja de depender de memoria individual.</p>
       </div>
@@ -1448,7 +1449,7 @@ function renderPlatformExecutiveSection() {
       <div class="platform-discipline" aria-labelledby="platformDisciplineTitle">
         <div class="platform-block-head">
           <span class="flow-chip">de tableros a disciplina de inteligencia</span>
-          <h3 id="platformDisciplineTitle">El objetivo final es pasar de entregables aislados a una práctica interna gobernada, escalable y trazable.</h3>
+          <h3 id="platformDisciplineTitle">El objetivo final es pasar de entregables aislados a una práctica organizacional gobernada, escalable y trazable.</h3>
           <p>Cada producto BI debe integrarse a un sistema de trabajo que conecte necesidad, dato, modelo, seguridad, visualización, publicación, adopción y mejora continua.</p>
         </div>
         <div class="platform-discipline-grid">
@@ -1718,11 +1719,12 @@ function renderDatalitoPage() {
           </div>
           <div class="datalito-side-block">
             <span class="flow-chip">contexto</span>
-            <h3>Metadata enviada al motor local</h3>
+            <h3>Contexto usado por el motor local</h3>
             <ul>
               <li>Ruta actual.</li>
-              <li>Título de página.</li>
+              <li>Título visible de página.</li>
               <li>Texto seleccionado, si existe.</li>
+              <li>Sección o ancla activa.</li>
               <li>Versión de prompt e índice.</li>
             </ul>
           </div>
@@ -1758,13 +1760,13 @@ function renderDatalitoPage() {
             </div>
           </article>
           <article class="datalito-card">
-            <h3>Categorías adversariales cubiertas</h3>
+            <h3>Casos de control cubiertos</h3>
             <ul>
               <li>Intentos de sobrescribir instrucciones.</li>
               <li>Pedidos de secretos o configuración interna.</li>
               <li>Acceso a contenido no publicado o restringido.</li>
               <li>Solicitudes de inventar respuestas sin evidencia.</li>
-              <li>Conflictos entre fuentes y contenido vencido.</li>
+              <li>Vigencia por fecha de revisión y posibles divergencias entre registros del mismo tema.</li>
             </ul>
           </article>
         </div>
@@ -2016,10 +2018,11 @@ function renderDatalitoCitations(citations) {
         ${citations
           .map(
             (source, index) => `
-              <a class="datalito-source-card" href="${escapeHtml(source.url)}" data-route>
+              <a class="datalito-source-card" href="${escapeHtml(source.url)}" data-route data-source-id="${escapeHtml(source.sourceId)}">
                 <span>S${index + 1} · ${escapeHtml(source.section)}</span>
                 <strong>${escapeHtml(source.title)}</strong>
-                <small>Fuente aprobada · revisada ${escapeHtml(source.reviewedAt)}</small>
+                <small>Versión ${escapeHtml(source.version)} · ${escapeHtml(formatDatalitoSourceStatus(source.status))} · ${escapeHtml(source.freshnessLabel)}</small>
+                <small>Revisada ${escapeHtml(formatDatalitoDate(source.reviewedAt))} · próxima revisión ${escapeHtml(formatDatalitoDate(source.reviewDueAt))}</small>
               </a>
             `,
           )
@@ -2090,6 +2093,13 @@ function runDatalitoQuestion(question) {
   });
 
   const response = buildDatalitoResponse(cleanQuestion, datalitoState.mode);
+  const responseContext = getDatalitoPageContext();
+  response.context = {
+    route: responseContext.route,
+    title: responseContext.title,
+    activeAnchor: responseContext.activeAnchor,
+    activeSectionTitle: responseContext.activeSectionTitle,
+  };
   datalitoState.messages.push(response);
   datalitoState.status =
     response.statusText || (response.unresolved ? "No lo tengo en la base aprobada; podés registrar la brecha." : "Listo, seguimos.");
@@ -2119,6 +2129,12 @@ function buildDatalitoResponse(question, mode) {
     };
   }
 
+  const sourceHealthResponse = buildDatalitoSourceHealthResponse(question, mode, context);
+  if (sourceHealthResponse) return sourceHealthResponse;
+
+  const templateResponse = buildDatalitoTemplateResponse(question, mode);
+  if (templateResponse) return templateResponse;
+
   const conversationalResponse = buildDatalitoConversationalResponse(question, mode);
   if (conversationalResponse) return conversationalResponse;
 
@@ -2133,8 +2149,16 @@ function buildDatalitoResponse(question, mode) {
   }
 
   const primary = strongMatches[0].source;
-  const citations = strongMatches.slice(0, 3).map((match) => toDatalitoCitation(match.source));
-  const answer = composeDatalitoAnswer(question, mode, primary, strongMatches, context);
+  const citedMatches = deduplicateDatalitoMatches(strongMatches).slice(0, 3);
+  const citations = citedMatches.map((match) => toDatalitoCitation(match.source));
+  const overdueSources = citedMatches.filter((match) => getDatalitoSourceFreshness(match.source).status === "overdue");
+  const conflicts = findDatalitoPotentialConflicts(citedMatches.map((match) => match.source));
+  const healthWarning = overdueSources.length
+    ? `\nAtención: ${overdueSources.length === 1 ? "la fuente citada tiene" : "las fuentes citadas tienen"} la revisión vencida; confirmá su vigencia con el owner antes de aplicarla.`
+    : conflicts.length
+      ? "\nAtención: encontré registros del mismo tema con versiones o contenido diferentes; revisá ambos antes de decidir."
+      : "";
+  const answer = `${composeDatalitoAnswer(question, mode, primary, citedMatches, context)}${healthWarning}`;
 
   return {
     id: createDatalitoId("assistant"),
@@ -2143,17 +2167,202 @@ function buildDatalitoResponse(question, mode) {
     answer,
     intent: detectDatalitoIntent(question),
     answerMode: mode,
-    confidence: strongMatches[0].score >= 12 ? "high" : "medium",
+    confidence: overdueSources.length || conflicts.length ? "low" : strongMatches[0].score >= 12 ? "high" : "medium",
     grounded: true,
     unresolved: false,
     citations,
-    relatedContent: strongMatches.slice(1, 4).map((match) => ({
-      title: match.source.title,
-      url: match.source.canonical_url,
-      reason: `Relacionado por ${match.reason}`,
-    })),
+    relatedContent: deduplicateDatalitoMatches(strongMatches)
+      .slice(1, 4)
+      .map((match) => ({
+        title: match.source.title,
+        url: match.source.canonical_url,
+        reason: `Relacionado por ${match.reason}`,
+      })),
     suggestedFollowUps: buildDatalitoFollowUps(primary),
   };
+}
+
+function buildDatalitoTemplateResponse(question, mode) {
+  const normalized = normalizeText(question);
+  const explicitTemplateLookup =
+    /(template|plantilla|modelo descargable|modelos descargables|descarg)/.test(normalized) ||
+    (/(donde|ubic|encontr)/.test(normalized) && /(prd|spec)/.test(normalized));
+  if (!explicitTemplateLookup) return null;
+
+  const templates = datalitoKnowledgeSources.filter((source) => source.content_type === "template" && source.template_assets);
+  const requestedProduct = detectDatalitoTemplateProduct(normalized);
+  const requestedKind = /\bprd\b/.test(normalized) ? "prd" : /\bspec\b/.test(normalized) ? "spec" : "";
+  const rankedTemplates = templates
+    .map((source) => {
+      const assets = source.template_assets;
+      let score = 1;
+      if (requestedProduct && assets.productId === requestedProduct) score += 12;
+      if (requestedKind && normalizeText(assets.kind) === requestedKind) score += 8;
+      if (requestedKind === "prd" && assets.productId === "cross-product") score += 4;
+      score += tokenizeDatalitoText(question).filter((token) =>
+        normalizeText(`${source.title} ${source.keywords.join(" ")}`).includes(token),
+      ).length;
+      return { source, score };
+    })
+    .sort((left, right) => right.score - left.score || left.source.title.localeCompare(right.source.title));
+  const hasSpecificRequest = Boolean(requestedProduct || requestedKind);
+  const selected = rankedTemplates.slice(0, hasSpecificRequest ? 1 : 4).map((match) => match.source);
+  if (!selected.length) return null;
+
+  const primary = selected[0];
+  const freshness = getDatalitoSourceFreshness(primary);
+  const answer = hasSpecificRequest
+    ? `El modelo vigente es “${primary.title}”, versión ${primary.version}. ${primary.summary} [S1]\nAbrí la fuente citada para ver la ficha y descargar el Word editable. Su próxima revisión está prevista para el ${formatDatalitoDate(primary.review_due_at)}.`
+    : `Hay ${selected.length} modelos documentales vigentes: un PRD común para definir el problema y tres Specs específicas para Power BI/Fabric, Power Apps y Power Automate. [S1][S2][S3][S4]\nAbrí cada fuente para revisar su alcance y descargar el Word editable correspondiente.`;
+
+  return {
+    id: createDatalitoId("assistant"),
+    role: "assistant",
+    question,
+    answer,
+    intent: ["template_lookup"],
+    answerMode: mode,
+    confidence: freshness.status === "overdue" ? "low" : "high",
+    grounded: true,
+    unresolved: false,
+    citations: selected.map(toDatalitoCitation),
+    relatedContent: [],
+    suggestedFollowUps: ["¿Qué diferencia hay entre PRD y Spec?", "¿Qué modelo corresponde a Power Apps?", "¿Qué debo completar primero?"],
+    statusText: "Encontré los modelos vigentes y su ubicación de descarga.",
+  };
+}
+
+function detectDatalitoTemplateProduct(normalizedQuestion) {
+  const explicitProducts = [
+    ["power-apps", /\bpower\s+apps?\b/],
+    ["power-automate", /\bpower\s+automate\b/],
+    ["power-bi", /\bpower\s+bi\b|\bfabric\b|\bbi\b/],
+  ];
+  const explicitMatch = explicitProducts.find(([, pattern]) => pattern.test(normalizedQuestion));
+  if (explicitMatch) return explicitMatch[0];
+
+  const productSignals = [
+    ["power-apps", /\b(aplicacion|canvas app|model-driven|power fx)\b/],
+    ["power-automate", /\b(automatizacion|cloud flow|desktop flow|rpa)\b/],
+    ["power-bi", /\b(modelo semantico|dax|pbip|tmdl|reporte analitico)\b/],
+  ];
+  return productSignals.find(([, pattern]) => pattern.test(normalizedQuestion))?.[0] || "";
+}
+
+function buildDatalitoSourceHealthResponse(question, mode, context) {
+  const normalized = normalizeText(question);
+  const asksFreshness = /(vencid|desactualiz|vigencia|frescura|fecha de revision|fecha de revisión)/.test(normalized);
+  const asksConflict = /(contradic|conflict|diverg|dicen cosas distintas)/.test(normalized);
+  if (!asksFreshness && !asksConflict) return null;
+
+  const contextSources = datalitoKnowledgeSources.filter((source) => {
+    const [route, hash = ""] = source.canonical_url.split("#");
+    return route === context.route && (!context.activeAnchor || !hash || `#${hash}` === context.activeAnchor);
+  });
+  const queryMatches = searchDatalitoSources(question, context).filter((match) => match.score >= 5);
+  const asksAboutCurrentContext = /(esta pagina|esta seccion|pagina actual|seccion actual|este contenido)/.test(normalized);
+  const preferredSources = asksAboutCurrentContext && contextSources.length ? contextSources : queryMatches.map((match) => match.source);
+  const candidates = deduplicateDatalitoSources(preferredSources).slice(0, 12);
+  const fallback = datalitoKnowledgeSources.find((source) => source.id === "datalito-product-contract");
+
+  if (asksConflict) {
+    const conflicts = findDatalitoPotentialConflicts(candidates);
+    const citedSources = conflicts.length ? conflicts.flatMap((conflict) => conflict.sources) : candidates.slice(0, 3);
+    return {
+      id: createDatalitoId("assistant"),
+      role: "assistant",
+      question,
+      answer: conflicts.length
+        ? `Detecté ${conflicts.length} posible${conflicts.length === 1 ? "" : "s"} divergencia${conflicts.length === 1 ? "" : "s"}: hay registros del mismo tema con versión o contenido diferente. No elijo uno por intuición; revisá status, versión, fecha y owner de las fuentes citadas antes de aplicar el criterio.`
+        : "No detecto una divergencia estructural entre las fuentes identificables en este contexto. El control local sólo marca registros del mismo tema cuando difieren en versión o contenido; para comparar dos documentos concretos necesito sus títulos o secciones y no voy a decidir sin esa evidencia.",
+      intent: ["source_conflict"],
+      answerMode: mode,
+      confidence: conflicts.length ? "low" : "medium",
+      grounded: Boolean(citedSources.length || fallback),
+      unresolved: !conflicts.length && !citedSources.length,
+      citations: deduplicateDatalitoSources(citedSources.length ? citedSources : [fallback].filter(Boolean))
+        .slice(0, 3)
+        .map(toDatalitoCitation),
+      relatedContent: [],
+      suggestedFollowUps: ["Compará estos dos títulos", "¿Cuál es la fecha de revisión?", "¿Cómo reporto una fuente?"],
+      statusText: conflicts.length
+        ? "Posible divergencia detectada; requiere revisión humana."
+        : "No encontré una divergencia verificable.",
+    };
+  }
+
+  const checkedSources = candidates.length ? candidates : [fallback].filter(Boolean);
+  const overdue = checkedSources.filter((source) => getDatalitoSourceFreshness(source).status === "overdue");
+  const earliestDueAt = checkedSources
+    .map((source) => source.review_due_at)
+    .filter(Boolean)
+    .sort()[0];
+  return {
+    id: createDatalitoId("assistant"),
+    role: "assistant",
+    question,
+    answer: overdue.length
+      ? `Sí: ${overdue.length} fuente${overdue.length === 1 ? " tiene" : "s tienen"} la revisión vencida según review_due_at. No la${overdue.length === 1 ? "" : "s"} tomes como criterio vigente sin confirmación del owner; te dejo las citas para revisarlas.`
+      : `No aparece vencida en el índice local: revisé ${checkedSources.length} fuente${checkedSources.length === 1 ? "" : "s"} aplicable${checkedSources.length === 1 ? "" : "s"} a este contexto y ninguna superó su review_due_at${earliestDueAt ? `; la próxima fecha registrada es ${formatDatalitoDate(earliestDueAt)}` : ""}. Esto verifica metadata de revisión, no reemplaza la validación del owner.`,
+    intent: ["source_freshness"],
+    answerMode: mode,
+    confidence: overdue.length ? "low" : "high",
+    grounded: Boolean(checkedSources.length),
+    unresolved: false,
+    citations: deduplicateDatalitoSources(overdue.length ? overdue : checkedSources)
+      .slice(0, 3)
+      .map(toDatalitoCitation),
+    relatedContent: [],
+    suggestedFollowUps: ["Mostrame la fecha de revisión", "¿Quién es el owner?", "Reportar fuente desactualizada"],
+    statusText: overdue.length ? "Hay fuentes con revisión vencida." : "La metadata de revisión está vigente.",
+  };
+}
+
+function findDatalitoPotentialConflicts(sources) {
+  const groups = new Map();
+  deduplicateDatalitoSources(sources).forEach((source) => {
+    const keys = [...new Set([normalizeText(source.slug), normalizeText(source.title)].filter(Boolean))];
+    keys.forEach((key) => {
+      const group = groups.get(key) || [];
+      group.push(source);
+      groups.set(key, group);
+    });
+  });
+
+  const seenGroups = new Set();
+  return [...groups.entries()]
+    .filter(([, group]) => group.length > 1)
+    .map(([topic, group]) => ({
+      topic,
+      sources: deduplicateDatalitoSources(group),
+    }))
+    .filter(({ sources }) => {
+      const signature = sources
+        .map((source) => source.id)
+        .sort()
+        .join("|");
+      if (seenGroups.has(signature)) return false;
+      seenGroups.add(signature);
+      return new Set(sources.map((source) => `${source.version}|${source.checksum}`)).size > 1;
+    });
+}
+
+function deduplicateDatalitoMatches(matches) {
+  const sourceIds = new Set();
+  return matches.filter((match) => {
+    if (sourceIds.has(match.source.id)) return false;
+    sourceIds.add(match.source.id);
+    return true;
+  });
+}
+
+function deduplicateDatalitoSources(sources) {
+  const sourceIds = new Set();
+  return sources.filter((source) => {
+    if (!source || sourceIds.has(source.id)) return false;
+    sourceIds.add(source.id);
+    return true;
+  });
 }
 
 function buildDatalitoNoEvidenceResponse(question, mode, relatedMatches) {
@@ -2292,7 +2501,7 @@ function composeDatalitoContinuationAnswer(question, source) {
   if (/(riesgo|evita|control)/.test(normalized)) {
     const riskText =
       risk || "evita que el equipo tome decisiones con criterios distintos, sin evidencia o con trabajo manual difícil de sostener.";
-    return `El riesgo principal que evita es este: ${riskText} En términos de gestión, ayuda a que el producto BI no dependa de memoria individual, correos sueltos o validaciones informales. La referencia está en “${source.title}”, dentro de ${source.section}. [S1]`;
+    return `El riesgo principal que evita es este: ${riskText} En términos de gestión, ayuda a que el producto de datalización no dependa de memoria individual, correos sueltos o validaciones informales. La referencia está en “${source.title}”, dentro de ${source.section}. [S1]`;
   }
 
   if (/(paso|checklist|como|cómo|aplica)/.test(normalized)) {
@@ -2365,9 +2574,13 @@ function isDatalitoWorkflowQuestion(question) {
   const asksHow = /(como|cómo|arm|hacer|diseñ|crear|organizar|estructurar|flujo|workflow|proceso|end to end|punta a punta|completo)/.test(
     normalized,
   );
-  const isBi = /(bi|power bi|datalizacion|datalización|tablero|dashboard|reporte|datos|inteligencia)/.test(normalized);
+  const isBi = /(\bbi\b|power bi|fabric|tablero|dashboard|reporte|modelo semantico|modelo semántico|dax|inteligencia de datos)/.test(
+    normalized,
+  );
+  const targetsAnotherProduct =
+    /(power apps|power automate|aplicacion|aplicación|automatizacion|automatización|cloud flow|desktop flow)/.test(normalized);
   const asksWorkflow = /(flujo|workflow|proceso|end to end|punta a punta|completo|roadmap|trabajo)/.test(normalized);
-  return asksHow && isBi && asksWorkflow;
+  return asksHow && isBi && asksWorkflow && !targetsAnotherProduct;
 }
 
 function composeDatalitoAnswer(question, mode, primary, matches, context) {
@@ -2407,11 +2620,19 @@ function composeDatalitoAnswer(question, mode, primary, matches, context) {
   return `Te diría esto: ${primary.summary} ${citation}\nLo importante, llevado al trabajo diario, es entender qué decisión habilita y dónde queda documentada. La sección correcta para revisar el detalle es “${primary.title}”, dentro de ${primary.section}.${relatedText}`;
 }
 
-function searchDatalitoSources(question, context) {
+function searchDatalitoSources(question, context, candidateSources = datalitoKnowledgeSources) {
   const normalizedQuestion = normalizeText(question);
-  const tokens = tokenizeDatalitoText(question);
+  const referencesCurrentContext =
+    /(esta pagina|pagina actual|esta seccion|seccion actual|aca|aqui|esto|texto|seleccion|seleccione|resumi)/.test(normalizedQuestion);
+  const referencesSelection = /(esto|texto|seleccion|seleccione|marcado)/.test(normalizedQuestion);
+  const selectedText = referencesSelection ? context.selectedText : "";
+  const selectedTokens = tokenizeDatalitoText(selectedText).slice(0, 18);
+  const tokens = [...new Set([...tokenizeDatalitoText(question), ...selectedTokens])];
+  const titleTokens = referencesCurrentContext ? tokenizeDatalitoText(context.title).slice(0, 10) : [];
+  const sectionTokens = referencesCurrentContext ? tokenizeDatalitoText(context.activeSectionTitle).slice(0, 10) : [];
+  const normalizedSelectedText = normalizeText(selectedText);
 
-  return datalitoKnowledgeSources
+  return candidateSources
     .map((source) => {
       const normalizedTitle = normalizeText(source.title);
       const normalizedSummary = normalizeText(source.summary);
@@ -2428,9 +2649,19 @@ function searchDatalitoSources(question, context) {
         score += 10;
         reasons.push("contenido exacto");
       }
-      if (source.canonical_url.split("#")[0] === context.route) {
-        score += 3;
-        reasons.push("página actual");
+      if (normalizedSelectedText.length >= 12 && normalizedContent.includes(normalizedSelectedText)) {
+        score += 18;
+        reasons.push("texto seleccionado");
+      }
+
+      const [sourceRoute, sourceHash = ""] = source.canonical_url.split("#");
+      if (sourceRoute === context.route) {
+        score += referencesCurrentContext ? 6 : 2;
+        reasons.push("ruta actual");
+      }
+      if (context.activeAnchor && sourceHash && `#${sourceHash}` === context.activeAnchor) {
+        score += referencesCurrentContext ? 14 : 4;
+        reasons.push("sección activa");
       }
 
       for (const token of tokens) {
@@ -2446,10 +2677,16 @@ function searchDatalitoSources(question, context) {
         if (normalizedContent.includes(token)) score += 1;
       }
 
+      for (const token of [...titleTokens, ...sectionTokens]) {
+        if (normalizedTitle.includes(token)) score += 2;
+        if (normalizedKeywords.includes(token)) score += 1;
+        if (normalizedContent.includes(token)) score += 0.5;
+      }
+
       return {
         source,
         score,
-        reason: reasons.slice(0, 2).join(", ") || "similitud textual",
+        reason: [...new Set(reasons)].slice(0, 3).join(", ") || "similitud textual",
       };
     })
     .filter((match) => match.score > 0)
@@ -2465,7 +2702,9 @@ function detectDatalitoIntent(question) {
   if (/(donde|ubic|encontr|ruta)/.test(normalized)) intents.push("navigation");
   if (/(vs|versus|diferencia|compar)/.test(normalized)) intents.push("comparison");
   if (/(rls|ols|seguridad|permiso|privacidad)/.test(normalized)) intents.push("security");
-  if (/(prd|spec|template|checklist)/.test(normalized)) intents.push("template_lookup");
+  if (/(prd|spec|template|plantilla|modelo descargable|checklist)/.test(normalized)) intents.push("template_lookup");
+  if (/(vencid|desactualiz|vigencia|frescura)/.test(normalized)) intents.push("source_freshness");
+  if (/(contradic|conflict|diverg)/.test(normalized)) intents.push("source_conflict");
   if (/(pagina|seccion|esto|esta)/.test(normalized)) intents.push("current_page");
   return intents.length ? intents : ["standard"];
 }
@@ -2498,6 +2737,8 @@ function buildDatalitoFollowUps(source) {
 }
 
 function toDatalitoCitation(source) {
+  const freshness = getDatalitoSourceFreshness(source);
+
   return {
     sourceId: source.id,
     title: source.title,
@@ -2506,8 +2747,39 @@ function toDatalitoCitation(source) {
     version: source.version,
     status: source.status,
     reviewedAt: source.reviewed_at,
+    reviewDueAt: source.review_due_at,
+    freshness: freshness.status,
+    freshnessLabel: freshness.label,
     excerpt: source.summary,
   };
+}
+
+function getDatalitoSourceFreshness(source, now = new Date()) {
+  const dueAt = parseDatalitoDate(source.review_due_at);
+  if (!dueAt) return { status: "unknown", label: "vigencia sin fecha" };
+
+  const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  return dueAt.getTime() < today ? { status: "overdue", label: "revisión vencida" } : { status: "current", label: "vigente" };
+}
+
+function parseDatalitoDate(value) {
+  const match = String(value || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return null;
+  return new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
+}
+
+function formatDatalitoDate(value) {
+  const match = String(value || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return match ? `${match[3]}/${match[2]}/${match[1]}` : "sin fecha";
+}
+
+function formatDatalitoSourceStatus(status) {
+  const labels = {
+    approved: "aprobada",
+    draft: "borrador",
+    archived: "archivada",
+  };
+  return labels[status] || String(status || "sin estado");
 }
 
 function getDatalitoPromptsForCurrentRoute() {
@@ -2517,18 +2789,73 @@ function getDatalitoPromptsForCurrentRoute() {
 
 function getDatalitoPageContext() {
   const route = getRoute();
-  const title = routeTitles[route] || routeTitles["/"];
-  const selectedText = String(window.getSelection?.().toString() || "")
-    .trim()
-    .slice(0, 700);
+  captureDatalitoSelection();
+  const visibleTitle = document.querySelector("#appRoot .page h1")?.textContent.trim();
+  const activeSection = getDatalitoActiveSection();
+  const selectedText = datalitoState.selectionContext.route === route ? datalitoState.selectionContext.text : "";
 
   return {
     route,
-    title,
+    title: visibleTitle || routeTitles[route] || routeTitles["/"],
     selectedText,
+    activeAnchor: activeSection.anchor,
+    activeSectionTitle: activeSection.title,
     promptVersion: datalitoPromptVersion,
     indexVersion: datalitoIndexVersion,
   };
+}
+
+function captureDatalitoSelection() {
+  const selection = window.getSelection?.();
+  const selectedText = String(selection?.toString() || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 700);
+  if (!selectedText) return;
+
+  const anchorElement = selection?.anchorNode instanceof Element ? selection.anchorNode : selection?.anchorNode?.parentElement;
+  if (!anchorElement || !appRoot.contains(anchorElement)) return;
+
+  datalitoState.selectionContext = {
+    route: getRoute(),
+    text: selectedText,
+  };
+}
+
+function getDatalitoActiveSection() {
+  const hashId = decodeURIComponent(window.location.hash.slice(1));
+  const hashTarget = hashId ? document.getElementById(hashId) : null;
+  if (hashTarget && !hashTarget.hidden) {
+    return {
+      anchor: `#${hashId}`,
+      title: getDatalitoSectionTitle(hashTarget),
+    };
+  }
+
+  const headerOffset = (document.querySelector(".site-header")?.getBoundingClientRect().height || 0) + 100;
+  const candidates = [
+    ...document.querySelectorAll("#appRoot .page > header[id], #appRoot .page section[id]:not([hidden]), #appRoot details[id][open]"),
+  ].filter((element) => {
+    const rect = element.getBoundingClientRect();
+    return rect.height > 0 && rect.bottom > headerOffset;
+  });
+  const active =
+    [...candidates].reverse().find((element) => element.getBoundingClientRect().top <= headerOffset) ||
+    candidates.find((element) => element.getBoundingClientRect().top >= 0);
+
+  return active
+    ? { anchor: `#${active.id}`, title: getDatalitoSectionTitle(active) }
+    : { anchor: "", title: document.querySelector("#appRoot .page h1")?.textContent.trim() || "" };
+}
+
+function getDatalitoSectionTitle(element) {
+  const labelledBy = element.getAttribute("aria-labelledby");
+  const labelledElement = labelledBy ? document.getElementById(labelledBy.split(/\s+/)[0]) : null;
+  return (
+    labelledElement?.textContent.trim() ||
+    element.querySelector(":scope > h1, :scope > h2, :scope > h3, h1, h2, h3")?.textContent.trim() ||
+    element.id
+  );
 }
 
 function refreshDatalitoViews() {
@@ -2559,6 +2886,7 @@ function scrollDatalitoThreadsToLatest() {
 }
 
 function openDatalitoPanel() {
+  captureDatalitoSelection();
   datalitoState.isOpen = true;
   refreshDatalitoViews();
   requestAnimationFrame(() => document.querySelector("#datalitoInput-panel")?.focus());
@@ -2577,18 +2905,51 @@ function resetDatalitoConversation(status = "Conversación nueva.") {
 
 function recordDatalitoFeedback(messageId, reason) {
   const message = datalitoState.messages.find((item) => item.id === messageId);
+  if (!message || message.role !== "assistant") {
+    datalitoState.status = "No pude asociar el feedback con una respuesta de Datalito.";
+    refreshDatalitoViews();
+    return;
+  }
+
+  const currentContext = getDatalitoPageContext();
+  const context = message.context || {
+    route: currentContext.route,
+    title: currentContext.title,
+    activeAnchor: currentContext.activeAnchor,
+    activeSectionTitle: currentContext.activeSectionTitle,
+  };
   datalitoState.feedback.push({
     id: createDatalitoId("feedback"),
+    schemaVersion: 2,
     messageId,
     reason,
-    question: message?.question || "",
-    answerMode: message?.answerMode || datalitoState.mode,
+    question: message.question || "",
+    answer: message.answer || "",
+    answerMode: message.answerMode || datalitoState.mode,
+    confidence: message.confidence || null,
+    grounded: Boolean(message.grounded),
+    unresolved: Boolean(message.unresolved),
+    sources: (message.citations || []).map((source) => ({
+      sourceId: source.sourceId,
+      title: source.title,
+      url: source.url,
+      version: source.version,
+      status: source.status,
+      reviewedAt: source.reviewedAt,
+      reviewDueAt: source.reviewDueAt,
+    })),
+    context: {
+      route: context.route,
+      title: context.title,
+      activeAnchor: context.activeAnchor,
+      activeSectionTitle: context.activeSectionTitle,
+    },
     promptVersion: datalitoPromptVersion,
     indexVersion: datalitoIndexVersion,
     createdAt: new Date().toISOString(),
   });
   persistDatalitoCollection(datalitoStorageKeys.feedback, datalitoState.feedback);
-  datalitoState.status = "Feedback registrado localmente para revisión.";
+  datalitoState.status = `Feedback registrado localmente con la respuesta y ${(message.citations || []).length} fuente${message.citations?.length === 1 ? "" : "s"}; no se guarda identidad de usuario.`;
   refreshDatalitoViews();
 }
 
@@ -2614,7 +2975,7 @@ function recordDatalitoGap(question) {
   }
 
   persistDatalitoCollection(datalitoStorageKeys.gaps, datalitoState.gaps);
-  datalitoState.status = "Brecha registrada localmente. En la versión enterprise se enviará a la bandeja de administración.";
+  datalitoState.status = "Brecha registrada localmente en este navegador.";
   refreshDatalitoViews();
 }
 
@@ -2761,6 +3122,8 @@ function renderRoadMethodologyPage() {
 
       ${renderRoadMethodologyThesis()}
 
+      ${renderMaquetaFeedbackSection()}
+
       <section class="methodology-intro page-inner" id="road-encuadre" aria-labelledby="methodologyIntroTitle">
         <div class="methodology-intro-copy">
           <span class="flow-chip">encuadre</span>
@@ -2801,6 +3164,10 @@ function renderRoadMethodologyPage() {
       </section>
 
       ${renderConceptDecantation()}
+
+      <section class="improvement-tools-disclosure page-inner" id="road-herramientas-mejora" aria-label="Herramientas de mejora">
+        <details class="method-disclosure road-tools-disclosure">
+          <summary>Herramientas de mejora (OEE BI, DMAIC, Lean, 4P Toyota) — abrir cuando haga falta profundizar</summary>
 
       <section class="oee-section page-inner" id="road-oee-bi" aria-labelledby="oeeTitle">
         <div class="methodology-section-head">
@@ -2876,6 +3243,9 @@ function renderRoadMethodologyPage() {
         </div>
       </section>
 
+        </details>
+      </section>
+
       <section class="methodology-close page-inner" id="road-cierre" aria-label="Cierre metodológico">
         <div>
           <span class="eyebrow">criterio de uso</span>
@@ -2912,6 +3282,49 @@ function renderRoadMethodologyThesis() {
           )
           .join("")}
       </div>
+    </section>
+  `;
+}
+
+function renderMaquetaFeedbackSection() {
+  const stage = getDeliveryStage("maqueta-feedback");
+  if (!stage) return "";
+  return `
+    <section class="maqueta-feedback-section page-inner" id="road-maqueta" aria-labelledby="maquetaFeedbackTitle">
+      <div class="methodology-section-head">
+        <span class="flow-chip">etapa 3 de 9 · antes de PRD y Spec</span>
+        <h2 id="maquetaFeedbackTitle">La maqueta valida la dirección con el cliente antes de comprometer diseño técnico.</h2>
+        <p>${escapeHtml(stage.purpose)}</p>
+      </div>
+      <div class="maqueta-feedback-banner" role="note">
+        <strong>Maqueta — no productiva.</strong>
+        <span>Datos ficticios, versión visible, fecha y owner. No es código productivo salvo decisión explícita.</span>
+      </div>
+      <div class="maqueta-feedback-grid">
+        <article class="maqueta-feedback-block">
+          <h3>Actividades</h3>
+          <ul>${stage.activities.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </article>
+        <article class="maqueta-feedback-block">
+          <h3>Salidas</h3>
+          <ul>${stage.deliverables.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </article>
+        <article class="maqueta-feedback-block">
+          <h3>Criterio de salida</h3>
+          <ul>${stage.exitCriteria.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </article>
+        <article class="maqueta-feedback-block">
+          <h3>Riesgos</h3>
+          <ul>${stage.risks.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+        </article>
+      </div>
+      <details class="method-disclosure">
+        <summary>Ver plantilla de registro de maquetado</summary>
+        <ol class="maqueta-feedback-template">
+          ${maquetaFeedbackTemplate.map((field) => `<li>${escapeHtml(field.label)}</li>`).join("")}
+        </ol>
+        <p class="maqueta-feedback-template-note">Plantilla completa en <code>docs/modelos/maqueta-feedback.md</code>.</p>
+      </details>
     </section>
   `;
 }
@@ -3552,7 +3965,7 @@ function renderDatalizationMethodPage() {
         <div class="method-project-grid">
           <div class="method-folder-browser" aria-label="Explorador de carpetas del proyecto">
             <div class="method-folder-root">
-              <span>PRJ001-MidGas-Tablero-Objetivos</span>
+              <span>PRJ001-OEE-Tablero-Objetivos</span>
               <small>plantilla viva de proyecto</small>
             </div>
             ${methodProjectFolders.map(renderMethodFolder).join("")}
@@ -4636,6 +5049,7 @@ function renderProductPracticeDisclosure(productSlug, phase) {
 }
 
 let productPracticeLoaderPromise;
+const productPracticeLoadPromises = new WeakMap();
 
 function setupProductPracticeLibraries(root = document) {
   root.querySelectorAll("[data-practice-library]").forEach((disclosure) => {
@@ -4647,34 +5061,44 @@ function setupProductPracticeLibraries(root = document) {
   });
 }
 
-async function loadProductPracticeDisclosure(disclosure) {
-  if (disclosure.dataset.practiceStatus === "loading") return;
-  const body = disclosure.querySelector("[data-practice-library-body]");
-  if (!body) return;
+function loadProductPracticeDisclosure(disclosure) {
+  const activeLoad = productPracticeLoadPromises.get(disclosure);
+  if (activeLoad) return activeLoad;
+  if (disclosure.dataset.practiceStatus === "ready") return Promise.resolve();
 
-  disclosure.dataset.practiceStatus = "loading";
-  body.innerHTML = '<p class="product-practice-status">Cargando buenas prácticas…</p>';
+  const loadPromise = (async () => {
+    const body = disclosure.querySelector("[data-practice-library-body]");
+    if (!body) return;
 
-  try {
-    productPracticeLoaderPromise ||= import("./data/practices/index.js");
-    const { loadGatePractices } = await productPracticeLoaderPromise;
-    const library = await loadGatePractices(disclosure.dataset.productSlug, disclosure.dataset.gateSlug);
-    body.innerHTML = renderLoadedProductPractices(library);
-    disclosure.dataset.practiceStatus = "ready";
-  } catch (error) {
-    console.error("No se pudo cargar la biblioteca de buenas prácticas", error);
-    productPracticeLoaderPromise = undefined;
-    disclosure.dataset.practiceStatus = "error";
-    body.innerHTML = `
-      <div class="product-practice-error" role="alert">
-        <p>No se pudo cargar esta biblioteca.</p>
-        <button class="button small secondary" type="button" data-practice-retry>Reintentar</button>
-      </div>
-    `;
-    body.querySelector("[data-practice-retry]")?.addEventListener("click", () => loadProductPracticeDisclosure(disclosure), {
-      once: true,
-    });
-  }
+    disclosure.dataset.practiceStatus = "loading";
+    body.innerHTML = '<p class="product-practice-status">Cargando buenas prácticas…</p>';
+
+    try {
+      productPracticeLoaderPromise ||= import("./data/practices/index.js");
+      const { loadGatePractices } = await productPracticeLoaderPromise;
+      const library = await loadGatePractices(disclosure.dataset.productSlug, disclosure.dataset.gateSlug);
+      body.innerHTML = renderLoadedProductPractices(library);
+      disclosure.dataset.practiceStatus = "ready";
+    } catch (error) {
+      console.error("No se pudo cargar la biblioteca de buenas prácticas", error);
+      productPracticeLoaderPromise = undefined;
+      disclosure.dataset.practiceStatus = "error";
+      body.innerHTML = `
+        <div class="product-practice-error" role="alert">
+          <p>No se pudo cargar esta biblioteca.</p>
+          <button class="button small secondary" type="button" data-practice-retry>Reintentar</button>
+        </div>
+      `;
+      body.querySelector("[data-practice-retry]")?.addEventListener("click", () => loadProductPracticeDisclosure(disclosure), {
+        once: true,
+      });
+    } finally {
+      productPracticeLoadPromises.delete(disclosure);
+    }
+  })();
+
+  productPracticeLoadPromises.set(disclosure, loadPromise);
+  return loadPromise;
 }
 
 function renderLoadedProductPractices(library) {
@@ -4699,7 +5123,7 @@ function renderLoadedProductPractices(library) {
 
 function renderProductPractice(practice, index) {
   return `
-    <details class="product-practice" style="--practice-order:${index}">
+    <details class="product-practice" id="${escapeHtml(practice.id)}" style="--practice-order:${index}">
       <summary>
         <span class="product-practice-index">${String(index + 1).padStart(2, "0")}</span>
         <span>
@@ -4764,10 +5188,10 @@ function renderPrdSpecModelSection() {
         <span class="flow-chip">modelos descargables</span>
           <h2 id="guideModelsTitle">PRD y Spec separan la pregunta ejecutiva de la respuesta técnica.</h2>
           <p>El PRD alinea la necesidad operativa; la Spec convierte esa necesidad en una implementación revisable. Los modelos se presentan como una vista previa limpia y se descargan como documentos Word editables.</p>
-        </div>
+      </div>
 
       <div class="guide-models-grid">
-        ${guideDocumentTemplates.map(renderGuideDocumentTemplate).join("")}
+        ${documentTemplates.map(renderGuideDocumentTemplate).join("")}
       </div>
 
       <div class="guide-process-contract" aria-labelledby="guideContractTitle">
@@ -4804,7 +5228,7 @@ function renderGuideDocumentTemplate(template) {
       </div>
       <div class="guide-model-preview" aria-label="Vista previa de ${escapeHtml(template.title)}">
         <div class="guide-model-sheet">
-          <span>YPF | Equipo de Datalización</span>
+          <span>Portal de Datalización YPF</span>
           <h4>${escapeHtml(template.title)}</h4>
           <p>${escapeHtml(template.format)}</p>
           <ol>
@@ -4813,7 +5237,7 @@ function renderGuideDocumentTemplate(template) {
         </div>
       </div>
       <div class="guide-model-actions">
-        <a class="button small secondary" href="/${template.source}" download>
+        <a class="button small secondary" href="${escapeHtml(template.downloadPath)}" download>
           ${icon("download")}
           Descargar Word
         </a>
@@ -5165,7 +5589,7 @@ function renderProjectPage() {
 
       ${renderExecutiveBrief(pageNarratives.project, "", "proyecto-sintesis")}
 
-      <section class="project-studio page-inner" id="proyecto-estudio">
+      <section class="project-studio page-inner" id="proyecto-flujo-trabajo">
         <div class="project-copy">
           <span class="flow-chip">filosofía de trabajo</span>
           <h2>La documentación vale cuando permite revisar una decisión.</h2>
@@ -5326,6 +5750,8 @@ function renderShortcutCategory(category) {
     </article>
   `;
 }
+
+document.addEventListener("selectionchange", captureDatalitoSelection);
 
 document.addEventListener("submit", (event) => {
   const form = event.target.closest("[data-datalito-form]");

@@ -38,6 +38,7 @@
 html {
   overflow-x: hidden;
   min-height: 100%;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -644,6 +645,7 @@ p {
 
 .page {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 30px;
 }
 
@@ -7896,6 +7898,78 @@ details.term-card {
   min-width: 0;
 }
 
+.maqueta-feedback-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin: 16px 0;
+  padding: 12px 16px;
+  border: 1px solid color-mix(in srgb, var(--ypf-yellow), transparent 55%);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--ypf-yellow), transparent 90%);
+  color: #ffffff;
+}
+
+.maqueta-feedback-banner strong {
+  color: var(--ypf-yellow);
+}
+
+.maqueta-feedback-banner span {
+  color: var(--muted);
+}
+
+.maqueta-feedback-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.maqueta-feedback-block {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.maqueta-feedback-block h3 {
+  margin: 0;
+  color: var(--ypf-blue-3);
+  font-size: 0.86rem;
+}
+
+.maqueta-feedback-block ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.maqueta-feedback-template {
+  margin: 0;
+  padding: 4px 16px 16px 32px;
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.maqueta-feedback-template-note {
+  margin: 0;
+  padding: 0 16px 16px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.road-tools-disclosure > summary {
+  margin-bottom: 16px;
+}
+
 .method-code-table {
   display: grid;
   grid-template-columns: minmax(82px, auto) minmax(0, 1fr);
@@ -9391,8 +9465,9 @@ kbd {
 
 .product-breadcrumb {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 9px;
+  gap: 6px 9px;
   padding-top: 34px;
   color: var(--muted);
   font-size: 0.86rem;

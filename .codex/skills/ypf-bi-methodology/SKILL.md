@@ -9,12 +9,13 @@ Use this skill to integrate improvement methods into the portal as working logic
 
 ## Workflow
 
-1. Locate the lifecycle stage: PRD/Spec, data, model, DAX, security, UX, versioning, publication, or operation.
+1. Locate the lifecycle stage: maqueta/feedback, PRD/Spec, data, model, DAX, security, UX, versioning, handoff/publication, or operation. Maqueta/feedback is mandatory and comes before PRD/Spec; it is never skipped and never treated as production code.
 2. Choose the method because it answers a specific question: loss, cause, risk, future flow, prevention, release speed, or sustained control.
 3. Explain each method with `por que`, `para que`, `como`, `definicion tecnica`, `definicion funcional`, and examples when the section is instructional.
 4. Tie every method to evidence: baseline, acceptance criteria, FMEA, data contract, UAT, runbook, SLA, adoption, incident, or backlog.
 5. Preserve the page hierarchy: conclusion, supporting logic, evidence, action.
 6. Validate that no method appears without a reason inside the BI process.
+7. At handoff/publication, Datalización only assembles the release package (artifacts, QA/UAT evidence, dependencies, permissions, release notes, rollback). Ingeniería de Software is the only actor who executes the promotion to PROD — never present Datalización as the one publishing to production.
 
 ## Method Placement
 

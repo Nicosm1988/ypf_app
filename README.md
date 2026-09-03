@@ -1,378 +1,262 @@
-# Datalización YPF
+# Datalización Hub
 
-Portal interno para el área de Datalización de YPF con recursos de consulta, gobierno y trabajo.
+Datalización Hub es una demostración pública y estática del sistema operativo metodológico de Datalización YPF. Reúne criterios, recorridos y herramientas para ordenar productos de Power BI, Microsoft Fabric, Power Apps y Power Automate desde la necesidad inicial hasta la operación y la mejora continua.
 
-Datalización es la práctica de automatizar procesos mediante datos confiables, reglas explícitas, acciones trazables y operación monitoreada. La web está replanteada con una estructura ejecutiva de síntesis, razones, evidencia, acción y control.
+> Este sitio se publica sin autenticación. Todo su contenido y sus archivos descargables son accesibles desde Internet: no deben incorporarse datos internos, confidenciales, personales o productivos; tampoco credenciales, secretos, URLs privadas ni documentación con acceso restringido.
 
-- Portada ejecutiva Datalización Hub / BI Delivery Playbook para posicionar la plataforma como capacidad organizacional.
-- Portadas con imagen industrial de alta calidad vinculada a refinería, ductos y puerto energético.
-- Road y Metodología BI/Fabric para ordenar en una sola sección el ciclo completo, los gates, OEE BI, DMAIC y mejora continua.
-- Guía maestra Fabric end-to-end dentro de Road y Metodología, con arquitectura OneLake, procesamiento, Direct Lake y pilares de adopción.
-- Método de Datalización para organizar DEV/PROD, Teams, SharePoint, canales, carpetas, naming, backlog, VMC, gobierno y el Marco de Datalización VMC.
-- Design System para consolidar patrones visuales, componentes, reglas de experiencia y criterios de calidad.
-- Datalito, asistente interno de conocimiento con personaje animado, conversación natural, búsqueda local, citas, feedback y brechas.
-- Narrativa ejecutiva en cada página para presentar primero la conclusión, luego los argumentos y finalmente la evidencia operativa.
-- Mega menú y footer tipo mapa de plataforma, con secciones y subsecciones navegables como páginas internas.
-- Productos de Datalización con catálogo y ciclos end-to-end de Microsoft Power BI, Microsoft Power Apps y Microsoft Power Automate.
-- Diccionario BI para alinear conceptos de automatización, datos, Power BI, Fabric, performance, gobierno y adopción.
-- Roadmap BI integrado en Road y Metodología, estructurado en 9 gates de ingeniería: PRD/Spec, datos/Power Query, modelado, DAX, seguridad/gobierno, UX/acción, versionado/aprobación, publicación y operación/mejora.
-- Proyecto de Power BI con Visual Studio para trabajar procesos, Spec, PBIP, TMDL, Git y documentación con criterio.
-- Catálogo de librerías, agentes, MCPs y sandboxes guardado en documentación local.
-- Sistema repo-local de skills, agentes, MCP registry y QA automatizada para evolucionar la web con criterio productivo.
-- Atajos Power BI curados con referencia directa a la documentación oficial de Microsoft Learn.
-- Trazabilidad académica desplegable después de cada sección y subsección, con 119 bloques cubiertos y fuentes específicas dentro de cada término del diccionario.
+## La plataforma convierte conocimiento disperso en un recorrido común
 
-La app es estatica, sin credenciales, sin datos sensibles y compatible con Vercel.
+- **Inicio** presenta el propósito, la definición de Datalización, la capacidad organizacional y el mapa del hub con una portada ejecutiva.
+- **Road y Metodología** integra el ciclo BI/Fabric, nueve gates, PRD, Specs por producto, Power Query, modelado, DAX, seguridad, UX, publicación, operación, OEE BI, DMAIC y prácticas Lean.
+- **Método de Datalización** ordena el trabajo entre DEV y PROD, Microsoft 365, canales, carpetas, naming, backlog, gobierno y el Marco de Datalización VMC.
+- **Design System** documenta fundamentos, principios, componentes, entregables y reglas de calidad para mantener una experiencia consistente.
+- **Datalito** orienta al usuario mediante búsqueda textual sobre fuentes locales, citas, modos de respuesta, feedback y registro de brechas.
+- **Productos** ofrece recorridos end-to-end para Microsoft Power BI, Microsoft Power Apps y Microsoft Power Automate.
+- **Diccionario BI** alinea definiciones, ejemplos, riesgos y trazabilidad académica.
+- **Proyecto Power BI** explica el trabajo con Power BI Desktop, Visual Studio Code, PBIP, TMDL, Git, PRD y Spec.
+- **Librerías y Atajos** reúne el catálogo técnico gobernado y accesos directos a la documentación oficial.
 
-## Stack
+El encabezado permite recorrer las secciones principales y el footer funciona como mapa complementario. Cada página presenta primero la conclusión, después el fundamento y finalmente la evidencia o la acción esperada.
 
-- HTML, CSS y JavaScript vanilla.
-- Modulos ES para separar datos de UI.
-- Contenido local editable en `data/platformIntro.js`, `data/powerPlatformProducts.js`, `data/datalito.js`, `data/designSystem.js`, `data/dictionary.js`, `data/engineeringGuide.js`, `data/datalizationMethod.js`, `data/methodology.js`, `data/executiveNarrative.js`, `data/roadmap.js`, `data/toolingLibrary.js` y `data/powerbiShortcuts.js`.
-- Registro bibliográfico, temas, criterios de elaboración y cobertura académica en `data/academicSources.js`.
-- Documentación técnica en `docs/librerias-agentes-mcp.md` y documentación operativa de Datalito en `docs/datalito-*.md`.
-- Casos de evaluación de Datalito en `evals/datalito`.
-- Skills repo-locales en `.codex/skills`.
-- Agentes operativos en `.codex/agents`.
-- Registry MCP gobernado en `.mcp/registry.json`.
-- QA automatizada con Playwright, axe-core, ESLint, Stylelint, HTML Validate, Markdownlint y Prettier.
-- Modelos descargables en `docs/modelos/prd-datalizacion.md` y `docs/modelos/spec-datalizacion.md`.
-- Deploy estatico en Vercel.
+## La arquitectura es una SPA estática y no necesita secretos
 
-## Correr localmente
+El navegador ejecuta HTML, CSS y JavaScript con módulos ES. No hay React, Next.js, API propia, base de datos, proveedor de IA, autenticación ni runtime de servidor.
+
+```text
+index.html
+  ├── navegación y footer
+  └── app.js
+        ├── routing e interfaz
+        ├── data/*.js
+        └── localStorage de Datalito
+
+service-worker.js
+  └── precache y actualización de recursos locales
+
+scripts/*.mjs
+  └── desarrollo, generación, validación y QA
+```
+
+Las responsabilidades principales se distribuyen así:
+
+- `index.html`: shell accesible, navegación principal, metadata y footer.
+- `styles.css`: tokens, componentes, layouts y comportamiento responsive.
+- `app.js`: routing del lado cliente, renderers e interacciones.
+- `data/`: contenido estructurado y contratos de datos.
+- `data/practices/`: buenas prácticas por gate y registro único de fuentes Microsoft.
+- `data/academicSources.js`: bibliografía, temas y trazabilidad académica.
+- `data/documentTemplates.js`: manifiesto canónico del PRD y las Specs; las Specs reutilizan los gates de cada producto.
+- `docs/`: documentación técnica y salidas Markdown de los modelos.
+- `assets/`: imágenes, identidad, íconos oficiales y salidas Word de los modelos.
+- `evals/datalito/`: casos de evaluación de Datalito.
+- `.codex/`: skills y agentes repo-locales.
+- `.mcp/registry.json`: inventario gobernado de capacidades MCP.
+- `scripts/`: servidor local, generadores y gates automatizados.
+- `service-worker.js` y `manifest.webmanifest`: instalación PWA y estrategia de caché.
+- `vercel.json`: build, rewrites, headers y configuración de publicación.
+
+El proyecto no carga archivos `.env`. El servidor de desarrollo acepta `PORT` como variable opcional de la shell, pero el sitio publicado no consume variables de entorno.
+
+## El entorno local se prepara con Node 24 LTS y npm 12
+
+Requisitos:
+
+- Node.js `24.18.1` LTS.
+- npm `12.0.2`.
+
+Instalar exactamente las dependencias del lockfile:
+
+```bash
+npm ci
+```
+
+Regenerar los modelos e iniciar el servidor:
 
 ```bash
 npm run dev
 ```
 
-Luego abrir:
+Abrir [http://127.0.0.1:8001/](http://127.0.0.1:8001/).
 
-```text
-http://127.0.0.1:8001/
-```
-
-El servidor local tambien soporta:
-
-```text
-http://127.0.0.1:8001/road-y-metodologia
-http://127.0.0.1:8001/metodo-datalizacion
-http://127.0.0.1:8001/design-system
-http://127.0.0.1:8001/datalito
-http://127.0.0.1:8001/productos
-http://127.0.0.1:8001/productos/power-bi
-http://127.0.0.1:8001/productos/power-apps
-http://127.0.0.1:8001/productos/power-automate
-http://127.0.0.1:8001/diccionario
-http://127.0.0.1:8001/proyecto-power-bi
-http://127.0.0.1:8001/librerias
-http://127.0.0.1:8001/atajos
-```
-
-Las subsecciones principales también tienen URL propia para que el menú, el footer y los links internos puedan llevar directo al bloque correcto:
-
-```text
-http://127.0.0.1:8001/road-y-metodologia/oee-bi
-http://127.0.0.1:8001/road-y-metodologia/fabric-end-to-end
-http://127.0.0.1:8001/metodo-datalizacion/backlog
-http://127.0.0.1:8001/design-system/componentes
-http://127.0.0.1:8001/datalito/arquitectura
-```
-
-## Validar build
+Para usar otro puerto:
 
 ```bash
-npm run build
+PORT=8010 npm run dev
 ```
 
-El build valida que:
+## Las rutas canónicas reflejan la navegación vigente
 
-- Exista Home, Road y Metodología, Método de Datalización, Design System, Datalito, Diccionario BI, Proyecto Power BI, Librerías y Atajos.
-- Existan el catálogo de Productos y las fichas de Microsoft Power BI, Microsoft Power Apps y Microsoft Power Automate, cada una con nueve gates.
-- Exista mega menú con grupos, dropdowns y subsecciones; el footer funcione como mapa completo de navegación.
-- La Home tenga portada ejecutiva Datalización Hub, narrativa Antes/Ahora/Después y transición de tableros a disciplina.
-- La Home tenga una primera lectura con estructura de estudio, tesis y contribución operativa.
-- La Home tenga botonera para las secciones principales, el Design System tenga estructura ejecutiva completa y Datalito tenga vertical slice funcional.
-- El diccionario tenga al menos 65 términos.
-- Los 119 bloques auditados tengan una fuente visible, metadata bibliográfica y criterio explícito de fuente directa, síntesis, adaptación o elaboración propia.
-- Cada término del diccionario resuelva a una bibliografía temática y todas las URLs académicas usen HTTPS o rutas internas controladas.
-- Road y Metodología tenga los 9 gates obligatorios, PRD/Spec, checklist de salida, OEE BI, DMAIC, Lean Six Sigma, 4P Toyota, VSM, FMEA, Kaizen, SMED, Poka-Yoke, Kata y cadencias de operación.
-- El Método de Datalización tenga proceso end to end, separación DEV/PROD, 8 canales base, 12 subcarpetas estándar y naming gobernado.
-- Cada página principal tenga narrativa ejecutiva con tesis, tres soportes y acción.
-- El sitio incluya un árbol de decantación conceptual con niveles y ramas claras.
-- Datalito tenga fuentes locales aprobadas, cinco modos de respuesta, controles de gobierno, KPIs, feedback, brechas y 170 preguntas benchmark.
-- El catálogo técnico tenga documentación Markdown y familias de herramientas.
-- Los atajos tengan categorías e items navegables.
-- Los datos tengan los campos requeridos.
-- Vercel tenga rewrites para páginas principales y subsecciones como `/road-y-metodologia/oee-bi`, manteniendo compatibilidad con `/guia-power-bi`, `/metodologia` y `/roadmap`.
-- Se genere `dist/` con las rutas estaticas listas para Vercel.
+| Área                     | Ruta                        |
+| ------------------------ | --------------------------- |
+| Inicio                   | `/`                         |
+| Road y Metodología       | `/road-y-metodologia`       |
+| Método de Datalización   | `/metodo-datalizacion`      |
+| Design System            | `/design-system`            |
+| Datalito                 | `/datalito`                 |
+| Productos                | `/productos`                |
+| Microsoft Power BI       | `/productos/power-bi`       |
+| Microsoft Power Apps     | `/productos/power-apps`     |
+| Microsoft Power Automate | `/productos/power-automate` |
+| Diccionario BI           | `/diccionario`              |
+| Proyecto Power BI        | `/proyecto-power-bi`        |
+| Librerías                | `/librerias`                |
+| Atajos                   | `/atajos`                   |
 
-## Validar calidad completa
+Las subsecciones también tienen rutas estables. Por ejemplo:
+
+- `/road-y-metodologia/fabric-end-to-end`
+- `/road-y-metodologia/maqueta`
+- `/road-y-metodologia/oee-bi`
+- `/metodo-datalizacion/backlog`
+- `/design-system/componentes`
+- `/datalito/arquitectura`
+
+`/guia-power-bi`, `/metodologia` y `/roadmap` se conservan como aliases de compatibilidad y resuelven a Road y Metodología. El servidor local y Vercel entregan `index.html` para las rutas de la SPA; luego `app.js` renderiza la página y, cuando corresponde, desplaza la vista a la sección solicitada.
+
+## Un solo gate valida el release completo
 
 ```bash
 npm run quality
 ```
 
-Este comando corre build, lint, validacion de agentes/skills/MCP y QA con navegador real.
+El gate ejecuta, en este orden:
 
-Comandos parciales:
+1. `npm run build`: genera los modelos documentales, valida contratos de contenido, rutas, assets y configuración, y produce `dist/`.
+2. `npm run lint`: revisa JavaScript, CSS, HTML y Markdown.
+3. `npm run format:check`: comprueba el formato sin modificar archivos.
+4. `npm run qa:agents`: valida skills, agentes y registros MCP.
+5. `npm run qa:links`: detecta enlaces locales rotos.
+6. `npm audit`: controla vulnerabilidades de dependencias.
+7. `npm run qa:e2e`: recorre las rutas soportadas en cinco viewports con navegador real y controla accesibilidad, consola, red, overflow, carga e interacciones críticas.
 
-```bash
-npm run lint
-npm run qa:agents
-npm run qa:links
-npm run qa:e2e
-npm audit
-```
+Comandos útiles durante el desarrollo:
 
-Si Playwright necesita instalar Chromium en una maquina nueva:
+| Comando                       | Uso                                                                     |
+| ----------------------------- | ----------------------------------------------------------------------- |
+| `npm run predev`              | Regenera los modelos antes de iniciar el servidor.                      |
+| `npm run dev`                 | Regenera los modelos mediante `predev` e inicia el servidor local.      |
+| `npm run docs:modelos`        | Regenera las salidas Markdown y Word desde `data/documentTemplates.js`. |
+| `npm run build`               | Genera documentos, valida contratos y crea `dist/`.                     |
+| `npm run validate`            | Ejecuta la misma validación estructural del build.                      |
+| `npm run lint`                | Ejecuta todos los linters.                                              |
+| `npm run lint:js`             | Revisa el JavaScript del repositorio.                                   |
+| `npm run lint:css`            | Revisa `styles.css`.                                                    |
+| `npm run lint:html`           | Revisa `index.html`.                                                    |
+| `npm run lint:md`             | Revisa el Markdown versionado.                                          |
+| `npm run format`              | Aplica Prettier.                                                        |
+| `npm run format:check`        | Comprueba el formato.                                                   |
+| `npm run qa:agents`           | Valida el sistema repo-local de agentes y MCP.                          |
+| `npm run qa:links`            | Valida enlaces internos.                                                |
+| `npm run qa:e2e`              | Ejecuta QA responsive y accesible en Chromium.                          |
+| `npm run qa:install-browsers` | Instala Chromium para Playwright.                                       |
+| `npm run quality`             | Ejecuta el gate completo de release.                                    |
 
-```bash
-npm run qa:install-browsers
-```
+`npm run build` elimina y vuelve a crear `dist/`. Esa carpeta es una salida generada y no debe editarse manualmente.
 
-## Desplegar en Vercel
+## Los modelos se mantienen en código y se distribuyen en Markdown y Word
 
-El proyecto está preparado para deploy estatico, pero los comandos de build y QA no despliegan. La publicación a producción es una acción separada y requiere autorización explícita.
+`data/documentTemplates.js` es el manifiesto canónico que reúne:
 
-Si el proyecto ya está linkeado a Vercel:
+- el PRD común;
+- la Spec de Power BI y Microsoft Fabric;
+- la Spec de Power Apps;
+- la Spec de Power Automate.
+
+El PRD, la metadata y la composición documental se editan allí. Las secciones de cada Spec se derivan de los nueve gates de `data/powerPlatformProducts.js`; así, la ficha web del producto, Datalito y el documento descargable no pueden describir ciclos de vida diferentes.
+
+`npm run docs:modelos` genera dos representaciones del mismo contenido:
+
+- `docs/modelos/*.md`, para lectura, revisión y control de cambios;
+- `assets/docs/modelos/*.docx`, para descarga y uso en Microsoft Word.
+
+No editar las salidas a mano: el siguiente build las reemplaza. Los cambios documentales comienzan en `data/documentTemplates.js`; si modifican el ciclo de un producto, comienzan en `data/powerPlatformProducts.js`. En ambos casos terminan regenerando los dos formatos.
+
+## Datalito demuestra el flujo sin simular una plataforma de IA
+
+La versión actual es local, determinística y read-only. Procesa la consulta en el navegador, aplica respuestas conversacionales acotadas, detecta pedidos sensibles mediante reglas explícitas y busca coincidencias textuales en el índice construido desde el contenido del portal. La ruta, el título, la sección activa y una selección de texto pueden aportar contexto.
+
+Cuando encuentra evidencia suficiente, Datalito estructura la respuesta según uno de cinco modos y muestra las citas asociadas. Cuando la base no alcanza, lo informa y permite registrar una brecha. El feedback y las brechas quedan en `localStorage` del navegador; no se envían a un equipo ni se persisten en infraestructura corporativa.
+
+Esta versión no ofrece:
+
+- un LLM o proveedor externo de IA;
+- RAG vectorial, embeddings o búsqueda semántica;
+- acceso abierto a Internet;
+- SSO, RBAC ni autorización por documento;
+- lectura de sistemas, datasets o fuentes privadas;
+- historial sincronizado entre dispositivos;
+- escritura sobre Power BI, Fabric, permisos o documentación.
+
+Los controles de vigencia, divergencia, citas y casos adversariales son controles funcionales del prototipo, no una frontera de seguridad. La metadata de una fuente describe su gobierno, pero no restringe el acceso en este deploy público.
+
+El contrato vigente está documentado en:
+
+- [`docs/datalito-architecture.md`](docs/datalito-architecture.md)
+- [`docs/datalito-content-governance.md`](docs/datalito-content-governance.md)
+- [`docs/datalito-evaluation.md`](docs/datalito-evaluation.md)
+- [`docs/datalito-runbook.md`](docs/datalito-runbook.md)
+- [`docs/datalito-threat-model.md`](docs/datalito-threat-model.md)
+
+No existe un prompt maestro separado: el comportamiento ejecutable vive en `app.js`, el conocimiento y sus contratos viven en `data/datalito.js`, y la documentación anterior explica sus límites.
+
+## El contenido se modifica en su fuente estructurada
+
+| Contenido                                | Fuente principal                |
+| ---------------------------------------- | ------------------------------- |
+| Inicio y definición de Datalización      | `data/platformIntro.js`         |
+| Narrativa de las páginas                 | `data/executiveNarrative.js`    |
+| Road, PRD/Spec y guía de ingeniería      | `data/engineeringGuide.js`      |
+| Gates de Power BI                        | `data/roadmap.js`               |
+| OEE BI, DMAIC y Lean                     | `data/methodology.js`           |
+| Método y Marco VMC                       | `data/datalizationMethod.js`    |
+| Design System                            | `data/designSystem.js`          |
+| Productos y gates de Power Apps/Automate | `data/powerPlatformProducts.js` |
+| Prácticas por producto                   | `data/practices/*.js`           |
+| Diccionario BI                           | `data/dictionary.js`            |
+| Fuentes académicas                       | `data/academicSources.js`       |
+| Datalito                                 | `data/datalito.js`              |
+| Librerías y agentes                      | `data/toolingLibrary.js`        |
+| Atajos Power BI                          | `data/powerbiShortcuts.js`      |
+| PRD y composición de Specs               | `data/documentTemplates.js`     |
+| Gates reutilizados por las Specs         | `data/powerPlatformProducts.js` |
+
+Cada objeto nuevo debe conservar el contrato del módulo, usar identificadores únicos, enlazar rutas locales válidas y distinguir una síntesis propia de una afirmación atribuida a una fuente externa. Las prácticas de los gates referencian las URLs oficiales por `sourceId` desde `data/practices/sources.js`; no deben duplicarlas.
+
+## La PWA prioriza contenido actual y mantiene un fallback local
+
+`manifest.webmanifest` permite instalar el sitio como aplicación. `service-worker.js` precachea el shell, rutas, módulos, documentos y assets necesarios; para navegación, scripts, estilos, manifiesto y módulos de datos intenta primero la red y usa caché ante una falla. Los assets versionados se sirven desde caché cuando están disponibles.
+
+Al cambiar archivos precacheados se debe actualizar `CACHE_NAME` en `service-worker.js`. La PWA funciona en `localhost` y en orígenes HTTPS; el caché no reemplaza una política de publicación ni convierte contenido público en contenido privado.
+
+## Vercel publica únicamente el resultado validado
+
+`vercel.json` define:
+
+- `npm run build` como comando de build;
+- `dist/` como directorio de salida;
+- rewrites para las rutas de la SPA;
+- revalidación de módulos de datos y del service worker;
+- CSP y headers defensivos.
+
+El build y los comandos de QA no despliegan. Si el proyecto ya está vinculado y la publicación fue autorizada:
 
 ```bash
 vercel deploy --prod
 ```
 
-Si se despliega desde GitHub, Vercel puede publicar automáticamente cuando haya push a la rama configurada.
+Una integración con GitHub también puede publicar al recibir un push en la rama configurada. En ambos casos, el resultado queda disponible públicamente y sin autenticación.
 
-## Editar Productos
+## La seguridad empieza por mantener el repositorio publicable
 
-Editar `data/powerPlatformProducts.js` para mantener las fichas de Microsoft Power BI, Microsoft Power Apps y Microsoft Power Automate. Cada producto debe conservar `slug`, `officialName`, `route`, `iconPath`, nueve fases con ids de `0` a `8`, recursos relacionados y la separación entre `commonControls` y `specificControls`.
+- No versionar credenciales, tokens, archivos `.env` ni endpoints privados.
+- No incluir datos reales de personas, operaciones, capacidades, costos o incidentes.
+- No activar MCPs con tokens ni herramientas que escriban en sistemas externos sin aprobación explícita.
+- No presentar controles de interfaz como autorización real.
+- No conectar Datalito a fuentes internas, APIs o proveedores de IA sin definir identidad, permisos previos a la recuperación, privacidad, retención, observabilidad y evaluación.
+- Ejecutar `npm run quality` antes de publicar.
 
-Decisión de navegación: `Productos` ocupa el único slot superior que antes agrupaba `Recursos`, para mantener el header en una sola fila también a 1024 px. La ruta `/proyecto-power-bi` se conserva y se enlaza desde la ficha de Power BI; Diccionario, Librerías, Atajos y los demás recursos siguen disponibles desde la Home, las fichas relacionadas y el footer.
+## Marcas, fuentes y assets mantienen trazabilidad propia
 
-Las fases de Power Apps y Power Automate viven en ese módulo. Microsoft Power BI referencia directamente `roadmapPhases` desde `data/roadmap.js`: no copiar ni mantener una segunda definición. Para cambiar el ciclo de Power BI, editar únicamente `data/roadmap.js`.
+Los íconos oficiales de Microsoft Power Platform y Microsoft Fabric se conservan como assets locales sin alterar y están documentados en `assets/microsoft/`. La geometría del logo de YPF se documenta en `assets/YPF_BRAND_NOTICE.md`. Las ilustraciones generadas se identifican en `assets/GENERATED_ASSETS.md` y las licencias de terceros en `THIRD_PARTY_NOTICES.md`.
 
-### Buenas prácticas por gate
-
-Cada uno de los 27 gates carga su biblioteca de buenas prácticas bajo demanda. La estructura se mantiene en:
-
-- `data/practices/powerBi.js`
-- `data/practices/powerApps.js`
-- `data/practices/powerAutomate.js`
-- `data/practices/sources.js`, registro único de fuentes oficiales de Microsoft Learn
-- `data/practices/index.js`, carga y validación del contrato
-
-Cada gate debe conservar `intro` y `practices`. Cada práctica necesita un `id` único, título, decisión, fundamento, evidencia, alcance, referencias oficiales y exactamente tres ejemplos completos. Los `slug` de los gates deben coincidir con los definidos en `data/roadmap.js` o `data/powerPlatformProducts.js`.
-
-El build valida las 90 prácticas y sus 270 ejemplos, la cobertura de los 27 gates, las 12 prácticas específicas de Power Query y la existencia de todas las fuentes declaradas. No duplicar URLs dentro de las prácticas: agregarlas una sola vez en `sources.js` y referenciarlas por `sourceIds`.
-
-Los iconos de producto son SVG locales de los paquetes oficiales de Microsoft Power Platform y Microsoft Fabric, y viven en `assets/microsoft/power-platform/`. Su fuente, fecha de obtención, uso previsto, hashes y restricciones están documentados en `assets/microsoft/power-platform/README.md`; el aviso también explica por qué el icono vigente de Power BI proviene del paquete Fabric. No reemplazarlos por URLs remotas, no redibujarlos y no aplicarles filtros, recortes, rotaciones, animaciones ni cambios de color.
-
-Los pictogramas de servicios Fabric viven en `assets/microsoft/fabric/` y siguen el mismo criterio. Los masters oficiales de YPF usados en el encabezado, el pie y el favicon están documentados en `assets/YPF_BRAND_NOTICE.md`. Las ilustraciones no oficiales del hero y de Datalito están identificadas en `assets/GENERATED_ASSETS.md`; las licencias de los íconos de interfaz están en `THIRD_PARTY_NOTICES.md`.
-
-Microsoft, Power BI, Power Apps y Power Automate son marcas del grupo de empresas Microsoft.
-
-## Agregar términos al diccionario
-
-Editar `data/dictionary.js` y agregar un objeto en `dictionaryTerms`:
-
-```js
-{
-  id: "nuevo-término",
-  term: "Nuevo término",
-  category: "Datos",
-  definition: "Definición simple.",
-  whyItMatters: "Por qué importa para el equipo.",
-  example: "Ejemplo breve.",
-  risk: "Riesgo de entenderlo mal."
-}
-```
-
-Las categorías disponibles estan en `dictionaryCategories`.
-
-Cada término recibe fuentes según su categoría y, cuando corresponde, por una asignación específica. Al agregar una categoría nueva, actualizar `dictionaryCategoryTopics` en `data/academicSources.js`; para un concepto metodológico o interno, agregar también un override en `dictionaryTermTopicOverrides`. No presentar ejemplos propios como casos publicados por una fuente externa.
-
-## Editar fuentes académicas
-
-`data/academicSources.js` mantiene un registro único con autor u organización, título, año cuando está verificado, editorial, URL, tipo de fuente y fecha de consulta. Los topics reúnen esas fuentes y declaran uno de cuatro criterios:
-
-- `direct`: el contenido resume directamente la fuente.
-- `synthesis`: el portal integra varias fuentes sin atribuirles la redacción final.
-- `adaptation`: el equipo aplica un marco externo al contexto BI o de Datalización.
-- `internal`: la decisión es elaboración propia y la fuente interna queda identificada.
-
-Cuando se agregue una sección semántica con `id`, incorporarla a `academicSectionTopics`. El build debe conservar 100 % de cobertura. OEE BI, el Marco de Datalización VMC, DEV → VMC y la aplicación de herramientas Lean a gates BI son adaptaciones internas: no deben atribuirse literalmente a ISO, Toyota, Lean Enterprise Institute o Microsoft.
-
-## Editar gates del roadmap
-
-Editar `data/roadmap.js` y modificar `roadmapPhases`.
-
-Cada gate debe mantener esta estructura:
-
-```js
-{
-  id: 0,
-  title: "PRD y Spec",
-  lane: "Producto y negocio",
-  objective: "Objetivo del gate.",
-  keyActivities: ["Actividad clave"],
-  deliverables: ["Entregable"],
-  owner: "Responsable principal",
-  riskIfSkipped: "Riesgo si se saltea.",
-  gate: "Gate A - Alineacion"
-}
-```
-
-El roadmap debe comenzar con PRD y Spec. La publicación productiva es un gate propio y ocurre después de versionado, pruebas y aprobación.
-
-## Editar Road y Metodología BI/Fabric
-
-Editar `data/engineeringGuide.js`, `data/roadmap.js` y `data/methodology.js`.
-
-- `prdSpecComparison`: tabla de comparacion entre PRD y Spec.
-- `guideSections`: capítulos de la guía.
-- `readinessChecklist`: checklist previo a producción.
-- `roadmapPhases`: gates del roadmap.
-- `oeeFactors`, `dmaicStages`, `methodologyTools`, `toyotaFourP`, `leanPractices` y `methodologyCadence`: marco metodológico de mejora continua BI.
-
-La sección navegable vive en `/road-y-metodologia`; las subsecciones se exponen como rutas internas, por ejemplo `/road-y-metodologia/oee-bi` y `/road-y-metodologia/dmaic`. Las rutas antiguas `/guia-power-bi`, `/metodologia` y `/roadmap` quedan como compatibilidad.
-
-## Editar portada ejecutiva
-
-Editar `data/platformIntro.js`.
-
-- `platformHeroMetrics`: capacidades principales que aparecen en el hero.
-- `platformPillars`: ganancias ejecutivas del área.
-- `platformDefinitionCards`: dimensiones de la definición de datalización.
-- `platformBeforeAfter`: narrativa Antes, Ahora y Después.
-- `platformCapabilityShift`: transición de tableros aislados a disciplina interna de inteligencia.
-
-## Editar Design System
-
-Editar `data/designSystem.js`.
-
-- `designSystemDefinition`: definición ejecutiva del sistema.
-- `designSystemComparison`: comparación Sin Design System / Con Design System.
-- `designSystemBenefits`: beneficios esperados.
-- `designSystemFoundations`: fundamentos.
-- `designSystemPrinciples`: principios de diseño.
-- `designSystemScope`: alcance inicial.
-- `designSystemComponents`: componentes esperados.
-- `designSystemDeliverables` y `designSystemQualityRules`: entregables y reglas.
-
-## Editar Datalito
-
-Editar `data/datalito.js`.
-
-- `datalitoKnowledgeSources`: índice local de fuentes aprobadas con metadata, contenido, URL canónica y checksum.
-- `datalitoAnswerModes`: modos breve, ejecutivo, funcional, técnico y paso a paso.
-- `datalitoSuggestedPrompts`: preguntas sugeridas por ruta.
-- `datalitoProductPrinciples`, `datalitoGovernanceControls` y `datalitoKpis`: contrato de producto, gobierno y medición.
-- `datalitoEvaluationQuestions`: banco de 170 preguntas benchmark.
-- `datalitoSecurityCases` y `datalitoNoAnswerCases`: pruebas adversariales y de falta de evidencia.
-
-La V1 conversa en frontend, responde saludos, repreguntas y pedidos de continuidad, y usa fuentes cuando la consulta requiere conocimiento aprobado. El acceso global se presenta como un personaje animado, no como un botón visual rígido. Es read-only y local: no usa proveedor externo de IA, no tiene SSO real y no persiste conversaciones en backend. Feedback y brechas se guardan en `localStorage` para demostrar el flujo sin inventar infraestructura corporativa.
-
-El avatar vive en:
-
-- `assets/datalito-robot-v22.png`
-- `assets/datalito-robot-v22-512.webp`
-- `assets/datalito-robot-v22-256.webp`
-
-Documentación relacionada:
-
-- `docs/datalito-architecture.md`
-- `docs/datalito-content-governance.md`
-- `docs/datalito-runbook.md`
-- `docs/datalito-threat-model.md`
-- `docs/datalito-evaluation.md`
-- `.env.example`
-
-## Editar Método de Datalización
-
-Editar `data/datalizationMethod.js`.
-
-- `methodOperatingFlow`: proceso end to end con qué es, por qué, para qué, cómo, definición técnica, funcional y ejemplo.
-- `methodEvaluationModel`: módulo único del Marco de Datalización VMC con definición, cinco pilares, intake, índice, ponderación, metadata mínima y alcance.
-- `methodPlanes`: separación entre DEV Datalización y PROD VMC.
-- `methodFunctionalLayers`: capas Microsoft 365 para comunicación, documentos, co-creación, seguimiento, conocimiento e IA contextual.
-- `methodChannels`: canales Teams con criterio PARA + Johnny.Decimal lite.
-- `methodProjectFolders`: plantilla intra-proyecto de 12 subcarpetas.
-- `methodNaming`: patrón de nombres, reglas, ejemplos y catálogos.
-- `methodRoadmap`, `methodRoles`, `methodDecisions` y `methodPendingDecisions`: adopción, gobierno y decisiones.
-
-## Editar metodología de mejora continua BI
-
-Editar `data/methodology.js`.
-
-- `oeeFactors`: disponibilidad, eficiencia y calidad traducidas al contexto BI.
-- `dmaicStages`: ciclo definir, medir, analizar, mejorar y controlar.
-- `methodologyTools`: ubicación de Lean Six Sigma, VSM, OEE BI, FMEA, VSM futuro y Kaizen/Kata.
-- `toyotaFourP`: filosofía, proceso, personas y resolución de problemas.
-- `leanPractices`: flujo continuo, SMED, Poka-Yoke, Kaizen y Kata.
-- `methodologyCadence`: rutina diaria, semanal, release y comité mensual.
-
-## Editar narrativa ejecutiva
-
-Editar `data/executiveNarrative.js`.
-
-- Cada página debe tener una tesis ejecutiva, un resumen, tres soportes no superpuestos y una acción.
-- Los títulos deben funcionar como conclusiones, no como etiquetas decorativas.
-- No usar saltos de línea HTML forzados para construir sentido; el texto debe fluir correctamente con el wrap natural del navegador.
-- El árbol de decantación conceptual debe bajar desde decisión gerencial hasta ejecución y control.
-
-## Editar librerías, agentes y MCPs
-
-Editar `data/toolingLibrary.js` para la versión navegable y `docs/librerias-agentes-mcp.md` para la documentación Markdown.
-
-El sistema de trabajo vive en:
-
-- `.codex/skills`: skills especializados del portal.
-- `.codex/agents`: agentes operativos y registry.
-- `.mcp/registry.json`: MCPs recomendados, estado, riesgo y requerimiento de token.
-
-Los MCPs que requieren credenciales no deben activarse sin aprobacion explicita ni guardar tokens en el repo.
-
-## Editar atajos Power BI
-
-La guía navegable se edita en `data/powerbiShortcuts.js`, agrupando cada atajo por categoría y manteniendo como referencia la [documentación oficial de Microsoft Learn](https://learn.microsoft.com/es-es/power-bi/create-reports/desktop-accessibility-keyboard-shortcuts):
-
-```js
-{
-  category: "Uso frecuente",
-  intro: "Descripcion corta.",
-  items: [
-    { action: "Mover el foco entre secciones", keys: ["Ctrl", "F6"] }
-  ]
-}
-```
-
-## Seguridad
-
-No subir información confidencial, credenciales ni datos sensibles.
-
-No conectar esta versión a sistemas internos, APIs privadas, tokens ni fuentes reales sin una revisión de seguridad previa.
-
-## Archivos principales
-
-- `index.html`
-- `styles.css`
-- `app.js`
-- `data/platformIntro.js`
-- `data/designSystem.js`
-- `data/dictionary.js`
-- `data/engineeringGuide.js`
-- `data/datalizationMethod.js`
-- `data/methodology.js`
-- `data/executiveNarrative.js`
-- `data/roadmap.js`
-- `data/practices/`
-- `data/toolingLibrary.js`
-- `data/powerbiShortcuts.js`
-- `THIRD_PARTY_NOTICES.md`
-- `assets/YPF_BRAND_NOTICE.md`
-- `assets/GENERATED_ASSETS.md`
-- `docs/librerias-agentes-mcp.md`
-- `scripts/dev-server.mjs`
-- `scripts/validate-build.mjs`
-- `vercel.json`
-- `manifest.webmanifest`
-- `service-worker.js`
+Microsoft, Power BI, Power Apps, Power Automate y Microsoft Fabric son marcas del grupo de empresas Microsoft.

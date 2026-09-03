@@ -13,161 +13,46 @@ import {
   TextRun,
   WidthType,
 } from "docx";
-import { mkdir, writeFile } from "node:fs/promises";
+import { readFile, mkdir, writeFile } from "node:fs/promises";
+import { format, resolveConfig } from "prettier";
+import { documentTemplates } from "../data/documentTemplates.js";
 
-const outputDir = "assets/docs/modelos";
+const documentOutputDir = "assets/docs/modelos";
+const markdownOutputDir = "docs/modelos";
 const brandBlue = "0054A6";
 const darkBlue = "102334";
 const yellow = "FFD200";
 const lightBlue = "EAF4FF";
 const lightGray = "F5F7FA";
+const prettierConfig = (await resolveConfig(".")) ?? {};
 
-const models = [
-  {
-    fileName: "prd-datalizacion.docx",
-    title: "Modelo PRD de Datalización",
-    subtitle: "Proceso, negocio, usuarios, reglas funcionales y criterios de éxito",
-    owner: "Equipo de Datalización - Piso 16",
-    purpose:
-      "Alinear qué proceso se quiere automatizar, por qué importa, quién lo usa, qué trabajo manual elimina y cómo se medirá el resultado.",
-    sections: [
-      {
-        title: "1. Resumen ejecutivo",
-        objective: "Explicar en una página qué proceso se quiere datalizar y qué resultado operativo se espera.",
-        prompts: [
-          "Qué tarea manual, repetitiva o fragmentada se quiere eliminar.",
-          "Qué decisión, alerta, aprobación o acción debe quedar automatizada.",
-          "Qué indicador demuestra que el proceso mejoró.",
-        ],
-        deliverable: "Resumen aprobado por negocio, producto BI e ingeniería.",
-      },
-      {
-        title: "2. Proceso actual y problema operativo",
-        objective: "Describir cómo se trabaja hoy, dónde aparece el retrabajo y qué riesgo genera mantenerlo manual.",
-        prompts: [
-          "Quién inicia el proceso y con qué disparador.",
-          "Qué planillas, correos, validaciones o pasos manuales existen.",
-          "Qué errores, demoras o pérdidas de trazabilidad aparecen.",
-        ],
-        deliverable: "Mapa simple del proceso actual con dolor operativo priorizado.",
-      },
-      {
-        title: "3. Usuarios, responsables y decisiones",
-        objective: "Identificar quién consume la salida, quién decide, quién opera y quién responde si algo falla.",
-        prompts: [
-          "Usuarios principales y secundarios.",
-          "Responsable funcional, responsable técnico y owner de datos.",
-          "Decisión o acción esperada después de recibir la señal.",
-        ],
-        deliverable: "Matriz de usuarios, responsables y decisiones.",
-      },
-      {
-        title: "4. Reglas funcionales, KPIs y alcance",
-        objective: "Convertir conocimiento de negocio en reglas claras, medibles y verificables.",
-        prompts: [
-          "Reglas de cálculo, umbrales, prioridades y excepciones.",
-          "KPIs de impacto, adopción, tiempo ahorrado o reducción de errores.",
-          "Qué queda dentro y fuera del alcance.",
-        ],
-        deliverable: "Reglas funcionales y KPIs acordados.",
-      },
-      {
-        title: "5. Criterios de aceptación",
-        objective: "Definir cuándo negocio puede decir que el proceso quedó correctamente automatizado.",
-        prompts: [
-          "Qué evidencia debe verse en la salida.",
-          "Qué pruebas deben pasar antes de construir o publicar.",
-          "Qué casos borde no pueden romper el proceso.",
-        ],
-        deliverable: "Checklist de aceptación funcional firmado.",
-      },
-    ],
-  },
-  {
-    fileName: "spec-datalizacion.docx",
-    title: "Modelo Spec Técnica de Datalización",
-    subtitle: "Arquitectura, datos, modelo, DAX, seguridad, UX, release y operación",
-    owner: "Equipo de Datalización - Piso 16",
-    purpose: "Transformar el PRD aprobado en una implementación construible, versionable, testeable y operable con Power BI/Fabric.",
-    sections: [
-      {
-        title: "1. Arquitectura y fuentes",
-        objective: "Definir de dónde vienen los datos, con qué frecuencia se actualizan y qué arquitectura sostiene el proceso.",
-        prompts: [
-          "Fuentes, owners, credenciales, latencia, volumen y restricciones.",
-          "Modo de conexión: Import, DirectQuery, Direct Lake, Lakehouse, Warehouse, Dataflow o Pipeline.",
-          "Contratos de datos, linaje y controles de calidad.",
-        ],
-        deliverable: "Mapa técnico de fuentes y arquitectura aprobada.",
-      },
-      {
-        title: "2. Preparación de datos y Power Query",
-        objective: "Documentar transformaciones repetibles y validables antes del modelado.",
-        prompts: [
-          "Pasos de Power Query, parámetros, tipos de datos y nombres.",
-          "Validación de nulos, duplicados, claves huérfanas y Query Folding.",
-          "Plan de refresh, gateway e incremental refresh cuando aplique.",
-        ],
-        deliverable: "Consultas o pipelines preparados con checklist de calidad.",
-      },
-      {
-        title: "3. Modelo semántico",
-        objective: "Diseñar una estructura entendible, performante y alineada al proceso.",
-        prompts: [
-          "Hechos, dimensiones, granularidad, calendario y relaciones.",
-          "Cardinalidad, dirección de filtro, columnas necesarias y jerarquías.",
-          "Modo de almacenamiento y criterios de performance.",
-        ],
-        deliverable: "Modelo semántico validado y documentado.",
-      },
-      {
-        title: "4. DAX y reglas calculadas",
-        objective: "Convertir reglas de negocio en medidas consistentes, legibles y testeables.",
-        prompts: [
-          "Medidas base, derivadas, KPIs, formatos y carpetas.",
-          "Uso de VAR, contexto de filtro e iteradores cuando correspondan.",
-          "Pruebas contra criterios de aceptación del PRD.",
-        ],
-        deliverable: "Diccionario de medidas DAX con pruebas funcionales.",
-      },
-      {
-        title: "5. Seguridad, UX y salida operativa",
-        objective: "Asegurar que la salida llegue al usuario correcto con permisos, navegación y acción esperada.",
-        prompts: [
-          "RLS/OLS, grupos, workspace, app, audiencia y sensibilidad.",
-          "Wireframes, drill-through, alertas, tareas o seguimiento operativo.",
-          "Validación de adopción, lectura rápida y trazabilidad de decisiones.",
-        ],
-        deliverable: "Salida accionable con seguridad y experiencia validadas.",
-      },
-      {
-        title: "6. Versionado, publicación y operación",
-        objective: "Controlar el paso a producción y sostener la solución después de la salida a producción.",
-        prompts: [
-          "PBIP/TMDL, Git, ramas, pull request, Dev-Test-Prod y checklist de release.",
-          "Publicación, credenciales, refresh inicial, endorsement y comunicación.",
-          "Monitoreo, incidentes, SLA, runbook, capacidad y backlog de mejora.",
-        ],
-        deliverable: "Release aprobado, publicado y operado con responsables claros.",
-      },
-    ],
-  },
-];
+await Promise.all([mkdir(documentOutputDir, { recursive: true }), mkdir(markdownOutputDir, { recursive: true })]);
 
-await mkdir(outputDir, { recursive: true });
+for (const template of documentTemplates) {
+  const markdownPath = `${markdownOutputDir}/${template.id}.md`;
+  const markdown = await format(renderMarkdown(template), {
+    ...prettierConfig,
+    parser: "markdown",
+    filepath: markdownPath,
+  });
+  await writeTextIfChanged(markdownPath, markdown);
 
-for (const model of models) {
-  const doc = createModelDocument(model);
+  const doc = createModelDocument(template);
   const buffer = await Packer.toBuffer(doc);
-  await writeFile(`${outputDir}/${model.fileName}`, buffer);
-  console.log(`Generated ${outputDir}/${model.fileName}`);
+  const documentPath = `${documentOutputDir}/${template.id}.docx`;
+  await writeFile(documentPath, buffer);
+  console.log(`Generated ${markdownPath} and ${documentPath}`);
 }
 
-function createModelDocument(model) {
+function createModelDocument(template) {
   return new Document({
-    creator: "Equipo de Datalización YPF",
-    title: model.title,
-    description: model.subtitle,
+    creator: template.owner,
+    lastModifiedBy: template.owner,
+    revision: 2,
+    title: template.title,
+    subject: template.product,
+    description: template.summary,
+    keywords: `Datalización, ${template.kind}, ${template.product}`,
     styles: {
       default: {
         document: {
@@ -204,9 +89,9 @@ function createModelDocument(model) {
         headers: { default: createHeader() },
         footers: { default: createFooter() },
         children: [
-          ...createCover(model),
-          ...model.sections.flatMap((section) => createSection(section)),
-          createChecklist(model.title.includes("PRD") ? "Checklist funcional final" : "Checklist técnico final"),
+          ...createCover(template),
+          ...template.sections.flatMap((section) => createSection(section)),
+          createChecklist(template.kind === "PRD" ? "Checklist funcional final" : "Checklist técnico final"),
         ],
       },
     ],
@@ -234,7 +119,7 @@ function createFooter() {
         alignment: AlignmentType.CENTER,
         children: [
           new TextRun({
-            text: "Torre YPF, Macacha Güemes 515, Puerto Madero, CABA, Argentina - Piso 16",
+            text: "Portal de Datalización YPF · Material metodológico de referencia",
             size: 18,
             color: "667788",
           }),
@@ -244,7 +129,7 @@ function createFooter() {
   });
 }
 
-function createCover(model) {
+function createCover(template) {
   return [
     new Paragraph({
       children: [
@@ -253,16 +138,19 @@ function createCover(model) {
       ],
       spacing: { after: 260 },
     }),
-    new Paragraph({ text: model.title, heading: HeadingLevel.TITLE }),
+    new Paragraph({ text: template.title, heading: HeadingLevel.TITLE }),
     new Paragraph({
-      children: [new TextRun({ text: model.subtitle, size: 26, color: darkBlue })],
+      children: [new TextRun({ text: template.subtitle, size: 26, color: darkBlue })],
       spacing: { after: 180 },
     }),
-    callout(`Propósito: ${model.purpose}`),
+    callout(`Propósito: ${template.purpose}`),
     metaTable([
-      ["Equipo", model.owner],
-      ["Uso", "Plantilla editable para proyectos internos de automatización BI/Fabric"],
-      ["Estado", "Base inicial para completar, revisar y versionar"],
+      ["Producto", template.product],
+      ["Responsable", template.owner],
+      ["Versión", template.version],
+      ["Estado", template.status],
+      ["Revisión", `${template.reviewedAt} · próxima revisión ${template.nextReviewAt}`],
+      ["Uso", "Plantilla editable: completar, revisar, aprobar y versionar por proyecto"],
     ]),
     spacer(),
   ];
@@ -274,9 +162,87 @@ function createSection(section) {
     new Paragraph({ children: [new TextRun({ text: section.objective, color: darkBlue })] }),
     metaTable([
       ["Preguntas guía", section.prompts.map((item) => `• ${item}`).join("\n")],
-      ["Entregable esperado", section.deliverable],
+      ["Entregables esperados", section.deliverables.map((item) => `• ${item}`).join("\n")],
+      ["Criterio de aceptación", section.acceptance],
     ]),
   ];
+}
+
+function renderMarkdown(template) {
+  const sections = template.sections
+    .map(
+      (section) => `## ${section.title}
+
+### Objetivo
+
+${section.objective}
+
+### Preguntas y controles guía
+
+${section.prompts.map((prompt) => `- ${prompt}`).join("\n")}
+
+### Entregables esperados
+
+${section.deliverables.map((deliverable) => `- ${deliverable}`).join("\n")}
+
+### Criterio de aceptación
+
+${section.acceptance}`,
+    )
+    .join("\n\n");
+
+  return `<!-- Generado desde data/documentTemplates.js. No editar manualmente. -->
+
+# ${template.title}
+
+> ${template.subtitle}
+
+| Control | Valor |
+| --- | --- |
+| Producto | ${template.product} |
+| Tipo | ${template.kind} |
+| Responsable | ${template.owner} |
+| Versión | ${template.version} |
+| Estado | ${template.status} |
+| Última revisión | ${template.reviewedAt} |
+| Próxima revisión | ${template.nextReviewAt} |
+
+## Propósito
+
+${template.purpose}
+
+## Forma de uso
+
+1. Duplicar la plantilla para el proyecto.
+2. Completar cada sección con evidencia y responsables.
+3. Resolver supuestos, riesgos y decisiones abiertas.
+4. Revisar con negocio, producto y responsables técnicos.
+5. Aprobar y versionar antes de pasar al siguiente gate.
+
+${sections}
+
+## Checklist final
+
+- [ ] Documento completo y revisado.
+- [ ] Criterios de aceptación trazables y comprobables.
+- [ ] Riesgos, decisiones y responsables definidos.
+- [ ] Evidencias y aprobaciones adjuntas al proyecto.
+- [ ] Gate aprobado antes de iniciar la etapa siguiente.
+`;
+}
+
+async function writeTextIfChanged(filePath, content) {
+  try {
+    if ((await readFile(filePath, "utf8")) === content) {
+      return;
+    }
+  } catch (error) {
+    if (error.code !== "ENOENT") {
+      throw error;
+    }
+  }
+
+  await writeFile(filePath, content);
 }
 
 function createChecklist(title) {

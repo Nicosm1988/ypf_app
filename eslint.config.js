@@ -3,11 +3,11 @@ import globals from "globals";
 
 export default [
   {
-    ignores: ["dist/**", "node_modules/**", ".playwright-mcp/**", ".qa/**"],
+    ignores: ["dist/**", "node_modules/**", ".playwright-mcp/**", ".qa/**", ".vercel/**"],
   },
   js.configs.recommended,
   {
-    files: ["app.js", "data/**/*.js", "scripts/**/*.mjs", "service-worker.js"],
+    files: ["**/*.{js,mjs,cjs}"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",

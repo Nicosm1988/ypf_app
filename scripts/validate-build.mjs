@@ -1,4 +1,4 @@
-import { access, cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { access, cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import {
   datalitoAnswerModes,
@@ -22,6 +22,7 @@ import {
   designSystemScope,
 } from "../data/designSystem.js";
 import { dictionaryCategories, dictionaryTerms } from "../data/dictionary.js";
+import { documentTemplates } from "../data/documentTemplates.js";
 import {
   academicSectionIds,
   academicSectionTopics,
@@ -65,6 +66,8 @@ import { powerBiPracticeLibrary } from "../data/practices/powerBi.js";
 import { practiceSources } from "../data/practices/sources.js";
 import { powerBiFlowCopy, roadmapPhases } from "../data/roadmap.js";
 import { toolingDocs, toolingGroups } from "../data/toolingLibrary.js";
+import { deliveryLifecycle, deliveryResponsibilities, maquetaFeedbackTemplate } from "../data/deliveryLifecycle.js";
+import { environments } from "../data/environments.js";
 
 const requiredTermFields = ["id", "term", "category", "definition", "whyItMatters", "example", "risk"];
 const requiredPhaseFields = ["id", "slug", "title", "lane", "objective", "keyActivities", "deliverables", "owner", "riskIfSkipped", "gate"];
@@ -98,9 +101,14 @@ const indexHtml = await readFile("index.html", "utf8");
 const appJs = await readFile("app.js", "utf8");
 const stylesCss = await readFile("styles.css", "utf8");
 const serviceWorkerJs = await readFile("service-worker.js", "utf8");
+const readmeMarkdown = await readFile("README.md", "utf8");
 const vercelJson = JSON.parse(await readFile("vercel.json", "utf8"));
+const manifest = JSON.parse(await readFile("manifest.webmanifest", "utf8"));
 
 assert(indexHtml.includes("Datalización YPF"), "index.html debe exponer el nombre del producto.");
+assert(indexHtml.includes("Demo pública"), "El footer debe identificar con claridad que el deploy es una demo pública.");
+assert(readmeMarkdown.includes("demostración pública"), "README debe explicar el alcance público del deploy.");
+assert(manifest.description.includes("Demo pública"), "El manifest debe identificar el alcance público demostrativo del portal.");
 assert(indexHtml.includes('type="module" src="/app.js"'), "index.html debe cargar app.js como modulo.");
 assert(appJs.includes("renderDictionaryPage"), "app.js debe renderizar el diccionario.");
 assert(appJs.includes("renderRoadMethodologyPage"), "app.js debe renderizar Road y Metodología como sección unificada.");
@@ -109,6 +117,8 @@ assert(appJs.includes("renderDesignSystemPage"), "app.js debe renderizar el Desi
 assert(appJs.includes("renderDatalitoPage"), "app.js debe renderizar Datalito.");
 assert(appJs.includes("renderDatalitoGlobalShell"), "app.js debe montar el launcher global de Datalito.");
 assert(appJs.includes("renderDatalitoAvatar"), "Datalito debe usar un avatar propio.");
+assert(appJs.includes("Datalito | Asistente de conocimiento"), "Datalito debe presentarse como asistente de conocimiento.");
+assert(appJs.includes("proyecto-flujo-trabajo"), "Proyecto Power BI debe registrar su ancla vigente de flujo de trabajo.");
 assert(appJs.includes("buildDatalitoConversationalResponse"), "Datalito debe manejar conversación natural antes del retrieval.");
 assert(appJs.includes("buildDatalitoWorkflowResponse"), "Datalito debe responder flujos BI end-to-end con criterio propio.");
 assert(appJs.includes("scrollToRouteHash"), "Los enlaces de Datalito deben navegar a la seccion exacta de la plataforma.");
@@ -200,7 +210,7 @@ for (const icon of fabricOfficialIcons) {
   const localPath = `assets/microsoft/fabric/${icon.file}`;
   const publicPath = `/${localPath}`;
   assert(appJs.includes(`src="${publicPath}"`), `${icon.label} debe renderizar el SVG oficial documentado.`);
-  assert(serviceWorkerJs.includes(`"${publicPath}"`), `${icon.label} debe formar parte del precache v38.`);
+  assert(serviceWorkerJs.includes(`"${publicPath}"`), `${icon.label} debe formar parte del precache vigente.`);
   const iconBuffer = await readFile(localPath);
   const iconSha256 = createHash("sha256").update(iconBuffer).digest("hex");
   assert(iconSha256 === icon.sha256, `${icon.label} debe conservar byte a byte el SVG oficial de Microsoft Fabric.`);
@@ -294,7 +304,7 @@ assert(
   "Cada término debe tener todos los campos requeridos.",
 );
 assert(new Set(dictionaryTerms.map((term) => term.id)).size === dictionaryTerms.length, "Los ids del diccionario deben ser únicos.");
-assert(academicSectionIds.length === 119, "La cobertura académica debe incluir exactamente los 119 bloques auditados.");
+assert(academicSectionIds.length === 121, "La cobertura académica debe incluir exactamente los 121 bloques auditados.");
 assert(new Set(academicSectionIds).size === academicSectionIds.length, "Los ids de cobertura académica deben ser únicos.");
 assert(
   Object.keys(academicSectionTopics).length === academicSectionIds.length,
@@ -379,6 +389,56 @@ assert(
 );
 assert(normalizeForCheck(roadmapPhases[0].title).includes("prd"), "El roadmap debe comenzar con PRD y Spec.");
 
+const requiredLifecycleFields = [
+  "id",
+  "order",
+  "title",
+  "shortTitle",
+  "purpose",
+  "activities",
+  "deliverables",
+  "owner",
+  "participants",
+  "entryCriteria",
+  "exitCriteria",
+  "evidence",
+  "risks",
+];
+assert(deliveryLifecycle.length === 9, "El ciclo de entrega canónico debe tener exactamente 9 etapas.");
+assert(
+  deliveryLifecycle.every((stage, index) => stage.order === index + 1),
+  "Las etapas del ciclo de entrega deben estar ordenadas de 1 a 9.",
+);
+assert(
+  deliveryLifecycle.every((stage) => hasFields(stage, requiredLifecycleFields)),
+  "Cada etapa del ciclo de entrega debe cumplir el contrato canónico definido en el prompt maestro.",
+);
+assert(
+  deliveryLifecycle[2].id === "maqueta-feedback" && deliveryLifecycle[3].id === "prd-spec",
+  "Maqueta y feedback debe ser la tercera etapa del ciclo canónico, inmediatamente antes de PRD y Spec.",
+);
+assert(
+  deliveryLifecycle.find((stage) => stage.id === "handoff-prod").owner === "Ingeniería de Software",
+  "Sólo Ingeniería de Software debe aparecer como responsable del pase a PROD en el ciclo canónico.",
+);
+assert(maquetaFeedbackTemplate.length === 12, "La plantilla de maquetado debe incluir los 12 campos definidos en el prompt maestro.");
+assert(deliveryResponsibilities.length === 8, "La matriz de responsabilidades debe cubrir los 8 momentos del ciclo.");
+assert(
+  deliveryResponsibilities.every((row) => !row.datalizacion.toLowerCase().includes("pase a prod")),
+  "Datalización no debe aparecer como responsable de ejecutar el pase a PROD en la matriz de responsabilidades.",
+);
+assert(environments.length === 3, "El modelo de entornos debe incluir DEV, QA/TEST y PROD.");
+assert(
+  environments.find((environment) => environment.id === "prod").promotionOwner === "Ingeniería de Software",
+  "El entorno PROD debe declarar a Ingeniería de Software como único promotionOwner.",
+);
+assert(appJs.includes("renderMaquetaFeedbackSection"), "app.js debe renderizar la sección Maqueta y feedback antes de PRD/Spec.");
+assert(
+  appJs.indexOf("renderMaquetaFeedbackSection()") < appJs.indexOf("renderPrdSpecModelSection()"),
+  "Maqueta y feedback debe invocarse antes que la sección de PRD/Spec en el Camino del producto.",
+);
+assert(indexHtml.includes("/road-y-metodologia/maqueta"), "La navegación debe exponer la subsección Maqueta y feedback.");
+
 const expectedProducts = [
   {
     slug: "power-bi",
@@ -456,6 +516,67 @@ for (const expectedProduct of expectedProducts) {
     `${expectedProduct.officialName} debe conservar byte a byte el SVG oficial documentado.`,
   );
 }
+
+const expectedTemplateIds = ["prd-datalizacion", "spec-power-bi-fabric", "spec-power-apps", "spec-power-automate"];
+assert(
+  documentTemplates.map((template) => template.id).join("|") === expectedTemplateIds.join("|"),
+  "Las plantillas deben incluir un PRD común y una Spec vigente para cada producto.",
+);
+assert(
+  new Set(documentTemplates.map((template) => template.id)).size === documentTemplates.length,
+  "Las plantillas deben tener ids únicos.",
+);
+assert(documentTemplates.filter((template) => template.kind === "PRD").length === 1, "Debe existir un único PRD común.");
+assert(documentTemplates.filter((template) => template.kind === "Spec").length === 3, "Debe existir una Spec por producto.");
+assert(
+  documentTemplates.every(
+    (template) =>
+      hasFields(template, [
+        "id",
+        "kind",
+        "productId",
+        "product",
+        "title",
+        "subtitle",
+        "purpose",
+        "owner",
+        "version",
+        "status",
+        "reviewedAt",
+        "nextReviewAt",
+        "route",
+        "sourceMarkdown",
+        "downloadPath",
+      ]) &&
+      Array.isArray(template.preview) &&
+      template.preview.length >= 5 &&
+      Array.isArray(template.sections) &&
+      template.sections.length >= 9,
+  ),
+  "Cada plantilla debe exponer gobierno, rutas, vista previa y contenido completo.",
+);
+assert(
+  documentTemplates.every((template) =>
+    template.sections.every(
+      (section) =>
+        hasFields(section, ["id", "title", "objective", "acceptance"]) &&
+        Array.isArray(section.prompts) &&
+        section.prompts.length >= 3 &&
+        Array.isArray(section.deliverables) &&
+        section.deliverables.length >= 3,
+    ),
+  ),
+  "Cada sección de PRD/Spec debe incluir objetivo, controles, entregables y aceptación.",
+);
+for (const product of products) {
+  const template = documentTemplates.find((item) => item.productId === product.id);
+  assert(template, `${product.officialName} debe tener una Spec propia.`);
+  assert(
+    template.sections.map((section) => section.id).join("|") === product.phases.map((phase) => phase.slug).join("|"),
+    `La Spec de ${product.officialName} debe derivar de sus mismos nueve gates.`,
+  );
+}
+assert(appJs.includes("documentTemplates"), "La UI debe renderizar las plantillas desde la fuente canónica compartida.");
 
 const practiceLibraries = {
   "power-bi": powerBiPracticeLibrary,
@@ -586,9 +707,17 @@ assert(
   ),
   "Cada etapa del Método de Datalización debe explicar qué es, por qué, para qué, cómo, definición técnica, funcional y ejemplo.",
 );
-assert(methodPlanes.length === 2, "El Método de Datalización debe separar DEV y PROD.");
+assert(methodPlanes.length === 3, "El Método de Datalización debe separar DEV, QA/TEST y PROD.");
+assert(
+  methodPlanes.find((plane) => plane.id === "prod").guardrail.includes("Ingeniería de Software"),
+  "El plano PROD debe dejar explícito que Ingeniería de Software es la única responsable de promover a PROD.",
+);
 assert(methodChannels.length === 8, "El Método de Datalización debe incluir los 8 canales base.");
-assert(methodProjectFolders.length === 12, "La plantilla de proyecto debe incluir 12 subcarpetas estándar.");
+assert(methodProjectFolders.length === 13, "La plantilla de proyecto debe incluir 13 subcarpetas estándar, con Maqueta-Feedback antes de PRD-SPEC.");
+assert(
+  methodProjectFolders[1].name === "Maqueta-Feedback" && methodProjectFolders[2].name === "PRD-SPEC",
+  "Maqueta-Feedback debe preceder a PRD-SPEC en la estructura de carpetas del proyecto.",
+);
 assert(methodNaming.pattern.includes("[CODIGO]"), "La convención de nombres debe incluir código, tipo, fecha y versión.");
 
 assert(designSystemBenefits.length === 8, "El Design System debe incluir 8 beneficios esperados.");
@@ -615,8 +744,10 @@ assert(
   "Cada fuente de Datalito debe incluir metadata y contenido.",
 );
 assert(
-  datalitoKnowledgeSources.every((source) => source.status === "approved" && source.confidentiality === "internal"),
-  "La V1 de Datalito debe exponer solo fuentes internas aprobadas.",
+  datalitoKnowledgeSources.every(
+    (source) => source.status === "approved" && source.confidentiality === "public" && source.allowed_roles?.includes("public"),
+  ),
+  "La demo pública de Datalito debe exponer solo fuentes aprobadas y clasificadas para acceso público.",
 );
 assert(
   datalitoKnowledgeSources.every((source) => !source.content.includes("undefined")),
@@ -647,8 +778,10 @@ assert(
 );
 assert(platformCapabilityShift.length === 4, "La transición de tableros a disciplina debe tener cuatro cambios de capacidad.");
 assert(
-  appJs.includes("Esta plataforma nace para ordenar, estandarizar y escalar la forma en que el área construye inteligencia de datos."),
-  "La portada debe incluir el texto clave de origen de la plataforma.",
+  appJs.includes(
+    "Esta plataforma ordena, estandariza y escala cómo el área diseña, construye y opera soluciones con Power BI y Fabric, Power Apps y Power Automate.",
+  ),
+  "La portada debe explicar el alcance vigente de los tres productos.",
 );
 assert(
   appJs.includes("Lo que estamos construyendo no es solo una web. Es una capacidad organizacional."),
@@ -721,8 +854,23 @@ for (const removedAsset of [
   }
   assert(!exists, `El asset obsoleto ${removedAsset} no debe volver al build.`);
 }
-await access("assets/docs/modelos/prd-datalizacion.docx");
-await access("assets/docs/modelos/spec-datalizacion.docx");
+for (const template of documentTemplates) {
+  await access(template.sourceMarkdown);
+  await access(template.downloadPath.slice(1));
+  assert(serviceWorkerJs.includes(`"${template.downloadPath}"`), `${template.title} debe formar parte del precache vigente.`);
+}
+const expectedMarkdownTemplates = documentTemplates.map((template) => `${template.id}.md`).sort();
+const expectedWordTemplates = documentTemplates.map((template) => `${template.id}.docx`).sort();
+// docs/modelos/ también aloja plantillas Markdown livianas escritas a mano (sección 5 del prompt maestro),
+// que no pasan por el generador docx a propósito. Sólo se listan explícitamente, para no habilitar acumulación silenciosa.
+const handAuthoredMarkdownTemplates = ["maqueta-feedback.md"];
+const markdownTemplates = (await readdir("docs/modelos")).filter((file) => file.endsWith(".md")).sort();
+const wordTemplates = (await readdir("assets/docs/modelos")).filter((file) => file.endsWith(".docx")).sort();
+assert(
+  markdownTemplates.join("|") === [...expectedMarkdownTemplates, ...handAuthoredMarkdownTemplates].sort().join("|"),
+  "Solo deben existir las salidas Markdown generadas más las plantillas livianas declaradas explícitamente.",
+);
+assert(wordTemplates.join("|") === expectedWordTemplates.join("|"), "Solo deben existir las salidas Word vigentes.");
 await access("assets/ypf-industrial-hero-1280.webp");
 await access("assets/ypf-industrial-hero-1280.avif");
 await access("assets/ypf-industrial-hero.png");
@@ -739,7 +887,6 @@ await access("docs/datalito-evaluation.md");
 await access("evals/datalito/golden-questions.json");
 await access("evals/datalito/no-answer-cases.json");
 await access("evals/datalito/security-cases.json");
-await access(".env.example");
 assert(
   createHash("sha256")
     .update(await readFile("assets/ypf-logo.svg"))
@@ -821,7 +968,6 @@ const staticRoutes = [
   "atajos",
   "librerias",
   "inicio/proposito",
-  "inicio/estudio",
   "inicio/capacidad",
   "inicio/secciones",
   "inicio/decantacion",
@@ -832,6 +978,7 @@ const staticRoutes = [
   "road-y-metodologia/fabric-end-to-end",
   "road-y-metodologia/arquitectura-fabric",
   "road-y-metodologia/flujo-bi",
+  "road-y-metodologia/maqueta",
   "road-y-metodologia/prd-spec",
   "road-y-metodologia/gates",
   "road-y-metodologia/checklist",
@@ -858,7 +1005,7 @@ const staticRoutes = [
   "datalito/arquitectura",
   "datalito/gobierno",
   "datalito/evaluacion",
-  "proyecto-power-bi/estudio",
+  "proyecto-power-bi/flujo-trabajo",
   "proyecto-power-bi/metodo",
   "proyecto-power-bi/herramientas",
   "diccionario/busqueda",
@@ -883,6 +1030,7 @@ await access("dist/productos/power-bi/index.html");
 await access("dist/productos/power-apps/index.html");
 await access("dist/productos/power-automate/index.html");
 await access("dist/data/powerPlatformProducts.js");
+await access("dist/data/documentTemplates.js");
 await access("dist/data/academicSources.js");
 await access("dist/data/practices/index.js");
 await access("dist/data/practices/powerBi.js");
@@ -894,6 +1042,10 @@ await access("dist/assets/microsoft/power-platform/power-automate.svg");
 for (const icon of fabricOfficialIcons) {
   await access(`dist/assets/microsoft/fabric/${icon.file}`);
 }
+for (const template of documentTemplates) {
+  await access(`dist/${template.sourceMarkdown}`);
+  await access(`dist${template.downloadPath}`);
+}
 
 console.log("Build validation OK");
 console.log(`- ${dictionaryTerms.length} términos BI`);
@@ -902,6 +1054,7 @@ console.log(`- ${guideSections.length} capítulos de guía`);
 console.log(`- ${dmaicStages.length} etapas DMAIC y ${oeeFactors.length} factores OEE BI`);
 console.log(`- ${roadmapPhases.length} gates de roadmap`);
 console.log(`- ${products.length} productos con ${products.reduce((total, product) => total + product.phases.length, 0)} gates`);
+console.log(`- ${documentTemplates.length} plantillas PRD/Spec generadas desde una fuente canónica`);
 console.log(`- ${toolingGroups.length} familias de librerías/agentes`);
 console.log(`- ${powerBiShortcuts.length} categorías de atajos`);
 console.log(`- ${datalitoKnowledgeSources.length} fuentes Datalito y ${datalitoEvaluationQuestions.length} preguntas de evaluación`);

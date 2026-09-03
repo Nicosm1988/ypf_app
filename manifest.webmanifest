@@ -1,7 +1,7 @@
 {
   "name": "Datalización YPF",
   "short_name": "Datalización",
-  "description": "Portal interno de Datalización YPF para automatizar procesos con datos, metodología, síntesis ejecutiva, gobierno, BI/Fabric y operación analítica.",
+  "description": "Demo pública del portal metodológico de Datalización YPF para Power BI/Fabric, Power Apps y Power Automate.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

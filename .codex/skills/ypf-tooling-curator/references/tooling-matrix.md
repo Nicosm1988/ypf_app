@@ -23,13 +23,13 @@ Any MCP or agent that needs tokens, writes to external systems, sends email, acc
 
 ## Primary Sources Used
 
-- Model Context Protocol servers: https://github.com/modelcontextprotocol/servers
-- Playwright MCP: https://playwright.dev/docs/getting-started-mcp
-- Chrome DevTools for agents: https://developer.chrome.com/docs/devtools/agents/get-started
-- GitHub MCP server: https://github.com/github/github-mcp-server
-- Vercel MCP: https://vercel.com/docs/agent-resources/vercel-mcp
-- Playwright accessibility testing: https://playwright.dev/docs/accessibility-testing
-- axe-core npm packages: https://github.com/dequelabs/axe-core-npm
-- HTML Validate: https://html-validate.org/usage
-- Prettier install guidance: https://prettier.io/docs/install
-- ESLint getting started: https://eslint.org/docs/latest/use/getting-started
+- [Model Context Protocol servers](https://github.com/modelcontextprotocol/servers)
+- [Playwright MCP](https://playwright.dev/docs/getting-started-mcp)
+- [Chrome DevTools for agents](https://developer.chrome.com/docs/devtools/agents/get-started)
+- [GitHub MCP server](https://github.com/github/github-mcp-server)
+- [Vercel MCP](https://vercel.com/docs/agent-resources/vercel-mcp)
+- [Playwright accessibility testing](https://playwright.dev/docs/accessibility-testing)
+- [axe-core npm packages](https://github.com/dequelabs/axe-core-npm)
+- [HTML Validate](https://html-validate.org/usage)
+- [Prettier install guidance](https://prettier.io/docs/install)
+- [ESLint getting started](https://eslint.org/docs/latest/use/getting-started)

@@ -1,12 +1,13 @@
 export const toolingDocs = {
   source: "docs/librerias-agentes-mcp.md",
-  title: "Capacidades técnicas para automatizaciones BI/IA",
+  title: "Capacidades técnicas para productos de Datalización",
 };
 
 export const toolingGroups = [
   {
     group: "Sistema instalado en el repo",
-    description: "Capacidades ya incorporadas para evolucionar el portal con QA, agentes, skills, MCP registry y release controlado. En la práctica, son parte del circuito de publicación.",
+    description:
+      "Capacidades ya incorporadas para evolucionar el portal con QA, agentes, skills, MCP registry y release controlado. En la práctica, son parte del circuito de publicación.",
     items: [
       "Skills repo-locales YPF",
       "Agentes operativos Codex",
@@ -25,7 +26,8 @@ export const toolingGroups = [
   },
   {
     group: "MCPs priorizados",
-    description: "Servidores MCP recomendados por utilidad real para investigar, diseñar, validar, desplegar y operar el portal con permisos explícitos.",
+    description:
+      "Servidores MCP recomendados por utilidad real para investigar, diseñar, validar, desplegar y operar el portal con permisos explícitos.",
     items: [
       "Playwright MCP",
       "Chrome DevTools MCP",
@@ -86,7 +88,8 @@ export const toolingGroups = [
   },
   {
     group: "Desarrollo y control de versiones",
-    description: "Aportan historial y revisión cuando el equipo necesita programar, depurar, revisar cambios y documentar contratos técnicos.",
+    description:
+      "Aportan historial y revisión cuando el equipo necesita programar, depurar, revisar cambios y documentar contratos técnicos.",
     items: [
       "GitHub",
       "GitLab",
@@ -122,14 +125,7 @@ export const toolingGroups = [
   {
     group: "Monitorizacion y observabilidad",
     description: "Permiten detectar errores, medir salud, alertar y operar soluciones con responsables claros.",
-    items: [
-      "Sentry",
-      "Grafana",
-      "PagerDuty",
-      "Raygun",
-      "Metoro",
-      "Amazon CloudWatch",
-    ],
+    items: ["Sentry", "Grafana", "PagerDuty", "Raygun", "Metoro", "Amazon CloudWatch"],
   },
   {
     group: "Productividad y colaboración",

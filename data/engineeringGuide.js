@@ -6,8 +6,8 @@ export const prdSpecComparison = [
   },
   {
     characteristic: "Creador principal",
-    prd: "Negocio, producto o consultoría BI junto al sponsor y usuarios clave del proceso.",
-    spec: "Ingeniería BI, arquitectura de datos, desarrollo Power BI y diseño técnico.",
+    prd: "Negocio y Product Owner junto con el sponsor y los usuarios clave del proceso.",
+    spec: "El equipo técnico del producto elegido: Power BI/Fabric, Power Apps o Power Automate, junto con datos, arquitectura y gobierno.",
   },
   {
     characteristic: "Objetivo",
@@ -17,7 +17,7 @@ export const prdSpecComparison = [
   {
     characteristic: "Contenido habitual",
     prd: "Contexto, proceso actual, usuarios, disparadores, KPIs, alcance, fuera de alcance y criterios de aceptación.",
-    spec: "Fuentes, preparación, modelado, DAX, seguridad, UX, versionado, publicación, pruebas y operación.",
+    spec: "Arquitectura, datos, lógica específica del producto, integraciones, seguridad, experiencia, pruebas, despliegue y operación.",
   },
 ];
 
@@ -34,7 +34,7 @@ export const guideSections = [
       "Convertir reglas de negocio en criterios de aceptación verificables",
       "Evitar documentos híbridos donde negocio y técnica discuten problemas distintos",
     ],
-    deliverables: ["PRD aprobado", "Spec inicial", "Criterios de aceptación", "Mapa de stakeholders"],
+    deliverables: ["PRD aprobado", "Spec del producto", "Criterios de aceptación", "Mapa de stakeholders"],
     risk: "Construir una solución prolija pero equivocada, o automatizar una parte del proceso que todavía no fue entendida.",
   },
   {
@@ -129,18 +129,18 @@ export const guideSections = [
   },
   {
     id: "publicacion",
-    title: "Publicación",
+    title: "Handoff y publicación",
     eyebrow: "Go-live",
     summary:
-      "Publicar es el paso en el que la automatización queda disponible para usuarios reales: workspace productivo, app o audiencia, permisos finales, refresh, credenciales y comunicación.",
+      "Datalización arma el paquete de release; Ingeniería de Software es la única responsable de ejecutar la promoción a producción, con permisos, refresh, credenciales y comunicación resueltos.",
     practices: [
-      "Publicar o promover contenido al workspace productivo",
-      "Configurar semantic model, reporte, app, audiencia, permisos y credenciales",
-      "Confirmar refresh inicial, gateway, parámetros y conexiones productivas",
+      "Consolidar artefactos, versión y evidencias de QA/UAT en un paquete de release trazable",
+      "Documentar dependencias, permisos, configuración por ambiente y plan de rollback",
+      "Entregar el paquete a Ingeniería de Software y acompañar la verificación de la promoción a PROD",
       "Comunicar a usuarios dónde entrar, qué cambió y qué acción se espera",
     ],
-    deliverables: ["Reporte publicado", "Semantic model productivo", "App o acceso configurado", "Comunicación de salida a producción"],
-    risk: "La solución queda en desarrollo o prueba, sin acceso real, sin refresh productivo o sin adopción clara.",
+    deliverables: ["Paquete de release", "Evidencias de QA/UAT", "Release notes", "Plan de rollback"],
+    risk: "Si falta evidencia en el paquete de handoff, el gate no se aprueba y la solución no debe promoverse a PROD.",
   },
   {
     id: "operacion-capacidad",

@@ -1,15 +1,24 @@
 import { designSystemBenefits, designSystemComponents, designSystemPrinciples } from "./designSystem.js";
 import { dictionaryTerms } from "./dictionary.js";
+import { documentTemplates } from "./documentTemplates.js";
 import { guideSections, prdSpecComparison, readinessChecklist } from "./engineeringGuide.js";
 import { methodEvaluationModel, methodOperatingFlow, methodPlanes, methodProjectFolders, methodRoles } from "./datalizationMethod.js";
 import { methodologyProcessFlow, methodologyTools, oeeFactors, leanPractices, dmaicStages } from "./methodology.js";
 import { platformBeforeAfter, platformDefinitionCards, platformPillars } from "./platformIntro.js";
 import { powerPlatformProducts } from "./powerPlatformProducts.js";
+import { powerAppsPracticeLibrary } from "./practices/powerApps.js";
+import { powerAutomatePracticeLibrary } from "./practices/powerAutomate.js";
+import { powerBiPracticeLibrary } from "./practices/powerBi.js";
+import { practiceSources } from "./practices/sources.js";
 import { roadmapPhases } from "./roadmap.js";
 import { toolingGroups } from "./toolingLibrary.js";
 
-export const datalitoPromptVersion = "datalito-prompt-v1.0-static";
-export const datalitoIndexVersion = "datalito-local-index-2026-07-10";
+export const datalitoPromptVersion = "datalito-prompt-v1.1-static";
+export const datalitoIndexVersion = "datalito-local-index-2026-07-31";
+
+const datalitoIndexReviewedAt = "2026-07-31";
+const datalitoIndexReviewDueAt = "2027-01-31";
+const datalitoSourceVersion = "2026.07.31";
 
 export const datalitoAnswerModes = [
   {
@@ -90,13 +99,15 @@ export const datalitoArchitectureLayers = [
   },
   {
     title: "Adaptadores futuros",
-    text: "La evolución enterprise debería conectar proveedor de modelo, búsqueda híbrida, SSO, permisos, telemetría y persistencia sin cambiar la experiencia base.",
+    text: "Una eventual evolución enterprise requeriría una decisión explícita sobre proveedor de modelo, búsqueda híbrida, SSO, permisos, telemetría y persistencia sin cambiar la experiencia base.",
   },
 ];
 
 export const datalitoGovernanceControls = [
-  "Solo fuentes con estado aprobado para usuarios generales.",
+  "Solo fuentes públicas con estado aprobado dentro de esta demo sin autenticación.",
   "Citas visibles con título, sección, versión, estado y enlace interno.",
+  "Vigencia calculada desde la fecha review_due_at de cada fuente.",
+  "Posibles divergencias señaladas únicamente cuando un mismo tema tiene versiones o contenidos distintos.",
   "Registro local de feedback y brechas en la V1 estática.",
   "Sin búsqueda abierta en Internet.",
   "Sin lectura de secretos, variables de entorno ni contenido restringido.",
@@ -357,7 +368,7 @@ export const datalitoKnowledgeSources = [
     content: [
       "Datalización Hub funciona como sistema operativo metodológico del área.",
       "Ordena la forma de relevar requerimientos, documentar decisiones, construir modelos y publicar productos BI.",
-      "La plataforma busca pasar de tableros aislados a una disciplina interna de inteligencia de datos que se pueda explicar, revisar y sostener.",
+      "La plataforma busca pasar de tableros aislados a una disciplina organizacional de inteligencia de datos que se pueda explicar, revisar y sostener.",
       ...platformPillars.map((item) => `${item.title}: ${item.text}`),
       ...platformBeforeAfter.map((item) => `${item.moment}: ${item.claim}. ${item.text}`),
     ],
@@ -385,7 +396,7 @@ export const datalitoKnowledgeSources = [
     section: "Datalito",
     contentType: "standard",
     url: "/datalito",
-    summary: "Datalito es un asistente interno de conocimiento basado en fuentes aprobadas, citas y registro de brechas.",
+    summary: "Datalito es un asistente de conocimiento basado en fuentes aprobadas, citas y registro de brechas.",
     keywords: ["datalito", "asistente", "chatbot", "fuentes", "citas", "brechas", "feedback", "read-only"],
     content: [
       "Datalito ayuda a encontrar, comprender y aplicar criterios, procesos y contenidos de Datalización.",
@@ -421,6 +432,42 @@ export const datalitoKnowledgeSources = [
     keywords: ["checklist", "produccion", "release", "publicacion", "uat", "rollback", "quality gate"],
     content: readinessChecklist.map((item) => (typeof item === "string" ? item : Object.values(item).join(". "))),
   }),
+  ...documentTemplates.map((template) =>
+    createSource({
+      id: `template-${template.id}`,
+      title: template.title,
+      slug: template.id,
+      section: "Modelos PRD y Spec",
+      contentType: "template",
+      url: template.route,
+      summary: template.summary,
+      keywords: ["template", "plantilla", "modelo", template.kind, template.product, template.productId, ...template.preview].filter(
+        Boolean,
+      ),
+      content: [
+        `Producto: ${template.product}.`,
+        `Propósito: ${template.purpose}`,
+        `Formato: ${template.format}.`,
+        `Descarga: ${template.downloadPath}.`,
+        `Fuente editable: ${template.sourceMarkdown}.`,
+        ...template.sections.map(
+          (section) =>
+            `${section.title}. Objetivo: ${section.objective}. Preguntas: ${section.prompts.join("; ")}. Entregables: ${section.deliverables.join(", ")}. Aceptación: ${section.acceptance}`,
+        ),
+      ],
+      status: normalizeDatalitoSourceStatus(template.status),
+      version: template.version,
+      owner: template.owner,
+      reviewedAt: template.reviewedAt,
+      reviewDueAt: template.nextReviewAt,
+      templateAssets: {
+        productId: template.productId,
+        kind: template.kind,
+        downloadPath: template.downloadPath,
+        sourceMarkdown: template.sourceMarkdown,
+      },
+    }),
+  ),
   createSource({
     id: "design-system",
     title: "Design System de la plataforma",
@@ -551,14 +598,15 @@ export const datalitoKnowledgeSources = [
       ],
     }),
   ),
-  ...guideSections.map((section) =>
+  ...buildDatalitoPracticeSources(),
+  ...guideSections.map((section, index) =>
     createSource({
       id: `guide-${section.id}`,
       title: section.title,
       slug: section.id,
       section: "Road y Metodología",
       contentType: "page",
-      url: `/road-y-metodologia#${section.id}`,
+      url: `/road-y-metodologia#unified-flow-panel-${index}`,
       summary: section.summary,
       keywords: [section.title, section.eyebrow, ...section.deliverables].filter(Boolean),
       content: [
@@ -589,6 +637,62 @@ export const datalitoKnowledgeSources = [
   ),
 ];
 
+function buildDatalitoPracticeSources() {
+  const libraries = new Map([
+    ["power-bi", powerBiPracticeLibrary],
+    ["power-apps", powerAppsPracticeLibrary],
+    ["power-automate", powerAutomatePracticeLibrary],
+  ]);
+
+  return powerPlatformProducts.flatMap((product) => {
+    const library = libraries.get(product.slug);
+    if (!library) return [];
+
+    return product.phases.flatMap((phase, gateIndex) => {
+      const gate = library[phase.slug];
+      if (!gate) return [];
+
+      return gate.practices.map((practice) => {
+        const externalSourceIds = [...new Set(practice.sourceIds)].filter((sourceId) => practiceSources[sourceId]?.url);
+        const externalSources = externalSourceIds.map((sourceId) => ({ id: sourceId, ...practiceSources[sourceId] }));
+
+        return createSource({
+          id: `practice-${practice.id}`,
+          title: practice.title,
+          slug: practice.id,
+          section: `${product.officialName} · Gate ${gateIndex + 1}`,
+          contentType: "practice",
+          url: `${product.route}#${practice.id}`,
+          summary: practice.decision,
+          keywords: [
+            "buena práctica",
+            "evidencia",
+            product.officialName,
+            product.shortName,
+            phase.title,
+            phase.slug,
+            ...practice.appliesTo,
+            ...externalSources.map((source) => source.label),
+          ],
+          content: [
+            `Gate: ${phase.title}. ${gate.intro}`,
+            `Decisión: ${practice.decision}`,
+            `Por qué importa: ${practice.why}`,
+            `Evidencia: ${practice.evidence.join(", ")}.`,
+            `Aplica a: ${practice.appliesTo.join(", ")}.`,
+            ...practice.examples.map(
+              (example) =>
+                `Ejemplo — ${example.title}. Situación: ${example.scenario}. Aplicación: ${example.application}. Evidencia: ${example.proof}.`,
+            ),
+            `Fuentes oficiales: ${externalSources.map((source) => `${source.label} (${source.id})`).join("; ")}.`,
+          ],
+          externalSourceIds,
+        });
+      });
+    });
+  });
+}
+
 function createSource({
   id,
   title,
@@ -600,9 +704,13 @@ function createSource({
   keywords = [],
   content,
   status = "approved",
-  version = "1.0",
+  version = datalitoSourceVersion,
   owner = "Datalización",
   steward = "Curador de conocimiento",
+  reviewedAt = datalitoIndexReviewedAt,
+  reviewDueAt = datalitoIndexReviewDueAt,
+  templateAssets,
+  externalSourceIds,
 }) {
   const contentText = Array.isArray(content) ? content.filter(Boolean).join("\n") : String(content || "");
 
@@ -618,18 +726,28 @@ function createSource({
     owner,
     steward,
     approved_by: "Datalización",
-    approved_at: "2026-06-26",
-    reviewed_at: "2026-06-26",
-    review_due_at: "2026-12-26",
-    confidentiality: "internal",
-    allowed_roles: ["general", "gerencia", "bi", "data", "seguridad", "curador"],
+    approved_at: datalitoIndexReviewedAt,
+    reviewed_at: reviewedAt,
+    review_due_at: reviewDueAt,
+    confidentiality: "public",
+    allowed_roles: ["public"],
     language: "es",
     keywords,
     source_system: "Datalización Hub",
     canonical_url: url,
     checksum: checksum(`${id}|${title}|${summary}|${contentText}`),
     content: contentText,
+    ...(templateAssets ? { template_assets: templateAssets } : {}),
+    ...(externalSourceIds?.length ? { external_source_ids: externalSourceIds } : {}),
   };
+}
+
+function normalizeDatalitoSourceStatus(status) {
+  const normalized = String(status || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+  return ["approved", "aprobado", "vigente"].includes(normalized) ? "approved" : normalized || "draft";
 }
 
 function checksum(value) {

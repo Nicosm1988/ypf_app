@@ -1,38 +1,44 @@
 {
-  "name": "ypf-bi-playbook",
+  "name": "ypf-datalizacion-hub",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Portal interno de Datalización YPF para automatizar procesos con PRD, Spec, roadmap, diccionario, BI/Fabric, librerías y atajos.",
+  "engines": {
+    "node": "24.18.x",
+    "npm": "12.0.2"
+  },
+  "packageManager": "npm@12.0.2",
+  "description": "Demo pública del portal metodológico de Datalización YPF para diseñar y gobernar soluciones con Power BI/Fabric, Power Apps y Power Automate.",
   "scripts": {
+    "predev": "npm run docs:modelos",
     "dev": "node scripts/dev-server.mjs",
     "docs:modelos": "node scripts/generate-docx-models.mjs",
     "build": "node scripts/generate-docx-models.mjs && node scripts/validate-build.mjs",
     "validate": "node scripts/generate-docx-models.mjs && node scripts/validate-build.mjs",
     "lint": "npm run lint:js && npm run lint:css && npm run lint:html && npm run lint:md",
-    "lint:js": "eslint app.js data/**/*.js scripts/**/*.mjs service-worker.js",
+    "lint:js": "eslint .",
     "lint:css": "stylelint styles.css",
     "lint:html": "html-validate index.html",
-    "lint:md": "markdownlint README.md THIRD_PARTY_NOTICES.md assets/**/*.md docs/**/*.md .codex/**/*.md",
+    "lint:md": "markdownlint \"*.md\" \"assets/**/*.md\" \"docs/**/*.md\" \".codex/**/*.md\"",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "qa:install-browsers": "playwright install chromium",
     "qa:e2e": "node scripts/qa-playwright.mjs",
     "qa:agents": "node scripts/validate-agent-system.mjs",
     "qa:links": "node scripts/check-local-links.mjs",
-    "quality": "npm run build && npm run lint && npm run qa:agents && npm run qa:links && npm run qa:e2e"
+    "quality": "npm run build && npm run lint && npm run format:check && npm run qa:agents && npm run qa:links && npm audit && npm run qa:e2e"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",
     "@eslint/js": "10.0.1",
     "docx": "9.7.1",
-    "eslint": "10.5.0",
-    "globals": "17.7.0",
-    "html-validate": "11.5.3",
-    "markdownlint-cli": "0.49.0",
-    "playwright": "1.61.1",
-    "prettier": "3.8.4",
-    "stylelint": "17.13.0",
+    "eslint": "10.8.0",
+    "globals": "17.8.0",
+    "html-validate": "11.6.0",
+    "markdownlint-cli": "0.49.1",
+    "playwright": "1.62.1",
+    "prettier": "3.9.6",
+    "stylelint": "17.14.1",
     "stylelint-config-standard": "40.0.0"
   }
 }
