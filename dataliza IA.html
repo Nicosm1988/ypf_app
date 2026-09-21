@@ -1,0 +1,2387 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#021b4d">
+<title>DATALIZA · Gestión de equipos</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23021b4d'/%3E%3Ctext x='50' y='62' font-size='28' font-family='Arial' font-weight='bold' fill='%2303C9C9' text-anchor='middle'%3EVMC%3C/text%3E%3C/svg%3E">
+<style>
+:root {
+  --navy:#021b4d; --blue:#056cf2; --blue2:#0424d9;
+  --turquoise:#03c9c9; --violet:#896cd2;
+  --bg:#eef1f6; --card:#fff; --line:#e2e8f0; --soft:#f3f6fb;
+  --text:#12233f; --muted:#67728a;
+  --green:#16974c; --red:#dc3545; --yellow:#d99a00;
+  --shadow:0 2px 8px rgba(4,36,110,.07);
+}
+[data-theme="dark"] {
+  --bg:#0e1626; --card:#151f33; --line:#29364d; --soft:#1c2940;
+  --text:#e7edf6; --muted:#a3b0c5;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; background:var(--bg); color:var(--text);
+  font:14px/1.5 "Segoe UI",system-ui,Arial,sans-serif;
+}
+button,input,select,textarea { font:inherit; }
+button,a,select { -webkit-tap-highlight-color:transparent; }
+button { cursor:pointer; }
+button:disabled { opacity:.55; cursor:wait; }
+input,select,textarea {
+  background:var(--card); color:var(--text); border:1.5px solid var(--line);
+  border-radius:9px; padding:9px 11px; max-width:100%;
+}
+textarea { resize:vertical; }
+input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible {
+  outline:2px solid var(--blue); outline-offset:2px;
+}
+a { color:var(--blue); }
+button { touch-action:manipulation; }
+.app { display:flex; min-height:100vh; }
+.side {
+  width:258px; flex-shrink:0; position:sticky; top:0; height:100vh;
+  display:flex; flex-direction:column; color:#fff; z-index:60;
+  background:linear-gradient(180deg,var(--navy),#01123a);
+}
+.brand { display:flex; gap:12px; padding:22px 18px; align-items:center; border-bottom:1px solid #ffffff20; }
+.logo {
+  border:1.5px solid var(--turquoise); color:var(--turquoise); border-radius:10px;
+  padding:8px 9px; letter-spacing:2px; font-weight:800;
+}
+.brand strong { font-size:17px; letter-spacing:.6px; }
+.brand small { display:block; color:#cbd7ed; font-size:10px; }
+.nav { padding:12px; overflow:auto; flex:1; }
+.nav-label { font-size:10px; opacity:.55; text-transform:uppercase; letter-spacing:1px; margin:16px 12px 6px; }
+.nav button {
+  display:block; width:100%; text-align:left; border:0; background:none;
+  color:#dbe5f6; padding:11px 12px; border-radius:9px; margin:2px 0;
+}
+.nav button:hover { background:#ffffff12; }
+.nav button.active { background:linear-gradient(90deg,var(--blue),var(--blue2)); color:#fff; }
+.foot { padding:14px 18px; font-size:10px; color:#c0cce0; border-top:1px solid #ffffff20; }
+.main { flex:1; min-width:0; }
+.topbar {
+  position:sticky; top:0; z-index:40; background:var(--card); border-bottom:1px solid var(--line);
+  padding:12px 22px; display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+}
+.top-left,.tools,.team-switch,.row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.tools { margin-left:auto; }
+.team-switch { padding:4px; border:1px solid var(--line); border-radius:12px; background:var(--soft); }
+.team-switch button {
+  padding:8px 12px; border:0; background:transparent; color:var(--muted);
+  border-radius:8px; font-size:12px; font-weight:800;
+}
+.team-switch button.active { color:#fff; background:linear-gradient(90deg,var(--blue),var(--blue2)); }
+.team-switch button.active.ia { background:linear-gradient(90deg,#7350c9,#4338ca); }
+.btn,.iconbtn {
+  border:0; border-radius:9px; color:#fff; background:linear-gradient(90deg,var(--blue),var(--blue2));
+  padding:10px 16px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+}
+.btn:hover,.iconbtn:hover { filter:brightness(1.08); }
+.btn.ghost,.iconbtn {
+  border:1.5px solid var(--line); background:var(--card); color:var(--text);
+}
+.btn.danger { background:#ce3544; color:#fff; border-color:#ce3544; }
+.btn.sm,.iconbtn { padding:7px 11px; font-size:12px; }
+.btn.green { background:#158449; color:#fff; }
+.avatar {
+  width:36px; height:36px; border-radius:50%; color:#fff; border:0;
+  font-size:11px; font-weight:800; background:var(--violet);
+}
+.search { width:170px; font-size:12px; }
+.status { font-size:11px; font-weight:700; padding:5px 9px; border-radius:20px; background:#e4f6ec; color:#126c38; }
+.status.warn { background:#fff0cc; color:#805800; }
+.status.error { background:#ffe1e4; color:#a52130; }
+.hamb { display:none; }
+.content { padding:24px 28px 65px; }
+h1 { font-size:24px; margin:0 0 5px; letter-spacing:-.4px; }
+h2 { font-size:16px; margin:0; }
+h3 { margin:0; font-size:14px; }
+.sub { color:var(--muted); margin:0 0 21px; }
+.section-title { font-size:16px; font-weight:800; margin:24px 0 12px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); overflow:hidden; }
+.card-head { padding:15px 18px; border-bottom:1px solid var(--line); display:flex; gap:12px; align-items:center; justify-content:space-between; }
+.card-body { padding:18px; }
+.grid2 { display:grid; grid-template-columns:1.5fr 1fr; gap:18px; }
+.grid4 { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:15px; }
+.kpi { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; box-shadow:var(--shadow); }
+.kpi strong { font-size:29px; display:block; font-variant-numeric:tabular-nums; }
+.kpi span { color:var(--muted); font-size:12px; }
+.kpi.accent { background:linear-gradient(135deg,var(--navy),var(--blue2)); color:#fff; border:0; }
+.kpi.accent span { color:#e0e7ff; }
+.toolbar { display:flex; align-items:center; flex-wrap:wrap; gap:9px; margin:15px 0; }
+.toolbar select,.toolbar input { width:auto; max-width:230px; font-size:12px; }
+.count { font-size:12px; color:var(--muted); font-weight:700; background:var(--soft); border-radius:20px; padding:6px 11px; }
+.seg { display:inline-flex; padding:3px; border-radius:10px; background:var(--soft); gap:3px; }
+.seg button { background:none; border:0; border-radius:8px; padding:8px 12px; color:var(--muted); font-size:12px; font-weight:700; }
+.seg button.active { background:var(--card); color:var(--blue); box-shadow:var(--shadow); }
+.pill,.chip { display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:20px; font-size:11px; font-weight:700; }
+.pill { background:var(--soft); color:var(--text); }
+.chip { background:#056cf21b; color:var(--blue); }
+.chip button { border:0; background:none; color:inherit; font-weight:900; padding:0 3px; }
+.dot { width:8px; height:8px; display:inline-block; border-radius:50%; flex-shrink:0; }
+.mini-avatar { display:inline-flex; justify-content:center; align-items:center; width:24px; height:24px; border-radius:50%; color:#fff; font-size:10px; font-weight:700; flex-shrink:0; }
+.table-wrap { overflow:auto; }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+th { background:var(--soft); color:var(--muted); text-align:left; padding:12px; font-size:11px; white-space:nowrap; }
+td { padding:12px; border-bottom:1px solid var(--line); vertical-align:middle; }
+tr:last-child td { border-bottom:0; }
+tr.task-row { cursor:pointer; }
+tr.task-row:hover { background:var(--soft); }
+th button { border:0; background:none; color:inherit; font-weight:800; padding:0; }
+.empty { padding:25px 15px; color:var(--muted); text-align:center; font-size:13px; }
+.note { padding:13px 15px; background:#056cf213; border:1px solid #056cf240; border-left:4px solid var(--blue); border-radius:10px; margin:14px 0; font-size:12px; }
+.note.warn { background:#edb52217; border-color:#d6a90055; border-left-color:#d6a900; }
+.small { font-size:12px; color:var(--muted); }
+.muted { color:var(--muted); }
+.board { display:flex; align-items:flex-start; gap:12px; overflow-x:auto; padding:3px 2px 18px; min-height:180px; }
+.column { flex:0 0 238px; background:var(--soft); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+.column-head { color:#fff; display:flex; justify-content:space-between; align-items:center; gap:10px; padding:11px 13px; font-size:12px; font-weight:800; }
+.column-body { padding:10px; min-height:90px; }
+.column.dragover { outline:2px dashed var(--blue); }
+.add-task { border:1px dashed var(--line); border-radius:8px; padding:8px; background:var(--card); width:100%; color:var(--muted); margin-bottom:10px; font-size:12px; }
+.task-card {
+  position:relative; border-radius:10px; border-left:4px solid var(--blue);
+  padding:12px; margin-bottom:10px; background:var(--card); box-shadow:var(--shadow);
+  cursor:pointer; transition:transform .16s,box-shadow .16s;
+}
+.task-card:hover { transform:translateY(-3px); box-shadow:0 10px 23px #021b4d21; }
+.task-card.dragging { opacity:.4; }
+.task-card h3 { font-size:13px; margin:9px 0 6px; overflow-wrap:anywhere; }
+.task-card .project { color:var(--muted); font-size:11px; margin-bottom:9px; overflow-wrap:anywhere; }
+.task-foot { display:flex; align-items:center; gap:6px; border-top:1px solid var(--line); margin-top:10px; padding-top:9px; font-size:11px; }
+.task-foot .assignee { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.task-actions { display:flex; justify-content:flex-end; gap:6px; margin-top:10px; }
+.task-actions button { font-size:11px; padding:4px 7px; }
+.group-neg td { background:var(--soft); font-size:13px; font-weight:800; cursor:pointer; }
+.group-project td { background:var(--bg); padding-left:28px; font-weight:700; cursor:pointer; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:15px 18px; }
+.field { display:flex; flex-direction:column; gap:6px; min-width:0; }
+.field.full,.form-title { grid-column:1/-1; }
+.field label { font-size:12px; font-weight:700; }
+.field input,.field textarea,.field select { width:100%; }
+.field .row { flex-wrap:nowrap; }
+.field .row select { min-width:0; flex:1; }
+.form-title { font-weight:800; color:var(--blue); border-left:4px solid var(--blue); padding-left:9px; margin:7px 0 0; }
+.checklist { padding:12px; border:1px solid var(--line); background:var(--soft); border-radius:10px; }
+.checkrow { display:flex; gap:8px; align-items:center; margin:7px 0; }
+.checkrow input[type=checkbox] { width:18px; flex-shrink:0; }
+.checkrow input[type=text],.checkrow input[type=url] { flex:1; min-width:0; font-size:12px; }
+.checkrow.done input[type=text] { text-decoration:line-through; color:var(--muted); }
+.linkrow { flex-wrap:wrap; }
+.linkrow .link-name { flex:0 1 125px!important; }
+.progress { height:6px; background:var(--line); border-radius:9px; overflow:hidden; margin:9px 0; }
+.progress i { display:block; height:100%; background:var(--green); }
+.dash { background:linear-gradient(135deg,var(--navy),#041439); color:#fff; padding:22px; border-radius:16px; }
+.dash .kpi { background:#ffffff0d; border-color:#ffffff26; color:#fff; }
+.dash .kpi span { color:#d6def0; }
+.dash-panels { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+.dpanel { padding:17px; border:1px solid #ffffff20; border-radius:12px; background:#ffffff08; min-width:0; }
+.dpanel h3 { margin-bottom:14px; }
+.bar {
+  display:grid; grid-template-columns:minmax(100px,145px) 1fr 32px;
+  gap:9px; align-items:center; border:0; background:none; color:inherit;
+  width:100%; text-align:left; padding:5px 0; font-size:11px;
+}
+.track { background:#ffffff20; height:15px; border-radius:7px; overflow:hidden; }
+.track i { display:block; height:100%; border-radius:7px; min-width:2px; }
+.bar:hover .track { outline:1px solid #ffffff70; }
+.light-bars .track { background:var(--soft); }
+.light-bars .bar:hover .track { outline-color:var(--blue); }
+.overlay { display:none; position:fixed; inset:0; background:#02112dc4; padding:28px 16px; z-index:100; overflow:auto; align-items:flex-start; justify-content:center; }
+.overlay.show { display:flex; }
+.modal { width:100%; max-width:760px; background:var(--card); border-radius:16px; box-shadow:0 24px 65px #0005; margin:auto 0; overflow:hidden; }
+.modal.sm { max-width:500px; }
+.modal-head,.modal-foot { padding:17px 21px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.modal-head { border-bottom:1px solid var(--line); }
+.modal-head h2 { flex:1; overflow-wrap:anywhere; }
+.modal-body { padding:21px; max-height:65vh; overflow:auto; }
+.modal-foot { border-top:1px solid var(--line); justify-content:flex-end; }
+.close { background:none; border:0; color:var(--muted); font-size:25px; }
+.tabs { padding:0 16px; background:var(--soft); display:flex; gap:4px; }
+.tabs button { border:0; background:none; color:var(--muted); padding:12px; border-bottom:2px solid transparent; font-weight:700; font-size:12px; }
+.tabs button.active { color:var(--blue); border-color:var(--blue); }
+.person-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.person-choice { background:var(--card); border:1.5px solid var(--line); border-radius:10px; padding:13px; text-align:left; color:var(--text); display:flex; align-items:center; gap:10px; font-size:12px; }
+.person-choice:hover { border-color:var(--blue); }
+.chat-message { border-radius:10px; padding:12px; background:var(--soft); margin-bottom:9px; overflow-wrap:anywhere; }
+.chat-message p { margin:6px 0 0; white-space:pre-wrap; }
+.history-row { padding:11px 0; border-bottom:1px solid var(--line); font-size:12px; overflow-wrap:anywhere; }
+.news-text { width:100%; min-height:420px; font-size:13px; line-height:1.65; }
+.news-row { display:block; width:100%; background:var(--card); border:1px solid var(--line); color:var(--text); border-radius:9px; padding:12px; text-align:left; margin-bottom:8px; }
+.diff-old { background:#dc35451b; color:#d63a49; padding:2px 5px; border-radius:5px; overflow-wrap:anywhere; }
+.diff-new { background:#16974c1b; color:#189551; padding:2px 5px; border-radius:5px; overflow-wrap:anywhere; }
+.toasts { position:fixed; bottom:20px; right:20px; z-index:1000; display:flex; flex-direction:column; gap:9px; max-width:min(470px,calc(100vw - 32px)); }
+.toast { padding:13px 16px; background:#0a1f4d; color:#fff; border-left:4px solid var(--turquoise); border-radius:10px; box-shadow:0 10px 35px #0003; font-size:13px; }
+.toast.error { border-left-color:#f16c79; }
+.toast.warn { border-left-color:#f3c74c; }
+.toast button { background:#ffffff24; border:0; color:#fff; margin-left:8px; border-radius:6px; padding:4px 8px; }
+#setupOverlay { z-index:200; }
+#identityOverlay { z-index:220; }
+#catalogOverlay { z-index:180; }
+#baseOverlay { z-index:190; }
+mark { background:#ffe591; color:#1c2840; border-radius:3px; }
+#confetti { position:fixed; inset:0; pointer-events:none; z-index:300; overflow:hidden; }
+.confetto { position:absolute; width:9px; height:13px; top:-20px; animation:fall 2.7s linear forwards; }
+@keyframes fall { to { transform:translateY(105vh) rotate(680deg); } }
+code { overflow-wrap:anywhere; }
+@media(max-width:1200px) {
+  .topbar { padding:10px 15px; }
+  .grid4 { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:1000px) {
+  .side { position:fixed; left:-258px; transition:left .2s; }
+  .side.open { left:0; box-shadow:0 0 80px #0008; }
+  .hamb { display:inline-flex; }
+  .grid2 { grid-template-columns:1fr; }
+  .content { padding:21px 18px 60px; }
+}
+@media(max-width:650px) {
+  .dash-panels,.form-grid { grid-template-columns:1fr; }
+  .team-switch { order:3; width:100%; justify-content:center; }
+  .team-switch button { flex:1; }
+  .search { width:115px; }
+  .status { font-size:10px; }
+  .tools { gap:5px; }
+  .person-grid { grid-template-columns:1fr; }
+  .modal-body { padding:16px; }
+  .dash { padding:15px; }
+  .column { flex-basis:225px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side">
+    <div class="brand">
+      <div class="logo">VMC</div>
+      <div><strong>DATALIZA</strong><small id="brandTeam">Gestión de equipos</small></div>
+    </div>
+    <nav class="nav" id="nav" aria-label="Navegación principal"></nav>
+    <div class="foot" id="footerTeam">Dataliza · Gestión interna</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="top-left">
+        <button class="iconbtn hamb" data-act="menu" aria-label="Abrir menú">☰</button>
+        <button class="iconbtn" data-act="back" id="backBtn" hidden>← Volver</button>
+        <span class="small" id="crumb">DATALIZA</span>
+      </div>
+
+      <div class="team-switch" aria-label="Seleccionar equipo">
+        <button data-act="team" data-team="dataliza" id="btnDataliza">👥 Equipo Datalización</button>
+        <button data-act="team" data-team="ia" id="btnIA" class="ia">🤖 Equipo IA</button>
+      </div>
+
+      <div class="tools">
+        <input class="search" id="globalSearch" placeholder="🔎 Buscar… (/)" aria-label="Buscar tareas">
+        <button class="iconbtn" data-act="theme" title="Claro u oscuro">🌓</button>
+        <button class="iconbtn" data-act="base" title="Base de datos y copias">📁 Base</button>
+        <button class="iconbtn" data-act="reload" title="Actualizar datos">↻</button>
+        <span class="status warn" id="dbState">Sin conectar</span>
+        <button class="avatar" id="avatar" data-act="identity" title="Elegir usuario">?</button>
+      </div>
+    </header>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+
+<div class="overlay show" id="setupOverlay">
+  <section class="modal sm" role="dialog" aria-modal="true" aria-labelledby="setupTitle">
+    <div class="modal-head"><h2 id="setupTitle">DATALIZA · Gestión de equipos</h2></div>
+    <div class="modal-body">
+      <p>El equipo de Datalización y el Equipo IA tienen bases e identidades independientes.</p>
+      <div class="note">
+        Para recuperar tus tareas existentes, conectá la carpeta que contiene
+        <b>dataliza_datos.json</b>. El Equipo IA utiliza otro archivo.
+      </div>
+      <div class="row" style="flex-direction:column;align-items:stretch">
+        <button class="btn" data-act="connect">📁 Conectar carpeta</button>
+        <button class="btn ghost" data-act="continue-base" id="continueSetup" hidden>Continuar con la carpeta anterior</button>
+        <button class="btn ghost" data-act="local">💾 Usar guardado local</button>
+        <button class="btn ghost" data-act="demo">Ver demostración sin guardar</button>
+      </div>
+      <p class="small">La conexión directa a carpetas requiere Chrome o Edge y permiso del navegador. El modo local funciona sin esa API.</p>
+      <p class="small">El guardado local pertenece a este navegador. Exportá copias: borrar sus datos puede eliminarlo.</p>
+    </div>
+  </section>
+</div>
+
+<div class="overlay" id="identityOverlay">
+  <section class="modal sm" role="dialog" aria-modal="true" aria-labelledby="identityTitle">
+    <div class="modal-head"><h2 id="identityTitle">¿Quién sos?</h2></div>
+    <div class="modal-body">
+      <p class="small">Tu elección se recuerda por separado para cada equipo en este navegador. No es un sistema de autenticación.</p>
+      <div class="person-grid" id="identityGrid"></div>
+    </div>
+  </section>
+</div>
+
+<div class="overlay" id="taskOverlay">
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="taskTitle">
+    <div class="modal-head">
+      <h2 id="taskTitle">Tarea</h2>
+      <button class="close" data-act="close-task" aria-label="Cerrar">×</button>
+    </div>
+    <div class="tabs" id="taskTabs">
+      <button data-act="task-tab" data-tab="detail">📝 Detalle</button>
+      <button data-act="task-tab" data-tab="chat">💬 Seguimiento</button>
+      <button data-act="task-tab" data-tab="history">🕓 Historial</button>
+    </div>
+    <div class="modal-body" id="taskBody"></div>
+    <div class="modal-foot" id="taskFooter"></div>
+  </section>
+</div>
+
+<div class="overlay" id="catalogOverlay">
+  <section class="modal sm" role="dialog" aria-modal="true" aria-labelledby="catalogTitle">
+    <div class="modal-head">
+      <h2 id="catalogTitle">Catálogo</h2>
+      <button class="close" data-act="close-catalog" aria-label="Cerrar">×</button>
+    </div>
+    <div class="modal-body" id="catalogBody"></div>
+  </section>
+</div>
+
+<div class="overlay" id="drillOverlay">
+  <section class="modal" role="dialog" aria-modal="true" aria-labelledby="drillTitle">
+    <div class="modal-head">
+      <h2 id="drillTitle">Desglose</h2>
+      <button class="close" data-act="close-drill" aria-label="Cerrar">×</button>
+    </div>
+    <div class="modal-body" id="drillBody"></div>
+    <div class="modal-foot">
+      <button class="btn ghost" data-act="drill-reset">↺ Reiniciar</button>
+      <button class="btn" data-act="drill-kanban">📋 Ver en Kanban</button>
+    </div>
+  </section>
+</div>
+
+<div class="overlay" id="baseOverlay">
+  <section class="modal sm" role="dialog" aria-modal="true" aria-labelledby="baseTitle">
+    <div class="modal-head">
+      <h2 id="baseTitle">Base de datos</h2>
+      <button class="close" data-act="close-base" aria-label="Cerrar">×</button>
+    </div>
+    <div class="modal-body" id="baseBody"></div>
+  </section>
+</div>
+
+<input id="importFile" type="file" accept=".json,application/json" hidden>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div id="confetti"></div>
+
+<script>
+"use strict";
+
+/* ================== CONFIGURACIÓN ================== */
+
+const $ = id => document.getElementById(id);
+const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[ch]));
+const clone = value => JSON.parse(JSON.stringify(value));
+
+const TEAMS = {
+  dataliza: {
+    label:"Equipo Datalización",
+    file:"dataliza_datos.json",
+    prefix:"",
+    backup:"backup_",
+    people:[
+      {n:"Nicolás San Marco",i:"NS",c:"#5b3fd0"},
+      {n:"Nahuel Paz",i:"NP",c:"#0072ce"},
+      {n:"Iztok Bajda",i:"IB",c:"#1aa053"},
+      {n:"Mariana Herrera",i:"MH",c:"#b0447a"},
+      {n:"Constanza Welschen",i:"CW",c:"#d4694f"},
+      {n:"Manuel Talavera",i:"MT",c:"#5b6672"},
+      {n:"Joaquín Vassarotto",i:"JV",c:"#0f766e"}
+    ]
+  },
+  ia: {
+    label:"Equipo IA",
+    file:"dataliza_ia_datos.json",
+    prefix:"ia_",
+    backup:"backup_ia_",
+    people:[
+      {n:"Vanina Fernández",i:"VF",c:"#8b5cf6"},
+      {n:"Damián Joglar",i:"DJ",c:"#0284c7"},
+      {n:"Esteban Antonel Gianfranco",i:"EG",c:"#159570"}
+    ]
+  }
+};
+
+const GATES = [
+  ["backlog","Backlog","#c98a4e"],
+  ["g1","1 · Requerim. y Spec","#2e3d52"],
+  ["g2","2 · Conex. y Orígenes","#5b6672"],
+  ["g3","3 · Datos y Transform.","#9b1b53"],
+  ["g4","4 · Modelo y Arquitect.","#7b5ce8"],
+  ["g5","5 · Lógica y Fórm.","#08214a"],
+  ["g6","6 · Segur. y Gob.","#1565c0"],
+  ["g7","7 · Exp. e Interacc. (UX)","#03a9c4"],
+  ["g8","8 · Version. y Aprob.","#1b5e20"],
+  ["g9","9 · Despliegue y Public.","#43a047"],
+  ["g10","10 · Operac. y Mejora","#c07d00"],
+  ["lecciones","Lecciones Aprend.","#b06a86"]
+];
+const ESTADOS = ["No iniciado","En curso","Bloqueado","En espera","Finalizado"];
+const EST_COLOR = {
+  "No iniciado":"#64748b","En curso":"#2563eb","Bloqueado":"#dc2626",
+  "En espera":"#e7a20b","Finalizado":"#16a34a"
+};
+const PRIOS = ["🔥 Fuego","⬆️ Alta","➖ Media","⬇️ Baja","⚪ Sin asignar"];
+const PRIO_COLOR = ["#e5484d","#dd9500","#056cf2","#8894a8","#94a3b8"];
+const TIPOS = {
+  app:"📱 Power App", fabric:"📊 Tablero Fabric",
+  flow:"⚡ Power Automate", otro:"🌐 HTML"
+};
+const PALETTE = ["#e11d48","#f59e0b","#06b6d4","#8b5cf6","#ec4899","#0ea5e9","#f97316","#14532d"];
+const NAV = [
+  ["Panel",[
+    ["resumen","🏠","Resumen de Tareas"],
+    ["kanban","📋","Kanban"],
+    ["dashboard","📊","Dashboard"],
+    ["gerencial","🗂️","Vista Gerencial"],
+    ["novedades","📝","Novedades"]
+  ]],
+  ["Carga",[["carga","➕","Cargar tarea"]]],
+  ["Gobierno",[["papelera","🗑️","Papelera"],["auditoria","🕓","Auditoría"]]],
+  ["Ayuda",[["info","🔍","Info"]]]
+];
+const PAGE_NAMES = Object.fromEntries(NAV.flatMap(g=>g[1].map(p=>[p[0],p[2]])));
+const FIELD_LABEL = {
+  nombre:"Nombre",desc:"Descripción",negocio:"Negocio",proyecto:"Proyecto",
+  subneg:"Sub negocio",tipo:"Tipo de activo",estado:"Estado",prioridad:"Prioridad",
+  gate:"Gate",resp:"Responsable",fini:"Fecha de inicio",fecha:"Fecha estimada",
+  invol:"Involucrados",subtareas:"Subtareas",links:"Links SharePoint"
+};
+const EDIT_FIELDS = Object.keys(FIELD_LABEL);
+
+let team = "dataliza";
+let page = "resumen";
+let view = "all";
+let mode = "local";
+let baseDir = null;
+let rememberedDir = null;
+let contexts = {};
+let started = false;
+let transitioning = false;
+let me = "";
+let navigation = [];
+let query = "";
+let boardView = "board";
+let collapsed = new Set();
+let filters = {};
+let sorting = {};
+let draft = null;
+let draftInitial = "";
+let draftLocation = null;
+let taskTab = "detail";
+let catalogKind = "negocio";
+let newsText = "";
+let newsDirty = false;
+let newsTone = "ejecutivo";
+let newsLabel = "Borrador";
+let drill = {};
+let drillInitial = {};
+let drillDimension = "estado";
+let importTeam = null;
+let searchTimer = null;
+let dragId = null;
+
+function emptyState() {
+  return {tasks:[],papelera:[],seq:100,negocios:[],proyectos:[],novedades:[],auditoria:[]};
+}
+
+function context(id=team) {
+  if (!contexts[id]) contexts[id] = {
+    state:emptyState(),loaded:false,signature:null,file:null,
+    busy:false,undo:null,error:false,warned:false
+  };
+  return contexts[id];
+}
+const state = () => context().state;
+const people = () => TEAMS[team].people;
+const person = name => people().find(p=>p.n===name) || {
+  n:name||"Sin asignar",
+  i:String(name||"?").split(/\s+/).slice(0,2).map(x=>x[0]||"").join(""),
+  c:"#8894a8"
+};
+const gate = id => GATES.find(g=>g[0]===id) || [id,id||"Sin gate","#64748b"];
+const sameId = (a,b) => String(a)===String(b);
+const findTask = id => state().tasks.find(t=>sameId(t.id,id));
+const localKey = id => "dataliza.v3.data."+id;
+const identityKey = id => "dataliza.v3.identity."+id;
+
+function getSetting(key,fallback="") {
+  try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; }
+}
+function setSetting(key,value) {
+  try { localStorage.setItem(key,value); return true; } catch { return false; }
+}
+
+function today() {
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function validDate(s) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(s||""))) return false;
+  const d=new Date(s+"T12:00:00");
+  return !isNaN(d) &&
+    d.getFullYear()===Number(s.slice(0,4)) &&
+    d.getMonth()+1===Number(s.slice(5,7)) &&
+    d.getDate()===Number(s.slice(8,10));
+}
+function dayNumber(s) {
+  if (!validDate(s)) return NaN;
+  const [y,m,d]=s.split("-").map(Number);
+  return Math.floor(Date.UTC(y,m-1,d)/86400000);
+}
+function daysTo(s) { return dayNumber(s)-dayNumber(today()); }
+function dateLabel(s,finished=false) {
+  if (finished) return "✓ hecho";
+  const n=daysTo(s);
+  if (!Number.isFinite(n)) return "Sin fecha";
+  if (!n) return "vence hoy";
+  if (n===1) return "mañana";
+  if (n<0) return `hace ${-n}d`;
+  return `en ${n}d`;
+}
+function formatDate(s) {
+  if (!s) return "";
+  const d = /^\d{4}-\d{2}-\d{2}$/.test(s) ? new Date(s+"T12:00:00") : new Date(s);
+  if (isNaN(d)) return String(s);
+  return d.toLocaleDateString("es-AR") +
+    (s.includes("T") ? " "+d.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"}) : "");
+}
+function safeURL(s) {
+  try {
+    const u=new URL(String(s||"").trim());
+    return ["http:","https:"].includes(u.protocol) ? u.href : "";
+  } catch { return ""; }
+}
+function normLinks(t) {
+  const arr=Array.isArray(t.links)?t.links:(t.link?[t.link]:[]);
+  return arr.filter(Boolean).map(l=>typeof l==="string"?{n:"",u:l}:{
+    n:String(l.n||""),u:String(l.u||l.url||"")
+  });
+}
+function migratePriority(p) {
+  if (PRIOS.includes(p)) return p;
+  const found=PRIOS.find(x=>x.toLowerCase().includes(String(p||"").trim().toLowerCase()));
+  return p && found ? found : "⚪ Sin asignar";
+}
+
+function normalize(raw) {
+  if (!raw || typeof raw!=="object" || Array.isArray(raw) || !Array.isArray(raw.tasks)) {
+    throw new Error("El JSON no tiene una base Dataliza válida: falta la lista tasks.");
+  }
+  for (const k of ["papelera","negocios","proyectos","novedades","auditoria"]) {
+    if (raw[k]!=null && !Array.isArray(raw[k])) throw new Error("Formato inválido en "+k);
+  }
+  const normalizeTask=t=>{
+    if (!t || typeof t!=="object" || t.id==null) throw new Error("Hay una tarea sin identificador.");
+    const g=t.gate==="fuego"?"g1":(t.gate||"backlog");
+    const legacy=g==="backlog"?"No iniciado":["g10","lecciones"].includes(g)?"Finalizado":"En curso";
+    return {
+      ...t,
+      nombre:String(t.nombre||"Sin nombre"),desc:String(t.desc||""),
+      negocio:String(t.negocio||""),proyecto:String(t.proyecto||""),
+      subneg:String(t.subneg||""),tipo:t.tipo||"otro",
+      gate:g,estado:ESTADOS.includes(t.estado)?t.estado:legacy,
+      prioridad:migratePriority(t.prioridad),resp:String(t.resp||""),
+      fini:t.fini||"",fecha:t.fecha||"",
+      invol:Array.isArray(t.invol)?t.invol.map(String):[],
+      subtareas:Array.isArray(t.subtareas)?t.subtareas.filter(Boolean).map(s=>({...s,t:String(s.t||""),done:!!s.done})):[],
+      comentarios:Array.isArray(t.comentarios)?t.comentarios.filter(c=>c&&String(c.texto||"").trim()):[],
+      historial:Array.isArray(t.historial)?t.historial:[],
+      links:normLinks(t),
+      createdAt:t.createdAt||t.updatedAt||today(),
+      updatedAt:t.updatedAt||t.createdAt||today()
+    };
+  };
+  const result={
+    ...emptyState(),...raw,
+    tasks:raw.tasks.map(normalizeTask),
+    papelera:(raw.papelera||[]).map(normalizeTask),
+    seq:Number(raw.seq)||100,
+    negocios:(raw.negocios||[]).map(String),
+    proyectos:(raw.proyectos||[]).filter(Boolean).map(p=>typeof p==="string"?{nombre:p,negocio:""}:p),
+    novedades:raw.novedades||[],
+    auditoria:raw.auditoria||[]
+  };
+  const ids=new Set();
+  for (const t of [...result.tasks,...result.papelera]) {
+    const id=String(t.id);
+    if (ids.has(id)) throw new Error("Identificador de tarea duplicado: "+id);
+    ids.add(id);
+  }
+  return result;
+}
+
+/* Los ejemplos se usan únicamente en modo demo de Datalización. */
+function demoState(id) {
+  if (id==="ia") return emptyState();
+  const s=emptyState();
+  s.negocios=["CILP","CILC","CIPH","CIT","Comercial","Logística","MidGas","MidOil"];
+  s.proyectos=[
+    {nombre:"Datalización Objetivos KPIs",negocio:"CILP"},
+    {nombre:"Datalización Estrategia",negocio:"CIT"}
+  ];
+  const rows=[
+    ["Diseñar tablas Proyecto/Tarea/Subtarea","CILP",0,"En curso","g4",1,0,"2026-08-02","app"],
+    ["Conectar app a backend","CILP",0,"Bloqueado","g4",1,1,"2026-08-06","app"],
+    ["Wireframe del mapa de linaje","CIT",1,"En curso","g7",3,0,"2026-08-12","fabric"],
+    ["Relevar endpoints de PI","Logística",1,"En espera","g2",0,2,"2026-07-31","flow"],
+    ["Armar base compartida DATALIZA","CILP",0,"En curso","g3",0,0,"2026-07-29","otro"],
+    ["PRD Datalización Estrategia","CIT",1,"No iniciado","g1",2,1,"2026-08-15","fabric"],
+    ["SPEC Sistema de gestión","CILP",0,"En curso","g1",1,0,"2026-08-01","app"],
+    ["Power Query indicadores Logística","Logística",1,"En curso","g3",2,4,"2026-08-04","fabric"],
+    ["Curar datos de HeadCount","MidGas",1,"En espera","g3",2,3,"2026-08-05","flow"],
+    ["Medidas DAX + semáforo","CILC",0,"En curso","g5",2,0,"2026-08-03","fabric"],
+    ["Permisos por grupo del equipo","CILP",0,"En curso","g6",2,1,"2026-08-01","app"],
+    ["Testeo indicadores","Comercial",1,"En curso","g8",1,4,"2026-08-02","fabric"],
+    ["Publicar tablero Objetivos","CIPH",0,"En curso","g9",1,2,"2026-08-04","fabric"],
+    ["Novedades semanales auto","CILP",0,"Finalizado","g10",3,0,"2026-07-25","flow"],
+    ["Relevar fuentes de SecEnergía","MidOil",1,"No iniciado","backlog",2,1,"2026-08-20","fabric"],
+    ["Inventario de flujos del equipo","CILP",0,"No iniciado","backlog",3,3,"2026-08-22","flow"]
+  ];
+  s.tasks=rows.map((r,i)=>({
+    id:i+1,nombre:r[0],negocio:r[1],proyecto:s.proyectos[r[2]].nombre,
+    estado:r[3],gate:r[4],prioridad:PRIOS[r[5]],
+    resp:TEAMS.dataliza.people[r[6]].n,fecha:r[7],tipo:r[8],
+    desc:"",subneg:"",fini:"",invol:[],subtareas:[],comentarios:[],historial:[],links:[],
+    createdAt:"2026-07-10",updatedAt:"2026-07-25"
+  }));
+  return s;
+}
+
+/* ================== INDEXEDDB Y ARCHIVOS ================== */
+
+function openIDB() {
+  return new Promise((resolve,reject)=>{
+    const request=indexedDB.open("dtz_db",1);
+    request.onupgradeneeded=()=>{
+      if (!request.result.objectStoreNames.contains("h")) request.result.createObjectStore("h");
+    };
+    request.onsuccess=()=>resolve(request.result);
+    request.onerror=()=>reject(request.error);
+  });
+}
+async function idbGet(key) {
+  const db=await openIDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction("h","readonly");
+    const request=tx.objectStore("h").get(key);
+    let value;
+    request.onsuccess=()=>{value=request.result;};
+    tx.oncomplete=()=>{db.close();resolve(value);};
+    tx.onerror=tx.onabort=()=>{db.close();reject(tx.error||new Error("Error de IndexedDB"));};
+  });
+}
+async function idbSet(key,value) {
+  const db=await openIDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction("h","readwrite");
+    tx.objectStore("h").put(value,key);
+    tx.oncomplete=()=>{db.close();resolve();};
+    tx.onerror=tx.onabort=()=>{db.close();reject(tx.error||new Error("Error de IndexedDB"));};
+  });
+}
+async function readDisk(dir,id) {
+  try {
+    const handle=await dir.getFileHandle(TEAMS[id].file);
+    const file=await handle.getFile();
+    const text=await file.text();
+    if (!text.trim()) throw new Error("El archivo de base está vacío. No se sobrescribió.");
+    const raw=JSON.parse(text);
+    return {handle,raw,signature:JSON.stringify(raw)};
+  } catch (err) {
+    if (err.name==="NotFoundError") return null;
+    throw err;
+  }
+}
+async function writeJSON(dir,name,data) {
+  const handle=await dir.getFileHandle(name,{create:true});
+  const writable=await handle.createWritable();
+  try {
+    await writable.write(JSON.stringify(data,null,2));
+    await writable.close();
+  } catch (err) {
+    try { await writable.abort(); } catch {}
+    throw err;
+  }
+  return handle;
+}
+async function loadContext(id,force=false) {
+  const c=context(id);
+  if (c.loaded&&!force) return c;
+  if (mode==="demo") {
+    if (!c.loaded) c.state=demoState(id);
+    c.loaded=true;
+    return c;
+  }
+  if (mode==="folder") {
+    const disk=await readDisk(baseDir,id);
+    if (!disk && c.loaded && c.signature!==null) {
+      throw new Error("La base ya no está en la carpeta. No se reemplazó por una vacía.");
+    }
+    c.state=disk?normalize(disk.raw):emptyState();
+    c.signature=disk?.signature??null;
+    c.file=disk?.handle??null;
+  } else {
+    const text=localStorage.getItem(localKey(id));
+    const raw=text===null?null:JSON.parse(text);
+    c.state=raw?normalize(raw):emptyState();
+    c.signature=raw?JSON.stringify(raw):null;
+    c.file=null;
+  }
+  c.loaded=true;
+  c.error=false;
+  c.warned=false;
+  return c;
+}
+
+async function persistCandidate(id,c,next) {
+  if (mode==="demo") return;
+  const nextSignature=JSON.stringify(next);
+  if (mode==="folder") {
+    const dir=baseDir;
+    const disk=await readDisk(dir,id);
+    if ((disk?.signature??null)!==c.signature) {
+      throw new Error("La base cambió desde la última lectura. Actualizá con ↻ antes de guardar para no pisar esos cambios.");
+    }
+    if (disk) {
+      await writeJSON(dir,TEAMS[id].backup+today()+".json",disk.raw);
+    }
+    c.file=await writeJSON(dir,TEAMS[id].file,next);
+    c.signature=nextSignature;
+  } else {
+    const key=localKey(id);
+    const current=localStorage.getItem(key);
+    const sig=current===null?null:JSON.stringify(JSON.parse(current));
+    if (sig!==c.signature) {
+      throw new Error("Otra pestaña modificó esta base local. Actualizá con ↻ antes de guardar.");
+    }
+    if (current!==null) localStorage.setItem(key+".backup",current);
+    localStorage.setItem(key,JSON.stringify(next));
+    c.signature=nextSignature;
+  }
+}
+
+/* Captura siempre el equipo antes de una operación asíncrona. */
+async function mutate(change,{undoable=true}={}) {
+  if (!started || transitioning) return false;
+  const id=team,c=context(id);
+  if (c.busy) { toast("Esperá a que termine el guardado.","warn"); return false; }
+  if (!me) { openIdentity(); return false; }
+  c.busy=true;
+  renderHeader();
+  const before=clone(c.state);
+  const next=clone(c.state);
+  try {
+    await change(next);
+    await persistCandidate(id,c,next);
+    c.state=next;
+    c.error=false;
+    c.warned=false;
+    if (undoable) c.undo=before;
+    if (mode==="folder") {
+      try { await exportStar(baseDir,id,clone(next)); }
+      catch (err) { toast("La base se guardó, pero falló una exportación para Power BI: "+err.message,"warn"); }
+    }
+    if (team===id) render();
+    return true;
+  } catch (err) {
+    c.error=true;
+    toast("No se guardó el cambio: "+err.message,"error",10000);
+    return false;
+  } finally {
+    c.busy=false;
+    renderHeader();
+  }
+}
+
+function newId(s) {
+  s.seq=Math.max((Number(s.seq)||100)+1,Date.now()*1000+Math.floor(Math.random()*1000));
+  return s.seq;
+}
+function printable(v) {
+  return typeof v==="object"&&v!==null?JSON.stringify(v):String(v??"");
+}
+function audit(s,action,entity,id,detail,field="",oldValue="",newValue="") {
+  s.auditoria.unshift({
+    id:newId(s),fecha:new Date().toISOString(),usuario:me,
+    accion:action,entidad:entity,entidadId:id,detalle:detail,
+    campo:field,anterior:printable(oldValue),nuevo:printable(newValue)
+  });
+}
+function history(t,action,detail) {
+  t.historial=t.historial||[];
+  t.historial.unshift({fecha:new Date().toISOString(),usuario:me,accion:action,detalle:detail});
+}
+async function undo() {
+  const c=context();
+  if (!c.undo) { toast("No hay una acción para deshacer.","warn"); return; }
+  if (!confirm("¿Deshacer la última modificación guardada de este equipo?")) return;
+  const previous=clone(c.undo);
+  const ok=await mutate(s=>{
+    const events=s.auditoria;
+    const sequence=s.seq;
+    Object.keys(s).forEach(k=>delete s[k]);
+    Object.assign(s,previous);
+    s.auditoria=events;
+    s.seq=Math.max(sequence,s.seq||100);
+    audit(s,"deshacer","sistema",team,"Se restauró el estado anterior a la última acción");
+  },{undoable:false});
+  if (ok) {
+    c.undo=null;
+    toast("Acción deshecha. Se conservó el registro de auditoría.");
+  }
+}
+
+/* ================== CAMBIO DE EQUIPO Y MODO ================== */
+
+function editorDirty() {
+  return !!draft && JSON.stringify(draft)!==draftInitial;
+}
+function discardAllowed() {
+  return (!editorDirty()&&!newsDirty) ||
+    confirm("Hay cambios sin guardar en un formulario o novedad. ¿Descartarlos?");
+}
+function resetWorkspace() {
+  draft=null;draftInitial="";draftLocation=null;
+  newsText="";newsDirty=false;newsLabel="Borrador";
+  view="all";query="";filters={};sorting={};collapsed.clear();
+  $("globalSearch").value="";
+  navigation=[];
+  document.querySelectorAll(".overlay").forEach(el=>{
+    if (el.id!=="setupOverlay") el.classList.remove("show");
+  });
+}
+async function loadIdentity() {
+  me=getSetting(identityKey(team));
+  if (!me&&team==="dataliza") {
+    try { me=await idbGet("yo")||""; } catch {}
+  }
+  if (!people().some(p=>p.n===me)) me="";
+  renderHeader();
+  if (!me) openIdentity();
+}
+async function changeTeam(id) {
+  if (!TEAMS[id]||!started||id===team) return;
+  if (transitioning||context().busy) { toast("Esperá a que termine la operación.","warn"); return; }
+  if (!discardAllowed()) return;
+  transitioning=true;
+  renderHeader();
+  try {
+    await loadContext(id);
+    resetWorkspace();
+    team=id;
+    setSetting("dataliza.v3.lastTeam",id);
+    render();
+    await loadIdentity();
+    toast("Ahora estás en "+TEAMS[id].label+".");
+  } catch (err) {
+    toast("No se pudo abrir el equipo: "+err.message,"error",10000);
+  } finally {
+    transitioning=false;
+    renderHeader();
+  }
+}
+async function startMode(nextMode,dir=null) {
+  if (context().busy||transitioning) return;
+  if (started&&!discardAllowed()) return;
+  if (started&&mode==="demo"&&nextMode!=="demo") {
+    if (!confirm("Los cambios de demostración no se trasladan a la base real. ¿Continuar?")) return;
+  }
+  transitioning=true;
+  const old={mode,baseDir,contexts};
+  mode=nextMode;baseDir=dir;contexts={};
+  try {
+    await loadContext(team);
+    resetWorkspace();
+    started=true;
+    $("setupOverlay").classList.remove("show");
+    render();
+    await loadIdentity();
+  } catch (err) {
+    mode=old.mode;baseDir=old.baseDir;contexts=old.contexts;
+    toast("No se pudo abrir la base: "+err.message,"error",12000);
+  } finally {
+    transitioning=false;
+    renderHeader();
+  }
+}
+async function connectBase(useRemembered=false) {
+  if (context().busy||transitioning) return;
+  if (!("showDirectoryPicker" in window)) {
+    toast("Este navegador no permite seleccionar carpetas. Usá Chrome/Edge o el guardado local con importación y exportación.","warn",10000);
+    return;
+  }
+  try {
+    let dir;
+    if (useRemembered&&rememberedDir) {
+      dir=rememberedDir;
+      let permission=await dir.queryPermission({mode:"readwrite"});
+      if (permission!=="granted") permission=await dir.requestPermission({mode:"readwrite"});
+      if (permission!=="granted") throw new Error("No se otorgó permiso de lectura y escritura.");
+    } else {
+      dir=await window.showDirectoryPicker({id:"dataliza_bbdd",mode:"readwrite"});
+    }
+    if (started&&mode==="local"&&state().tasks.length) {
+      if (!confirm("Se abrirán los datos de la carpeta. Los datos locales seguirán guardados en este navegador, pero no se copiarán automáticamente a la carpeta. ¿Continuar?")) return;
+    }
+    await startMode("folder",dir);
+    if (mode==="folder"&&baseDir===dir) {
+      rememberedDir=dir;
+      try { await idbSet("dh",dir);await idbSet("dhName",dir.name); }
+      catch { toast("La carpeta se abrió, pero el navegador no pudo recordar el permiso.","warn"); }
+    }
+  } catch (err) {
+    if (err.name!=="AbortError") toast(err.message,"error",10000);
+  }
+}
+function openIdentity() {
+  if (!started) return;
+  $("identityTitle").textContent="¿Quién sos? · "+TEAMS[team].label;
+  $("identityGrid").innerHTML=people().map(p=>`
+    <button class="person-choice" data-act="choose-identity" data-name="${esc(p.n)}">
+      <span class="mini-avatar" style="background:${p.c}">${esc(p.i)}</span>${esc(p.n)}
+    </button>`).join("");
+  $("identityOverlay").classList.add("show");
+}
+function chooseIdentity(name) {
+  if (!people().some(p=>p.n===name)) return;
+  me=name;
+  if (!setSetting(identityKey(team),name)) toast("La identidad no pudo guardarse para la próxima visita.","warn");
+  $("identityOverlay").classList.remove("show");
+  render();
+}
+async function reloadCurrent(manual=true) {
+  if (!started||transitioning||context().busy||mode==="demo") return;
+  if (manual) {
+    if (!discardAllowed()) return;
+  } else if (draft || newsDirty || document.querySelector(".overlay.show")) return;
+
+  const id=team,c=context();
+  c.busy=true;
+  renderHeader();
+  try {
+    if (!manual) {
+      let signature;
+      if (mode==="folder") signature=(await readDisk(baseDir,id))?.signature??null;
+      else {
+        const raw=localStorage.getItem(localKey(id));
+        signature=raw===null?null:JSON.stringify(JSON.parse(raw));
+      }
+      if (signature===c.signature) return;
+    }
+    await loadContext(id,true);
+    c.undo=null;
+    if (manual) {
+      draft=null;draftLocation=null;draftInitial="";
+      newsDirty=false;
+      $("taskOverlay").classList.remove("show");
+      $("catalogOverlay").classList.remove("show");
+    }
+    render();
+    toast(manual?"Datos actualizados.":"Se detectaron cambios externos y se actualizó la vista.");
+  } catch (err) {
+    c.error=true;
+    if (manual||!c.warned) toast("No se pudo actualizar: "+err.message,"error",10000);
+    c.warned=true;
+  } finally {
+    c.busy=false;
+    renderHeader();
+  }
+}
+
+/* ================== PRESENTACIÓN ================== */
+
+function toast(message,type="",duration=5500) {
+  const el=document.createElement("div");
+  el.className="toast "+type;
+  el.textContent=message;
+  $("toasts").appendChild(el);
+  setTimeout(()=>el.remove(),duration);
+}
+function btn(label,act,attrs="",classes="btn sm ghost") {
+  return `<button class="${classes}" data-act="${act}" ${attrs}>${label}</button>`;
+}
+function selectHTML(values,current,placeholder="") {
+  let out=placeholder?`<option value="">${esc(placeholder)}</option>`:"";
+  return out+values.map(item=>{
+    const [value,label]=Array.isArray(item)?item:[item,item];
+    return `<option value="${esc(value)}"${String(value)===String(current)?" selected":""}>${esc(label)}</option>`;
+  }).join("");
+}
+function highlight(text) {
+  const value=String(text??"");
+  if (!query) return esc(value);
+  const safe=query.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  const parts=value.split(new RegExp("("+safe+")","ig"));
+  return parts.map(p=>p.toLowerCase()===query.toLowerCase()?`<mark>${esc(p)}</mark>`:esc(p)).join("");
+}
+function stateBadge(value) {
+  const color=EST_COLOR[value]||"#64748b";
+  return `<span class="pill" style="background:${color}19;color:${color}"><i class="dot" style="background:${color}"></i>${esc(value)}</span>`;
+}
+function priorityBadge(value) {
+  const color=PRIO_COLOR[PRIOS.indexOf(value)]||"#64748b";
+  return `<span class="pill" style="background:${color}1d;color:${color}">${esc(value)}</span>`;
+}
+function personHTML(name) {
+  const p=person(name);
+  return `<span class="row" style="flex-wrap:nowrap"><span class="mini-avatar" style="background:${p.c}">${esc(p.i)}</span><span>${esc(name||"Sin asignar")}</span></span>`;
+}
+function dateBadge(t) {
+  const d=daysTo(t.fecha),fin=t.estado==="Finalizado";
+  const color=fin?"#16974c":d<0?"#dc3545":d<=2?"#c58400":"#64748b";
+  return `<span class="pill" title="${esc(formatDate(t.fecha))}" style="font-size:10px;background:${color}16;color:${color}">${esc(dateLabel(t.fecha,fin))}</span>`;
+}
+function colorBusiness(name) {
+  return PALETTE[Math.max(0,state().negocios.indexOf(name))%PALETTE.length];
+}
+function inView(t) { return view==="all"||t.resp===me||(t.invol||[]).includes(me); }
+function viewTasks() { return state().tasks.filter(inView); }
+function matchesQuery(t) {
+  return !query || [t.nombre,t.proyecto,t.negocio,t.desc,t.resp,t.subneg].some(v=>String(v||"").toLowerCase().includes(query));
+}
+function filtered(scope) {
+  const f=filters[scope]||{};
+  return viewTasks().filter(t=>{
+    if (!matchesQuery(t)) return false;
+    if ((scope==="kanban"||scope==="gerencial")&&!f.showFinished&&f.estado!=="Finalizado"&&t.estado==="Finalizado") return false;
+    return ["negocio","proyecto","resp","estado","prioridad","gate","tipo"].every(k=>!f[k]||t[k]===f[k]);
+  });
+}
+function sortTasks(arr,scope) {
+  const sort=sorting[scope]||{key:"fecha",dir:1};
+  const val=(t,k)=>{
+    if (k==="gate") return GATES.findIndex(g=>g[0]===t.gate);
+    if (k==="prioridad") return PRIOS.indexOf(t.prioridad);
+    if (k==="subs") return (t.subtareas||[]).filter(s=>s.done).length;
+    return t[k]??"";
+  };
+  return [...arr].sort((a,b)=>{
+    const x=val(a,sort.key),y=val(b,sort.key);
+    return (typeof x==="number"&&typeof y==="number"?x-y:String(x).localeCompare(String(y),"es",{numeric:true}))*sort.dir;
+  });
+}
+function th(scope,key,label) {
+  const s=sorting[scope];
+  const arrow=s?.key===key?(s.dir===1?" ▲":" ▼"):" ↕";
+  return `<th><button data-act="sort" data-scope="${scope}" data-key="${key}">${esc(label+arrow)}</button></th>`;
+}
+function title(name,subtitle) {
+  return `<h1>${esc(name)}</h1><p class="sub">${subtitle}</p>`;
+}
+function viewSwitch() {
+  return `<div class="seg">
+    <button data-act="view" data-value="all" class="${view==="all"?"active":""}">👥 Todo el equipo</button>
+    <button data-act="view" data-value="mine" class="${view==="mine"?"active":""}">🙋 Mi trabajo</button>
+  </div>`;
+}
+function kpis(items) {
+  return `<div class="grid4">${items.map((x,i)=>`
+    <div class="kpi${i===0?" accent":""}"><strong>${esc(x[0])}</strong><span>${esc(x[1])}</span></div>`).join("")}</div>`;
+}
+function renderHeader() {
+  $("brandTeam").textContent="Gestión interna · "+TEAMS[team].label;
+  $("footerTeam").textContent="Dataliza · "+TEAMS[team].label+" · 2026/2027";
+  $("crumb").textContent=PAGE_NAMES[page]||"DATALIZA";
+  $("backBtn").hidden=!navigation.length;
+  const c=context();
+  const status=$("dbState");
+  status.className="status"+(c.error?" error":mode==="demo"||!started?" warn":"");
+  status.textContent=!started?"Sin conectar":transitioning?"Abriendo…":c.busy?"Guardando / leyendo…":
+    c.error?"Revisar base":mode==="demo"?"Demo · no guarda":mode==="folder"?"● Carpeta conectada":"● Guardado local";
+  status.title=TEAMS[team].file;
+  const p=person(me);
+  $("avatar").textContent=me?p.i:"?";
+  $("avatar").style.background=p.c;
+  $("avatar").title=me?me+" · Cambiar usuario":"Elegir usuario";
+  for (const [id,key] of [["btnDataliza","dataliza"],["btnIA","ia"]]) {
+    const b=$(id);
+    b.classList.toggle("active",team===key);
+    b.setAttribute("aria-pressed",String(team===key));
+    b.disabled=transitioning||c.busy;
+  }
+  document.title="DATALIZA · "+TEAMS[team].label;
+}
+function renderNav() {
+  $("nav").innerHTML=NAV.map(([group,items])=>`
+    <div class="nav-label">${esc(group)}</div>
+    ${items.map(([id,icon,name])=>`<button data-act="page" data-page="${id}" class="${page===id?"active":""}">${icon} ${esc(name)}</button>`).join("")}`).join("");
+}
+function render() {
+  if (!started) { renderHeader();return; }
+  renderHeader();renderNav();
+  const renderers={
+    resumen:renderSummary,kanban:renderKanban,dashboard:renderDashboard,
+    gerencial:renderManagement,carga:renderCreate,novedades:renderNews,
+    papelera:renderTrash,auditoria:renderAudit,info:renderInfo
+  };
+  const banner=mode==="demo"?`<div class="note warn"><b>Modo demo.</b> Los cambios no se guardan. ${TEAMS[team].label}.</div>`:"";
+  $("content").innerHTML=banner+renderers[page]();
+  if (page==="carga") drawPreview();
+}
+function go(next,back=false) {
+  if (!PAGE_NAMES[next]||!started) return;
+  if (page==="carga"&&next!=="carga"&&editorDirty()&&!confirm("¿Descartar la tarea sin guardar?")) return;
+  if (page==="novedades"&&next!=="novedades"&&newsDirty&&!confirm("¿Salir dejando esta novedad sin guardar?")) return;
+  if (!back&&page!==next) navigation.push(page);
+  if (page==="carga"&&next!=="carga") {draft=null;draftLocation=null;}
+  page=next;
+  $("side").classList.remove("open");
+  render();
+  window.scrollTo(0,0);
+}
+
+function filterBar(scope,withFinished=true) {
+  const f=filters[scope]||{};
+  const fields=[
+    ["negocio","🏢 Negocio",state().negocios],
+    ["proyecto","📁 Proyecto",state().proyectos.map(p=>p.nombre)],
+    ["resp","👤 Responsable",people().map(p=>p.n)],
+    ["estado","🧭 Estado",ESTADOS],
+    ["prioridad","🚩 Prioridad",PRIOS],
+    ["gate","🏁 Gate",GATES.map(g=>[g[0],g[1]])],
+    ["tipo","🧩 Tipo",Object.entries(TIPOS)]
+  ];
+  return `<div class="toolbar">
+    ${fields.map(([key,label,values])=>`<select data-filter="${scope}" data-key="${key}" aria-label="${label}">${selectHTML(values,f[key]||"",label+": Todos")}</select>`).join("")}
+    ${withFinished?`<label class="small"><input type="checkbox" data-filter="${scope}" data-key="showFinished"${f.showFinished?" checked":""}> Ver finalizados</label>`:""}
+    ${btn("Limpiar","clear-filters",`data-scope="${scope}"`)}
+    <span class="count">${filtered(scope).length} de ${viewTasks().length} tareas</span>
+  </div>`;
+}
+
+function renderSummary() {
+  const tasks=viewTasks().filter(matchesQuery);
+  const active=tasks.filter(t=>t.estado!=="Finalizado");
+  const ongoing=sortTasks(tasks.filter(t=>!["No iniciado","Finalizado"].includes(t.estado)),"summary");
+  const alerts=active.filter(t=>t.estado==="Bloqueado"||t.prioridad===PRIOS[0]||daysTo(t.fecha)<0);
+  return title("Resumen de Tareas",`${esc(TEAMS[team].label)} · Tareas, responsables y actividad del equipo seleccionado.`)+
+    `<div class="toolbar">${viewSwitch()}<span class="small">${view==="mine"?"Asignadas a vos o con tu participación":"Todos los integrantes del equipo"}</span></div>`+
+    kpis([
+      [new Set(active.map(t=>t.proyecto).filter(Boolean)).size,"Proyectos activos"],
+      [tasks.length,"Tareas"],
+      [tasks.filter(t=>t.estado==="En curso").length,"En curso"],
+      [tasks.filter(t=>t.estado==="Bloqueado").length,"Bloqueadas"]
+    ])+
+    `<div class="section-title">Tareas en curso <span class="count">${ongoing.length}</span></div>
+    <div class="card table-wrap"><table><thead><tr>
+    ${th("summary","nombre","Tarea")}${th("summary","proyecto","Proyecto")}${th("summary","negocio","Negocio")}
+    ${th("summary","gate","Gate")}${th("summary","estado","Estado")}${th("summary","resp","Responsable")}${th("summary","prioridad","Prioridad")}
+    </tr></thead><tbody>${ongoing.map(t=>`<tr class="task-row" data-act="edit-task" data-id="${esc(t.id)}">
+      <td><b>${highlight(t.nombre)}</b></td><td>${esc(t.proyecto)}</td><td>${esc(t.negocio)}</td>
+      <td>${esc(gate(t.gate)[1])}</td><td>${stateBadge(t.estado)}</td><td>${personHTML(t.resp)}</td><td>${priorityBadge(t.prioridad)}</td>
+    </tr>`).join("")||'<tr><td colspan="7" class="empty">No hay tareas en curso.</td></tr>'}</tbody></table></div>
+    <div class="grid2" style="margin-top:20px">
+      <section class="card"><div class="card-head"><h2>🔔 Necesitan atención</h2></div><div class="card-body">
+      ${alerts.map(t=>`<div class="history-row">${btn("Abrir","edit-task",`data-id="${esc(t.id)}"`)} ${priorityBadge(t.prioridad)} ${esc(t.nombre)} ${dateBadge(t)}</div>`).join("")||'<div class="small">Todo al día 🎉</div>'}
+      </div></section>
+      <section class="card"><div class="card-head"><h2>⚡ Acciones rápidas</h2></div><div class="card-body row">
+        ${btn("➕ Nueva tarea","new-task","","btn")}
+        ${btn("📋 Kanban","page",'data-page="kanban"')}
+        ${btn("📊 Dashboard","page",'data-page="dashboard"')}
+        ${btn("📝 Novedades","page",'data-page="novedades"')}
+        ${btn("↶ Deshacer última acción","undo")}
+      </div></section>
+    </div>`;
+}
+
+function cardHTML(t,draggable=false) {
+  const p=person(t.resp),subs=t.subtareas||[],links=normLinks(t).filter(l=>safeURL(l.u));
+  const mine=t.resp===me||(t.invol||[]).includes(me);
+  return `<article class="task-card" ${draggable?'draggable="true"':""} data-task="${esc(t.id)}"
+    data-act="edit-task" data-id="${esc(t.id)}" style="border-left-color:${EST_COLOR[t.estado]||"#64748b"}">
+    <div class="row">${priorityBadge(t.prioridad)}${mine?'<span class="chip">🙋 Mío</span>':""}</div>
+    <h3>${highlight(t.nombre)}</h3>
+    <div class="project">📁 ${esc(t.proyecto||"Sin proyecto")} · ${esc(t.negocio||"Sin negocio")}</div>
+    <div class="row">${stateBadge(t.estado)}
+      ${subs.length?`<span class="pill">☑ ${subs.filter(s=>s.done).length}/${subs.length}</span>`:""}
+      ${t.comentarios?.length?`<span class="pill">💬 ${t.comentarios.length}</span>`:""}
+    </div>
+    ${links.length?`<div style="margin-top:8px"><a href="${esc(safeURL(links[0].u))}" target="_blank" rel="noopener noreferrer" class="chip">🔗 ${esc(links[0].n||"Documento")}${links.length>1?" +"+(links.length-1):""}</a></div>`:""}
+    <div class="task-foot">
+      <span class="mini-avatar" style="background:${p.c}">${esc(p.i)}</span>
+      <span class="assignee" title="${esc(t.resp)}">${esc(t.resp||"Sin asignar")}</span>
+      ${dateBadge(t)}
+    </div>
+    <div class="task-actions">
+      ${t.estado!=="Finalizado"?btn("✓ Hecho","finish-task",`data-id="${esc(t.id)}"`,"btn sm green"):""}
+      ${btn("🗑️","trash-task",`data-id="${esc(t.id)}" aria-label="Enviar a papelera"`)}
+    </div>
+  </article>`;
+}
+
+function renderKanban() {
+  const tasks=filtered("kanban"),f=filters.kanban||{};
+  const viewBar=`<div class="toolbar">${viewSwitch()}
+    <div class="seg">
+      <button data-act="board-view" data-value="board" class="${boardView==="board"?"active":""}">📋 Tablero</button>
+      <button data-act="board-view" data-value="list" class="${boardView==="list"?"active":""}">☰ Lista</button>
+    </div>
+    ${boardView==="list"?btn("Expandir todo","expand-all")+btn("Contraer todo","collapse-all"):""}
+    ${btn("➕ Agregar tarea","new-task","","btn sm")}
+  </div>`;
+  const board=`<div class="board">${GATES.filter(g=>!f.gate||f.gate===g[0]).map(g=>{
+    const list=tasks.filter(t=>t.gate===g[0]).sort((a,b)=>(a.orden||0)-(b.orden||0));
+    return `<section class="column" data-gate="${g[0]}">
+      <div class="column-head" style="background:${g[2]}"><span>${esc(g[1])}</span><span>${list.length}</span></div>
+      <div class="column-body">${btn("+ Agregar","new-task",`data-gate="${g[0]}"`,"add-task")}
+      ${list.map(t=>cardHTML(t,true)).join("")||'<div class="empty">Arrastrá una tarea acá</div>'}</div>
+    </section>`;
+  }).join("")}</div>`;
+  return title("Kanban","Arrastrá las tarjetas entre gates o abrí una para editarla. Cada equipo tiene su propio tablero.")+
+    viewBar+filterBar("kanban")+(boardView==="board"?board:taskListHTML(tasks));
+}
+function taskListHTML(tasks) {
+  const columns=[["nombre","Tarea"],["subneg","Sub negocio"],["estado","Estado"],["gate","Gate"],["prioridad","Prioridad"],["resp","Responsable"],["fecha","Fecha"],["subs","Subtareas"]];
+  let rows="";
+  const negocios=[...new Set(tasks.map(t=>t.negocio))].sort((a,b)=>a.localeCompare(b,"es"));
+  for (const neg of negocios) {
+    const nt=tasks.filter(t=>t.negocio===neg);
+    const nk="neg::"+neg,nc=collapsed.has(nk);
+    const projects=[...new Set(nt.map(t=>t.proyecto))];
+    rows+=`<tr class="group-neg" data-act="toggle-group" data-key="${esc(nk)}"><td colspan="9">${nc?"▶":"▼"} 🏢 ${esc(neg||"Sin negocio")} <span class="small">· ${projects.length} proyectos · ${nt.length} tareas</span></td></tr>`;
+    if (nc) continue;
+    for (const project of projects) {
+      const pk="project::"+neg+"::"+project,pc=collapsed.has(pk);
+      const pt=sortTasks(nt.filter(t=>t.proyecto===project),"list");
+      rows+=`<tr class="group-project" data-act="toggle-group" data-key="${esc(pk)}"><td colspan="9">${pc?"▶":"▼"} 📁 ${esc(project||"Sin proyecto")} · ${pt.length} tareas</td></tr>`;
+      if (pc) continue;
+      rows+=pt.map(t=>`<tr class="task-row" data-act="edit-task" data-id="${esc(t.id)}">
+        <td style="min-width:220px"><b>${highlight(t.nombre)}</b></td><td>${esc(t.subneg||"—")}</td>
+        <td>${stateBadge(t.estado)}</td><td>${esc(gate(t.gate)[1])}</td><td>${priorityBadge(t.prioridad)}</td>
+        <td>${personHTML(t.resp)}</td><td>${dateBadge(t)}</td>
+        <td>${t.subtareas.filter(s=>s.done).length}/${t.subtareas.length}</td>
+        <td><div class="row">${t.estado!=="Finalizado"?btn("✓","finish-task",`data-id="${esc(t.id)}"`):""}${btn("🗑️","trash-task",`data-id="${esc(t.id)}"`)}</div></td>
+      </tr>`).join("");
+    }
+  }
+  return `<div class="card table-wrap"><table><thead><tr>${columns.map(c=>th("list",c[0],c[1])).join("")}<th>Acciones</th></tr></thead>
+  <tbody>${rows||'<tr><td colspan="9" class="empty">Sin tareas para mostrar.</td></tr>'}</tbody></table></div>`;
+}
+function renderManagement() {
+  const tasks=filtered("gerencial");
+  const projects=[...new Set(tasks.map(t=>t.proyecto))];
+  return title("🗂️ Vista Gerencial · Por Proyecto","Vista ejecutiva de las tareas del equipo seleccionado, agrupadas por proyecto.")+
+    `<div class="toolbar">${viewSwitch()}</div>`+
+    kpis([
+      [projects.length,"Proyectos visibles"],[tasks.length,"Tareas visibles"],
+      [tasks.filter(t=>t.estado==="En curso").length,"En curso"],
+      [tasks.filter(t=>t.estado==="Bloqueado").length,"Bloqueadas"]
+    ])+filterBar("gerencial")+
+    `<div class="board">${projects.map(p=>{
+      const list=tasks.filter(t=>t.proyecto===p).sort((a,b)=>(a.orden||0)-(b.orden||0));
+      return `<section class="column"><div class="column-head" style="background:${colorBusiness(list[0]?.negocio)}"><span>📁 ${esc(p||"Sin proyecto")}</span><span>${list.length}</span></div>
+      <div class="column-body">${list.map(t=>cardHTML(t)).join("")}</div></section>`;
+    }).join("")||'<div class="card empty" style="width:100%">No hay tareas con estos filtros.</div>'}</div>`;
+}
+
+/* ================== FORMULARIOS ================== */
+
+function makeDraft(t=null) {
+  return t?clone(t):{
+    nombre:"",desc:"",negocio:state().negocios[0]||"",
+    proyecto:state().proyectos[0]?.nombre||"",subneg:"",
+    tipo:"app",estado:"No iniciado",prioridad:"➖ Media",
+    gate:"backlog",resp:me||people()[0]?.n||"",fini:"",fecha:today(),
+    invol:[],subtareas:[],links:[]
+  };
+}
+function formHTML() {
+  const d=draft;
+  const input=(key,type="text",extra="")=>`<input type="${type}" data-edit="${key}" value="${esc(d[key]||"")}" ${extra}>`;
+  const select=(key,values,placeholder="")=>`<select data-edit="${key}">${selectHTML(values,d[key],placeholder)}</select>`;
+  return `<div class="form-grid">
+    <div class="form-title">📍 Ubicación</div>
+    <div class="field"><label>Negocio *</label><div class="row">
+      ${select("negocio",state().negocios,"Elegir negocio")}
+      ${btn("+","catalog",'data-kind="negocio" aria-label="Administrar negocios"',"iconbtn")}
+    </div></div>
+    <div class="field"><label>Proyecto *</label><div class="row">
+      ${select("proyecto",state().proyectos.map(p=>p.nombre),"Elegir proyecto")}
+      ${btn("+","catalog",'data-kind="proyecto" aria-label="Administrar proyectos"',"iconbtn")}
+    </div></div>
+    <div class="field"><label>Sub negocio</label>${input("subneg")}</div>
+    <div class="field"><label>Tipo de activo</label>${select("tipo",Object.entries(TIPOS))}</div>
+    <div class="form-title">📝 Datos de la tarea</div>
+    <div class="field full"><label>Nombre *</label>${input("nombre","text",'placeholder="[Verbo] + [qué] + [dónde]"')}</div>
+    <div class="field full"><label>Descripción</label><textarea data-edit="desc" rows="3">${esc(d.desc)}</textarea></div>
+    <div class="field full"><label>🔗 Links SharePoint o documentación</label><div class="checklist" id="linksEditor">${linksHTML()}</div><span class="small">Se permiten enlaces http y https. Para abrirlos hace falta conectividad al recurso.</span></div>
+    <div class="field"><label>Estado *</label>${select("estado",ESTADOS)}</div>
+    <div class="field"><label>Prioridad *</label>${select("prioridad",PRIOS)}</div>
+    <div class="field"><label>Gate *</label>${select("gate",GATES.map(g=>[g[0],g[1]]))}</div>
+    <div class="field"><label>Fecha de inicio</label>${input("fini","date")}</div>
+    <div class="field"><label>Fecha estimada *</label>${input("fecha","date")}</div>
+    <div class="form-title">👥 Personas · ${esc(TEAMS[team].label)}</div>
+    <div class="field"><label>Responsable *</label>${select("resp",people().map(p=>p.n),"Elegir responsable")}</div>
+    <div class="field"><label>Agregar involucrado</label><select data-add-person><option value="">Elegir persona…</option>${selectHTML(people().filter(p=>!d.invol.includes(p.n)).map(p=>p.n),"")}</select></div>
+    <div class="field full"><label>Involucrados</label><div class="row" id="involvedEditor">${involvedHTML()}</div></div>
+    <div class="form-title">✅ Subtareas</div>
+    <div class="field full"><div class="checklist" id="subtasksEditor">${subtasksHTML()}</div></div>
+  </div>`;
+}
+function linksHTML() {
+  return (draft.links||[]).map((l,i)=>`<div class="checkrow linkrow">
+    <input class="link-name" type="text" data-link-name="${i}" value="${esc(l.n)}" placeholder="Nombre">
+    <input type="url" data-link-url="${i}" value="${esc(l.u)}" placeholder="https://...">
+    ${safeURL(l.u)?`<a class="btn sm ghost" href="${esc(safeURL(l.u))}" target="_blank" rel="noopener noreferrer">Abrir</a>`:""}
+    ${btn("×","remove-link",`data-index="${i}" aria-label="Eliminar enlace"`)}
+  </div>`).join("")+btn("+ Agregar link","add-link");
+}
+function involvedHTML() {
+  return draft.invol.map((name,i)=>`<span class="chip">${esc(name)}<button data-act="remove-person" data-index="${i}" aria-label="Quitar involucrado">×</button></span>`).join("")||'<span class="small">Sin involucrados.</span>';
+}
+function subtasksHTML() {
+  const subs=draft.subtareas,total=subs.length,done=subs.filter(s=>s.done).length;
+  return `<div class="small">${done}/${total} completadas</div>`+
+    subs.map((s,i)=>`<div class="checkrow${s.done?" done":""}">
+      <input type="checkbox" data-sub-done="${i}"${s.done?" checked":""} aria-label="Completar subtarea">
+      <input type="text" data-sub-text="${i}" value="${esc(s.t)}" aria-label="Nombre de subtarea">
+      ${btn("×","remove-subtask",`data-index="${i}" aria-label="Eliminar subtarea"`)}
+    </div>`).join("")+
+    `<div class="checkrow"><input id="newSubtask" type="text" placeholder="Nueva subtarea…">${btn("+ Agregar","add-subtask")}</div>
+    ${total?`<div class="progress"><i style="width:${Math.round(done/total*100)}%"></i></div>`:""}`;
+}
+function drawFormPieces() {
+  if (!draft) return;
+  if ($("linksEditor")) $("linksEditor").innerHTML=linksHTML();
+  if ($("involvedEditor")) $("involvedEditor").innerHTML=involvedHTML();
+  if ($("subtasksEditor")) $("subtasksEditor").innerHTML=subtasksHTML();
+  const select=document.querySelector("[data-add-person]");
+  if (select) select.innerHTML='<option value="">Elegir persona…</option>'+selectHTML(people().filter(p=>!draft.invol.includes(p.n)).map(p=>p.n),"");
+  drawPreview();
+}
+function renderCreate() {
+  if (!draft||draftLocation!=="page") {
+    draft=makeDraft();draftInitial=JSON.stringify(draft);draftLocation="page";
+  }
+  return title("Cargar tarea",`${esc(TEAMS[team].label)} · Usá los botones + para crear negocios y proyectos.`)+`
+    <div class="grid2">
+      <section class="card"><div class="card-body">
+        ${formHTML()}
+        <div class="toolbar" style="justify-content:flex-end">${btn("💾 Crear tarea","save-task","","btn")}</div>
+      </div></section>
+      <section class="card"><div class="card-head"><h2>👁️ Vista previa</h2></div><div class="card-body" id="taskPreview"></div></section>
+    </div>`;
+}
+function drawPreview() {
+  if (!$("taskPreview")||!draft||draftLocation!=="page") return;
+  const t={...draft,id:"preview",nombre:draft.nombre||"(nombre de la tarea)",comentarios:[]};
+  const holder=document.createElement("div");
+  holder.innerHTML=cardHTML(t);
+  holder.querySelectorAll("[data-act]").forEach(el=>{
+    el.removeAttribute("data-act");
+    if (el.tagName==="BUTTON") el.disabled=true;
+  });
+  $("taskPreview").replaceChildren(...holder.childNodes);
+}
+function openTask(id=null,g=null) {
+  if (draft&&editorDirty()&&!confirm("¿Descartar el formulario actual para abrir esta tarea?")) return;
+  const t=id!==null?findTask(id):null;
+  if (id!==null&&!t) return;
+  draft=makeDraft(t);
+  if (!t&&g) draft.gate=g;
+  draftInitial=JSON.stringify(draft);draftLocation="modal";taskTab="detail";
+  if (page==="carga") {page="kanban";render();}
+  drawTaskDialog();
+  $("taskOverlay").classList.add("show");
+  setTimeout(()=>document.querySelector('#taskBody [data-edit="nombre"]')?.focus(),40);
+}
+function closeTask(force=false) {
+  if (!force&&editorDirty()&&!confirm("¿Cerrar sin guardar los cambios del detalle?")) return false;
+  $("taskOverlay").classList.remove("show");
+  draft=null;draftLocation=null;draftInitial="";
+  return true;
+}
+function drawTaskDialog() {
+  if (!draft||draftLocation!=="modal") return;
+  const t=draft.id!=null?findTask(draft.id):null;
+  $("taskTitle").textContent=t?"Editar: "+t.nombre:"Nueva tarea · "+TEAMS[team].label;
+  document.querySelectorAll("#taskTabs button").forEach(b=>b.classList.toggle("active",b.dataset.tab===taskTab));
+  if (taskTab==="detail") $("taskBody").innerHTML=formHTML();
+  if (taskTab==="chat") {
+    $("taskBody").innerHTML=`<div id="chatMessages">${chatHTML(t?.comentarios||[])}</div>
+    <div class="row" style="flex-wrap:nowrap;margin-top:14px">
+      <input id="chatInput" type="text" placeholder="Escribí una actualización…" style="flex:1;min-width:0">
+      ${btn("Enviar","send-comment","","btn")}
+    </div>${!t?'<p class="small">Guardá la tarea antes de agregar comentarios.</p>':""}`;
+  }
+  if (taskTab==="history") {
+    $("taskBody").innerHTML=(t?.historial||[]).map(h=>`
+      <div class="history-row"><span class="small">${esc(formatDate(h.fecha))}</span><br>
+      <b>${esc(h.usuario)}</b> · ${esc(h.accion)} — ${esc(h.detalle)}</div>`).join("")||'<div class="empty">Sin historial todavía.</div>';
+  }
+  $("taskFooter").innerHTML=`
+    ${t?btn("🗑️ Eliminar","trash-task",`data-id="${esc(t.id)}"`,"btn sm danger")+btn("⧉ Duplicar","duplicate-task",`data-id="${esc(t.id)}"`):""}
+    ${btn("Cancelar","close-task")}
+    ${btn("💾 Guardar","save-task","","btn")}`;
+}
+function chatHTML(comments) {
+  return comments.map(c=>`<div class="chat-message">
+    <div class="row">${personHTML(c.autor)}<span class="small">${esc(formatDate(c.fecha))}</span></div>
+    <p>${esc(c.texto)}</p>
+  </div>`).join("")||'<div class="empty">Sin comentarios aún.</div>';
+}
+function validateDraft(d) {
+  if (!d.nombre.trim()) throw new Error("Poné un nombre para la tarea.");
+  if (!state().negocios.includes(d.negocio)) throw new Error("Elegí o creá un negocio.");
+  if (!state().proyectos.some(p=>p.nombre===d.proyecto)) throw new Error("Elegí o creá un proyecto.");
+  if (!people().some(p=>p.n===d.resp)) throw new Error("Elegí un responsable de este equipo.");
+  if (!validDate(d.fecha)) throw new Error("Indicá una fecha estimada válida.");
+  if (d.fini&&!validDate(d.fini)) throw new Error("La fecha de inicio no es válida.");
+  if (d.fini&&d.fini>d.fecha) throw new Error("La fecha estimada no puede ser anterior al inicio.");
+  if (d.links.some(l=>l.u.trim()&&!safeURL(l.u))) throw new Error("Hay un enlace inválido. Usá direcciones http o https.");
+}
+async function saveTask() {
+  if (!draft) return;
+  const d=clone(draft),location=draftLocation;
+  try { validateDraft(d); } catch (err) {toast(err.message,"warn");return;}
+  d.nombre=d.nombre.trim();
+  d.links=d.links.filter(l=>l.u.trim()).map(l=>({n:l.n.trim(),u:l.u.trim()}));
+  d.subtareas=d.subtareas.filter(s=>s.t.trim()).map(s=>({...s,t:s.t.trim()}));
+  const ok=await mutate(s=>{
+    if (d.id!=null) {
+      const current=s.tasks.find(t=>sameId(t.id,d.id));
+      if (!current) throw new Error("La tarea ya no existe.");
+      for (const field of EDIT_FIELDS) {
+        if (JSON.stringify(current[field])!==JSON.stringify(d[field])) {
+          const before=field==="gate"?gate(current[field])[1]:current[field];
+          const after=field==="gate"?gate(d[field])[1]:d[field];
+          audit(s,"editar","tarea",current.id,current.nombre,FIELD_LABEL[field],before,after);
+          history(current,"editar",`${FIELD_LABEL[field]}: ${printable(before)} → ${printable(after)}`);
+        }
+        current[field]=clone(d[field]??"");
+      }
+      current.updatedAt=today();
+    } else {
+      const t={...d,id:newId(s),createdAt:today(),updatedAt:today(),comentarios:[],historial:[]};
+      history(t,"crear","Tarea creada");
+      audit(s,"crear","tarea",t.id,t.nombre);
+      s.tasks.push(t);
+    }
+  });
+  if (ok) {
+    closeTask(true);
+    if (location==="page") go("kanban");
+    toast(mode==="demo"?"Cambio aplicado en demo, sin guardar.":"Tarea guardada.");
+  }
+}
+async function sendComment() {
+  if (!draft?.id) {toast("Guardá la tarea primero.","warn");return;}
+  const input=$("chatInput"),text=input?.value.trim();
+  if (!text) return;
+  const id=draft.id;
+  const ok=await mutate(s=>{
+    const t=s.tasks.find(t=>sameId(t.id,id));
+    if (!t) throw new Error("No se encontró la tarea.");
+    t.comentarios.push({autor:me,fecha:new Date().toISOString(),texto:text});
+    t.updatedAt=today();
+    history(t,"comentar",text);
+    audit(s,"comentar","tarea",t.id,t.nombre,"Comentario","",text);
+  });
+  if (ok) {drawTaskDialog();toast("Comentario agregado.");}
+}
+async function finishTask(id) {
+  const ok=await mutate(s=>{
+    const t=s.tasks.find(t=>sameId(t.id,id));
+    if (!t) throw new Error("No se encontró la tarea.");
+    const old=t.estado;
+    t.estado="Finalizado";t.updatedAt=today();
+    audit(s,"editar","tarea",t.id,t.nombre,"Estado",old,t.estado);
+    history(t,"editar","Estado: "+old+" → Finalizado");
+  });
+  if (ok) {celebrate();toast("Tarea marcada como finalizada.");}
+}
+async function duplicateTask(id) {
+  if (editorDirty()&&!confirm("Se duplicará la versión guardada, no el detalle sin guardar. ¿Continuar?")) return;
+  let created;
+  const ok=await mutate(s=>{
+    const original=s.tasks.find(t=>sameId(t.id,id));
+    if (!original) throw new Error("No se encontró la tarea.");
+    const t=clone(original);
+    t.id=newId(s);created=t.id;t.nombre+=" (copia)";
+    t.createdAt=today();t.updatedAt=today();t.comentarios=[];t.historial=[];
+    delete t.orden;
+    history(t,"crear","Duplicada de "+original.id);
+    audit(s,"crear","tarea",t.id,t.nombre,"Origen","",original.id);
+    s.tasks.push(t);
+  });
+  if (ok) {closeTask(true);openTask(created);toast("Tarea duplicada.");}
+}
+async function trashTask(id) {
+  const t=findTask(id);
+  if (!t||!confirm('¿Enviar "'+t.nombre+'" a la papelera?')) return;
+  const ok=await mutate(s=>{
+    const i=s.tasks.findIndex(t=>sameId(t.id,id));
+    if (i<0) throw new Error("No se encontró la tarea.");
+    const item=s.tasks.splice(i,1)[0];
+    item.deletedAt=new Date().toISOString();item.deletedBy=me;
+    history(item,"eliminar","Enviada a papelera");
+    s.papelera.unshift(item);
+    audit(s,"eliminar","tarea",item.id,item.nombre,"Ubicación","activa","papelera");
+  });
+  if (ok) {
+    if (draft&&sameId(draft.id,id)) closeTask(true);
+    toast("Tarea enviada a la papelera.");
+  }
+}
+async function moveTask(id,newGate,beforeId=null) {
+  if (!GATES.some(g=>g[0]===newGate)) return;
+  const ok=await mutate(s=>{
+    const t=s.tasks.find(t=>sameId(t.id,id));
+    if (!t) throw new Error("No se encontró la tarea.");
+    const oldGate=t.gate;
+    t.gate=newGate;t.updatedAt=today();
+    const column=s.tasks.filter(x=>x.gate===newGate&&!sameId(x.id,id)).sort((a,b)=>(a.orden||0)-(b.orden||0));
+    let pos=beforeId?column.findIndex(x=>sameId(x.id,beforeId)):-1;
+    if (pos<0) pos=column.length;
+    column.splice(pos,0,t);column.forEach((x,i)=>x.orden=i);
+    if (oldGate!==newGate) {
+      audit(s,"mover","tarea",t.id,t.nombre,"Gate",gate(oldGate)[1],gate(newGate)[1]);
+      history(t,"mover",gate(oldGate)[1]+" → "+gate(newGate)[1]);
+    } else {
+      audit(s,"ordenar","tarea",t.id,t.nombre,"Orden","",pos);
+    }
+  });
+  if (ok) toast("Tarjeta movida. El estado se conserva; usá ✓ Hecho para finalizarla.");
+}
+
+/* ================== CATÁLOGOS ================== */
+
+function openCatalog(kind) {
+  catalogKind=kind;
+  drawCatalog();
+  $("catalogOverlay").classList.add("show");
+}
+function drawCatalog() {
+  const business=catalogKind==="negocio";
+  $("catalogTitle").textContent=(business?"Negocios":"Proyectos")+" · "+TEAMS[team].label;
+  $("catalogBody").innerHTML=`
+    ${!business?`<div class="field"><label>Negocio del proyecto</label><select id="catalogBusiness">${selectHTML(state().negocios,draft?.negocio||"","Elegir negocio")}</select></div>`:""}
+    <div class="field" style="margin-top:12px"><label>Nombre</label>
+      <div class="row"><input id="catalogName" type="text" placeholder="${business?"Nuevo negocio":"Nuevo proyecto"}">
+      ${btn("+ Agregar","add-catalog","","btn sm")}</div>
+    </div>
+    <div style="margin-top:15px">${(business?state().negocios:state().proyectos).map((item,i)=>{
+      const name=business?item:item.nombre;
+      return `<div class="history-row row"><span style="flex:1">${esc(name)}${!business?` <span class="small">· ${esc(item.negocio)}</span>`:""}</span>${btn("🗑️","delete-catalog",`data-index="${i}"`)}</div>`;
+    }).join("")||'<div class="empty">Todavía no hay elementos.</div>'}</div>
+    <p class="small">No se eliminan elementos que estén utilizados por tareas activas o de la papelera.</p>`;
+}
+function refreshDraftCatalogs() {
+  if (!draft) return;
+  for (const field of ["negocio","proyecto"]) {
+    const el=document.querySelector(`[data-edit="${field}"]`);
+    if (!el) continue;
+    const values=field==="negocio"?state().negocios:state().proyectos.map(p=>p.nombre);
+    el.innerHTML=selectHTML(values,draft[field],"Elegir "+field);
+  }
+  drawPreview();
+}
+async function addCatalog() {
+  const name=$("catalogName").value.trim();
+  const business=$("catalogBusiness")?.value||"";
+  const kind=catalogKind;
+  if (!name) {toast("Escribí un nombre.","warn");return;}
+  if (kind==="proyecto"&&!business) {toast("Elegí un negocio para el proyecto.","warn");return;}
+  const exists=kind==="negocio"?state().negocios:state().proyectos.map(p=>p.nombre);
+  if (exists.some(n=>n.toLocaleLowerCase("es")===name.toLocaleLowerCase("es"))) {toast("Ya existe ese nombre.","warn");return;}
+  const ok=await mutate(s=>{
+    if (kind==="negocio") s.negocios.push(name);
+    else s.proyectos.push({nombre:name,negocio:business});
+    audit(s,"crear",kind,name,name);
+  });
+  if (ok) {
+    if (draft) draft[kind]=name;
+    drawCatalog();refreshDraftCatalogs();
+    toast("Elemento agregado.");
+  }
+}
+async function deleteCatalog(index) {
+  const kind=catalogKind;
+  const item=kind==="negocio"?state().negocios[index]:state().proyectos[index];
+  if (!item) return;
+  const name=kind==="negocio"?item:item.nombre;
+  const used=[...state().tasks,...state().papelera].some(t=>t[kind]===name) ||
+    (kind==="negocio"&&state().proyectos.some(p=>p.negocio===name));
+  if (used) {toast("No se puede eliminar: está en uso por tareas o proyectos.","warn");return;}
+  if (!confirm('¿Eliminar '+kind+' "'+name+'"?')) return;
+  const ok=await mutate(s=>{
+    if (kind==="negocio") s.negocios=s.negocios.filter(n=>n!==name);
+    else s.proyectos=s.proyectos.filter(p=>p.nombre!==name);
+    audit(s,"eliminar",kind,name,name);
+  });
+  if (ok) {
+    if (draft?.[kind]===name) draft[kind]="";
+    drawCatalog();refreshDraftCatalogs();
+  }
+}
+
+/* ================== DASHBOARD Y DESGLOSE ================== */
+
+function groupRows(tasks,field,metric="tasks") {
+  const names=[...new Set(tasks.map(t=>t[field]||""))];
+  return names.map((name,i)=>{
+    const subset=tasks.filter(t=>(t[field]||"")===name);
+    let val=subset.length;
+    if (metric==="subs") val=subset.reduce((n,t)=>n+t.subtareas.length,0);
+    if (metric==="projects") val=new Set(subset.map(t=>t.proyecto).filter(Boolean)).size;
+    let label=name||"Sin asignar";
+    if (field==="tipo") label=TIPOS[name]||name;
+    if (field==="gate") label=gate(name)[1];
+    let color=PALETTE[i%PALETTE.length];
+    if (field==="resp") color=person(name).c;
+    if (field==="estado") color=EST_COLOR[name]||color;
+    if (field==="prioridad") color=PRIO_COLOR[PRIOS.indexOf(name)]||color;
+    if (field==="negocio") color=colorBusiness(name);
+    return {name,label,val,color,field};
+  }).filter(r=>r.val>0).sort((a,b)=>b.val-a.val);
+}
+function barsHTML(rows,action="open-drill") {
+  if (!rows.length) return '<div class="small" style="color:inherit;opacity:.65">Sin datos</div>';
+  const max=Math.max(1,...rows.map(r=>r.val));
+  return rows.map(r=>`<button class="bar" data-act="${action}" data-field="${esc(r.field)}" data-value="${esc(r.name)}">
+    <span>${esc(r.label)}</span><span class="track"><i style="width:${r.val/max*100}%;background:${r.color}"></i></span><b>${r.val}</b>
+  </button>`).join("");
+}
+function weeklyChart(tasks) {
+  const now=dayNumber(today()),labels=[],vals=[];
+  for (let i=7;i>=0;i--) {
+    const end=now-i*7,start=end-6;
+    const d=new Date(start*86400000);
+    labels.push(String(d.getUTCDate()).padStart(2,"0")+"/"+String(d.getUTCMonth()+1).padStart(2,"0"));
+    vals.push(tasks.filter(t=>{
+      const n=dayNumber(String(t.updatedAt||"").slice(0,10));
+      return t.estado==="Finalizado"&&n>=start&&n<=end;
+    }).length);
+  }
+  const W=460,H=180,P=30,max=Math.max(1,...vals);
+  const pts=vals.map((v,i)=>[P+i*(W-2*P)/7,H-P-v/max*(H-2*P)]);
+  const grid=[0,1,2,3,4].map(i=>{
+    const y=P+i*(H-2*P)/4;
+    return `<line x1="${P}" y1="${y}" x2="${W-P}" y2="${y}" stroke="#ffffff20"/>`;
+  }).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%" role="img" aria-label="Tareas finalizadas por semana">
+    ${grid}<polyline points="${pts.map(p=>p.join(",")).join(" ")}" fill="none" stroke="#03c9c9" stroke-width="3"/>
+    ${pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#03c9c9"/>
+    <text x="${p[0]}" y="${p[1]-10}" fill="white" font-size="10" text-anchor="middle">${vals[i]}</text>
+    <text x="${p[0]}" y="${H-10}" fill="#dce5fa" font-size="10" text-anchor="middle">${labels[i]}</text>`).join("")}
+  </svg><div style="font-size:10px;opacity:.7">Se usa la fecha de última modificación de las tareas finalizadas, como en el modelo original.</div>`;
+}
+function renderDashboard() {
+  const tasks=filtered("dashboard");
+  const panel=(heading,field,metric)=>`<section class="dpanel"><h3>${heading}</h3>${barsHTML(groupRows(tasks,field,metric))}</section>`;
+  return title("Dashboard","Métricas del equipo seleccionado. Tocá una barra para desglosar sus tareas.")+
+    `<div class="toolbar">${viewSwitch()}</div>`+filterBar("dashboard",false)+`
+    <div class="dash">
+      <h2 style="margin-bottom:18px">📊 Gestión · ${esc(TEAMS[team].label)}</h2>
+      ${kpis([
+        [tasks.length,"Total de tareas"],
+        [tasks.filter(t=>t.estado==="Finalizado").length,"Finalizadas"],
+        [tasks.filter(t=>t.estado==="En curso").length,"En curso"],
+        [tasks.filter(t=>t.prioridad===PRIOS[0]&&t.estado!=="Finalizado").length,"🔥 En Fuego"]
+      ])}
+      <div class="dash-panels">
+        <section class="dpanel"><h3>📈 Evolución semanal</h3>${weeklyChart(tasks)}</section>
+        ${panel("🧭 Tareas por estado","estado")}
+        ${panel("👥 Tareas por persona","resp")}
+        ${panel("🏢 Tareas por negocio","negocio")}
+        ${panel("✅ Subtareas por persona","resp","subs")}
+        ${panel("📁 Proyectos por persona","resp","projects")}
+        ${panel("🧩 Tareas por tipo de activo","tipo")}
+        ${panel("🚩 Tareas por prioridad","prioridad")}
+      </div>
+    </div>`;
+}
+function openDrill(field,value) {
+  const f=filters.dashboard||{};
+  drill=Object.fromEntries(Object.entries(f).filter(([k,v])=>v&&k!=="showFinished"));
+  drill[field]=value;
+  drillInitial=clone(drill);
+  drillDimension=field==="estado"?"resp":"estado";
+  drawDrill();
+  $("drillOverlay").classList.add("show");
+}
+function drillTasks() {
+  return viewTasks().filter(matchesQuery).filter(t=>Object.entries(drill).every(([k,v])=>(t[k]||"")===v));
+}
+function drawDrill() {
+  const tasks=drillTasks();
+  const dims=[["estado","Estado"],["negocio","Negocio"],["proyecto","Proyecto"],["resp","Persona"],["prioridad","Prioridad"],["gate","Gate"],["tipo","Tipo de activo"]];
+  const labels=Object.entries(drill).map(([k,v])=>`${FIELD_LABEL[k]||k}: ${k==="gate"?gate(v)[1]:k==="tipo"?TIPOS[v]||v:v||"Sin asignar"}`);
+  $("drillTitle").textContent="Desglose · "+TEAMS[team].label;
+  $("drillBody").innerHTML=`<p class="small">${esc(labels.join(" › ")||"Todo el equipo")}</p>
+    <div class="toolbar"><label>Desglosar por:</label><select id="drillDimension">${selectHTML(dims,drillDimension)}</select><span class="count">${tasks.length} tareas</span></div>
+    <div class="light-bars">${barsHTML(groupRows(tasks,drillDimension),"deeper-drill")}</div>
+    <div class="section-title">Tareas del desglose</div>
+    ${tasks.map(t=>`<div class="history-row">${btn("Abrir","edit-from-drill",`data-id="${esc(t.id)}"`)} ${esc(t.nombre)} ${stateBadge(t.estado)}</div>`).join("")||'<div class="empty">Sin tareas.</div>'}`;
+}
+
+/* ================== NOVEDADES ================== */
+
+function generateNews() {
+  const tasks=viewTasks().filter(matchesQuery);
+  const sections={ "POWER APPS":{}, "DASHBOARDS":{}, "PROYECTOS":{} };
+  for (const t of tasks) {
+    const section=t.tipo==="app"?"POWER APPS":t.tipo==="fabric"?"DASHBOARDS":"PROYECTOS";
+    const project=t.proyecto||"Sin proyecto";
+    (sections[section][project]??=[]).push(t);
+  }
+  let text=`NOVEDADES SEMANALES · ${TEAMS[team].label}\n`;
+  text+=`Fecha: ${formatDate(today())}\nAlcance: ${view==="mine"?me:"Todo el equipo"}\n`;
+  text+="═".repeat(55)+"\n";
+  if (!tasks.length) text+="\nSin tareas registradas para este alcance.\n";
+  for (const [section,projects] of Object.entries(sections)) {
+    if (!Object.keys(projects).length) continue;
+    text+="\n"+section+"\n";
+    for (const [project,list] of Object.entries(projects)) {
+      text+="\n"+project+"\n";
+      if (newsTone==="detallado") {
+        text+=list.map(t=>`• ${t.nombre} — ${t.estado}; ${t.resp}; fecha estimada ${formatDate(t.fecha)||"sin fecha"}.`).join("\n")+"\n";
+      } else {
+        const finished=list.filter(t=>t.estado==="Finalizado").length;
+        const started=list.filter(t=>!["Finalizado","No iniciado"].includes(t.estado));
+        const pending=list.filter(t=>t.estado==="No iniciado").length;
+        if (newsTone==="breve") {
+          text+=`${finished} finalizada(s) · ${started.length} en ejecución · ${pending} por iniciar.\n`;
+        } else {
+          if (finished) text+=`Se completaron ${finished} tarea(s). `;
+          if (started.length) text+=`El foco está en ${started.slice(0,2).map(t=>t.nombre).join(" y ")}. `;
+          if (pending) text+=`Quedan ${pending} tarea(s) por iniciar.`;
+          text+="\n";
+        }
+      }
+      const overdue=list.filter(t=>t.estado!=="Finalizado"&&daysTo(t.fecha)<0);
+      if (overdue.length) text+=`⚠️ ${overdue.length} tarea(s) vencida(s).\n`;
+    }
+  }
+  return text+"\n"+"═".repeat(55)+"\nGenerado por DATALIZA";
+}
+function renderNews() {
+  return title("Novedades semanales","Generación a partir de las tareas visibles del equipo. Podés editar el texto y guardar versiones.")+`
+    <div class="toolbar">${viewSwitch()}
+      <select id="newsTone">${selectHTML([["ejecutivo","Tono ejecutivo"],["detallado","Tono detallado"],["breve","Tono breve"]],newsTone)}</select>
+      ${btn("🔄 Generar borrador","generate-news")}
+      ${btn("💾 Generar y guardar","generate-save-news","","btn sm")}
+      ${btn("💾 Guardar texto actual","save-news")}
+      ${btn("📋 Copiar","copy-news")}
+    </div>
+    <div class="grid2">
+      <section class="card"><div class="card-head"><h2>📄 Novedad actual</h2><span class="small">${esc(newsLabel)}</span></div>
+      <div class="card-body"><textarea class="news-text" id="newsText" placeholder="Generá un borrador o escribí una novedad…">${esc(newsText)}</textarea></div></section>
+      <section class="card"><div class="card-head"><h2>🗂️ Historial</h2><span class="count">${state().novedades.length}</span></div>
+      <div class="card-body" style="max-height:600px;overflow:auto">
+      ${state().novedades.map((n,i)=>`<button class="news-row" data-act="open-news" data-index="${i}">
+        <b>📄 ${esc(formatDate(n.fecha))}</b><br><span class="small">${esc(n.alcance||"Equipo")} · ${esc(n.tono||"ejecutivo")} · ${esc(n.autor||"")}</span>
+      </button>`).join("")||'<div class="empty">No hay novedades guardadas.</div>'}
+      </div></section>
+    </div>`;
+}
+async function saveNews(generate=false) {
+  if (generate) {
+    if (newsDirty&&!confirm("¿Reemplazar el texto editado por una nueva generación?")) return;
+    newsText=generateNews();
+  }
+  if (!newsText.trim()) {toast("No hay texto para guardar.","warn");return;}
+  const date=new Date().toISOString(),text=newsText;
+  const ok=await mutate(s=>{
+    s.novedades.unshift({fecha:date,alcance:view==="mine"?me:"Equipo",tono:newsTone,texto:text,autor:me});
+    audit(s,"crear","novedad",date,"Novedad semanal guardada");
+  });
+  if (ok) {
+    newsDirty=false;newsLabel="Guardada · "+formatDate(date);
+    render();toast("Novedad guardada.");
+  }
+}
+async function copyNews() {
+  try {
+    if (!newsText.trim()) throw new Error("No hay texto para copiar.");
+    if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(newsText);
+    else {
+      const area=$("newsText");area.focus();area.select();
+      if (!document.execCommand("copy")) throw new Error("Copiá el texto manualmente con Ctrl+C.");
+    }
+    toast("Novedades copiadas.");
+  } catch (err) {toast(err.message,"warn");}
+}
+
+/* ================== PAPELERA Y AUDITORÍA ================== */
+
+function renderTrash() {
+  const arr=sortTasks(state().papelera,"trash");
+  return title("🗑️ Papelera de reciclaje",`${esc(TEAMS[team].label)} · Restaurá tareas o eliminá sus datos definitivamente.`)+`
+    <div class="card table-wrap"><table><thead><tr>
+    ${th("trash","nombre","Tarea")}${th("trash","proyecto","Proyecto")}${th("trash","deletedAt","Eliminada")}${th("trash","deletedBy","Por")}<th>Acciones</th>
+    </tr></thead><tbody>${arr.map(t=>`<tr>
+      <td><b>${esc(t.nombre)}</b></td><td>${esc(t.proyecto)}</td><td>${esc(formatDate(t.deletedAt))}</td><td>${esc(t.deletedBy)}</td>
+      <td><div class="row">${btn("↩ Restaurar","restore-task",`data-id="${esc(t.id)}"`)}${btn("🗑️ Definitivo","permanent-delete",`data-id="${esc(t.id)}"`,"btn sm danger")}</div></td>
+    </tr>`).join("")||'<tr><td colspan="5" class="empty">La papelera está vacía.</td></tr>'}</tbody></table></div>`;
+}
+async function restoreTask(id) {
+  const ok=await mutate(s=>{
+    const i=s.papelera.findIndex(t=>sameId(t.id,id));
+    if (i<0) throw new Error("No se encontró la tarea en la papelera.");
+    const t=s.papelera.splice(i,1)[0];
+    delete t.deletedAt;delete t.deletedBy;t.updatedAt=today();
+    s.tasks.push(t);history(t,"restaurar","Restaurada desde papelera");
+    audit(s,"restaurar","tarea",t.id,t.nombre,"Ubicación","papelera","activa");
+  });
+  if (ok) toast("Tarea restaurada.");
+}
+async function permanentDelete(id) {
+  const t=state().papelera.find(t=>sameId(t.id,id));
+  if (!t||!confirm('¿Eliminar definitivamente "'+t.nombre+'"? No habrá opción de deshacer esta eliminación en la app. Las copias anteriores pueden conservarla.')) return;
+  const ok=await mutate(s=>{
+    s.papelera=s.papelera.filter(t=>!sameId(t.id,id));
+    audit(s,"eliminar","tarea",t.id,t.nombre,"Ubicación","papelera","definitivo");
+  },{undoable:false});
+  if (ok) {context().undo=null;toast("Tarea eliminada definitivamente.");}
+}
+function renderAudit() {
+  const f=filters.audit||{};
+  let arr=state().auditoria.filter(a=>{
+    if (f.desde&&String(a.fecha).slice(0,10)<f.desde) return false;
+    if (f.hasta&&String(a.fecha).slice(0,10)>f.hasta) return false;
+    if (f.usuario&&a.usuario!==f.usuario) return false;
+    if (f.accion&&a.accion!==f.accion) return false;
+    if (f.entidad&&a.entidad!==f.entidad) return false;
+    if (f.keyword&&!`${a.detalle||""} ${a.campo||""} ${a.anterior||""} ${a.nuevo||""}`.toLowerCase().includes(f.keyword.toLowerCase())) return false;
+    return true;
+  });
+  if (!sorting.audit) sorting.audit={key:"fecha",dir:-1};
+  arr=sortTasks(arr,"audit");
+  const actions=[...new Set(["crear","editar","mover","comentar","eliminar","restaurar",...state().auditoria.map(a=>a.accion)])];
+  const entities=[...new Set(["tarea","negocio","proyecto","novedad",...state().auditoria.map(a=>a.entidad)])];
+  const users=[...new Set([...people().map(p=>p.n),...state().auditoria.map(a=>a.usuario).filter(Boolean)])];
+  const cols=[["fecha","Fecha"],["usuario","Usuario"],["accion","Acción"],["entidad","Entidad"],["detalle","Detalle"],["campo","Campo"],["anterior","Antes"],["nuevo","Después"]];
+  return title("🕓 Auditoría","Eventos del equipo seleccionado: quién cambió qué, cuándo y cuáles eran los valores.")+`
+    <div class="toolbar">
+      <input type="date" data-filter="audit" data-key="desde" value="${esc(f.desde||"")}" aria-label="Desde">
+      <input type="date" data-filter="audit" data-key="hasta" value="${esc(f.hasta||"")}" aria-label="Hasta">
+      <select data-filter="audit" data-key="usuario">${selectHTML(users,f.usuario,"Usuario: Todos")}</select>
+      <select data-filter="audit" data-key="accion">${selectHTML(actions,f.accion,"Acción: Todas")}</select>
+      <select data-filter="audit" data-key="entidad">${selectHTML(entities,f.entidad,"Entidad: Todas")}</select>
+      <input id="auditKeyword" type="text" value="${esc(f.keyword||"")}" placeholder="Detalle / palabra clave">
+      ${btn("Buscar","audit-search")}${btn("Limpiar","clear-filters",'data-scope="audit"')}
+      <span class="count">${arr.length} eventos${arr.length>800?" · mostrando 800":""}</span>
+    </div>
+    <div class="card table-wrap"><table><thead><tr>${cols.map(c=>th("audit",c[0],c[1])).join("")}</tr></thead>
+    <tbody>${arr.slice(0,800).map(a=>`<tr>
+      <td style="white-space:nowrap">${esc(formatDate(a.fecha))}</td><td>${esc(a.usuario)}</td>
+      <td><span class="pill">${esc(a.accion)}</span></td><td>${esc(a.entidad)}</td><td>${esc(a.detalle)}</td><td>${esc(a.campo||"—")}</td>
+      <td>${a.anterior!==""&&a.anterior!=null?`<span class="diff-old">${esc(a.anterior)}</span>`:"—"}</td>
+      <td>${a.nuevo!==""&&a.nuevo!=null?`<span class="diff-new">${esc(a.nuevo)}</span>`:"—"}</td>
+    </tr>`).join("")||'<tr><td colspan="8" class="empty">Sin eventos.</td></tr>'}</tbody></table></div>`;
+}
+
+/* ================== BASE, IMPORTACIÓN Y EXPORTACIÓN ================== */
+
+function downloadJSON(name,data) {
+  const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json;charset=utf-8"}));
+  const link=document.createElement("a");
+  link.href=url;link.download=name;document.body.appendChild(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),10000);
+}
+function openBase() {
+  if (!started) return;
+  $("baseBody").innerHTML=`
+    <p><b>${esc(TEAMS[team].label)}</b></p>
+    <p>Base: <code>${esc(TEAMS[team].file)}</code></p>
+    <p class="small">Modo: ${mode==="folder"?"Carpeta · "+esc(baseDir.name):mode==="demo"?"Demo sin guardado":"Guardado local del navegador"}</p>
+    <div class="row" style="flex-direction:column;align-items:stretch">
+      ${btn("📁 Conectar o cambiar carpeta","connect","","btn")}
+      ${rememberedDir?btn("Continuar con carpeta anterior","continue-base"):""}
+      ${btn("💾 Cambiar a guardado local","local")}
+      ${btn("⬇ Exportar JSON del equipo","export-json")}
+      ${btn("⬆ Importar JSON en este equipo","import-json")}
+      ${btn("📊 Regenerar tablas Power BI","export-star")}
+      ${btn("↶ Deshacer última modificación","undo")}
+      ${btn("Ver demo sin guardar","demo")}
+    </div>
+    <div class="note warn">
+      Las bases no se fusionan al cambiar de modo. La importación reemplaza los datos del equipo actual después de confirmar.
+      Exportá primero una copia si necesitás conservar una versión.
+    </div>
+    <p class="small">Los archivos de Power BI de IA tienen prefijo <code>ia_</code>, para no sobrescribir los del equipo de Datalización.</p>`;
+  $("baseOverlay").classList.add("show");
+}
+async function importJSONFile(file) {
+  const target=importTeam;
+  importTeam=null;
+  if (!file||target!==team) {toast("La importación se canceló porque cambió el equipo.","warn");return;}
+  if (context().busy||transitioning) {toast("Hay otra operación en curso.","warn");return;}
+  try {
+    const raw=JSON.parse(await file.text());
+    const incoming=normalize(raw);
+    if (target!==team) throw new Error("Cambió el equipo durante la lectura.");
+    const unknown=[...new Set(incoming.tasks.map(t=>t.resp).filter(n=>n&&!people().some(p=>p.n===n)))];
+    const warning=unknown.length?"\n\nHay responsables que no pertenecen a este equipo: "+unknown.join(", ")+". Sus nombres se conservarán, pero deberás reasignarlos si editás esas tareas.":"";
+    if (!confirm(`¿Reemplazar los datos de ${TEAMS[team].label} con ${incoming.tasks.length} tareas de "${file.name}"? La otra base no se modifica.${warning}`)) return;
+    if (!discardAllowed()) return;
+    const ok=await mutate(s=>{
+      const previousSequence=s.seq;
+      Object.keys(s).forEach(k=>delete s[k]);
+      Object.assign(s,clone(incoming));
+      s.seq=Math.max(previousSequence,s.seq||100);
+      audit(s,"importar","sistema",team,"Base importada: "+file.name);
+    });
+    if (ok) {
+      draft=null;draftLocation=null;newsText="";newsDirty=false;
+      $("taskOverlay").classList.remove("show");
+      $("baseOverlay").classList.remove("show");
+      render();toast("Importación completada en "+TEAMS[team].label+".");
+    }
+  } catch (err) {toast("No se importó: "+err.message,"error",10000);}
+}
+
+function starData(id,s) {
+  const pp=TEAMS[id].people;
+  const idx=(arr,value)=>arr.indexOf(value)+1;
+  const pi=name=>pp.findIndex(p=>p.n===name)+1;
+  const gi=value=>GATES.findIndex(g=>g[0]===value)+1;
+  const ni=value=>idx(s.negocios,value);
+  const pri=value=>s.proyectos.findIndex(p=>p.nombre===value)+1;
+  const tables={
+    dim_persona:pp.map((p,i)=>({persona_id:i+1,nombre:p.n,iniciales:p.i,color:p.c})),
+    dim_negocio:s.negocios.map((n,i)=>({negocio_id:i+1,nombre:n,color:PALETTE[i%PALETTE.length]})),
+    dim_proyecto:s.proyectos.map((p,i)=>({proyecto_id:i+1,nombre:p.nombre,negocio:p.negocio,negocio_id:ni(p.negocio)})),
+    dim_gate:GATES.map((g,i)=>({gate_id:i+1,codigo:g[0],nombre:g[1],orden:i})),
+    dim_estado:ESTADOS.map((e,i)=>({estado_id:i+1,nombre:e,color:EST_COLOR[e],orden:i})),
+    dim_prioridad:PRIOS.map((p,i)=>({prioridad_id:i+1,nombre:p,orden:i})),
+    dim_fecha:[],
+    fact_tareas:[],
+    fact_subtareas:[],
+    fact_comentarios:[],
+    fact_historial:[]
+  };
+  const dates=new Set([today()]);
+  let sid=0,cid=0;
+  for (const t of s.tasks) {
+    for (const f of [t.fecha,t.fini,t.createdAt,t.updatedAt]) {
+      const d=String(f||"").slice(0,10);if (validDate(d)) dates.add(d);
+    }
+    const dv=daysTo(t.fecha),links=normLinks(t);
+    const cycle=dayNumber(String(t.updatedAt).slice(0,10))-dayNumber(String(t.createdAt).slice(0,10));
+    tables.fact_tareas.push({
+      tarea_id:t.id,nombre:t.nombre,descripcion:t.desc||"",
+      links_sharepoint:links.map(l=>(l.n?l.n+": ":"")+l.u).join(" | "),cant_links:links.length,
+      sub_negocio:t.subneg||"",tipo:t.tipo,
+      negocio:t.negocio,negocio_id:ni(t.negocio),
+      proyecto:t.proyecto,proyecto_id:pri(t.proyecto),
+      gate:gate(t.gate)[1],gate_codigo:t.gate,gate_id:gi(t.gate),
+      estado:t.estado,estado_id:idx(ESTADOS,t.estado),
+      prioridad:t.prioridad,prioridad_id:idx(PRIOS,t.prioridad),
+      responsable:t.resp,responsable_id:pi(t.resp),
+      fecha_inicio:t.fini||"",fecha_estimada:t.fecha,
+      fecha_creacion:t.createdAt,fecha_modificacion:t.updatedAt,
+      dias_para_vencer:Number.isFinite(dv)?dv:null,
+      vencida:t.estado!=="Finalizado"&&dv<0?1:0,
+      dias_ciclo:t.estado==="Finalizado"&&Number.isFinite(cycle)?Math.max(0,cycle):null,
+      subtareas_total:t.subtareas.length,
+      subtareas_hechas:t.subtareas.filter(x=>x.done).length,
+      subtareas_pendientes:t.subtareas.filter(x=>!x.done).length,
+      comentarios:t.comentarios.length,involucrados:t.invol.join(", ")
+    });
+    t.subtareas.forEach((sub,i)=>tables.fact_subtareas.push({
+      subtarea_id:++sid,tarea_id:t.id,subtarea:sub.t,hecha:sub.done?1:0,orden:i
+    }));
+    t.comentarios.forEach(c=>{
+      const date=String(c.fecha||"").slice(0,10);if(validDate(date)) dates.add(date);
+      tables.fact_comentarios.push({
+        comentario_id:++cid,tarea_id:t.id,autor:c.autor,autor_id:pi(c.autor),
+        fecha:c.fecha,fecha_id:date,texto:c.texto
+      });
+    });
+  }
+  for (const a of s.auditoria) {
+    const date=String(a.fecha||"").slice(0,10);if(validDate(date)) dates.add(date);
+    tables.fact_historial.push({
+      evento_id:a.id,fecha:a.fecha,fecha_id:date,usuario:a.usuario,usuario_id:pi(a.usuario),
+      accion:a.accion,entidad:a.entidad,entidad_id:a.entidadId,
+      tarea_id:a.entidad==="tarea"?a.entidadId:null,entidad_nombre:a.detalle,
+      campo:a.campo||"",valor_anterior:a.anterior||"",valor_nuevo:a.nuevo||"",detalle:a.detalle||""
+    });
+  }
+  const sorted=[...dates].sort();
+  const min=dayNumber(sorted[0]),max=dayNumber(sorted.at(-1));
+  if (max-min>366*100) throw new Error("El rango de fechas excede 100 años; revisá las fechas antes de generar dim_fecha.");
+  for (let n=min;n<=max;n++) {
+    const d=new Date(n*86400000),iso=d.toISOString().slice(0,10);
+    tables.dim_fecha.push({
+      fecha_id:iso,fecha:iso,anio:d.getUTCFullYear(),mes:d.getUTCMonth()+1,
+      nombre_mes:d.toLocaleDateString("es-AR",{month:"long",timeZone:"UTC"}),
+      anio_mes:iso.slice(0,7),trimestre:"T"+(Math.floor(d.getUTCMonth()/3)+1),
+      dia:d.getUTCDate(),
+      dia_semana:d.toLocaleDateString("es-AR",{weekday:"long",timeZone:"UTC"}),
+      es_fin_semana:[0,6].includes(d.getUTCDay())?1:0
+    });
+  }
+  return tables;
+}
+async function exportStar(dir,id,s) {
+  const tables=starData(id,s);
+  for (const [name,data] of Object.entries(tables)) {
+    await writeJSON(dir,TEAMS[id].prefix+name+".json",data);
+  }
+}
+async function manualStarExport() {
+  if (context().busy||transitioning) return;
+  const id=team,c=context();c.busy=true;renderHeader();
+  try {
+    if (mode==="folder") {
+      await exportStar(baseDir,id,clone(c.state));
+      toast("Tablas Power BI generadas en la carpeta.");
+    } else {
+      downloadJSON("modelo_estrella_"+id+".json",starData(id,c.state));
+      toast("Se descargó un JSON que contiene todas las tablas.");
+    }
+  } catch (err) {toast(err.message,"error",9000);}
+  finally {c.busy=false;renderHeader();}
+}
+
+function renderInfo() {
+  return title("🔍 Info","Funcionamiento y cuidados de esta versión.")+`
+    <section class="card"><div class="card-body">
+      <h2>Dos equipos, dos bases</h2>
+      <ul>
+        <li><b>Equipo Datalización:</b> <code>dataliza_datos.json</code>.</li>
+        <li><b>Equipo IA:</b> <code>dataliza_ia_datos.json</code>.</li>
+        <li>IA comienza sin tareas, negocios, proyectos, novedades ni auditoría.</li>
+        <li>Sus integrantes son Vanina Fernández, Damián Joglar y Esteban Antonel Gianfranco.</li>
+      </ul>
+      <h2>Guardado y trabajo sin conexión</h2>
+      <ul>
+        <li>El HTML no necesita librerías externas ni una conexión para mostrar la interfaz.</li>
+        <li>En <b>modo local</b>, los datos quedan separados por equipo en este navegador.</li>
+        <li>En <b>modo carpeta</b>, se leen y escriben archivos JSON con permiso del navegador.</li>
+        <li>El permiso puede volver a pedirse. Instalar una web no garantiza permisos permanentes.</li>
+        <li>Los documentos enlazados y la sincronización de OneDrive requieren conexión o disponibilidad local.</li>
+        <li>Una base nueva se crea en la carpeta cuando guardás la primera modificación.</li>
+        <li>Las copias automáticas de carpeta guardan la versión anterior a cada escritura: <code>backup_aaaa-mm-dd.json</code> y <code>backup_ia_aaaa-mm-dd.json</code>. La copia del mismo día se reemplaza con cada guardado.</li>
+      </ul>
+      <div class="note warn">
+        <b>Importante para compartir:</b> OneDrive no es una base transaccional. La app revisa si el archivo cambió antes de guardar y consulta cambios cada cuatro segundos, pero eso no elimina todas las carreras de escritura entre computadoras.
+        Coordiná que una sola persona guarde a la vez y esperá a que OneDrive sincronice. No hay fusión automática de cambios.
+      </div>
+      <h2>Power BI</h2>
+      <p>Se mantienen tablas de personas, negocios, proyectos, gates, estados, prioridades y fechas; y hechos de tareas, subtareas, comentarios e historial.
+      Las tablas de IA se escriben con prefijo <code>ia_</code>.</p>
+      <h2>Identidad y seguridad</h2>
+      <p>Elegir un nombre identifica comentarios y acciones, pero <b>no autentica al usuario</b>. Los botones de equipo separan espacios de trabajo, no son un control de permisos.
+      Protegé la carpeta con los permisos de Windows, OneDrive o SharePoint.</p>
+      <h2>Atajos</h2>
+      <p><b>/</b>: buscar · <b>N</b>: nueva tarea · <b>Esc</b>: cerrar ventanas · <b>Ctrl+Z</b>: deshacer la última operación de datos cuando no estás escribiendo.</p>
+      <div class="row">
+        ${btn("📁 Administrar base","base","","btn")}
+        ${btn("⬇ Exportar copia de este equipo","export-json")}
+      </div>
+    </div></section>
+    <div class="section-title">🎯 Objetivo</div>
+    <div class="grid2">
+      <section class="card"><div class="card-body"><h2>Centralizar el trabajo</h2>
+        <p>Tareas, prioridades, responsables, subtareas, documentación y novedades en un único lugar.</p></div></section>
+      <section class="card"><div class="card-body"><h2>Trazabilidad por equipo</h2>
+        <p>Kanban, dashboard, vista por proyecto, seguimiento, papelera y auditoría sin mezclar los dos espacios.</p></div></section>
+    </div>`;
+}
+
+/* ================== EVENTOS ================== */
+
+async function dispatch(el,event) {
+  const a=el.dataset.act;
+  if (a==="menu") {$("side").classList.toggle("open");return;}
+  if (a==="theme") {
+    const dark=document.documentElement.dataset.theme!=="dark";
+    document.documentElement.dataset.theme=dark?"dark":"";
+    setSetting("dtz_theme",dark?"dark":"");
+    return;
+  }
+  if (transitioning) return;
+  if (context().busy && !["close-base","close-drill"].includes(a)) {
+    toast("Esperá a que termine la operación.","warn");return;
+  }
+  switch(a) {
+    case "connect": await connectBase();break;
+    case "continue-base": await connectBase(true);break;
+    case "local": await startMode("local");break;
+    case "demo": await startMode("demo");break;
+    case "team": await changeTeam(el.dataset.team);break;
+    case "identity": if(discardAllowed()) openIdentity();break;
+    case "choose-identity": chooseIdentity(el.dataset.name);break;
+    case "base": openBase();break;
+    case "close-base": $("baseOverlay").classList.remove("show");break;
+    case "reload": await reloadCurrent();break;
+    case "page": go(el.dataset.page);break;
+    case "back":
+      if(navigation.length) {
+        const next=navigation.at(-1),previous=page;
+        go(next,true);
+        if(page!==previous) navigation.pop();
+        renderHeader();
+      }
+      break;
+    case "view":
+      if (page==="novedades"&&newsDirty&&!confirm("¿Cambiar el alcance? El texto escrito se conservará, pero puede no coincidir con el nuevo alcance.")) return;
+      view=el.dataset.value;render();break;
+    case "board-view": boardView=el.dataset.value;render();break;
+    case "sort": {
+      const scope=el.dataset.scope,key=el.dataset.key;
+      sorting[scope]={key,dir:sorting[scope]?.key===key?-sorting[scope].dir:1};
+      render();break;
+    }
+    case "clear-filters": filters[el.dataset.scope]={};render();break;
+    case "toggle-group":
+      collapsed.has(el.dataset.key)?collapsed.delete(el.dataset.key):collapsed.add(el.dataset.key);
+      render();break;
+    case "expand-all": collapsed.clear();render();break;
+    case "collapse-all":
+      filtered("kanban").forEach(t=>{
+        collapsed.add("neg::"+t.negocio);
+        collapsed.add("project::"+t.negocio+"::"+t.proyecto);
+      });
+      render();break;
+    case "new-task": openTask(null,el.dataset.gate||null);break;
+    case "edit-task": openTask(el.dataset.id);break;
+    case "close-task": closeTask();break;
+    case "task-tab": taskTab=el.dataset.tab;drawTaskDialog();break;
+    case "save-task": await saveTask();break;
+    case "send-comment": await sendComment();break;
+    case "finish-task": await finishTask(el.dataset.id);break;
+    case "duplicate-task": await duplicateTask(el.dataset.id);break;
+    case "trash-task": await trashTask(el.dataset.id);break;
+    case "restore-task": await restoreTask(el.dataset.id);break;
+    case "permanent-delete": await permanentDelete(el.dataset.id);break;
+    case "add-link":
+      if(draft){draft.links.push({n:"",u:""});drawFormPieces();}
+      break;
+    case "remove-link":
+      if(draft){draft.links.splice(Number(el.dataset.index),1);drawFormPieces();}
+      break;
+    case "remove-person":
+      if(draft){draft.invol.splice(Number(el.dataset.index),1);drawFormPieces();}
+      break;
+    case "add-subtask": {
+      const text=$("newSubtask")?.value.trim();
+      if(draft&&text){draft.subtareas.push({t:text,done:false});drawFormPieces();$("newSubtask")?.focus();}
+      break;
+    }
+    case "remove-subtask":
+      if(draft){draft.subtareas.splice(Number(el.dataset.index),1);drawFormPieces();}
+      break;
+    case "catalog": openCatalog(el.dataset.kind);break;
+    case "close-catalog": $("catalogOverlay").classList.remove("show");break;
+    case "add-catalog": await addCatalog();break;
+    case "delete-catalog": await deleteCatalog(Number(el.dataset.index));break;
+    case "open-drill": openDrill(el.dataset.field,el.dataset.value);break;
+    case "close-drill": $("drillOverlay").classList.remove("show");break;
+    case "deeper-drill":
+      drill[el.dataset.field]=el.dataset.value;
+      drillDimension=["estado","resp","negocio","proyecto","prioridad","gate","tipo"].find(k=>!(k in drill))||"estado";
+      drawDrill();break;
+    case "drill-reset": drill=clone(drillInitial);drawDrill();break;
+    case "drill-kanban":
+      filters.kanban={...drill,showFinished:true};
+      $("drillOverlay").classList.remove("show");go("kanban");break;
+    case "edit-from-drill":
+      $("drillOverlay").classList.remove("show");openTask(el.dataset.id);break;
+    case "generate-news":
+      if(newsDirty&&!confirm("¿Reemplazar el borrador editado?")) return;
+      newsText=generateNews();newsDirty=true;newsLabel="Borrador sin guardar";render();break;
+    case "generate-save-news": await saveNews(true);break;
+    case "save-news": await saveNews();break;
+    case "copy-news": await copyNews();break;
+    case "open-news": {
+      if(newsDirty&&!confirm("¿Reemplazar el borrador por la novedad del historial?")) return;
+      const n=state().novedades[Number(el.dataset.index)];
+      if(n){newsText=n.texto;newsDirty=false;newsLabel="Historial · "+formatDate(n.fecha);render();}
+      break;
+    }
+    case "audit-search":
+      (filters.audit??={}).keyword=$("auditKeyword")?.value.trim()||"";
+      render();break;
+    case "export-json":
+      downloadJSON(TEAMS[team].file,clone(state()));
+      toast("Se solicitó la descarga de la base de "+TEAMS[team].label+".");
+      break;
+    case "import-json":
+      importTeam=team;$("importFile").value="";$("importFile").click();break;
+    case "export-star": await manualStarExport();break;
+    case "undo": await undo();break;
+  }
+}
+
+document.addEventListener("click",event=>{
+  /* Un enlace de documentación no debe abrir también el editor de tarea. */
+  if(event.target.closest("a[href]")) return;
+  const el=event.target.closest("[data-act]");
+  if(!el) return;
+  event.preventDefault();
+  dispatch(el,event).catch(err=>toast("Ocurrió un error: "+err.message,"error",10000));
+});
+
+document.addEventListener("input",event=>{
+  const el=event.target;
+  if(el.id==="globalSearch") {
+    clearTimeout(searchTimer);
+    query=el.value.toLowerCase().trim();
+    searchTimer=setTimeout(()=>{
+      if(started&&["resumen","kanban","dashboard","gerencial"].includes(page)) render();
+    },180);
+    return;
+  }
+  if(el.id==="newsText") {newsText=el.value;newsDirty=true;return;}
+  if(!draft) return;
+  if(el.dataset.edit) {draft[el.dataset.edit]=el.value;drawPreview();}
+  if(el.hasAttribute("data-sub-text")) {
+    draft.subtareas[Number(el.dataset.subText)].t=el.value;drawPreview();
+  }
+  if(el.hasAttribute("data-link-name")) draft.links[Number(el.dataset.linkName)].n=el.value;
+  if(el.hasAttribute("data-link-url")) draft.links[Number(el.dataset.linkUrl)].u=el.value;
+});
+
+document.addEventListener("change",event=>{
+  const el=event.target;
+  if(el.dataset.filter) {
+    const f=filters[el.dataset.filter]??={};
+    f[el.dataset.key]=el.type==="checkbox"?el.checked:el.value;
+    render();return;
+  }
+  if(el.id==="newsTone") {newsTone=el.value;return;}
+  if(el.id==="drillDimension") {drillDimension=el.value;drawDrill();return;}
+  if(el.id==="importFile") {importJSONFile(el.files?.[0]);return;}
+  if(!draft) return;
+  if(el.hasAttribute("data-add-person")&&el.value) {
+    if(!draft.invol.includes(el.value)) draft.invol.push(el.value);
+    drawFormPieces();return;
+  }
+  if(el.hasAttribute("data-sub-done")) {
+    draft.subtareas[Number(el.dataset.subDone)].done=el.checked;
+    drawFormPieces();return;
+  }
+  if(el.dataset.edit) {draft[el.dataset.edit]=el.value;drawPreview();}
+});
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="Enter"&&event.target.id==="chatInput") {
+    event.preventDefault();sendComment();return;
+  }
+  if(event.key==="Enter"&&event.target.id==="newSubtask") {
+    event.preventDefault();
+    if(draft&&event.target.value.trim()) {
+      draft.subtareas.push({t:event.target.value.trim(),done:false});
+      drawFormPieces();$("newSubtask")?.focus();
+    }
+    return;
+  }
+  if(event.key==="Enter"&&event.target.id==="catalogName") {event.preventDefault();addCatalog();return;}
+  if(event.key==="Enter"&&event.target.id==="auditKeyword") {
+    (filters.audit??={}).keyword=event.target.value.trim();render();return;
+  }
+  if(event.key==="Escape") {
+    if($("identityOverlay").classList.contains("show")||$("setupOverlay").classList.contains("show")) return;
+    for(const id of ["baseOverlay","catalogOverlay","drillOverlay"]) {
+      if($(id).classList.contains("show")) {$(id).classList.remove("show");return;}
+    }
+    if($("taskOverlay").classList.contains("show")) closeTask();
+    $("side").classList.remove("open");
+    return;
+  }
+  if(!started||context().busy||transitioning||document.querySelector(".overlay.show")) return;
+  if(event.target.closest("input,textarea,select,[contenteditable=true]")) return;
+  if(event.key==="/") {event.preventDefault();$("globalSearch").focus();}
+  else if(event.key.toLowerCase()==="n"&&!event.ctrlKey&&!event.metaKey&&!event.altKey) {
+    event.preventDefault();openTask();
+  } else if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==="z") {
+    event.preventDefault();undo();
+  }
+});
+
+document.addEventListener("dragstart",event=>{
+  const card=event.target.closest('.task-card[draggable="true"]');
+  if(!card||context().busy||transitioning) {if(card) event.preventDefault();return;}
+  dragId=card.dataset.task;card.classList.add("dragging");
+  event.dataTransfer.effectAllowed="move";
+  event.dataTransfer.setData("text/plain",dragId);
+});
+document.addEventListener("dragover",event=>{
+  const col=event.target.closest(".column[data-gate]");
+  if(!col||dragId===null) return;
+  event.preventDefault();event.dataTransfer.dropEffect="move";col.classList.add("dragover");
+});
+document.addEventListener("dragleave",event=>{
+  const col=event.target.closest(".column[data-gate]");
+  if(col&&!col.contains(event.relatedTarget)) col.classList.remove("dragover");
+});
+document.addEventListener("drop",event=>{
+  const col=event.target.closest(".column[data-gate]");
+  if(!col||dragId===null) return;
+  event.preventDefault();
+  const target=event.target.closest(".task-card");
+  const id=dragId,g=col.dataset.gate,before=target?.dataset.task;
+  dragId=null;
+  document.querySelectorAll(".dragover,.dragging").forEach(el=>el.classList.remove("dragover","dragging"));
+  if(before&&sameId(id,before)) return;
+  moveTask(id,g,before).catch(err=>toast(err.message,"error"));
+});
+document.addEventListener("dragend",()=>{
+  dragId=null;
+  document.querySelectorAll(".dragover,.dragging").forEach(el=>el.classList.remove("dragover","dragging"));
+});
+
+window.addEventListener("beforeunload",event=>{
+  if(editorDirty()||newsDirty||context().busy) {
+    event.preventDefault();event.returnValue="";
+  }
+});
+window.addEventListener("storage",event=>{
+  if(started&&mode==="local"&&event.key===localKey(team)) reloadCurrent(false);
+});
+
+function celebrate() {
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  for(let i=0;i<70;i++) {
+    const el=document.createElement("i");
+    el.className="confetto";
+    el.style.left=Math.random()*100+"%";
+    el.style.background=PALETTE[i%PALETTE.length];
+    el.style.animationDuration=(2+Math.random()*1.8)+"s";
+    el.style.animationDelay=(Math.random()*.3)+"s";
+    $("confetti").appendChild(el);
+    setTimeout(()=>el.remove(),4500);
+  }
+}
+
+/* ================== INICIO ================== */
+
+(async function init() {
+  document.documentElement.dataset.theme=getSetting("dtz_theme");
+  const rememberedTeam=getSetting("dataliza.v3.lastTeam","dataliza");
+  if(TEAMS[rememberedTeam]) team=rememberedTeam;
+  try {
+    rememberedDir=await idbGet("dh");
+    if(rememberedDir) {
+      $("continueSetup").hidden=false;
+      $("continueSetup").textContent="Continuar con "+rememberedDir.name;
+    }
+  } catch {}
+  renderHeader();
+  renderNav();
+  setInterval(()=>reloadCurrent(false),4000);
+})();
+</script>
+</body>
+</html>
