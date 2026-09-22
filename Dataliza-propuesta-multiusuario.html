@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Dataliza — Propuesta de edición multiusuario</title>
+<style>
+@page {size:A4; margin:1.8cm 2cm;} body {font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.18;color:#243247;} h1{font-size:25pt;color:#12365a;margin-bottom:10pt;} h2{font-size:17pt;color:#12365a;margin-top:14pt;margin-bottom:8pt;} h3{font-size:12pt;color:#126a79;margin-bottom:5pt;} p{margin:6pt 0;} .eyebrow{font-size:10pt;color:#126a79;font-weight:bold;} .lead{font-size:13pt;} .note{background:#edf3f8;padding:10pt;} table{border-collapse:collapse;width:100%;margin:9pt 0;font-size:10pt;} th{background:#12365a;color:white;text-align:left;} td,th{border:1px solid #cbd5df;padding:7pt;vertical-align:top;} .page{page-break-before:always;} li{margin-bottom:5pt;} .small{font-size:9pt;color:#536477;} a{color:#126a79;}
+</style></head><body>
+<p class="eyebrow">DATALIZA · DATA E IA · PROPUESTA PARA EVALUACIÓN INTERNA</p>
+<h1>Edición simultánea sin sobrescribir el trabajo del equipo</h1>
+<p class="lead"><b>Propuesta:</b> centralizar el guardado de Dataliza en un servicio instalado en una PC Windows, con una base de datos local y acceso del equipo desde el navegador.</p>
+<p>La necesidad es que varios usuarios puedan <b>consultar y editar al mismo tiempo</b>, tanto en Data como en IA, conservando los cambios de cada persona y las exportaciones para Power BI.</p>
+<h2>Por qué hace falta el cambio</h2>
+<p>Actualmente, cada navegador trabaja con una copia de la base. Al guardar, la aplicación reemplaza el archivo JSON completo del área, aunque se haya modificado una sola tarea. Ese mecanismo no coordina de forma fiable las escrituras desde distintas computadoras.</p>
+<table><tr><th>Necesidad</th><th>Situación actual</th><th>Resultado buscado</th></tr>
+<tr><td>Editar tareas diferentes a la vez</td><td>Una copia completa puede reemplazar cambios ajenos.</td><td>Guardar cada operación sobre el registro correspondiente.</td></tr>
+<tr><td>Editar la misma tarea</td><td>Hay detección parcial de conflictos, sin coordinación central.</td><td>Detectar la versión desactualizada y pedir revisión antes de reemplazarla.</td></tr>
+<tr><td>Conservar información para gestión</td><td>Los respaldos permiten recuperar versiones, con revisión manual.</td><td>Prevenir sobrescrituras y mantener respaldos para otros incidentes.</td></tr></table>
+<h2>Qué se propone y qué se conserva</h2>
+<p>Se propone adaptar la aplicación para que un único servicio reciba las operaciones, valide los datos y confirme cada guardado. Se conservarían la experiencia de uso, las áreas Data e IA y sus exportaciones para Power BI.</p>
+<p>No se requiere instalar una aplicación en cada PC del equipo: los usuarios accederían a una dirección interna desde Chrome o Edge. La PC anfitriona alojaría la aplicación y los datos.</p>
+<p class="note"><b>Estado de la propuesta:</b> el servicio central y la migración todavía no están desarrollados ni instalados. Este documento solicita evaluar la viabilidad y autorizar un piloto; no describe una solución ya desplegada.</p>
+<p class="small">Fecha: 22 de septiembre de 2026 · Alcance: arquitectura de edición compartida de Dataliza.</p>
+
+<div class="page"></div>
+<p class="eyebrow">02 · EJEMPLO DEL PROBLEMA</p>
+<h2>Dos personas cambian tareas distintas y un cambio puede perderse</h2>
+<p>Ana y Bruno abren Dataliza a las 9:00. Ambos ven la tarea A “En curso” y la tarea B con vencimiento el viernes.</p>
+<table><tr><th>Momento</th><th>Qué ocurre</th></tr>
+<tr><td>1. Ana edita A</td><td>Marca la tarea A como “Finalizado”. Su copia conserva B con vencimiento el viernes.</td></tr>
+<tr><td>2. Bruno edita B</td><td>Cambia el vencimiento de B al lunes. Su copia todavía conserva A “En curso”.</td></tr>
+<tr><td>3. Ana guarda</td><td>Su PC escribe la base completa: A finalizada y B con vencimiento el viernes.</td></tr>
+<tr><td>4. Bruno guarda</td><td>Si el conflicto no se detecta, su copia completa reemplaza la anterior: B queda para el lunes, pero A vuelve a “En curso”.</td></tr></table>
+<p><b>Resultado posible:</b> el cambio de Ana deja de estar en la base principal, aunque Bruno nunca haya editado la tarea A.</p>
+<h3>Qué protección existe hoy</h3>
+<p>La aplicación compara la base antes de escribir e intenta bloquear guardados sobre una versión desactualizada. También conserva respaldos. Son controles útiles, pero no garantizan coordinación entre computadoras: dos guardados casi simultáneos pueden pasar las verificaciones, y una carpeta sincronizada puede demorar en mostrar los cambios de otra PC.</p>
+<p>Si se detecta el conflicto, el segundo guardado se frena y requiere actualizar y revisar. Si no se detecta, puede ser necesario buscar el cambio en los respaldos y reconstruirlo manualmente. La pérdida no ocurre en cada guardado, pero el mecanismo actual permite ese escenario.</p>
+<h3>Cómo funcionaría con el servicio central</h3>
+<p>Ana envía el cambio de la tarea A y Bruno el de la tarea B. El servicio guarda ambas operaciones sobre sus respectivos registros. Ninguno reemplaza la base completa del otro.</p>
+<p>Si ambos editan A, cada solicitud incluye la versión que la persona abrió. El servicio verifica esa versión y actualiza el registro en una misma transacción. Tras guardar el primer cambio, rechaza el segundo si quedó desactualizado.</p>
+<p class="note"><b>Mensaje esperado:</b> “Otra persona modificó esta tarea. Revisá la versión actual antes de guardar”. La interfaz debe conservar la edición pendiente para que el usuario pueda compararla y decidir. No se propone una fusión automática de campos.</p>
+
+<div class="page"></div>
+<p class="eyebrow">03 · SOLUCIÓN PROPUESTA</p>
+<h2>Una PC coordina; el equipo utiliza el navegador</h2>
+<p class="note"><b>PCs del equipo → red interna o VPN → servicio Dataliza en la PC anfitriona → base SQLite en disco local.</b></p>
+<table><tr><th>Componente</th><th>Ubicación y función</th></tr>
+<tr><td>Python y dependencias de la aplicación</td><td>En la PC anfitriona. Ejecutan el servicio web; la versión y los paquetes se definirán y aprobarán para el entorno corporativo.</td></tr>
+<tr><td>Servicio web Dataliza</td><td>En la PC anfitriona. Entrega la interfaz, valida solicitudes, coordina guardados y registra resultados. Debe poder arrancar automáticamente y recuperarse de fallas.</td></tr>
+<tr><td>Base SQLite</td><td>Archivo local en la PC anfitriona. No requiere instalar un servidor de base de datos separado. El servicio accede a ella mediante el módulo sqlite3 de Python [1].</td></tr>
+<tr><td>Navegador</td><td>En cada PC usuaria. Accede al enlace interno; no abre directamente la base de datos.</td></tr>
+<tr><td>Respaldo y exportaciones</td><td>El servicio debe generar copias verificadas y exportaciones de Data e IA para los destinos autorizados.</td></tr></table>
+<h3>Por qué SQLite puede servir para el piloto</h3>
+<p>SQLite permite múltiples lectores y una escritura a la vez. El servicio puede atender a varios usuarios y coordinar operaciones breves; la experiencia de edición simultánea no exige que todas las escrituras físicas ocurran en el mismo instante. Su adecuación debe comprobarse con el volumen real del equipo [2, 3].</p>
+<p>La base activa debe quedar en disco local, fuera de OneDrive y carpetas de red. Los usuarios acceden mediante el servicio; no comparten el archivo SQLite directamente. Si el volumen o la disponibilidad exigida crecen, se deberá evaluar un servidor administrado y otra base de datos [2].</p>
+<h3>Autenticación y disponibilidad</h3>
+<p>Resolver la concurrencia no exige integrar primero el inicio de sesión con Microsoft. La selección de nombre podría conservarse para un piloto si Sistemas la acepta, pero seguiría siendo una identidad declarada, no verificada. El acceso y la autenticación para uso operativo deben acordarse por separado.</p>
+<p><b>La PC anfitriona es un punto único de disponibilidad:</b> si se apaga, suspende, reinicia o pierde conectividad, el equipo no podrá consultar ni guardar contra el servicio. No se propone edición desconectada ni sincronización posterior automática.</p>
+<p>La base de datos evita ciertos errores de concurrencia, pero no sustituye los respaldos. Se deben generar copias consistentes con un mecanismo compatible con SQLite y verificar su restauración; no basta con copiar a ciegas el archivo mientras está en uso.</p>
+
+<div class="page"></div>
+<p class="eyebrow">04 · IMPLEMENTACIÓN Y DECISIÓN</p>
+<h2>Qué hay que hacer para ponerlo en marcha</h2>
+<table><tr><th>Paso y responsable</th><th>Resultado necesario</th></tr>
+<tr><td>1. Viabilidad · Sistemas</td><td>Confirmar que se permite alojar el servicio en la PC Windows. Definir dirección estable, puerto, alcance de red/VPN, firewall, protección de la conexión y acceso autorizado. Sin exposición pública a Internet.</td></tr>
+<tr><td>2. Adaptación · Desarrollo</td><td>Crear el servicio, persistencia por registro, validaciones y control de versión atómico. Adaptar la interfaz para manejar conflictos, errores y actualización de datos desde el servidor.</td></tr>
+<tr><td>3. Operación · Sistemas y responsable de Dataliza</td><td>Configurar arranque automático, recuperación tras reinicio, horario de disponibilidad, registro de errores, respaldo independiente y responsable de soporte.</td></tr>
+<tr><td>4. Migración · Responsable de datos y Desarrollo</td><td>Respaldar los JSON de Data e IA, detener temporalmente las ediciones e importar los datos. Comparar tareas, catálogos, comentarios e historial; conservar los originales.</td></tr>
+<tr><td>5. Piloto · Equipo usuario</td><td>Validar desde dos PCs los casos de concurrencia, conectividad, recuperación y Power BI antes de habilitar el uso general.</td></tr></table>
+<h3>Criterios para aceptar el piloto</h3>
+<ul>
+<li>Dos usuarios editan tareas diferentes y ambos cambios se conservan.</li>
+<li>Dos usuarios editan la misma tarea: se detecta el conflicto y se conserva la edición pendiente del segundo usuario para revisión.</li>
+<li>Una interrupción de red no produce una confirmación falsa; los reintentos no duplican operaciones como comentarios.</li>
+<li>Tras reiniciar la PC, el servicio vuelve a estar disponible y conserva los datos confirmados.</li>
+<li>Se restaura un respaldo en un entorno de prueba y se comprueba su contenido.</li>
+<li>Se regeneran y cargan las tablas de Data e IA en Power BI, manteniendo identificación de área y relaciones correctas.</li>
+</ul>
+<p>Las exportaciones actuales tienen 7 dimensiones y 4 tablas de hechos por área, con <b>area_id</b>, <b>area_nombre</b> y claves por área. La adaptación debe conservar ese contrato y publicar conjuntos consistentes. El refresco programado de Power BI Service, si se requiere, se evaluará por separado.</p>
+<p><b>Decisión solicitada:</b> aprobar la evaluación técnica y un piloto en una PC designada, con responsables de operación y respaldo. Si la política corporativa no permite alojarlo allí, evaluar un servicio interno administrado que mantenga el mismo mecanismo central de guardado.</p>
+<p class="small"><b>Fuentes y alcance:</b> revisión del HTML Dataliza, LEEME.md y guía local de Power BI. El código actual contiene verificación de cambios y respaldos, pero no el servicio propuesto. Fuentes técnicas consultadas el 22/09/2026:</p>
+<p class="small">[1] <a href="https://docs.python.org/3/library/sqlite3.html">Python: módulo sqlite3</a> · [2] <a href="https://www.sqlite.org/whentouse.html">SQLite: usos adecuados y límites</a> · [3] <a href="https://www.sqlite.org/lang_transaction.html">SQLite: transacciones</a>.</p>
+</body></html>
